@@ -1,9 +1,9 @@
-#Gabi Steele
+# Gabi Steele
 
-##Data Review
+## Quantitative Data
 
-##Quantitative Data
+## Qualitative Data
 
-##Text Presentation
+## Dynamics, Interactivity and Narrative
 
-##WWW
+## Tools, Users and Use Cases
