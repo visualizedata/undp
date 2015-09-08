@@ -4,7 +4,7 @@
 
 * Women, Business & the Law
 * Vulnerable Employment share in Subsaharan Africa
-* Share of women in wage employment in the nonagricultural# References sector
+* Share of women in wage employment in the nonagricultural sector
 * Gender Gaps in Agricultural Productivity (8 countries)
 
 References: 43
