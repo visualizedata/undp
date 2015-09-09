@@ -23,6 +23,8 @@ one of the highest material and infant mortality rates in the world
 women are disproportionally affected by HIV and Aids
 women do not have access to the same productive resources, justice system, career opportunities, education.
 
+[Africa Women](http://www.our-africa.org/women)
+
 Protocol to the African Charter on Human and Peoples’ Rights on the Rights of Women in Africa
 A protocol adopted by the 2nd Ordinary Session of the Assembly of the Union in Maputo, July 2003 that significantly improved the rights of women in the region
 A collective of articles that provide women basic human rights with regard to life, integrity, security, marriage, dignity, prejudice, political participation, land, adequate housing, food security, healthy and sustainable environment, inheritance etc.
