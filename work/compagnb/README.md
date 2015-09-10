@@ -1,4 +1,4 @@
-# Barbara Compagnoni
+# Daniel Sauter
 
 ## Quantitative Data
 
