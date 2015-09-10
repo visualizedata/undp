@@ -15,27 +15,27 @@
 -The Poverty Headcount Ratio data included with this set appears to contain a particularly powerful array of indicators, especially because of their global scope and their recent historical spread (2000-2014). Lacking further outside data, this may be one of the best sets to work with.
 
 2. SELECTED RESOURCES
-Gender_Entrepreneurship_Competitiveness in Africa copy.pdf
+-- Gender_Entrepreneurship_Competitiveness in Africa copy.pdf
 This document examines the economic potentials for female-driven enterprises on the African continent. While the data it contains is slightly dated (up to 2006/7), it introduces the motivations for highlighting gender equality as an engine for development. 
 
-http://blogs.worldbank.org/nasikiliza/how-empowering-women-can-help-end-poverty-africa
+-- http://blogs.worldbank.org/nasikiliza/how-empowering-women-can-help-end-poverty-africa
 A recent world bank blog entry frames the issues of women's high rate of involvement in the African labor force against the slow rate of sustained economic growth. The author cites specific examples of hindrances to gender equality -- including the fact that women in male-dominate areas of the labor force make three times as much as women in more traditionally female employment.
 
-http://www.irinnews.org/report/97868/for-women-urbanization-is-a-mixed-bag
+-- http://www.irinnews.org/report/97868/for-women-urbanization-is-a-mixed-bag
 An article on the risks to women in newly urbanized regions. Risks include lack of infrastructure for health and family services, crime, security and mobility. 
 
 3. ADDITIONAL RESOURCES
 
-589960PUB0ID171UBLIC109780821374344.pdf -- in 1.1 "Gender and Macroeconomic Policy"
+-- 589960PUB0ID171UBLIC109780821374344.pdf -- in 1.1 "Gender and Macroeconomic Policy"
 Dates from 2011 but contains a wealth of information regarding gender in Africa.
 
-E-Book_African_Economic_Outlook_2014
+-- E-Book_African_Economic_Outlook_2014
 Also contains much update information about the state of various African economies
 
-http://www.fao.org/3/a-i4635e.pdf
+-- http://www.fao.org/3/a-i4635e.pdf
 A recent report on food security would help enrich the data for 3.2
 
-In addition: the following data resources may help extend/enrich the current data
+-- In addition: the following data resources may help extend/enrich the current data
 
 http://hdr.undp.org/en/content/table-4-gender-inequality-index
 http://hdr.undp.org/en/content/table-2-human-development-index-trends-1980-2013
@@ -44,11 +44,11 @@ http://hdr.undp.org/en/content/table-6-multidimensional-poverty-index-mpi
 http://data.worldbank.org/indicator/SL.EMP.INSV.FE.ZS?page=3
 
 4. QUESTIONS FOR UNDP
-Who do you envision as the primary/ideal audience for these visualizations? Who, in your experience, would be viewing these most carefully, and to what end (decision making for aid, policy making, education, etc)?
+-Who do you envision as the primary/ideal audience for these visualizations? Who, in your experience, would be viewing these most carefully, and to what end (decision making for aid, policy making, education, etc)?
 
-What are the main data sources you used? Would you encourage us to use additional data we find on the UNDP and Worldbank.org site? Are their other data sources you would recommend?
+-What are the main data sources you used? Would you encourage us to use additional data we find on the UNDP and Worldbank.org site? Are their other data sources you would recommend?
 
-The key data set to all of these questions seems to be the "HDR/Breakdown" which is included in every category. It includes the human development index, life expectancy, schooling, and gross national income. It seems like this is the based line data set against which the others may be compared. Could you speak to it's importance to this study -- and to whether we can find more historical ranges for this data set?
+-The key data set to all of these questions seems to be the "HDR/Breakdown" which is included in every category. It includes the human development index, life expectancy, schooling, and gross national income. It seems like this is the based line data set against which the others may be compared. Could you speak to it's importance to this study -- and to whether we can find more historical ranges for this data set?
 
 
 ##Quantitative Data
