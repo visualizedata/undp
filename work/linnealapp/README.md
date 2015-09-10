@@ -43,11 +43,15 @@
     2. Could the references be renamed in a more informative way?
     3. What would be the best method for creating context for data which shows a subset of a population?
         (ex. For data which tells the number of HIV cases among men aged 15-24 in various countries, it would be beneficial to know the total number of men aged 15-24 in that country)
-
+    4. How does the naming of the topics apply to the structure of the report
+    5. How will the visualizations be included in the report (format/media)
+    
 3-step formula:
     1. I am trying to learn about the social institutions which constrain women in Africa...
     2. Because I want to find out what the social/economic consequences are...
     3. In order to help my reader understand the effect of gender specific social constraints on sustainable development in Africa
+    
+    
 ## Quantitative Data
 
 ## Qualitative Data
