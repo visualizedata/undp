@@ -19,9 +19,9 @@
         - Some paper highlights:
             - Just as growth does not automatically trickle down to poor households, nor do income increases in poor households automatically trickle down to women and girls.
             - In addition to the different ways in which men and women have experienced globalization, there have been differences across different segments of women, differentiated by class
-    - [Gender Inequality, Income, and Growth: Are Good Times Good for Women?] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/2011-08-10 M4 - DollaryGatti(1999)GenderInequalityIncomeAndGrowth.pdf)
+    - [Gender Inequality, Income, and Growth: Are Good Times Good for Women?] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/2011-08-10M4-DollaryGatti1999GenderInequalityIncomeAndGrowth.pdf)
         - Systematic patterns in gender differentials suggest that low investment in women can reduce the rate of economic growth. Thus, societies that have a preference for not investing in girls will have a slower growth and reduced income.
-    - [Poverty, Equity and Growth in Developing and Transition Countries: Statistical Methods and Empirical Analysis] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/Cho_2011_CRC-PEG_DP_73.pdf
+    - [Poverty, Equity and Growth in Developing and Transition Countries: Statistical Methods and Empirical Analysis] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/Cho_2011_CRC-PEG_DP_73.pdf)
         - Analyzes how different dimensions of globalization affect various aspects of women’s status and rights
              - social globilization effects women positively
              - economic globilization has no effect                                                                                                                                                                                                                                              
