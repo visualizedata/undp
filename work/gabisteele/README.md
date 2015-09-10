@@ -53,8 +53,6 @@ Based of the data related to these issues it is clear that women’s life expect
 
 #### Supplemental Sources
 
-Supplemental Sources
-
 1. [Gender Inequality in Education in sub-Saharan Africa](http://www.academia.edu/6037312/Gender_Inequality_in_Education_in_sub-_Saharan_Africa) 
     * Paper addresses overlooked issues in disparities between men and women in Africa starting from basic education and leading to high levels of illiteracy for girls and women.
     * Discusses the impact of political instability, violence (especially towards women), poverty, female genital mutilation, child marriage, sexual harassment and negative culture values.
@@ -69,9 +67,9 @@ Supplemental Sources
     * Solutions to this problem must therefore be equally multifaceted and well constructed if there is any chance of success. 
 
 3. [Tackling the root causes of gender inequalities](www.worldwewant2015.org/file/287499/download/311690) 
-*Gender equality is a human right, but should it be measured globally?
-*World Bank has suggested that education, employment, business, health and political participation are all contributors to lack of women’s rights and gender disparities
-*Discusses Social Institutions and Gender Index and how this framework can be used to identify discriminatory social institutions suggesting they are a leading cause of gender inequality.
+    * Gender equality is a human right, but should it be measured globally?
+    * World Bank has suggested that education, employment, business, health and political participation are all contributors to lack of women’s rights and gender disparities
+    * Discusses Social Institutions and Gender Index and how this framework can be used to identify discriminatory social institutions suggesting they are a leading cause of gender inequality.
 
 #### Questions
 
