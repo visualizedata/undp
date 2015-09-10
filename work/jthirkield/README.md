@@ -1,7 +1,8 @@
 #Jon Thirkield
 
 ##Data Review
-1. Conceptually, the questions in 2.2 about the roles of urbanization and technology are of the greatest interest to me, but the current data sets do not offer much that directly addresses those questions. (Cellphone use is one, but it is a small part of the picture). I would be interested in researching the appropriate data in order to assess the possible effects of technology and urbanization on social/gender disparities. If I had to work with the current data sets as is, here three issues I would be interested in examining:
+
+1: Conceptually, the questions in 2.2 about the roles of urbanization and technology are of the greatest interest to me, but the current data sets do not offer much that directly addresses those questions. (Cellphone use is one, but it is a small part of the picture). I would be interested in researching the appropriate data in order to assess the possible effects of technology and urbanization on social/gender disparities. If I had to work with the current data sets as is, here three issues I would be interested in examining:
 
 --2.1: I am interested in studying the varieties of labor involvement by country/region in order to visualize how different types of economic engagement relate to gender disparities and economic well-being. I believe this will allow us to better understand the range of labor diversity from country to country as well as the possible influence of gender involvement in various sectors.
 -This would be a baseline visualization of labor and gaps that the varieties of indicators referenced in 2.2 (see below). There are a number of data sets in other categories that relate to this question -- data on types of labor (agricultural/non-agricultural), management disparities, banking, and manufacturing. It would be helpful to investigate how the distributions of each sector may relate to economic opportunities across genders.
@@ -14,7 +15,8 @@
 --3.2 As with section 2.2 I would also be interested in creating a visualization of the economic costs of gender gaps in order to examine the possible relationships between gender gaps and economic growth. The questions in this data set are similar to 2.2 in that they are wide ranging, but this section is focused on the particular issues of poverty, food security, and HDI. 
 -The Poverty Headcount Ratio data included with this set appears to contain a particularly powerful array of indicators, especially because of their global scope and their recent historical spread (2000-2014). Lacking further outside data, this may be one of the best sets to work with.
 
-2. SELECTED RESOURCES
+2: SELECTED RESOURCES
+
 -- Gender_Entrepreneurship_Competitiveness in Africa copy.pdf
 This document examines the economic potentials for female-driven enterprises on the African continent. While the data it contains is slightly dated (up to 2006/7), it introduces the motivations for highlighting gender equality as an engine for development. 
 
@@ -24,7 +26,7 @@ A recent world bank blog entry frames the issues of women's high rate of involve
 -- http://www.irinnews.org/report/97868/for-women-urbanization-is-a-mixed-bag
 An article on the risks to women in newly urbanized regions. Risks include lack of infrastructure for health and family services, crime, security and mobility. 
 
-3. ADDITIONAL RESOURCES
+3: ADDITIONAL RESOURCES
 
 -- 589960PUB0ID171UBLIC109780821374344.pdf -- in 1.1 "Gender and Macroeconomic Policy"
 Dates from 2011 but contains a wealth of information regarding gender in Africa.
@@ -43,7 +45,8 @@ http://hdr.undp.org/en/content/table-5-gender-related-development-index-gdi
 http://hdr.undp.org/en/content/table-6-multidimensional-poverty-index-mpi
 http://data.worldbank.org/indicator/SL.EMP.INSV.FE.ZS?page=3
 
-4. QUESTIONS FOR UNDP
+4: QUESTIONS FOR UNDP
+
 -Who do you envision as the primary/ideal audience for these visualizations? Who, in your experience, would be viewing these most carefully, and to what end (decision making for aid, policy making, education, etc)?
 
 -What are the main data sources you used? Would you encourage us to use additional data we find on the UNDP and Worldbank.org site? Are their other data sources you would recommend?
