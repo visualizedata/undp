@@ -24,13 +24,16 @@
     - [Poverty, Equity and Growth in Developing and Transition Countries: Statistical Methods and Empirical Analysis] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/Cho_2011_CRC-PEG_DP_73.pdf)
         - Analyzes how different dimensions of globalization affect various aspects of women’s status and rights
              - social globilization effects women positively
-             - economic globilization has no effect                                                                                                                                                                                                                                              
+             - economic globilization has no effect  
+
 3. Supplemental Sources (Additional research I investigated outside of files supplied by the UNDP).
-     - [African Economic Research] (http://aercafrica.org/index.php/newsbooks/168-poverty-in-africa-analytical-and-policy-perspectives-by-augustin-fosu-germano-mwabu-a-erik-thorbecke) :
-     - 
+    - [African Economic Research] (http://aercafrica.org/index.php/newsbooks/168-poverty-in-africa-analytical-and-policy-perspectives-by-augustin-fosu-germano-mwabu-a-erik-thorbecke) :
+    - [What’s driving Africa’s growth] (http://www.mckinsey.com/insights/economic_studies/whats_driving_africas_growth):
+    - [Making the most of Africa’s growth momentum] (http://blogs.worldbank.org/africacan/category/topics/macroeconomics-and-economic-growth): 
+        -
 4. Questions
-     - ____
-     - 
-     - 
-    Gender Gaps in Agricultural Productivity (8 countries)
-    Poverty heacount ratio at $1.25/day (not disaggregated)
+     - For the folders with not a large amount of data will more be added? What is the eta on the addition if there is one?
+     - Who is this being presented to? Will this be a general public visual? What is the end goal?
+     - Is it possible that we will be proving that the gender issues will be nominal in the economic struggles? How far can we push the envelope?
+    - 
+    
