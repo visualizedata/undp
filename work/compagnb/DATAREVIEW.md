@@ -32,8 +32,13 @@
     - [Making the most of Africa’s growth momentum] (http://blogs.worldbank.org/africacan/category/topics/macroeconomics-and-economic-growth): 
         -
 4. Questions
-     - For the folders with not a large amount of data will more be added? What is the eta on the addition if there is one?
-     - Who is this being presented to? Will this be a general public visual? What is the end goal?
-     - Is it possible that we will be proving that the gender issues will be nominal in the economic struggles? How far can we push the envelope?
-    - 
+    - For the folders with not a large amount of data will more be added? What is the eta on the addition if there is one?
+    - Who is this being presented to? Will this be a general public visual? What is the end goal?
+    - Is it possible that we will be proving that the gender issues will be nominal in the economic struggles? How far can we push the envelope?
+    - Currently there is only data set aside for life, agriculture and schooling in 3.2, when will there be more?
+    - Who are you recieving this data from? Can we have direct access to the sources?
+    - Will we be able to provide our own data sources?
+    - How was this data gathered?
+    - Broken links in files?
+    - How was the data broken up into spreadsheet form?
     
