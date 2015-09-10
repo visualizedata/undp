@@ -30,7 +30,7 @@
     - [African Economic Research] (http://aercafrica.org/index.php/newsbooks/168-poverty-in-africa-analytical-and-policy-perspectives-by-augustin-fosu-germano-mwabu-a-erik-thorbecke) :
     - [What’s driving Africa’s growth] (http://www.mckinsey.com/insights/economic_studies/whats_driving_africas_growth):
     - [Making the most of Africa’s growth momentum] (http://blogs.worldbank.org/africacan/category/topics/macroeconomics-and-economic-growth): 
-        -
+
 4. Questions
     - For the folders with not a large amount of data will more be added? What is the eta on the addition if there is one?
     - Who is this being presented to? Will this be a general public visual? What is the end goal?
