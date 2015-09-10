@@ -6,13 +6,22 @@
         - 3.3.3 What are the economic costs of gender gaps and inequality on socio-economic indicators?
         - 3.3.4 What are the costs of disparities in agriculture (e.g. access to land for women and men) in achieving food security and inclusive growth?
     
-    - Formula Research Question: I am studing the impact of gender equality and women's empowerment on socio-economic indicators, food security and poverty to learn if the economic concerns are impacted by the gender issue in order to address economic concerns. 
+    - Research Question Formula: I am studing the impact of gender equality and women's empowerment on socio-economic indicators, food security and poverty to learn if the economic concerns are impacted by the gender issue in order to address economic concerns. 
     
     - My hypothesis is that the gender issue will be nominal and the economic concerns are larger addressed through engaging internal revenue equally.
 
-2. Selected References
-    - ____
-3. Supplemental Sources
+2. Selected References (No references were found in the folder so all references are technically supplimental).
+    - [Gender and globalization: a macroeconomic perspective] (4_3_204_wcsdg-wp-19.pdf): 
+        - This paper explores three main topics :
+            - the gender-differentiated effects of globalization and economic policies
+            - the effects of gender inequalities on economic policites
+            - initiatives made to promote gender equality.
+        - Some paper highlights:
+            - Just as growth does not automatically trickle down to poor households, nor do income increases in poor households automatically trickle down to women and girls.
+            - In addition to the different ways in which men and women have experienced globalization, there have been differences across different segments of women, differentiated by class
+    - [Gender Inequality, Income, and Growth: Are Good Times Good for Women?] (2011-08-10 M4 - DollaryGatti(1999)GenderInequalityIncomeAndGrowth.pdf)
+
+3. Supplemental Sources (Additional research I investigated outside of files supplied by the UNDP).
      - [African Economic Research] (http://aercafrica.org/index.php/newsbooks/168-poverty-in-africa-analytical-and-policy-perspectives-by-augustin-fosu-germano-mwabu-a-erik-thorbecke) :
      - 
 4. Questions
