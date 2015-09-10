@@ -11,7 +11,7 @@
     - My hypothesis is that the gender issue will be nominal and the economic concerns are larger addressed through engaging internal revenue equally.
 
 2. Selected References (No references were found in the folder so all references are technically supplimental).
-    - [Gender and globalization: a macroeconomic perspective] (4_3_204_wcsdg-wp-19.pdf): 
+    - [Gender and globalization: a macroeconomic perspective] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/4_3_204_wcsdg-wp-19.pdf): 
         - This paper explores three main topics :
             - the gender-differentiated effects of globalization and economic policies
             - the effects of gender inequalities on economic policites
@@ -19,7 +19,7 @@
         - Some paper highlights:
             - Just as growth does not automatically trickle down to poor households, nor do income increases in poor households automatically trickle down to women and girls.
             - In addition to the different ways in which men and women have experienced globalization, there have been differences across different segments of women, differentiated by class
-    - [Gender Inequality, Income, and Growth: Are Good Times Good for Women?] (2011-08-10 M4 - DollaryGatti(1999)GenderInequalityIncomeAndGrowth.pdf)
+    - [Gender Inequality, Income, and Growth: Are Good Times Good for Women?] (https://github.com/visualizedata/undp/tree/master/data/1.1/References/2011-08-10 M4 - DollaryGatti(1999)GenderInequalityIncomeAndGrowth.pdf)
 
 3. Supplemental Sources (Additional research I investigated outside of files supplied by the UNDP).
      - [African Economic Research] (http://aercafrica.org/index.php/newsbooks/168-poverty-in-africa-analytical-and-policy-perspectives-by-augustin-fosu-germano-mwabu-a-erik-thorbecke) :
