@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <style>
+      select {
+        font-size: 1em;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top:12px;
+        padding: 5px 18px 5px 18px;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+        width: auto;
+      }
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+          select {padding-right:39px}
+      }
+      label {position:relative}
+      label:after {
+        display:none;
+          content:'<>';
+          font-weight:light;
+          font:1em "Consolas", monospace;
+          color:#ccc;
+          -webkit-transform:rotate(90deg);
+          -moz-transform:rotate(90deg);
+          -ms-transform:rotate(90deg);
+          transform:rotate(90deg);
+          right:8px; top:2px;
+          padding:38px 5px 0 0;
+          position:absolute;
+          pointer-events:none;
+      }
+      label:before {
+          content:'';
+          right:6px; top:0px;
+          width:20px; height:20px;
+          /*background:#f8f8f8;*/
+          position:absolute;
+          pointer-events:none;
+      }
+      h1, span.counter {
+        font-family: Helvetica, sans-serif;
+        font-weight: bold;
+      }
+      h1 {
+        font-size:3em;
+      }
+      div {margin 0 0; padding: 0 0; display:inline}
+      span, u, select, option {
+        vertical-align: middle;
+      }
+      span.counter {
+        transition: all 1.5s ease;
+      }
+
+      span.bad { color: red; font-size: 1.5em; text-decoration: underline;}
+      span.good { color: orange;}
+      span.strike { color: grey; text-decoration: line-through;}
+      h1.underline {text-decoration: underline}
+
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900' rel='stylesheet' type='text/css'>
+    <title>Sketch</title>
+  </head>
+  <body>
+    <div id='root'>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="vendors.js"></script>
+    <script src="app.js"></script>
+    <script src="https://use.typekit.net/agv1hsz.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  </body>
+</html>
