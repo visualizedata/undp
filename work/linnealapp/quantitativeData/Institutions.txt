@@ -1,0 +1,41 @@
+Economy	RegionName	Is there a non-discrimination clause in the constitution?	Does the constitution guarantee equality before the law?	Can an unmarried woman apply for a passport in the same way as a man?	Can a married woman apply for a passport in the same way as a man?	Can an unmarried woman apply for a national ID card in the same way as a man?	Can a married woman apply for a national ID card in the same way as a man?	Can an unmarried woman travel outside the country in the same way as a man?	Can a married woman travel outside the country in the same way as a man?	Can an unmarried woman travel outside her home in the same way as a man?	Can a married woman travel outside her home in the same way as a man?	Can an unmarried woman get a job or pursue a trade or profession in the same way as a man?	Can a married woman get a job or pursue a trade or profession in the same way as a man?	Can an unmarried woman sign a contract in the same way as a man?	Can a married woman sign a contract in the same way as a man?	Can an unmarried woman register a business in the same way as a man?	Can a married woman register a business in the same way as a man?	Can an unmarried woman open a bank account in the same way as a man?	Can a married woman open a bank account in the same way as a man?	Can an unmarried woman choose where to live in the same way as a man?	Can a married woman choose where to live in the same way as a man?	Can an unmarried woman confer citizenship to her children in the same way as a man?	Can a married woman confer citizenship to her children in the same way as a man?	Can an unmarried woman be "head of household" or "head of family" in the same way as a man?	Can a married woman be "head of household" or "head of family" in the same way as a man?	Can a married woman convey citizenship to her non-national spouse in the same way as a man?	Do married couples jointly share legal responsibility for financially maintaining the family's expenses?
+Algeria	Middle East & North Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Angola	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes
+Benin	Sub-Saharan Africa	No	Yes	Yes	No	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	No	Yes
+Botswana	Sub-Saharan Africa	Yes	No	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Burkina Faso	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	N/A	N/A	Yes	Yes
+Burundi	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	Yes
+Cameroon	Sub-Saharan Africa	No	Yes	Yes	No	Yes	No	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	No	Yes
+Chad	Sub-Saharan Africa	Yes	Yes	Yes	Yes	..	..	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	Yes	Yes
+Congo, Dem. Rep.	Sub-Saharan Africa	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes	Yes	Yes	Yes	No	Yes	No	Yes	No	Yes	No	Yes	No	Yes	Yes	Yes	No	Yes	Yes
+Congo, Rep.	Sub-Saharan Africa	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	No	Yes
+Côte d'Ivoire	Sub-Saharan Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Egypt, Arab Rep.	Middle East & North Africa	Yes	Yes	Yes	No	No	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	No
+Ethiopia	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Gabon	Sub-Saharan Africa	No	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	Yes	Yes
+Ghana	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes
+Guinea	Sub-Saharan Africa	No	Yes	Yes	Yes	..	..	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	No	Yes	No	No	Yes
+Kenya	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Lesotho	Sub-Saharan Africa	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	Yes
+Liberia	Sub-Saharan Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Madagascar	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	No	No	Yes
+Malawi	Sub-Saharan Africa	Yes	Yes	Yes	No	N/A	N/A	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	Yes
+Mali	Sub-Saharan Africa	Yes	Yes	Yes	Yes	..	..	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	No	Yes	No	No	No
+Mauritania	Sub-Saharan Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	Yes	No	No	No
+Mauritius	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Morocco	Middle East & North Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	Yes
+Mozambique	Sub-Saharan Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Namibia	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Niger	Sub-Saharan Africa	Yes	Yes	Yes	Yes	..	..	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	No	Yes	No	Yes	Yes	Yes	No	No	Yes
+Nigeria	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	Yes
+Rwanda	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	Yes	Yes
+Senegal	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	No	No	Yes
+Sierra Leone	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	Yes
+South Africa	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Sudan	Sub-Saharan Africa	Yes	Yes	Yes	No	Yes	Yes	No	No	Yes	No	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	No	No	No	No	No
+Tanzania	Sub-Saharan Africa	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	No	No
+Togo	Sub-Saharan Africa	No	Yes	Yes	Yes	Yes	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	Yes
+Tunisia	Middle East & North Africa	No	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	No	No	Yes
+Uganda	Sub-Saharan Africa	Yes	Yes	Yes	No	N/A	N/A	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Zambia	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
+Zimbabwe	Sub-Saharan Africa	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	Yes	N/A	N/A	Yes	Yes
