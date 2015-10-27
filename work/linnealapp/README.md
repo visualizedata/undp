@@ -33,15 +33,9 @@
         
 ###3. Supplemental Sources
 
-####1. Male and female homicide victims killed by intimate partner or family members as percentage of total homicide victims, time series 2005-2012
-- http://www.unodc.org/documents/gsh/data/GSH2013_IPFM.xlsx
-
-####2. Intimate partner violence: causes and prevention
-- http://www.ayamm.org/english/Violence%20against%20women%201.pdf
-
-####3. Women’s role in economic development: Overcoming the constraints
-- http://unsdsn.org/wp-content/uploads/2014/02/130520-Women-Economic-Development-Paper-for-HLP.pdf
-
+- Male and female homicide victims killed by intimate partner or family members as percentage of total homicide victims, time series 2005-2012: http://www.unodc.org/documents/gsh/data/GSH2013_IPFM.xlsx
+- Intimate partner violence: causes and prevention: http://www.ayamm.org/english/Violence%20against%20women%201.pdf
+- Women’s role in economic development: Overcoming the constraints: http://unsdsn.org/wp-content/uploads/2014/02/130520-Women-Economic-Development-Paper-for-HLP.pdf
 - International Human Development Indicators: http://hdr.undp.org/en/content/table-5-gender-related-development-index-gdi
 - International Human Development Indicators: http://hdr.undp.org/en/countries
 - UNICEF Data: Monitoring the Situation of Children and Women: http://data.unicef.org/child-protection/violent-unions.html
