@@ -94,22 +94,22 @@ function showData() {
         p.endShape(); // record graph end
       // }
       
-      p.beginShape(); // record graph begin
-        // loop through all the columns
+      // p.beginShape(); // record graph begin
+      //   // loop through all the columns
 
-      for (var colb = 0; colb < 26; colb++) {
-          valb = table.getString(row, 9); // get the data point
-          // display the text on the canvas
-          valb = parseFloat(valb); // create a number from the string to draw with
-          p.fill(200);
-          p.ellipse(map(valb, minVal, maxVal, 50, width), height/3, 2, 2); // mark values vs. no values
+      // for (var colb = 5; colb < 26; colb++) {
+      //     valb = table.getString(row, 9); // get the data point
+      //     // display the text on the canvas
+      //     valb = parseFloat(valb); // create a number from the string to draw with
+      //     p.fill(200);
+      //     p.ellipse(map(valb, minVal, maxVal, 50, width), height/3, 2, 2); // mark values vs. no values
 
-          p.stroke(0);
-          p.strokeWeight(2);
-          p.vertex(map(valb, minVal, maxVal,50, width), height/3); // record one vertex per data point
+      //     p.stroke(0);
+      //     p.strokeWeight(2);
+      //     p.vertex(map(valb, minVal, maxVal,50, width), height/3); // record one vertex per data point
 
-        }
-        p.endShape(); // record graph end
+      //   }
+      //   p.endShape(); // record graph end
       }
     };
   }
