@@ -32,12 +32,20 @@
 - This chapter discusses the influence of gender on consumption and saving in the context of a household as a microeconomic unit. Gender effects who has control of and access to household resources; expenditure and saving priorities also vary depending on gender. Women in many countries state that their husbands have full control over household resources. However, women's economic consumption is more likely to benefit economic growth. This potential is due to women's tendency to spend money on things which will further the growth of their children, therefore increasing human capital. The chapter also discusses gender inequalities that exist within children's education.
         
 ###3. Supplemental Sources
+
 ####1. Male and female homicide victims killed by intimate partner or family members as percentage of total homicide victims, time series 2005-2012
 - http://www.unodc.org/documents/gsh/data/GSH2013_IPFM.xlsx
+
 ####2. Intimate partner violence: causes and prevention
 - http://www.ayamm.org/english/Violence%20against%20women%201.pdf
+
 ####3. Women’s role in economic development: Overcoming the constraints
 - http://unsdsn.org/wp-content/uploads/2014/02/130520-Women-Economic-Development-Paper-for-HLP.pdf
+
+- International Human Development Indicators: http://hdr.undp.org/en/content/table-5-gender-related-development-index-gdi
+- International Human Development Indicators: http://hdr.undp.org/en/countries
+- UNICEF Data: Monitoring the Situation of Children and Women: http://data.unicef.org/child-protection/violent-unions.html
+- Fathom Information Design, No Ceilings: http://noceilings.org/map/#MAFMFWFR&2010
 
 ###4. Questions
 1. To what extent can the established questions be reworded in order to better focus our research for our visualizations?
