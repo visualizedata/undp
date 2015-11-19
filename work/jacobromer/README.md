@@ -1,5 +1,4 @@
-# UNDP African Human Development Report 2015
-## Jacob Romer
+# UNDP AFHDR 2015 Projects, Jacob Romer
 
 ## Project 1: [The Story Behind the Data](story)
 
