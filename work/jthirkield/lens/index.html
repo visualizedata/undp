@@ -1,0 +1,192 @@
+<html>
+<head>
+<meta charset=utf-8 />
+<title>The African Continent: Gender Equity in Focus</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+<link rel="stylesheet" type="text/css" href="styles.css">
+<style>
+  body { margin:0; padding:0; background: #000000}
+  #map { position:absolute; top:0; left:0px; height: 100%; width:100%; }
+</style>
+</head>
+<body>
+<div id="readout"></div>
+<div id="zreadout"><h2>Niger</h2><p><img src="niger.jpg" width="432" height="277" alt="niger" /></p>
+<p>The Nigerien Constitution grants equal rights regardless of gender. Niger has ratified both the Convention on the Elimination of All forms of Discrimination against Women (CEDAW) (in 1999), and the Optional Protocol on violence against women (2004).Niger has signed but not ratified the Protocol to the African Charter on Human and Peoples’ Rights on the Rights of Women in Africa. A Ministry of Social Development, Population, Advancement of Women and Protection of Children has been in place since 1998.</p>
+<p>Links: http://genderindex.org/country/niger<br></p>
+<p>etc...</p></h3></div>
+
+<style>
+#map {
+  pointer-events:all;
+  cursor:none
+  }
+#zoommap {
+ background:#eeeeee;
+  width:100px;
+  height:100px;
+  overflow:hidden;
+  -webkit-transform:rotate(-60deg);
+     -moz-transform:rotate(-60deg);
+      -ms-transform:rotate(-60deg);
+       -o-transform:rotate(-60deg);
+          transform:rotate(-60deg);
+  }
+#zoomlens {
+  overflow:visible;
+  top:-9999px;
+  left:-9999px;
+  }
+#border {
+  border:0.5px solid #404040;
+  border-radius:50%;
+  box-shadow:0 0 10px rgb(255,255,255);
+  }
+.overlay {
+  position:absolute;
+  pointer-events:none;
+  overflow:hidden;
+  width:100px;
+  height:100px;
+  z-index:1000;
+  }
+.rotater {
+  -webkit-transform:rotate(30deg);
+     -moz-transform:rotate(30deg);
+      -ms-transform:rotate(30deg);
+       -o-transform:rotate(30deg);
+          transform:rotate(30deg);
+  }
+</style>
+<div id='map'></div>
+<div id='footer'><h3>The African Continent: Gender Equity in Focus</h3>
+</div>
+<div id='zoomlens' class='overlay'>
+    <div class='overlay rotater'>
+        <div class='overlay rotater'>
+            <div id='zoommap' class='overlay'></div>
+        </div>
+    </div>
+    <div id='border' class='overlay'></div>
+</div>
+ <script type="text/javascript" src="africa.js"></script>
+<script>
+   var geojson;
+   var cnArray = [];
+   var infoArray = [];
+L.mapbox.accessToken = 'pk.eyJ1IjoianRoaXJraWVsZCIsImEiOiJjaWdiM2JyZWUxbnVydjltM3B5MThwZjdpIn0.6CxRDmKlbzs4MHL3YdrpEw';
+var map = L.mapbox.map('map', 'mapbox.satellite',{
+    gridControl: false // Disable default gridControl interactivity.
+}).setView([-1.0, 1.0], 4);
+   geojson = L.geoJson(africaData, {
+   style: style,
+     onEachFeature: onEachFeature
+   }).addTo(map);
+    
+var zoommap = L.mapbox.map('zoommap', 'mapbox.streets', {
+    fadeAnimation: false,
+    zoomControl: false,
+    attributionControl: false
+});
+
+var zl = document.getElementById('zoomlens');
+ var elt1 = document.getElementById("readout");
+ var elt2 = document.getElementById("zreadout");
+
+
+// Call update or zoom functions when
+// these events occur.
+map.on('mousemove', update);
+map.on('zoomend', zoom);
+
+function zoom(e) {
+  
+    if (e.target.getZoom() > 4) {
+         elt2.style.visibility = 'visible';
+    } else {
+	         elt2.style.visibility = 'hidden';    
+    }
+
+}
+ function zoomToFeature(e) {
+     map.setView(e.latlng, map.getZoom() + 1, true);
+//    zoommap.setView(e.latlng, map.getZoom() + 0, true);
+   }
+ function style(feature) {
+     return {
+       fillColor: '#000000', // assign color from HDR
+       weight: 1,
+       opacity: 0,
+       color: 'white',
+       dashArray: '0',
+       fillOpacity: 0
+     };
+   }
+function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+       mouseout: dropWindow,
+           click: zoomToFeature
+        });
+    }
+    
+  function highlightFeature(e) {
+     var layer = e.target;
+     dpdate(layer.feature.properties);
+     elt1.style.visibility = 'visible';
+       }
+       function dropWindow() {
+            elt1.style.visibility = 'hidden';
+       }
+dpdate = function(props) {
+
+     var nxtHTML =  '<h4>' + props.name + '</h4>';
+if (props.hdifemale2013) {
+if (props.hdifemale2013 != "..") {
+nxtHTML += '<p class="female">HDI ' + props.hdifemale2013 + '</p><p class="male">HDI ' + props.hdimale2013 + '</p>';
+}
+}
+if (props.gniFemale2011) {
+if (props.gniFemale2011 != "..") {
+nxtHTML += '<p class="female">GNI ' + props.gniFemale2011 + '</p><p class="male">GNI ' + props.gniMale2011 + '</p>';
+}
+}
+if (props.lifeexfemal2013) {
+if (props.lifeexfemal2013 != "..") {
+nxtHTML += '<p class="female">Life Expectancy ' + props.lifeexfemal2013 + '</p><p class="male">Life Expectancy' + props.lifeexmale2013 + '</p>';
+}
+}
+if (props.meanSchoolFemale02_12) {
+if (props.meanSchoolFemale02_12 != "..") {
+nxtHTML += '<p  class="female">Mean Years of School ' + props.meanSchoolFemale02_12 + '</p><p class="male">Mean Years of School ' + props.meanSchoolMale00_12 + '</p>';
+}
+
+
+if (infoArray.length > 4) {
+infoArray.shift();
+}
+
+       infoArray.push(nxtHTML);
+
+       elt1.innerHTML = " ";
+       for(var h = 0; h < 1; h++) {
+       if (infoArray[h]) {
+ elt1.innerHTML += nxtHTML;
+ }
+   }
+   }
+   };
+function update(e) {
+
+    zl.style.top = ~~e.containerPoint.y - 50 + 'px';
+    zl.style.left = ~~e.containerPoint.x -50 + 'px';
+    elt1.style.top = ~~e.containerPoint.y - 150 + 'px';
+    elt1.style.left = ~~e.containerPoint.x + 70 + 'px';
+    zoommap.setView(e.latlng, map.getZoom() + 0, true);
+
+}
+</script>
+</body>
+</html>
