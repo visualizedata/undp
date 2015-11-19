@@ -1,7 +1,7 @@
 # UNDP African Human Development Report 2015
 ## Barbara Compagnoni
 
-## [Impacts of economic matters on gender equality]
+## [Impacts of economic matters on gender equality](https://github.com/visualizedata/undp/blob/master/work/compagnb/impacts/index.html)
 
 ### Research Question
 
@@ -20,7 +20,7 @@ I am highlighting the differences in Male and Female HDR's in Africa, to explore
 - Sources include the dataset from 3.2, containing the HDI breakdown which includes GDI and information used to create that score as well as the GDP ranking provided by World Bank.
 
 
-## [Establishing the gender gap]
+## [Establishing the gender gap](https://github.com/visualizedata/undp/blob/master/work/compagnb/gap/index.html)
 
 ### Research Question
 
