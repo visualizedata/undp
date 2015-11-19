@@ -3,7 +3,7 @@
 ## Jaime Tanner 
  
 
-## Project 1: Agricultural Productivity Differences Between Male and Female Managed Farms 
+## Project 1: [Agricultural Productivity Differences Between Male and Female Managed Farms](https://github.com/visualizedata/undp/blob/master/work/jaimetanner/AerialPhoto/index.html)
  
 ### Project 1 Research Question
 
@@ -20,7 +20,7 @@ https://openknowledge.worldbank.org/bitstream/handle/10986/17790/860390WP0WB0ON0
 
 
 
-## Project 2: Child Marriage and the Gender Gap 
+## Project 2: [Child Marriage and the Gender Gap ](https://github.com/visualizedata/undp/blob/master/work/jaimetanner/Gaps/index.html)
 
 ### Project 2 Research Question
 
