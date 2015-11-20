@@ -3,6 +3,7 @@
 ## Gabi Steele
 
 ##Project 1: Combating Gender Disparities in Education Levels for Children in Africa through Approachable Design
+###[View Project](https://p5js-gabisteele.c9.io/undp/undp_Project1_Visualization/index.html)
 
 ###Research Question
 
