@@ -1,6 +1,6 @@
 #Jon Thirkield
 
-##Stems and Branches: Charting Gender Gaps in Sub-Saharan Africa's Labor Markets
+##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/stems/">Stems and Branches: Charting Gender Gaps in Sub-Saharan Africa's Labor Markets</a>
 
 ###Research Question
 How can data on gender gaps be viewed against broader indicators for a country and a region?
@@ -12,7 +12,7 @@ While gender gaps are deeply embedded in each country's and each region's cultur
 This chart employs both wage and business/labor data sets for men and women, and charts them against broader indicators for a country such as HDI rank and poverty head count ratio. The design works to highlight the divide between men and women, while never loosing sight of their inherent connection and dependance on each other.
 
 
-##The African Continent: Gender Equity in Focus
+##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/lens/">The African Continent: Gender Equity in Focus</a>
 
 ###Research Question
 What do we see when we look at the African Continent? How can Gender Equity become a lens for learning about Africa?
