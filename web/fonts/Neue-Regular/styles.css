@@ -1,0 +1,8 @@
+
+@font-face {
+  font-family: 'Neue-Regular';
+  src: url('Neue-Regular.eot?#iefix') format('embedded-opentype'),  url('Neue-Regular.otf')  format('opentype'),
+	     url('Neue-Regular.woff') format('woff'), url('Neue-Regular.ttf')  format('truetype'), url('Neue-Regular.svg#Neue-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
