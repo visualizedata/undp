@@ -115,6 +115,7 @@ Styles
     line-height: 4.46667rem;
     margin-top: -0.2rem;
     padding-left: 100px;
+    color: #E82E21;
 }
 
 #banner h1 {
@@ -129,9 +130,10 @@ Styles
     color: #000;
 }
 
-#banner h1 a span.subtitle {
+#banner .subtitle {
     font-size: 1.5rem;
     letter-spacing: 0;
+    margin-left: 100px;
 }
 
 #banner #top-logo {
@@ -172,6 +174,6 @@ Styles
 }
 
 #inner-menu-stripe {
-    width: 157px;
+    width: 100px;
     position: absolute;
 }
