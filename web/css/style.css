@@ -71,7 +71,7 @@ Styles
 }
 
 .font-width-1 {
-    font-family: "neue-display";
+    font-family: "neue-display-random";
     font-weight: 700;
 }
 
@@ -107,6 +107,11 @@ Styles
 }
 
 #banner h1 {
+    font-size: 18pt;
+}
+
+h2 {
+    font-family: "neue-regular";
     font-size: 18pt;
 }
 
