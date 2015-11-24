@@ -2,7 +2,7 @@
 ## Justine Keller
  
 ## Quantitative Data
-## Project 1: Human Development Index Gender Gap
+## Project 1: [Human Development Index Gender Gap] (https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project1)
  
 ## Qualitative Data
 ### Project 1 Research Question
@@ -24,7 +24,7 @@ I am visualizing the gap between the Human Development Index of Females and the 
 The source I used was the HDR 2014. I wanted to focus on this one data set to strongly desplay the HDI without distraction.
 
 
-## Project 2: Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender
+## Project 2: [Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender] (https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project2)
 
 ### Project 2 Research Question
 
