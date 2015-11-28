@@ -85,6 +85,21 @@ Styles
     font-weight: 700;
 }
 
+.lead {
+    font-family: "neue-regular";
+    font-size: 18px;
+}
+
+p {
+    font-family: "neue-regular";
+    font-size: 14px;
+}
+
+aside {
+    font-family: "neue-display-random";
+    font-size: 18px;
+}
+
 .bottom-stripe {
     width: 100%;
     padding: 0 0px 5px 0;
@@ -110,10 +125,6 @@ Styles
     font-size: 18pt;
 }
 
-h2 {
-    font-family: "neue-regular";
-    font-size: 18pt;
-}
 
 #banner h1.sitename {
     font-size: 4.33333rem;
