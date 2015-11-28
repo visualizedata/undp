@@ -85,19 +85,45 @@ Styles
     font-weight: 700;
 }
 
-.lead {
-    font-family: "neue-regular";
-    font-size: 18px;
+iframe {
+    width:100%;
+    height: auto;
+    border: 0;
+    margin-bottom: 20px;
 }
 
-p {
-    font-family: "neue-regular";
-    font-size: 14px;
+h2 {
+    font-family: "neue-regular" !important;
+    font-size: 14.5pt;
 }
 
-aside {
-    font-family: "neue-display-random";
-    font-size: 18px;
+a {
+    color: black !important;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #e82e21 !important;
+    text-decoration: none !important;
+}
+
+body, p {
+    font-family: "neue-regular";
+    font-size: 14.5px;
+}
+
+h3 {
+    font-family: "neue-display-ultra" !important;
+    letter-spacing: 0.05em;
+    font-kerning: normal;
+    line-height: 1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    font-size: 14.5px !important;
+}
+
+.title {
+    font-family: "neue-regular-italic" !important";
 }
 
 .bottom-stripe {
@@ -193,3 +219,4 @@ aside {
     width: 100px;
     position: absolute;
 }
+
