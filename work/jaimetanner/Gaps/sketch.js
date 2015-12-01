@@ -2,7 +2,8 @@ var table;
 var data = new Object;
 var back = 85;
 var tri = false;
-var opt1, opt2, opt3, opt4, opt5 = false;
+var opt1 = false, opt2 = false, opt3 = false, opt4 = false, opt5 = false;
+var clicked1 = false, clicked2, clicked3, clicked4, clicked5 = false;
 // var opt2 = false;
 // var opt3 = false;
 var count;
@@ -78,7 +79,7 @@ function setup() {
   text("Human Development Index", width / 2 - (textWidth("Human Development Index") / 2), height * 0.98);
 
   stroke(black);
-  fill(backgroundColor);
+  // fill(backgroundColor);
   strokeWeight(3);
   rect(width * 0.6, height * 0.05, width * 0.06, width * 0.03, 10, 10, 10, 10);
   rect(width * 0.675, height * 0.05, width * 0.06, width * 0.03, 10, 10, 10, 10);
@@ -112,28 +113,28 @@ function draw() {
   strokeWeight(1);
 
 
-  if (mouseX >= (width * 0.6) && mouseX <= (width * 0.6) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03)) {
+  if (mouseX >= (width * 0.6) && mouseX <= (width * 0.6) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt1 == false) {
     opt1 = true;
 
-  } else {
+  } else if (mouseX >= (width * 0.6) && mouseX <= (width * 0.6) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt1 == true){
     opt1 = false;
   }
 
-  if (mouseX >= (width * 0.675) && mouseX <= (width * 0.675) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03)) {
+  if (mouseX >= (width * 0.675) && mouseX <= (width * 0.675) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt2 == false) {
     opt2 = true;
-  } else {
+  } else if (mouseX >= (width * 0.675) && mouseX <= (width * 0.675) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt2 == true){
     opt2 = false;
   }
 
-  if (mouseX >= (width * 0.75) && mouseX <= (width * 0.75) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03)) {
+  if (mouseX >= (width * 0.75) && mouseX <= (width * 0.75) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt3 == false) {
     opt3 = true;
-  } else {
+  } else if (mouseX >= (width * 0.75) && mouseX <= (width * 0.75) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt3 == true){
     opt3 = false;
   }
 
-  if (mouseX >= (width * 0.825) && mouseX <= (width * 0.825) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03)) {
+  if (mouseX >= (width * 0.825) && mouseX <= (width * 0.825) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt4 == false) {
     opt4 = true;
-  } else {
+  } else if (mouseX >= (width * 0.825) && mouseX <= (width * 0.825) + (width * 0.06) && mouseY >= height * 0.05 && mouseY <= (height * 0.05) + (width * 0.03) && opt4 == true){
     opt4 = false;
   }
   // if (opt1 == true) {
@@ -223,7 +224,7 @@ function mousePressed() {
     for (var r = 0; r < count; r++) {
       drawTriangle(r);
     }
-  } else {
+  } else if (opt1 == false){
     stroke(black);
     fill(backgroundColor);
     strokeWeight(3);
