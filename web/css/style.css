@@ -87,7 +87,7 @@ Styles
 
 iframe {
     width:100%;
-    height: auto;
+    height: 600px;
     border: 0;
     margin-bottom: 20px;
 }
@@ -123,7 +123,18 @@ h3 {
 }
 
 .title {
-    font-family: "neue-regular-italic" !important";
+    font-family: "neue-regular-italic" !important;
+}
+
+.project {
+    /*padding-top: 20px !important;*/
+    border: 6px solid #fff;
+    transition: all .5s ease-in-out;
+}
+
+.project:hover {
+    border: 6px solid #000;
+    transition: all .5s ease-in-out;
 }
 
 .bottom-stripe {
@@ -144,7 +155,7 @@ h3 {
 
 #banner {
     margin: 0;
-    padding: 10px 0 0;
+    /*padding: 10px 0 0;*/
 }
 
 #banner h1 {
