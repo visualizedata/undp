@@ -127,13 +127,13 @@ h3 {
 }
 
 .project {
-    /*padding-top: 20px !important;*/
-    border: 6px solid #fff;
+    padding-top: 20px !important;
+    border: 5px solid #fff;
     transition: all .5s ease-in-out;
 }
 
 .project:hover {
-    border: 6px solid #000;
+    border: 5px solid #000;
     transition: all .5s ease-in-out;
 }
 
