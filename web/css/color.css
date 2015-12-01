@@ -38,15 +38,15 @@
 }
 
 /* background */
-.bg-1 { color: MidnightBlue }
-.bg-2 { color: SlateGrey }
-.bg-3 { color: SteelBlue }
-.bg-4 { color: SeaGreen }
-.bg-5 { color: LimeGreen }
-.bg-6 { color: Red }
-.bg-7 { color: Maroon }
-.bg-8 { color: GoldenRod }
-.bg-9 { color: DimGrey }
-.bg-10 { color: Tan }
-.bg-11 { color: White }
-.bg-12 { color: Black }
+.bg-1 { background-color: MidnightBlue }
+.bg-2 { background-color: SlateGrey }
+.bg-3 { background-color: SteelBlue }
+.bg-4 { background-color: SeaGreen }
+.bg-5 { background-color: LimeGreen }
+.bg-6 { background-color: Red }
+.bg-7 { background-color: Maroon }
+.bg-8 { background-color: GoldenRod }
+.bg-9 { background-color: DimGrey }
+.bg-10 { background-color: Tan }
+.bg-11 { background-color: White }
+.bg-12 { background-color: Black }
