@@ -105,6 +105,7 @@ a {
 a:hover {
     color: #e82e21 !important;
     text-decoration: none !important;
+    transition: all .3s ease-in-out;
 }
 
 body, p {
