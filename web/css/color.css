@@ -1,106 +1,52 @@
-/*foreground*/
+/* foreground */
 
-.c-1,
-.black {
-    color: Black;
+.c-1, .midnight-blue { 
+  color: MidnightBlue
+}
+.c-2, .slate-grey { 
+  color: SlateGrey
+}
+.c-3, .steel-blue { 
+  color: SteelBlue
+}
+.c-4, .sea-green { 
+  color: SeaGreen
+}
+.c-5, .lime-green { 
+  color: LimeGreen
+}
+.c-6, .red { 
+  color: Red
+}
+.c-7, .marron { 
+  color: Maroon
+}
+.c-8, .golden-rod { 
+  color: GoldenRod
+}
+.c-9, .dim-grey { 
+  color: DimGrey
+}
+.c-10, .tan { 
+  color: Tan
+}
+.c-11, .white { 
+  color: White
+}
+.c-12, .black { 
+  color: Black
 }
 
-.c-2,
-.dark-gray {
-    color: DarkGray;
-}
-
-.c-3,
-.light-gray {
-    color: LightGray;
-}
-
-.c-4,
-.white {
-    color: White;
-}
-
-.c-5 {
-    color: Crimson;
-}
-
-.c-6,
-.royal-blue {
-    color: RoyalBlue;
-}
-
-.c-7,
-.lime-green {
-    color: LimeGreen;
-}
-
-.c-8 {
-    color: DeepPink;
-}
-
-.c-9 {
-    color: Aquamarine;
-}
-
-.c-10 {
-    color: Gold;
-}
-
-.c-11 {
-    color: DarkOrange;
-}
-
-.c-12 {
-    color: Navy;
-}
-
-
-/*background*/
-
-.bg-1 {
-    background-color: Black;
-}
-
-.bg-2 {
-    background-color: DarkGray;
-}
-
-.bg-3 {
-    background-color: LightGray;
-}
-
-.bg-4 {
-    background-color: White;
-}
-
-.bg-5 {
-    background-color: Crimson;
-}
-
-.bg-6 {
-    background-color: RoyalBlue;
-}
-
-.bg-7 {
-    background-color: LimeGreen;
-}
-
-.bg-8 {
-    background-color: DeepPink;
-}
-
-.bg-9 {
-    background-color: Aquamarine;
-}
-
-.bg-10 {
-    background-color: Gold;
-}
-
-.bg-11 {
-    background-color: DarkOrange;
-}
-
-.bg-12 {
-    background-color: Navy;
-}
+/* background */
+.bg-1 { color: MidnightBlue }
+.bg-2 { color: SlateGrey }
+.bg-3 { color: SteelBlue }
+.bg-4 { color: SeaGreen }
+.bg-5 { color: LimeGreen }
+.bg-6 { color: Red }
+.bg-7 { color: Maroon }
+.bg-8 { color: GoldenRod }
+.bg-9 { color: DimGrey }
+.bg-10 { color: Tan }
+.bg-11 { color: White }
+.bg-12 { color: Black }
