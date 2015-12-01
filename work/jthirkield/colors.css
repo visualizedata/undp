@@ -1,0 +1,35 @@
+/*a color palette Justine and I found -- in which all the colors are cooridinated.*/
+
+.c-1, .green { 
+  color: rgb(88,166,86)
+}
+.c-2, .light-blue { 
+  color: rgb(50,153,143)
+}
+.c-3, .dark-blue { 
+  color: rgb(2, 39, 95)
+}
+.c-4, .black { 
+  color: rgb(0,0,0)
+}
+.c-5, .off-white { 
+  color: rgb(238,226,210)
+}
+.c-6, .gray { 
+  color: rgb(113, 121, 124)
+}
+.c-7, .brown { 
+  color: rgb(108,58,32)
+}
+.c-8, .dark-red { 
+  color: rgb(147,38,47)
+}
+.c-9, .mid-red { 
+  color: rgb(185,61,71)
+}
+.c-10, .light-red { 
+  color: rgb(225,96,108)
+}
+.c-11, .white { 
+  color: rgb(255,255,255)
+}
