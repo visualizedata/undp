@@ -232,3 +232,11 @@ h3 {
     position: absolute;
 }
 
+#colors {
+    position: fixed;
+    bottom: 0;
+}
+
+.marginbot-50 {
+	margin-bottom: 50px !important;
+}
