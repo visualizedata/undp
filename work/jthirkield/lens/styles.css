@@ -26,18 +26,22 @@ margin-left: 200px;
 h4 {
 font-family: 'Helvectica Neue', Helvetica, serif;
 font-style: normal;
+/* 
 line-height: 13pt;
+ */
 font-size: 10pt;
 color: #666;
 margin: 3px;
-margin-top: 10px;
+/* 
+margin-top: 3px;
+ */
 }
 
 .male {
-color: #000066;
+color: #333333;
 }
 .female {
-color: #006633;
+color: #333333;
 }
 
 .headline {
@@ -57,10 +61,32 @@ a {
   z-index: 100;
   top:-200px;
   left: -200px;
-  width: 200;
-  height: 200px;
-  padding:15px;
+  width: 200px;
+/* 
+  height: 240px;
+ */
+  padding:5px 7px 5px 7px;
+/* 
   line-height: 22px;
+ */
+  color: #333333;
+  font-size: 11px;
+  visibility: hidden;
+}
+#compares {
+      position: absolute;
+              background-color: rgba(233,233,233,0.9);
+  z-index: 101;
+  top: 10px;
+  left: 10px;
+  width: 200px;
+/* 
+  height: 240px;
+ */
+  padding:5px 7px 5px 7px;
+/* 
+  line-height: 22px;
+ */
   color: #333333;
   font-size: 11px;
   visibility: hidden;

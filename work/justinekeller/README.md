@@ -3,6 +3,7 @@
  
 ## Quantitative Data
 ## Project 1: [Human Development Index Gender Gap] (https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project1)
+## [Print Project 1] ((https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project1b)
  
 ## Qualitative Data
 ### Project 1 Research Question

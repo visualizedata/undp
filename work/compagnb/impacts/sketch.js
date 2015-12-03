@@ -5,8 +5,19 @@ var hdiRanks = [];
 var hdiGaps = [];
 var Fhdis = [];
 var Mhdis = [];
+var jsonRegions = [];
 var geometrys = [];
 var geojson = [];
+var regions = [
+    'Pick A Region',
+    'All Africa - HDR',
+    'Central - HDR',
+    'East - HDR',
+    'West - HDR',
+    'Northern - HDR',
+    'Southern - HDR'];
+    
+var dropValue = 'Central - HDR';
 
 function preload(){
   
@@ -17,74 +28,43 @@ function setup() {
    
   initLeaflet(); // load leaflet functions and creat map and defined view
   loadJSON("africa.json", showData);
-
+  regionFilter();
 
 }
 
 function draw() {
-  
+
+
 
 }
-
-function addLegend(){
-  var legend = L.control({
-     position: 'bottomleft'
-  });
-  legend.on('add', function(e){
-     var div = L.DomUtil.create('div', 'info legend'),
-       grades = ["Unavailable", 50, 75, 100, 125, 150, 175],
-       labels = [];
-    div.innerHTML += '<h4> HDR Ranks </h4>';
-     // iterate through the array and make a label with a colored square
-     for (var i = 0; i < grades.length; i++) {
-       // for all numbers do the following to mark hdr ranges
-       if (grades[i] != "Unavailable") {
-         div.innerHTML +=
-           '<i style="background:' + setColor(grades[i] + 1) + '"></i> ' +
-           grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-       }
-       // but I don't want a range for the first "unavailable" so do this instead
-       if (grades[i] == "Unavailable") {
-         div.innerHTML +=
-           '<i style="background:' + setColor(grades[i]) + '"></i> ' +
-           grades[i] + '<br>';
-       }
-     }
-  //   // return the div when completed
-    return div;
-  // };
-  })
-   legend.addTo(map);
-
+function removeGeoJson(i) {
+  map.removeLayer(geojson[i]);
+  geojson[i].clearLayers();
 }
 
-function addGeoJson(data) {
-
-  for(var i = 0; i< data.features.length; i++){
+function addGeoJson(i) {
+      geojson[i] = L.geoJson([geometrys[i]],{
+        style: addStyle(i)
+        // onEachFeature: onEachFeature(i)
+        });
     
-    geojson[i] = L.geoJson([data.features[i].geometry],{
-      style: addStyle(i)
-      // onEachFeature: onEachFeature(i)
-      });
-    geojson[i].on('mouseover', function(e) {
-      var layer = e.target;
-      // console.log("test in");
-      layer.setStyle({
-        weight: 3,
-        color: '#FFF',
-      });
-    }).on('mouseout', function(e) {
-      // console.log("test out");
-      var layer = e.target;
-      layer.setStyle({
-        weight: 1,
-        color: '#FFF',
-      });
-    }).on('click', function(e){
-      map.fitBounds(e.target.getBounds());
-    }).addTo(map);
-    // geojson[i].addTo(map);
-  }
+      geojson[i].on('mouseover', function(e) {
+        var layer = e.target;
+        // console.log("test in");
+        layer.setStyle({
+          weight: 3,
+          color: '#FFF',
+        });
+      }).on('mouseout', function(e) {
+        // console.log("test out");
+        var layer = e.target;
+        layer.setStyle({
+          weight: 1,
+          color: '#FFF',
+        });
+      }).on('click', function(e){
+        map.fitBounds(e.target.getBounds());
+      }).addTo(map);
 
 }
 
@@ -95,18 +75,18 @@ function addStyle(i){
     color: '#FFF',
     dashArray: '0',
     fillOpacity: 0.7,
-    fillColor: setColor(hdiRanks[i])
+    fillColor: setColor(i)
   }
 }
 
-function setColor(hdiRank){
-  return hdiRank > 175 ? '#800026' :
-       hdiRank > 150 ? '#BD0026' :
-       hdiRank > 125 ? '#E31A1C' :
-       hdiRank > 100 ? '#FC4E2A' :
-       hdiRank > 75 ? '#FD8D3C' :
-       hdiRank > 50 ? '#FEB24C' :
-       hdiRank > 25 ? '#FED976' :
+function setColor(i){
+    return hdiRanks[i] > 175 ? '#800026' :
+       hdiRanks[i]  > 150 ? '#BD0026' :
+       hdiRanks[i]  > 125 ? '#E31A1C' :
+       hdiRanks[i]  > 100 ? '#FC4E2A' :
+       hdiRanks[i]  > 75 ? '#FD8D3C' :
+       hdiRanks[i]  > 50 ? '#FEB24C' :
+       hdiRanks[i]  > 25 ? '#FED976' :
        '#FED976';
 }
 
@@ -116,11 +96,10 @@ function showData(data) {
     countryNames[i]= data.features[i].properties.name;
     hdiRanks[i]= data.features[i].properties.hdrRank;
     hdiGaps[i]= data.features[i].properties.hdrGap;
-    // Fhdis[i]= data.features[i].properties.2013Fhdi;
-    // Mhdis[i]= data.features[i].properties.2013Mhdi;
     geometrys[i]= data.features[i].geometry;
+    jsonRegions[i] = data.features[i].properties.region;
+   
   }
-  addGeoJson(data);
 }
 
 // init leaflet using a custom mapbox
@@ -135,9 +114,58 @@ function initLeaflet() {
   // leaflet needs this function, no need to do anything here
   function onMapClick(e) {}
   map.on('click', onMapClick);
+  
 }
 
-// // function to change window size when modified
-// window.onresize = function() {
-//   canvas.size(windowWidth * .4, windowHeight-75);
-// };
+function regionFilter() {
+  dropdown = createElement('select');
+  dropdown.position(0, 0);
+  for (var i = 0; i < regions.length; i++) {
+    var option = createElement('option');
+    option.attribute('value', regions[i]);
+    option.html(regions[i]);
+    option.parent(dropdown);
+  }
+  dropdown.parent('filter');
+    var droptest = createDiv('what is selected?')
+  droptest.parent('value');
+
+  dropdown.elt.onchange = function() {
+    droptest.html(this.value);
+    dropValue = this.value;
+    console.log(dropValue);
+    for(var i = 0; i< geometrys.length; i++){
+      if (dropValue === 'All Africa - HDR'){
+        addGeoJson(i);
+      } else if (dropValue === 'Central - HDR' && jsonRegions[i] === 'central'){
+        addGeoJson(i);
+      } else if (dropValue === 'Central - HDR' && jsonRegions[i] != 'central') {
+        removeGeoJson(i);
+      } else if (dropValue === 'East - HDR' && jsonRegions[i] === 'east'){
+        addGeoJson(i);
+      } else if (dropValue === 'East - HDR' && jsonRegions[i] !== 'east') {
+        removeGeoJson(i);
+      } else if (dropValue === 'Northern - HDR' && jsonRegions[i] === 'northern'){
+        addGeoJson(i);
+      } else if (dropValue === 'Northern - HDR' && jsonRegions[i] !== 'northern') {
+        removeGeoJson(i);
+      } else if (dropValue === 'Southern - HDR' && jsonRegions[i] === 'southern'){
+        addGeoJson(i);
+      } else if (dropValue === 'Southern - HDR' && jsonRegions[i] !== 'southern') {
+        removeGeoJson(i);
+      }else if (dropValue === 'West - HDR' && jsonRegions[i] === 'west'){
+        addGeoJson(i);
+      }else if (dropValue === 'West - HDR' && jsonRegions[i] !== 'west') {
+        removeGeoJson(i);
+      }else {
+        removeGeoJson(i);
+      }
+    }
+  }
+}
+
+// function to change window size when modified
+window.onresize = function() {
+  canvas.size(windowWidth, windowHeight);
+
+};
