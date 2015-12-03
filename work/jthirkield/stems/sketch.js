@@ -23,11 +23,46 @@ var hdimin = 100;
 var theYlimit = 0;
 var theLowerY = 0;
 var maleHigher = true;
+ var centralColor;
+var eastColor;
+var southernColor;
+var westColor;
+var backColor;
+
+
 
 
 function setup() {
   createCanvas(windowWidth,windowHeight);
- background(229,221,203);
+// centralColor = color(177, 154, 36);
+// eastColor = color(85,149,40);
+// southernColor = color(72, 96, 218);
+// westColor =  color(177,84,36);
+//backColor = color(229,221,203)
+// backColor = color(255)
+// centralColor = color(255, 140, 0);
+// eastColor = color(50, 205, 50);
+// southernColor = color(65, 105, 225);
+// westColor =  color(220, 20, 60);
+centralColor = color('GoldenRod');
+eastColor = color('SeaGreen');
+southernColor = color('MidnightBlue');
+westColor =  color('Maroon');
+backColor = color(210,180,140,40)
+
+// backColor = color(238,226,210);
+// //backColor = color(0);
+// centralColor = color(108,58,32);
+// eastColor = color(88,166,86);
+// //eastColor = color(147,38,47);
+// southernColor = color(185,61,71);
+// //southernColor = color(2, 39, 95);
+// westColor =  color(50,153,143);
+// //westColor =  color(185,61,71);
+
+background(255);
+background(backColor);
+
   countryTable2 = loadTable("povheadcount.tsv", "tsv", "header", nextData);
 }
 function nextData() {
@@ -62,7 +97,8 @@ function setData() {
           }
           }
   }
-   background(229,221,203);
+  background(255);
+   background(backColor);
   makeAxis();
 
     for (var i = 0; i < countryObject.length; i++) {
@@ -159,7 +195,8 @@ function dataChange(sel) {
 for (var i = 0; i < countryObject.length; i++) {
    countryObject[i].update();
    }
-      background(229,221,203);
+   background(255);
+      background(backColor);
     makeAxis();
     namecollision = [];
  for (var i = 0; i < countryObject.length; i++) {
@@ -173,7 +210,8 @@ function regionSort(num) {
         regionsTest[num] = 1;
   }
       resetMaxs();
-        background(229,221,203);
+      background(255);
+        background(backColor);
     makeAxis();
     namecollision = [];
    for (var i = 0; i < countryObject.length; i++) {
@@ -187,7 +225,8 @@ function sortChange(sel) {
     //console.log(tnum)
     datasort = Number(tnum);
     resetMaxs();
-          background(229,221,203);
+    background(255);
+          background(backColor);
     makeAxis();
     namecollision = [];
  for (var i = 0; i < countryObject.length; i++) {
@@ -220,7 +259,8 @@ function resetMaxs() {
 function makeAxis() {
   textSize(11);
  textFont("monaco");
- fill(152,142,120, 50);
+ //fill(152,142,120, 50);
+ fill(211,211,211, 50);
  stroke(152,142,120,50);
  rect(width * 0.05, height * 0.75, width * 0.85, 20);
   fill(33);
@@ -293,13 +333,13 @@ var thisX = map(xpoint,maxnum,minnum,width * 0.05,width * 0.9);
 textAlign(CENTER,TOP);
 noStroke();
 if (region == "central")
-  fill(177, 154, 36);
+  fill(centralColor);
 else if (region == "east")
-  fill(85,149,40);
+  fill(eastColor);
 else if (region == "southern")
-  fill(72, 96, 218);
+  fill(southernColor);
 else if (region == "west")
-  fill(177,84,36);
+  fill(westColor);
 
 var startDraw = height * 0.75 + 20;
 var forkHere = theLowerY + 25;
@@ -343,19 +383,20 @@ while (startDraw - 5 > theYlimit) {
 }
 noFill();
 if (region == "central")
-  stroke(177, 154, 36);
+  stroke(centralColor);
 else if (region == "east")
-  stroke(85,149,40);
+  stroke(eastColor);
 else if (region == "southern")
-  stroke(72, 96, 218);
+  stroke(southernColor);
 else if (region == "west")
-  stroke(177,84,36);
+  stroke(westColor);
   ellipse(thisX + 10, theYlimit,8,8);
 
 }
 function windowResized() {
 resizeCanvas(windowWidth, windowHeight);
-         background(229,221,203);
+background(255);
+         background(backColor);
     makeAxis();
     namecollision = [];
  for (var i = 0; i < countryObject.length; i++) {
