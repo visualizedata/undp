@@ -102,9 +102,15 @@ a {
     text-decoration: none;
 }
 
+.sitename a {
+    color: #e82e21 !important;
+    text-decoration: none;
+}
+
 a:hover {
     color: #e82e21 !important;
     text-decoration: none !important;
+    transition: all .3s ease-in-out;
 }
 
 body, p {
@@ -168,7 +174,7 @@ h3 {
     line-height: 4.46667rem;
     margin-top: -0.2rem;
     padding-left: 100px;
-    color: #E82E21;
+    color: #E82E21 !important;
 }
 
 #banner h1 {
@@ -231,3 +237,11 @@ h3 {
     position: absolute;
 }
 
+#colors {
+    position: fixed;
+    bottom: 0;
+}
+
+.marginbot-50 {
+	margin-bottom: 50px !important;
+}
