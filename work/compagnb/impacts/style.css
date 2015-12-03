@@ -54,7 +54,7 @@ hr{
 }
 
 #map {
-   width: 40%;
+   width: 50%;
    height: 100%;
 }
 .info {
@@ -96,4 +96,19 @@ hr{
    width: 50%;
    height: 500px;
    background: #2B2B2B;
+}
+#value{
+  visibility: hidden;
+  height: 0px;
+}
+#filter{
+  position: absolute;
+  width: 40%;
+  height: 10%;
+  /*background: #2B2B2B;*/
+  z-index: 100;
+}
+#filter select{
+  margin-top:10px;
+  margin-left:75%;
 }
