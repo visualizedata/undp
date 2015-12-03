@@ -1,4908 +1,4 @@
-/*! p5.js v0.4.19 November 11, 2015 */
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.p5 = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-
-},{}],2:[function(_dereq_,module,exports){
-// Run-time checking of preconditions.
-
-'use strict';
-
-// Precondition function that checks if the given predicate is true.
-// If not, it will throw an error.
-exports.argument = function(predicate, message) {
-    if (!predicate) {
-        throw new Error(message);
-    }
-};
-
-// Precondition function that checks if the given assertion is true.
-// If not, it will throw an error.
-exports.assert = exports.argument;
-
-},{}],3:[function(_dereq_,module,exports){
-// Drawing utility functions.
-
-'use strict';
-
-// Draw a line on the given context from point `x1,y1` to point `x2,y2`.
-function line(ctx, x1, y1, x2, y2) {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-}
-
-exports.line = line;
-
-},{}],4:[function(_dereq_,module,exports){
-// Glyph encoding
-
-'use strict';
-
-var cffStandardStrings = [
-    '.notdef', 'space', 'exclam', 'quotedbl', 'numbersign', 'dollar', 'percent', 'ampersand', 'quoteright',
-    'parenleft', 'parenright', 'asterisk', 'plus', 'comma', 'hyphen', 'period', 'slash', 'zero', 'one', 'two',
-    'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'colon', 'semicolon', 'less', 'equal', 'greater',
-    'question', 'at', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-    'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bracketleft', 'backslash', 'bracketright', 'asciicircum', 'underscore',
-    'quoteleft', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x', 'y', 'z', 'braceleft', 'bar', 'braceright', 'asciitilde', 'exclamdown', 'cent', 'sterling',
-    'fraction', 'yen', 'florin', 'section', 'currency', 'quotesingle', 'quotedblleft', 'guillemotleft',
-    'guilsinglleft', 'guilsinglright', 'fi', 'fl', 'endash', 'dagger', 'daggerdbl', 'periodcentered', 'paragraph',
-    'bullet', 'quotesinglbase', 'quotedblbase', 'quotedblright', 'guillemotright', 'ellipsis', 'perthousand',
-    'questiondown', 'grave', 'acute', 'circumflex', 'tilde', 'macron', 'breve', 'dotaccent', 'dieresis', 'ring',
-    'cedilla', 'hungarumlaut', 'ogonek', 'caron', 'emdash', 'AE', 'ordfeminine', 'Lslash', 'Oslash', 'OE',
-    'ordmasculine', 'ae', 'dotlessi', 'lslash', 'oslash', 'oe', 'germandbls', 'onesuperior', 'logicalnot', 'mu',
-    'trademark', 'Eth', 'onehalf', 'plusminus', 'Thorn', 'onequarter', 'divide', 'brokenbar', 'degree', 'thorn',
-    'threequarters', 'twosuperior', 'registered', 'minus', 'eth', 'multiply', 'threesuperior', 'copyright',
-    'Aacute', 'Acircumflex', 'Adieresis', 'Agrave', 'Aring', 'Atilde', 'Ccedilla', 'Eacute', 'Ecircumflex',
-    'Edieresis', 'Egrave', 'Iacute', 'Icircumflex', 'Idieresis', 'Igrave', 'Ntilde', 'Oacute', 'Ocircumflex',
-    'Odieresis', 'Ograve', 'Otilde', 'Scaron', 'Uacute', 'Ucircumflex', 'Udieresis', 'Ugrave', 'Yacute',
-    'Ydieresis', 'Zcaron', 'aacute', 'acircumflex', 'adieresis', 'agrave', 'aring', 'atilde', 'ccedilla', 'eacute',
-    'ecircumflex', 'edieresis', 'egrave', 'iacute', 'icircumflex', 'idieresis', 'igrave', 'ntilde', 'oacute',
-    'ocircumflex', 'odieresis', 'ograve', 'otilde', 'scaron', 'uacute', 'ucircumflex', 'udieresis', 'ugrave',
-    'yacute', 'ydieresis', 'zcaron', 'exclamsmall', 'Hungarumlautsmall', 'dollaroldstyle', 'dollarsuperior',
-    'ampersandsmall', 'Acutesmall', 'parenleftsuperior', 'parenrightsuperior', '266 ff', 'onedotenleader',
-    'zerooldstyle', 'oneoldstyle', 'twooldstyle', 'threeoldstyle', 'fouroldstyle', 'fiveoldstyle', 'sixoldstyle',
-    'sevenoldstyle', 'eightoldstyle', 'nineoldstyle', 'commasuperior', 'threequartersemdash', 'periodsuperior',
-    'questionsmall', 'asuperior', 'bsuperior', 'centsuperior', 'dsuperior', 'esuperior', 'isuperior', 'lsuperior',
-    'msuperior', 'nsuperior', 'osuperior', 'rsuperior', 'ssuperior', 'tsuperior', 'ff', 'ffi', 'ffl',
-    'parenleftinferior', 'parenrightinferior', 'Circumflexsmall', 'hyphensuperior', 'Gravesmall', 'Asmall',
-    'Bsmall', 'Csmall', 'Dsmall', 'Esmall', 'Fsmall', 'Gsmall', 'Hsmall', 'Ismall', 'Jsmall', 'Ksmall', 'Lsmall',
-    'Msmall', 'Nsmall', 'Osmall', 'Psmall', 'Qsmall', 'Rsmall', 'Ssmall', 'Tsmall', 'Usmall', 'Vsmall', 'Wsmall',
-    'Xsmall', 'Ysmall', 'Zsmall', 'colonmonetary', 'onefitted', 'rupiah', 'Tildesmall', 'exclamdownsmall',
-    'centoldstyle', 'Lslashsmall', 'Scaronsmall', 'Zcaronsmall', 'Dieresissmall', 'Brevesmall', 'Caronsmall',
-    'Dotaccentsmall', 'Macronsmall', 'figuredash', 'hypheninferior', 'Ogoneksmall', 'Ringsmall', 'Cedillasmall',
-    'questiondownsmall', 'oneeighth', 'threeeighths', 'fiveeighths', 'seveneighths', 'onethird', 'twothirds',
-    'zerosuperior', 'foursuperior', 'fivesuperior', 'sixsuperior', 'sevensuperior', 'eightsuperior', 'ninesuperior',
-    'zeroinferior', 'oneinferior', 'twoinferior', 'threeinferior', 'fourinferior', 'fiveinferior', 'sixinferior',
-    'seveninferior', 'eightinferior', 'nineinferior', 'centinferior', 'dollarinferior', 'periodinferior',
-    'commainferior', 'Agravesmall', 'Aacutesmall', 'Acircumflexsmall', 'Atildesmall', 'Adieresissmall',
-    'Aringsmall', 'AEsmall', 'Ccedillasmall', 'Egravesmall', 'Eacutesmall', 'Ecircumflexsmall', 'Edieresissmall',
-    'Igravesmall', 'Iacutesmall', 'Icircumflexsmall', 'Idieresissmall', 'Ethsmall', 'Ntildesmall', 'Ogravesmall',
-    'Oacutesmall', 'Ocircumflexsmall', 'Otildesmall', 'Odieresissmall', 'OEsmall', 'Oslashsmall', 'Ugravesmall',
-    'Uacutesmall', 'Ucircumflexsmall', 'Udieresissmall', 'Yacutesmall', 'Thornsmall', 'Ydieresissmall', '001.000',
-    '001.001', '001.002', '001.003', 'Black', 'Bold', 'Book', 'Light', 'Medium', 'Regular', 'Roman', 'Semibold'];
-
-var cffStandardEncoding = [
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', 'space', 'exclam', 'quotedbl', 'numbersign', 'dollar', 'percent', 'ampersand', 'quoteright',
-    'parenleft', 'parenright', 'asterisk', 'plus', 'comma', 'hyphen', 'period', 'slash', 'zero', 'one', 'two',
-    'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'colon', 'semicolon', 'less', 'equal', 'greater',
-    'question', 'at', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-    'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bracketleft', 'backslash', 'bracketright', 'asciicircum', 'underscore',
-    'quoteleft', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x', 'y', 'z', 'braceleft', 'bar', 'braceright', 'asciitilde', '', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    'exclamdown', 'cent', 'sterling', 'fraction', 'yen', 'florin', 'section', 'currency', 'quotesingle',
-    'quotedblleft', 'guillemotleft', 'guilsinglleft', 'guilsinglright', 'fi', 'fl', '', 'endash', 'dagger',
-    'daggerdbl', 'periodcentered', '', 'paragraph', 'bullet', 'quotesinglbase', 'quotedblbase', 'quotedblright',
-    'guillemotright', 'ellipsis', 'perthousand', '', 'questiondown', '', 'grave', 'acute', 'circumflex', 'tilde',
-    'macron', 'breve', 'dotaccent', 'dieresis', '', 'ring', 'cedilla', '', 'hungarumlaut', 'ogonek', 'caron',
-    'emdash', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'AE', '', 'ordfeminine', '', '', '',
-    '', 'Lslash', 'Oslash', 'OE', 'ordmasculine', '', '', '', '', '', 'ae', '', '', '', 'dotlessi', '', '',
-    'lslash', 'oslash', 'oe', 'germandbls'];
-
-var cffExpertEncoding = [
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    '', '', '', '', 'space', 'exclamsmall', 'Hungarumlautsmall', '', 'dollaroldstyle', 'dollarsuperior',
-    'ampersandsmall', 'Acutesmall', 'parenleftsuperior', 'parenrightsuperior', 'twodotenleader', 'onedotenleader',
-    'comma', 'hyphen', 'period', 'fraction', 'zerooldstyle', 'oneoldstyle', 'twooldstyle', 'threeoldstyle',
-    'fouroldstyle', 'fiveoldstyle', 'sixoldstyle', 'sevenoldstyle', 'eightoldstyle', 'nineoldstyle', 'colon',
-    'semicolon', 'commasuperior', 'threequartersemdash', 'periodsuperior', 'questionsmall', '', 'asuperior',
-    'bsuperior', 'centsuperior', 'dsuperior', 'esuperior', '', '', 'isuperior', '', '', 'lsuperior', 'msuperior',
-    'nsuperior', 'osuperior', '', '', 'rsuperior', 'ssuperior', 'tsuperior', '', 'ff', 'fi', 'fl', 'ffi', 'ffl',
-    'parenleftinferior', '', 'parenrightinferior', 'Circumflexsmall', 'hyphensuperior', 'Gravesmall', 'Asmall',
-    'Bsmall', 'Csmall', 'Dsmall', 'Esmall', 'Fsmall', 'Gsmall', 'Hsmall', 'Ismall', 'Jsmall', 'Ksmall', 'Lsmall',
-    'Msmall', 'Nsmall', 'Osmall', 'Psmall', 'Qsmall', 'Rsmall', 'Ssmall', 'Tsmall', 'Usmall', 'Vsmall', 'Wsmall',
-    'Xsmall', 'Ysmall', 'Zsmall', 'colonmonetary', 'onefitted', 'rupiah', 'Tildesmall', '', '', '', '', '', '', '',
-    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-    'exclamdownsmall', 'centoldstyle', 'Lslashsmall', '', '', 'Scaronsmall', 'Zcaronsmall', 'Dieresissmall',
-    'Brevesmall', 'Caronsmall', '', 'Dotaccentsmall', '', '', 'Macronsmall', '', '', 'figuredash', 'hypheninferior',
-    '', '', 'Ogoneksmall', 'Ringsmall', 'Cedillasmall', '', '', '', 'onequarter', 'onehalf', 'threequarters',
-    'questiondownsmall', 'oneeighth', 'threeeighths', 'fiveeighths', 'seveneighths', 'onethird', 'twothirds', '',
-    '', 'zerosuperior', 'onesuperior', 'twosuperior', 'threesuperior', 'foursuperior', 'fivesuperior',
-    'sixsuperior', 'sevensuperior', 'eightsuperior', 'ninesuperior', 'zeroinferior', 'oneinferior', 'twoinferior',
-    'threeinferior', 'fourinferior', 'fiveinferior', 'sixinferior', 'seveninferior', 'eightinferior',
-    'nineinferior', 'centinferior', 'dollarinferior', 'periodinferior', 'commainferior', 'Agravesmall',
-    'Aacutesmall', 'Acircumflexsmall', 'Atildesmall', 'Adieresissmall', 'Aringsmall', 'AEsmall', 'Ccedillasmall',
-    'Egravesmall', 'Eacutesmall', 'Ecircumflexsmall', 'Edieresissmall', 'Igravesmall', 'Iacutesmall',
-    'Icircumflexsmall', 'Idieresissmall', 'Ethsmall', 'Ntildesmall', 'Ogravesmall', 'Oacutesmall',
-    'Ocircumflexsmall', 'Otildesmall', 'Odieresissmall', 'OEsmall', 'Oslashsmall', 'Ugravesmall', 'Uacutesmall',
-    'Ucircumflexsmall', 'Udieresissmall', 'Yacutesmall', 'Thornsmall', 'Ydieresissmall'];
-
-var standardNames = [
-    '.notdef', '.null', 'nonmarkingreturn', 'space', 'exclam', 'quotedbl', 'numbersign', 'dollar', 'percent',
-    'ampersand', 'quotesingle', 'parenleft', 'parenright', 'asterisk', 'plus', 'comma', 'hyphen', 'period', 'slash',
-    'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'colon', 'semicolon', 'less',
-    'equal', 'greater', 'question', 'at', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'bracketleft', 'backslash', 'bracketright',
-    'asciicircum', 'underscore', 'grave', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
-    'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'braceleft', 'bar', 'braceright', 'asciitilde',
-    'Adieresis', 'Aring', 'Ccedilla', 'Eacute', 'Ntilde', 'Odieresis', 'Udieresis', 'aacute', 'agrave',
-    'acircumflex', 'adieresis', 'atilde', 'aring', 'ccedilla', 'eacute', 'egrave', 'ecircumflex', 'edieresis',
-    'iacute', 'igrave', 'icircumflex', 'idieresis', 'ntilde', 'oacute', 'ograve', 'ocircumflex', 'odieresis',
-    'otilde', 'uacute', 'ugrave', 'ucircumflex', 'udieresis', 'dagger', 'degree', 'cent', 'sterling', 'section',
-    'bullet', 'paragraph', 'germandbls', 'registered', 'copyright', 'trademark', 'acute', 'dieresis', 'notequal',
-    'AE', 'Oslash', 'infinity', 'plusminus', 'lessequal', 'greaterequal', 'yen', 'mu', 'partialdiff', 'summation',
-    'product', 'pi', 'integral', 'ordfeminine', 'ordmasculine', 'Omega', 'ae', 'oslash', 'questiondown',
-    'exclamdown', 'logicalnot', 'radical', 'florin', 'approxequal', 'Delta', 'guillemotleft', 'guillemotright',
-    'ellipsis', 'nonbreakingspace', 'Agrave', 'Atilde', 'Otilde', 'OE', 'oe', 'endash', 'emdash', 'quotedblleft',
-    'quotedblright', 'quoteleft', 'quoteright', 'divide', 'lozenge', 'ydieresis', 'Ydieresis', 'fraction',
-    'currency', 'guilsinglleft', 'guilsinglright', 'fi', 'fl', 'daggerdbl', 'periodcentered', 'quotesinglbase',
-    'quotedblbase', 'perthousand', 'Acircumflex', 'Ecircumflex', 'Aacute', 'Edieresis', 'Egrave', 'Iacute',
-    'Icircumflex', 'Idieresis', 'Igrave', 'Oacute', 'Ocircumflex', 'apple', 'Ograve', 'Uacute', 'Ucircumflex',
-    'Ugrave', 'dotlessi', 'circumflex', 'tilde', 'macron', 'breve', 'dotaccent', 'ring', 'cedilla', 'hungarumlaut',
-    'ogonek', 'caron', 'Lslash', 'lslash', 'Scaron', 'scaron', 'Zcaron', 'zcaron', 'brokenbar', 'Eth', 'eth',
-    'Yacute', 'yacute', 'Thorn', 'thorn', 'minus', 'multiply', 'onesuperior', 'twosuperior', 'threesuperior',
-    'onehalf', 'onequarter', 'threequarters', 'franc', 'Gbreve', 'gbreve', 'Idotaccent', 'Scedilla', 'scedilla',
-    'Cacute', 'cacute', 'Ccaron', 'ccaron', 'dcroat'];
-
-// This is the encoding used for fonts created from scratch.
-// It loops through all glyphs and finds the appropriate unicode value.
-// Since it's linear time, other encodings will be faster.
-function DefaultEncoding(font) {
-    this.font = font;
-}
-
-DefaultEncoding.prototype.charToGlyphIndex = function(c) {
-    var code = c.charCodeAt(0);
-    var glyphs = this.font.glyphs;
-    if (glyphs) {
-        for (var i = 0; i < glyphs.length; i += 1) {
-            var glyph = glyphs.get(i);
-            for (var j = 0; j < glyph.unicodes.length; j += 1) {
-                if (glyph.unicodes[j] === code) {
-                    return i;
-                }
-            }
-        }
-    } else {
-        return null;
-    }
-};
-
-function CmapEncoding(cmap) {
-    this.cmap = cmap;
-}
-
-CmapEncoding.prototype.charToGlyphIndex = function(c) {
-    return this.cmap.glyphIndexMap[c.charCodeAt(0)] || 0;
-};
-
-function CffEncoding(encoding, charset) {
-    this.encoding = encoding;
-    this.charset = charset;
-}
-
-CffEncoding.prototype.charToGlyphIndex = function(s) {
-    var code = s.charCodeAt(0);
-    var charName = this.encoding[code];
-    return this.charset.indexOf(charName);
-};
-
-function GlyphNames(post) {
-    var i;
-    switch (post.version) {
-    case 1:
-        this.names = exports.standardNames.slice();
-        break;
-    case 2:
-        this.names = new Array(post.numberOfGlyphs);
-        for (i = 0; i < post.numberOfGlyphs; i++) {
-            if (post.glyphNameIndex[i] < exports.standardNames.length) {
-                this.names[i] = exports.standardNames[post.glyphNameIndex[i]];
-            } else {
-                this.names[i] = post.names[post.glyphNameIndex[i] - exports.standardNames.length];
-            }
-        }
-
-        break;
-    case 2.5:
-        this.names = new Array(post.numberOfGlyphs);
-        for (i = 0; i < post.numberOfGlyphs; i++) {
-            this.names[i] = exports.standardNames[i + post.glyphNameIndex[i]];
-        }
-
-        break;
-    case 3:
-        this.names = [];
-        break;
-    }
-}
-
-GlyphNames.prototype.nameToGlyphIndex = function(name) {
-    return this.names.indexOf(name);
-};
-
-GlyphNames.prototype.glyphIndexToName = function(gid) {
-    return this.names[gid];
-};
-
-function addGlyphNames(font) {
-    var glyph;
-    var glyphIndexMap = font.tables.cmap.glyphIndexMap;
-    var charCodes = Object.keys(glyphIndexMap);
-
-    for (var i = 0; i < charCodes.length; i += 1) {
-        var c = charCodes[i];
-        var glyphIndex = glyphIndexMap[c];
-        glyph = font.glyphs.get(glyphIndex);
-        glyph.addUnicode(parseInt(c));
-    }
-
-    for (i = 0; i < font.glyphs.length; i += 1) {
-        glyph = font.glyphs.get(i);
-        if (font.cffEncoding) {
-            glyph.name = font.cffEncoding.charset[i];
-        } else {
-            glyph.name = font.glyphNames.glyphIndexToName(i);
-        }
-    }
-}
-
-exports.cffStandardStrings = cffStandardStrings;
-exports.cffStandardEncoding = cffStandardEncoding;
-exports.cffExpertEncoding = cffExpertEncoding;
-exports.standardNames = standardNames;
-exports.DefaultEncoding = DefaultEncoding;
-exports.CmapEncoding = CmapEncoding;
-exports.CffEncoding = CffEncoding;
-exports.GlyphNames = GlyphNames;
-exports.addGlyphNames = addGlyphNames;
-
-},{}],5:[function(_dereq_,module,exports){
-// The Font object
-
-'use strict';
-
-var path = _dereq_('./path');
-var sfnt = _dereq_('./tables/sfnt');
-var encoding = _dereq_('./encoding');
-var glyphset = _dereq_('./glyphset');
-
-// A Font represents a loaded OpenType font file.
-// It contains a set of glyphs and methods to draw text on a drawing context,
-// or to get a path representing the text.
-function Font(options) {
-    options = options || {};
-
-    // OS X will complain if the names are empty, so we put a single space everywhere by default.
-    this.familyName = options.familyName || ' ';
-    this.styleName = options.styleName || ' ';
-    this.designer = options.designer || ' ';
-    this.designerURL = options.designerURL || ' ';
-    this.manufacturer = options.manufacturer || ' ';
-    this.manufacturerURL = options.manufacturerURL || ' ';
-    this.license = options.license || ' ';
-    this.licenseURL = options.licenseURL || ' ';
-    this.version = options.version || 'Version 0.1';
-    this.description = options.description || ' ';
-    this.copyright = options.copyright || ' ';
-    this.trademark = options.trademark || ' ';
-    this.unitsPerEm = options.unitsPerEm || 1000;
-    this.ascender = options.ascender;
-    this.descender = options.descender;
-    this.supported = true;
-    this.glyphs = new glyphset.GlyphSet(this, options.glyphs || []);
-    this.encoding = new encoding.DefaultEncoding(this);
-    this.tables = {};
-}
-
-// Check if the font has a glyph for the given character.
-Font.prototype.hasChar = function(c) {
-    return this.encoding.charToGlyphIndex(c) !== null;
-};
-
-// Convert the given character to a single glyph index.
-// Note that this function assumes that there is a one-to-one mapping between
-// the given character and a glyph; for complex scripts this might not be the case.
-Font.prototype.charToGlyphIndex = function(s) {
-    return this.encoding.charToGlyphIndex(s);
-};
-
-// Convert the given character to a single Glyph object.
-// Note that this function assumes that there is a one-to-one mapping between
-// the given character and a glyph; for complex scripts this might not be the case.
-Font.prototype.charToGlyph = function(c) {
-    var glyphIndex = this.charToGlyphIndex(c);
-    var glyph = this.glyphs.get(glyphIndex);
-    if (!glyph) {
-        // .notdef
-        glyph = this.glyphs.get(0);
-    }
-
-    return glyph;
-};
-
-// Convert the given text to a list of Glyph objects.
-// Note that there is no strict one-to-one mapping between characters and
-// glyphs, so the list of returned glyphs can be larger or smaller than the
-// length of the given string.
-Font.prototype.stringToGlyphs = function(s) {
-    var glyphs = [];
-    for (var i = 0; i < s.length; i += 1) {
-        var c = s[i];
-        glyphs.push(this.charToGlyph(c));
-    }
-
-    return glyphs;
-};
-
-Font.prototype.nameToGlyphIndex = function(name) {
-    return this.glyphNames.nameToGlyphIndex(name);
-};
-
-Font.prototype.nameToGlyph = function(name) {
-    var glyphIndex = this.nametoGlyphIndex(name);
-    var glyph = this.glyphs.get(glyphIndex);
-    if (!glyph) {
-        // .notdef
-        glyph = this.glyphs.get(0);
-    }
-
-    return glyph;
-};
-
-Font.prototype.glyphIndexToName = function(gid) {
-    if (!this.glyphNames.glyphIndexToName) {
-        return '';
-    }
-
-    return this.glyphNames.glyphIndexToName(gid);
-};
-
-// Retrieve the value of the kerning pair between the left glyph (or its index)
-// and the right glyph (or its index). If no kerning pair is found, return 0.
-// The kerning value gets added to the advance width when calculating the spacing
-// between glyphs.
-Font.prototype.getKerningValue = function(leftGlyph, rightGlyph) {
-    leftGlyph = leftGlyph.index || leftGlyph;
-    rightGlyph = rightGlyph.index || rightGlyph;
-    var gposKerning = this.getGposKerningValue;
-    return gposKerning ? gposKerning(leftGlyph, rightGlyph) :
-        (this.kerningPairs[leftGlyph + ',' + rightGlyph] || 0);
-};
-
-// Helper function that invokes the given callback for each glyph in the given text.
-// The callback gets `(glyph, x, y, fontSize, options)`.
-Font.prototype.forEachGlyph = function(text, x, y, fontSize, options, callback) {
-    if (!this.supported) {
-        return;
-    }
-
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    fontSize = fontSize !== undefined ? fontSize : 72;
-    options = options || {};
-    var kerning = options.kerning === undefined ? true : options.kerning;
-    var fontScale = 1 / this.unitsPerEm * fontSize;
-    var glyphs = this.stringToGlyphs(text);
-    for (var i = 0; i < glyphs.length; i += 1) {
-        var glyph = glyphs[i];
-        callback(glyph, x, y, fontSize, options);
-        if (glyph.advanceWidth) {
-            x += glyph.advanceWidth * fontScale;
-        }
-
-        if (kerning && i < glyphs.length - 1) {
-            var kerningValue = this.getKerningValue(glyph, glyphs[i + 1]);
-            x += kerningValue * fontScale;
-        }
-    }
-};
-
-// Create a Path object that represents the given text.
-//
-// text - The text to create.
-// x - Horizontal position of the beginning of the text. (default: 0)
-// y - Vertical position of the *baseline* of the text. (default: 0)
-// fontSize - Font size in pixels. We scale the glyph units by `1 / unitsPerEm * fontSize`. (default: 72)
-// Options is an optional object that contains:
-// - kerning - Whether to take kerning information into account. (default: true)
-//
-// Returns a Path object.
-Font.prototype.getPath = function(text, x, y, fontSize, options) {
-    var fullPath = new path.Path();
-    this.forEachGlyph(text, x, y, fontSize, options, function(glyph, gX, gY, gFontSize) {
-        var glyphPath = glyph.getPath(gX, gY, gFontSize);
-        fullPath.extend(glyphPath);
-    });
-
-    return fullPath;
-};
-
-// Draw the text on the given drawing context.
-//
-// ctx - A 2D drawing context, like Canvas.
-// text - The text to create.
-// x - Horizontal position of the beginning of the text. (default: 0)
-// y - Vertical position of the *baseline* of the text. (default: 0)
-// fontSize - Font size in pixels. We scale the glyph units by `1 / unitsPerEm * fontSize`. (default: 72)
-// Options is an optional object that contains:
-// - kerning - Whether to take kerning information into account. (default: true)
-Font.prototype.draw = function(ctx, text, x, y, fontSize, options) {
-    this.getPath(text, x, y, fontSize, options).draw(ctx);
-};
-
-// Draw the points of all glyphs in the text.
-// On-curve points will be drawn in blue, off-curve points will be drawn in red.
-//
-// ctx - A 2D drawing context, like Canvas.
-// text - The text to create.
-// x - Horizontal position of the beginning of the text. (default: 0)
-// y - Vertical position of the *baseline* of the text. (default: 0)
-// fontSize - Font size in pixels. We scale the glyph units by `1 / unitsPerEm * fontSize`. (default: 72)
-// Options is an optional object that contains:
-// - kerning - Whether to take kerning information into account. (default: true)
-Font.prototype.drawPoints = function(ctx, text, x, y, fontSize, options) {
-    this.forEachGlyph(text, x, y, fontSize, options, function(glyph, gX, gY, gFontSize) {
-        glyph.drawPoints(ctx, gX, gY, gFontSize);
-    });
-};
-
-// Draw lines indicating important font measurements for all glyphs in the text.
-// Black lines indicate the origin of the coordinate system (point 0,0).
-// Blue lines indicate the glyph bounding box.
-// Green line indicates the advance width of the glyph.
-//
-// ctx - A 2D drawing context, like Canvas.
-// text - The text to create.
-// x - Horizontal position of the beginning of the text. (default: 0)
-// y - Vertical position of the *baseline* of the text. (default: 0)
-// fontSize - Font size in pixels. We scale the glyph units by `1 / unitsPerEm * fontSize`. (default: 72)
-// Options is an optional object that contains:
-// - kerning - Whether to take kerning information into account. (default: true)
-Font.prototype.drawMetrics = function(ctx, text, x, y, fontSize, options) {
-    this.forEachGlyph(text, x, y, fontSize, options, function(glyph, gX, gY, gFontSize) {
-        glyph.drawMetrics(ctx, gX, gY, gFontSize);
-    });
-};
-
-// Validate
-Font.prototype.validate = function() {
-    var warnings = [];
-    var _this = this;
-
-    function assert(predicate, message) {
-        if (!predicate) {
-            warnings.push(message);
-        }
-    }
-
-    function assertStringAttribute(attrName) {
-        assert(_this[attrName] && _this[attrName].trim().length > 0, 'No ' + attrName + ' specified.');
-    }
-
-    // Identification information
-    assertStringAttribute('familyName');
-    assertStringAttribute('weightName');
-    assertStringAttribute('manufacturer');
-    assertStringAttribute('copyright');
-    assertStringAttribute('version');
-
-    // Dimension information
-    assert(this.unitsPerEm > 0, 'No unitsPerEm specified.');
-};
-
-// Convert the font object to a SFNT data structure.
-// This structure contains all the necessary tables and metadata to create a binary OTF file.
-Font.prototype.toTables = function() {
-    return sfnt.fontToTable(this);
-};
-
-Font.prototype.toBuffer = function() {
-    var sfntTable = this.toTables();
-    var bytes = sfntTable.encode();
-    var buffer = new ArrayBuffer(bytes.length);
-    var intArray = new Uint8Array(buffer);
-    for (var i = 0; i < bytes.length; i++) {
-        intArray[i] = bytes[i];
-    }
-
-    return buffer;
-};
-
-// Initiate a download of the OpenType font.
-Font.prototype.download = function() {
-    var fileName = this.familyName.replace(/\s/g, '') + '-' + this.styleName + '.otf';
-    var buffer = this.toBuffer();
-
-    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(window.TEMPORARY, buffer.byteLength, function(fs) {
-        fs.root.getFile(fileName, {create: true}, function(fileEntry) {
-            fileEntry.createWriter(function(writer) {
-                var dataView = new DataView(buffer);
-                var blob = new Blob([dataView], {type: 'font/opentype'});
-                writer.write(blob);
-
-                writer.addEventListener('writeend', function() {
-                    // Navigating to the file will download it.
-                    location.href = fileEntry.toURL();
-                }, false);
-            });
-        });
-    },
-
-    function(err) {
-        throw err;
-    });
-};
-
-exports.Font = Font;
-
-},{"./encoding":4,"./glyphset":7,"./path":10,"./tables/sfnt":25}],6:[function(_dereq_,module,exports){
-// The Glyph object
-
-'use strict';
-
-var check = _dereq_('./check');
-var draw = _dereq_('./draw');
-var path = _dereq_('./path');
-
-function getPathDefinition(glyph, path) {
-    var _path = path || { commands: [] };
-    return {
-        configurable: true,
-
-        get: function() {
-            if (typeof _path === 'function') {
-                _path = _path();
-            }
-
-            return _path;
-        },
-
-        set: function(p) {
-            _path = p;
-        }
-    };
-}
-
-// A Glyph is an individual mark that often corresponds to a character.
-// Some glyphs, such as ligatures, are a combination of many characters.
-// Glyphs are the basic building blocks of a font.
-//
-// The `Glyph` class contains utility methods for drawing the path and its points.
-function Glyph(options) {
-    // By putting all the code on a prototype function (which is only declared once)
-    // we reduce the memory requirements for larger fonts by some 2%
-    this.bindConstructorValues(options);
-}
-
-Glyph.prototype.bindConstructorValues = function(options) {
-    this.index = options.index || 0;
-
-    // These three values cannnot be deferred for memory optimization:
-    this.name = options.name || null;
-    this.unicode = options.unicode || undefined;
-    this.unicodes = options.unicodes || options.unicode !== undefined ? [options.unicode] : [];
-
-    // But by binding these values only when necessary, we reduce can
-    // the memory requirements by almost 3% for larger fonts.
-    if (options.xMin) {
-        this.xMin = options.xMin;
-    }
-
-    if (options.yMin) {
-        this.yMin = options.yMin;
-    }
-
-    if (options.xMax) {
-        this.xMax = options.xMax;
-    }
-
-    if (options.yMax) {
-        this.yMax = options.yMax;
-    }
-
-    if (options.advanceWidth) {
-        this.advanceWidth = options.advanceWidth;
-    }
-
-    // The path for a glyph is the most memory intensive, and is bound as a value
-    // with a getter/setter to ensure we actually do path parsing only once the
-    // path is actually needed by anything.
-    Object.defineProperty(this, 'path', getPathDefinition(this, options.path));
-};
-
-Glyph.prototype.addUnicode = function(unicode) {
-    if (this.unicodes.length === 0) {
-        this.unicode = unicode;
-    }
-
-    this.unicodes.push(unicode);
-};
-
-// Convert the glyph to a Path we can draw on a drawing context.
-//
-// x - Horizontal position of the glyph. (default: 0)
-// y - Vertical position of the *baseline* of the glyph. (default: 0)
-// fontSize - Font size, in pixels (default: 72).
-Glyph.prototype.getPath = function(x, y, fontSize) {
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    fontSize = fontSize !== undefined ? fontSize : 72;
-    var scale = 1 / this.path.unitsPerEm * fontSize;
-    var p = new path.Path();
-    var commands = this.path.commands;
-    for (var i = 0; i < commands.length; i += 1) {
-        var cmd = commands[i];
-        if (cmd.type === 'M') {
-            p.moveTo(x + (cmd.x * scale), y + (-cmd.y * scale));
-        } else if (cmd.type === 'L') {
-            p.lineTo(x + (cmd.x * scale), y + (-cmd.y * scale));
-        } else if (cmd.type === 'Q') {
-            p.quadraticCurveTo(x + (cmd.x1 * scale), y + (-cmd.y1 * scale),
-                               x + (cmd.x * scale), y + (-cmd.y * scale));
-        } else if (cmd.type === 'C') {
-            p.curveTo(x + (cmd.x1 * scale), y + (-cmd.y1 * scale),
-                      x + (cmd.x2 * scale), y + (-cmd.y2 * scale),
-                      x + (cmd.x * scale), y + (-cmd.y * scale));
-        } else if (cmd.type === 'Z') {
-            p.closePath();
-        }
-    }
-
-    return p;
-};
-
-// Split the glyph into contours.
-// This function is here for backwards compatibility, and to
-// provide raw access to the TrueType glyph outlines.
-Glyph.prototype.getContours = function() {
-    if (this.points === undefined) {
-        return [];
-    }
-
-    var contours = [];
-    var currentContour = [];
-    for (var i = 0; i < this.points.length; i += 1) {
-        var pt = this.points[i];
-        currentContour.push(pt);
-        if (pt.lastPointOfContour) {
-            contours.push(currentContour);
-            currentContour = [];
-        }
-    }
-
-    check.argument(currentContour.length === 0, 'There are still points left in the current contour.');
-    return contours;
-};
-
-// Calculate the xMin/yMin/xMax/yMax/lsb/rsb for a Glyph.
-Glyph.prototype.getMetrics = function() {
-    var commands = this.path.commands;
-    var xCoords = [];
-    var yCoords = [];
-    for (var i = 0; i < commands.length; i += 1) {
-        var cmd = commands[i];
-        if (cmd.type !== 'Z') {
-            xCoords.push(cmd.x);
-            yCoords.push(cmd.y);
-        }
-
-        if (cmd.type === 'Q' || cmd.type === 'C') {
-            xCoords.push(cmd.x1);
-            yCoords.push(cmd.y1);
-        }
-
-        if (cmd.type === 'C') {
-            xCoords.push(cmd.x2);
-            yCoords.push(cmd.y2);
-        }
-    }
-
-    var metrics = {
-        xMin: Math.min.apply(null, xCoords),
-        yMin: Math.min.apply(null, yCoords),
-        xMax: Math.max.apply(null, xCoords),
-        yMax: Math.max.apply(null, yCoords),
-        leftSideBearing: 0
-    };
-    metrics.rightSideBearing = this.advanceWidth - metrics.leftSideBearing - (metrics.xMax - metrics.xMin);
-    return metrics;
-};
-
-// Draw the glyph on the given context.
-//
-// ctx - The drawing context.
-// x - Horizontal position of the glyph. (default: 0)
-// y - Vertical position of the *baseline* of the glyph. (default: 0)
-// fontSize - Font size, in pixels (default: 72).
-Glyph.prototype.draw = function(ctx, x, y, fontSize) {
-    this.getPath(x, y, fontSize).draw(ctx);
-};
-
-// Draw the points of the glyph.
-// On-curve points will be drawn in blue, off-curve points will be drawn in red.
-//
-// ctx - The drawing context.
-// x - Horizontal position of the glyph. (default: 0)
-// y - Vertical position of the *baseline* of the glyph. (default: 0)
-// fontSize - Font size, in pixels (default: 72).
-Glyph.prototype.drawPoints = function(ctx, x, y, fontSize) {
-
-    function drawCircles(l, x, y, scale) {
-        var PI_SQ = Math.PI * 2;
-        ctx.beginPath();
-        for (var j = 0; j < l.length; j += 1) {
-            ctx.moveTo(x + (l[j].x * scale), y + (l[j].y * scale));
-            ctx.arc(x + (l[j].x * scale), y + (l[j].y * scale), 2, 0, PI_SQ, false);
-        }
-
-        ctx.closePath();
-        ctx.fill();
-    }
-
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    fontSize = fontSize !== undefined ? fontSize : 24;
-    var scale = 1 / this.path.unitsPerEm * fontSize;
-
-    var blueCircles = [];
-    var redCircles = [];
-    var path = this.path;
-    for (var i = 0; i < path.commands.length; i += 1) {
-        var cmd = path.commands[i];
-        if (cmd.x !== undefined) {
-            blueCircles.push({x: cmd.x, y: -cmd.y});
-        }
-
-        if (cmd.x1 !== undefined) {
-            redCircles.push({x: cmd.x1, y: -cmd.y1});
-        }
-
-        if (cmd.x2 !== undefined) {
-            redCircles.push({x: cmd.x2, y: -cmd.y2});
-        }
-    }
-
-    ctx.fillStyle = 'blue';
-    drawCircles(blueCircles, x, y, scale);
-    ctx.fillStyle = 'red';
-    drawCircles(redCircles, x, y, scale);
-};
-
-// Draw lines indicating important font measurements.
-// Black lines indicate the origin of the coordinate system (point 0,0).
-// Blue lines indicate the glyph bounding box.
-// Green line indicates the advance width of the glyph.
-//
-// ctx - The drawing context.
-// x - Horizontal position of the glyph. (default: 0)
-// y - Vertical position of the *baseline* of the glyph. (default: 0)
-// fontSize - Font size, in pixels (default: 72).
-Glyph.prototype.drawMetrics = function(ctx, x, y, fontSize) {
-    var scale;
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    fontSize = fontSize !== undefined ? fontSize : 24;
-    scale = 1 / this.path.unitsPerEm * fontSize;
-    ctx.lineWidth = 1;
-
-    // Draw the origin
-    ctx.strokeStyle = 'black';
-    draw.line(ctx, x, -10000, x, 10000);
-    draw.line(ctx, -10000, y, 10000, y);
-
-    // This code is here due to memory optimization: by not using
-    // defaults in the constructor, we save a notable amount of memory.
-    var xMin = this.xMin || 0;
-    var yMin = this.yMin || 0;
-    var xMax = this.xMax || 0;
-    var yMax = this.yMax || 0;
-    var advanceWidth = this.advanceWidth || 0;
-
-    // Draw the glyph box
-    ctx.strokeStyle = 'blue';
-    draw.line(ctx, x + (xMin * scale), -10000, x + (xMin * scale), 10000);
-    draw.line(ctx, x + (xMax * scale), -10000, x + (xMax * scale), 10000);
-    draw.line(ctx, -10000, y + (-yMin * scale), 10000, y + (-yMin * scale));
-    draw.line(ctx, -10000, y + (-yMax * scale), 10000, y + (-yMax * scale));
-
-    // Draw the advance width
-    ctx.strokeStyle = 'green';
-    draw.line(ctx, x + (advanceWidth * scale), -10000, x + (advanceWidth * scale), 10000);
-};
-
-exports.Glyph = Glyph;
-
-},{"./check":2,"./draw":3,"./path":10}],7:[function(_dereq_,module,exports){
-// The GlyphSet object
-
-'use strict';
-
-var _glyph = _dereq_('./glyph');
-
-// A GlyphSet represents all glyphs available in the font, but modelled using
-// a deferred glyph loader, for retrieving glyphs only once they are absolutely
-// necessary, to keep the memory footprint down.
-function GlyphSet(font, glyphs) {
-    this.font = font;
-    this.glyphs = {};
-    if (Array.isArray(glyphs)) {
-        for (var i = 0; i < glyphs.length; i++) {
-            this.glyphs[i] = glyphs[i];
-        }
-    }
-
-    this.length = (glyphs && glyphs.length) || 0;
-}
-
-GlyphSet.prototype.get = function(index) {
-    if (typeof this.glyphs[index] === 'function') {
-        this.glyphs[index] = this.glyphs[index]();
-    }
-
-    return this.glyphs[index];
-};
-
-GlyphSet.prototype.push = function(index, loader) {
-    this.glyphs[index] = loader;
-    this.length++;
-};
-
-function glyphLoader(font, index) {
-    return new _glyph.Glyph({index: index, font: font});
-}
-
-/**
- * Generate a stub glyph that can be filled with all metadata *except*
- * the "points" and "path" properties, which must be loaded only once
- * the glyph's path is actually requested for text shaping.
- */
-
-function ttfGlyphLoader(font, index, parseGlyph, data, position, buildPath) {
-    return function() {
-        var glyph = new _glyph.Glyph({index: index, font: font});
-
-        glyph.path = function() {
-            parseGlyph(glyph, data, position);
-            var path = buildPath(font.glyphs, glyph);
-            path.unitsPerEm = font.unitsPerEm;
-            return path;
-        };
-
-        return glyph;
-    };
-}
-
-function cffGlyphLoader(font, index, parseCFFCharstring, charstring) {
-    return function() {
-        var glyph = new _glyph.Glyph({index: index, font: font});
-
-        glyph.path = function() {
-            var path = parseCFFCharstring(font, glyph, charstring);
-            path.unitsPerEm = font.unitsPerEm;
-            return path;
-        };
-
-        return glyph;
-    };
-}
-
-exports.GlyphSet = GlyphSet;
-exports.glyphLoader = glyphLoader;
-exports.ttfGlyphLoader = ttfGlyphLoader;
-exports.cffGlyphLoader = cffGlyphLoader;
-
-},{"./glyph":6}],8:[function(_dereq_,module,exports){
-// opentype.js
-// https://github.com/nodebox/opentype.js
-// (c) 2015 Frederik De Bleser
-// opentype.js may be freely distributed under the MIT license.
-
-/* global ArrayBuffer, DataView, Uint8Array, XMLHttpRequest  */
-
-'use strict';
-
-var encoding = _dereq_('./encoding');
-var _font = _dereq_('./font');
-var glyph = _dereq_('./glyph');
-var parse = _dereq_('./parse');
-var path = _dereq_('./path');
-
-var cmap = _dereq_('./tables/cmap');
-var cff = _dereq_('./tables/cff');
-var glyf = _dereq_('./tables/glyf');
-var gpos = _dereq_('./tables/gpos');
-var head = _dereq_('./tables/head');
-var hhea = _dereq_('./tables/hhea');
-var hmtx = _dereq_('./tables/hmtx');
-var kern = _dereq_('./tables/kern');
-var loca = _dereq_('./tables/loca');
-var maxp = _dereq_('./tables/maxp');
-var _name = _dereq_('./tables/name');
-var os2 = _dereq_('./tables/os2');
-var post = _dereq_('./tables/post');
-
-// File loaders /////////////////////////////////////////////////////////
-
-// Convert a Node.js Buffer to an ArrayBuffer
-function toArrayBuffer(buffer) {
-    var arrayBuffer = new ArrayBuffer(buffer.length);
-    var data = new Uint8Array(arrayBuffer);
-    for (var i = 0; i < buffer.length; i += 1) {
-        data[i] = buffer[i];
-    }
-
-    return arrayBuffer;
-}
-
-function loadFromFile(path, callback) {
-    var fs = _dereq_('fs');
-    fs.readFile(path, function(err, buffer) {
-        if (err) {
-            return callback(err.message);
-        }
-
-        callback(null, toArrayBuffer(buffer));
-    });
-}
-
-function loadFromUrl(url, callback) {
-    var request = new XMLHttpRequest();
-    request.open('get', url, true);
-    request.responseType = 'arraybuffer';
-    request.onload = function() {
-        if (request.status !== 200) {
-            return callback('Font could not be loaded: ' + request.statusText);
-        }
-
-        return callback(null, request.response);
-    };
-
-    request.send();
-}
-
-// Public API ///////////////////////////////////////////////////////////
-
-// Parse the OpenType file data (as an ArrayBuffer) and return a Font object.
-// If the file could not be parsed (most likely because it contains Postscript outlines)
-// we return an empty Font object with the `supported` flag set to `false`.
-function parseBuffer(buffer) {
-    var indexToLocFormat;
-    var hmtxOffset;
-    var glyfOffset;
-    var locaOffset;
-    var cffOffset;
-    var kernOffset;
-    var gposOffset;
-
-    // OpenType fonts use big endian byte ordering.
-    // We can't rely on typed array view types, because they operate with the endianness of the host computer.
-    // Instead we use DataViews where we can specify endianness.
-
-    var font = new _font.Font();
-    var data = new DataView(buffer, 0);
-
-    var version = parse.getFixed(data, 0);
-    if (version === 1.0) {
-        font.outlinesFormat = 'truetype';
-    } else {
-        version = parse.getTag(data, 0);
-        if (version === 'OTTO') {
-            font.outlinesFormat = 'cff';
-        } else {
-            throw new Error('Unsupported OpenType version ' + version);
-        }
-    }
-
-    var numTables = parse.getUShort(data, 4);
-
-    // Offset into the table records.
-    var p = 12;
-    for (var i = 0; i < numTables; i += 1) {
-        var tag = parse.getTag(data, p);
-        var offset = parse.getULong(data, p + 8);
-        switch (tag) {
-        case 'cmap':
-            font.tables.cmap = cmap.parse(data, offset);
-            font.encoding = new encoding.CmapEncoding(font.tables.cmap);
-            if (!font.encoding) {
-                font.supported = false;
-            }
-
-            break;
-        case 'head':
-            font.tables.head = head.parse(data, offset);
-            font.unitsPerEm = font.tables.head.unitsPerEm;
-            indexToLocFormat = font.tables.head.indexToLocFormat;
-            break;
-        case 'hhea':
-            font.tables.hhea = hhea.parse(data, offset);
-            font.ascender = font.tables.hhea.ascender;
-            font.descender = font.tables.hhea.descender;
-            font.numberOfHMetrics = font.tables.hhea.numberOfHMetrics;
-            break;
-        case 'hmtx':
-            hmtxOffset = offset;
-            break;
-        case 'maxp':
-            font.tables.maxp = maxp.parse(data, offset);
-            font.numGlyphs = font.tables.maxp.numGlyphs;
-            break;
-        case 'name':
-            font.tables.name = _name.parse(data, offset);
-            font.familyName = font.tables.name.fontFamily;
-            font.styleName = font.tables.name.fontSubfamily;
-            break;
-        case 'OS/2':
-            font.tables.os2 = os2.parse(data, offset);
-            break;
-        case 'post':
-            font.tables.post = post.parse(data, offset);
-            font.glyphNames = new encoding.GlyphNames(font.tables.post);
-            break;
-        case 'glyf':
-            glyfOffset = offset;
-            break;
-        case 'loca':
-            locaOffset = offset;
-            break;
-        case 'CFF ':
-            cffOffset = offset;
-            break;
-        case 'kern':
-            kernOffset = offset;
-            break;
-        case 'GPOS':
-            gposOffset = offset;
-            break;
-        }
-        p += 16;
-    }
-
-    if (glyfOffset && locaOffset) {
-        var shortVersion = indexToLocFormat === 0;
-        var locaTable = loca.parse(data, locaOffset, font.numGlyphs, shortVersion);
-        font.glyphs = glyf.parse(data, glyfOffset, locaTable, font);
-        hmtx.parse(data, hmtxOffset, font.numberOfHMetrics, font.numGlyphs, font.glyphs);
-        encoding.addGlyphNames(font);
-    } else if (cffOffset) {
-        cff.parse(data, cffOffset, font);
-        encoding.addGlyphNames(font);
-    } else {
-        font.supported = false;
-    }
-
-    if (font.supported) {
-        if (kernOffset) {
-            font.kerningPairs = kern.parse(data, kernOffset);
-        } else {
-            font.kerningPairs = {};
-        }
-
-        if (gposOffset) {
-            gpos.parse(data, gposOffset, font);
-        }
-    }
-
-    return font;
-}
-
-// Asynchronously load the font from a URL or a filesystem. When done, call the callback
-// with two arguments `(err, font)`. The `err` will be null on success,
-// the `font` is a Font object.
-//
-// We use the node.js callback convention so that
-// opentype.js can integrate with frameworks like async.js.
-function load(url, callback) {
-    var isNode = typeof window === 'undefined';
-    var loadFn = isNode ? loadFromFile : loadFromUrl;
-    loadFn(url, function(err, arrayBuffer) {
-        if (err) {
-            return callback(err);
-        }
-
-        var font = parseBuffer(arrayBuffer);
-        if (!font.supported) {
-            return callback('Font is not supported (is this a Postscript font?)');
-        }
-
-        return callback(null, font);
-    });
-}
-
-exports._parse = parse;
-exports.Font = _font.Font;
-exports.Glyph = glyph.Glyph;
-exports.Path = path.Path;
-exports.parse = parseBuffer;
-exports.load = load;
-
-},{"./encoding":4,"./font":5,"./glyph":6,"./parse":9,"./path":10,"./tables/cff":12,"./tables/cmap":13,"./tables/glyf":14,"./tables/gpos":15,"./tables/head":16,"./tables/hhea":17,"./tables/hmtx":18,"./tables/kern":19,"./tables/loca":20,"./tables/maxp":21,"./tables/name":22,"./tables/os2":23,"./tables/post":24,"fs":1}],9:[function(_dereq_,module,exports){
-// Parsing utility functions
-
-'use strict';
-
-// Retrieve an unsigned byte from the DataView.
-exports.getByte = function getByte(dataView, offset) {
-    return dataView.getUint8(offset);
-};
-
-exports.getCard8 = exports.getByte;
-
-// Retrieve an unsigned 16-bit short from the DataView.
-// The value is stored in big endian.
-exports.getUShort = function(dataView, offset) {
-    return dataView.getUint16(offset, false);
-};
-
-exports.getCard16 = exports.getUShort;
-
-// Retrieve a signed 16-bit short from the DataView.
-// The value is stored in big endian.
-exports.getShort = function(dataView, offset) {
-    return dataView.getInt16(offset, false);
-};
-
-// Retrieve an unsigned 32-bit long from the DataView.
-// The value is stored in big endian.
-exports.getULong = function(dataView, offset) {
-    return dataView.getUint32(offset, false);
-};
-
-// Retrieve a 32-bit signed fixed-point number (16.16) from the DataView.
-// The value is stored in big endian.
-exports.getFixed = function(dataView, offset) {
-    var decimal = dataView.getInt16(offset, false);
-    var fraction = dataView.getUint16(offset + 2, false);
-    return decimal + fraction / 65535;
-};
-
-// Retrieve a 4-character tag from the DataView.
-// Tags are used to identify tables.
-exports.getTag = function(dataView, offset) {
-    var tag = '';
-    for (var i = offset; i < offset + 4; i += 1) {
-        tag += String.fromCharCode(dataView.getInt8(i));
-    }
-
-    return tag;
-};
-
-// Retrieve an offset from the DataView.
-// Offsets are 1 to 4 bytes in length, depending on the offSize argument.
-exports.getOffset = function(dataView, offset, offSize) {
-    var v = 0;
-    for (var i = 0; i < offSize; i += 1) {
-        v <<= 8;
-        v += dataView.getUint8(offset + i);
-    }
-
-    return v;
-};
-
-// Retrieve a number of bytes from start offset to the end offset from the DataView.
-exports.getBytes = function(dataView, startOffset, endOffset) {
-    var bytes = [];
-    for (var i = startOffset; i < endOffset; i += 1) {
-        bytes.push(dataView.getUint8(i));
-    }
-
-    return bytes;
-};
-
-// Convert the list of bytes to a string.
-exports.bytesToString = function(bytes) {
-    var s = '';
-    for (var i = 0; i < bytes.length; i += 1) {
-        s += String.fromCharCode(bytes[i]);
-    }
-
-    return s;
-};
-
-var typeOffsets = {
-    byte: 1,
-    uShort: 2,
-    short: 2,
-    uLong: 4,
-    fixed: 4,
-    longDateTime: 8,
-    tag: 4
-};
-
-// A stateful parser that changes the offset whenever a value is retrieved.
-// The data is a DataView.
-function Parser(data, offset) {
-    this.data = data;
-    this.offset = offset;
-    this.relativeOffset = 0;
-}
-
-Parser.prototype.parseByte = function() {
-    var v = this.data.getUint8(this.offset + this.relativeOffset);
-    this.relativeOffset += 1;
-    return v;
-};
-
-Parser.prototype.parseChar = function() {
-    var v = this.data.getInt8(this.offset + this.relativeOffset);
-    this.relativeOffset += 1;
-    return v;
-};
-
-Parser.prototype.parseCard8 = Parser.prototype.parseByte;
-
-Parser.prototype.parseUShort = function() {
-    var v = this.data.getUint16(this.offset + this.relativeOffset);
-    this.relativeOffset += 2;
-    return v;
-};
-
-Parser.prototype.parseCard16 = Parser.prototype.parseUShort;
-Parser.prototype.parseSID = Parser.prototype.parseUShort;
-Parser.prototype.parseOffset16 = Parser.prototype.parseUShort;
-
-Parser.prototype.parseShort = function() {
-    var v = this.data.getInt16(this.offset + this.relativeOffset);
-    this.relativeOffset += 2;
-    return v;
-};
-
-Parser.prototype.parseF2Dot14 = function() {
-    var v = this.data.getInt16(this.offset + this.relativeOffset) / 16384;
-    this.relativeOffset += 2;
-    return v;
-};
-
-Parser.prototype.parseULong = function() {
-    var v = exports.getULong(this.data, this.offset + this.relativeOffset);
-    this.relativeOffset += 4;
-    return v;
-};
-
-Parser.prototype.parseFixed = function() {
-    var v = exports.getFixed(this.data, this.offset + this.relativeOffset);
-    this.relativeOffset += 4;
-    return v;
-};
-
-Parser.prototype.parseOffset16List =
-Parser.prototype.parseUShortList = function(count) {
-    var offsets = new Array(count);
-    var dataView = this.data;
-    var offset = this.offset + this.relativeOffset;
-    for (var i = 0; i < count; i++) {
-        offsets[i] = exports.getUShort(dataView, offset);
-        offset += 2;
-    }
-
-    this.relativeOffset += count * 2;
-    return offsets;
-};
-
-Parser.prototype.parseString = function(length) {
-    var dataView = this.data;
-    var offset = this.offset + this.relativeOffset;
-    var string = '';
-    this.relativeOffset += length;
-    for (var i = 0; i < length; i++) {
-        string += String.fromCharCode(dataView.getUint8(offset + i));
-    }
-
-    return string;
-};
-
-Parser.prototype.parseTag = function() {
-    return this.parseString(4);
-};
-
-// LONGDATETIME is a 64-bit integer.
-// JavaScript and unix timestamps traditionally use 32 bits, so we
-// only take the last 32 bits.
-Parser.prototype.parseLongDateTime = function() {
-    var v = exports.getULong(this.data, this.offset + this.relativeOffset + 4);
-    this.relativeOffset += 8;
-    return v;
-};
-
-Parser.prototype.parseFixed = function() {
-    var v = exports.getULong(this.data, this.offset + this.relativeOffset);
-    this.relativeOffset += 4;
-    return v / 65536;
-};
-
-Parser.prototype.parseVersion = function() {
-    var major = exports.getUShort(this.data, this.offset + this.relativeOffset);
-
-    // How to interpret the minor version is very vague in the spec. 0x5000 is 5, 0x1000 is 1
-    // This returns the correct number if minor = 0xN000 where N is 0-9
-    var minor = exports.getUShort(this.data, this.offset + this.relativeOffset + 2);
-    this.relativeOffset += 4;
-    return major + minor / 0x1000 / 10;
-};
-
-Parser.prototype.skip = function(type, amount) {
-    if (amount === undefined) {
-        amount = 1;
-    }
-
-    this.relativeOffset += typeOffsets[type] * amount;
-};
-
-exports.Parser = Parser;
-
-},{}],10:[function(_dereq_,module,exports){
-// Geometric objects
-
-'use strict';
-
-// A bézier path containing a set of path commands similar to a SVG path.
-// Paths can be drawn on a context using `draw`.
-function Path() {
-    this.commands = [];
-    this.fill = 'black';
-    this.stroke = null;
-    this.strokeWidth = 1;
-}
-
-Path.prototype.moveTo = function(x, y) {
-    this.commands.push({
-        type: 'M',
-        x: x,
-        y: y
-    });
-};
-
-Path.prototype.lineTo = function(x, y) {
-    this.commands.push({
-        type: 'L',
-        x: x,
-        y: y
-    });
-};
-
-Path.prototype.curveTo = Path.prototype.bezierCurveTo = function(x1, y1, x2, y2, x, y) {
-    this.commands.push({
-        type: 'C',
-        x1: x1,
-        y1: y1,
-        x2: x2,
-        y2: y2,
-        x: x,
-        y: y
-    });
-};
-
-Path.prototype.quadTo = Path.prototype.quadraticCurveTo = function(x1, y1, x, y) {
-    this.commands.push({
-        type: 'Q',
-        x1: x1,
-        y1: y1,
-        x: x,
-        y: y
-    });
-};
-
-Path.prototype.close = Path.prototype.closePath = function() {
-    this.commands.push({
-        type: 'Z'
-    });
-};
-
-// Add the given path or list of commands to the commands of this path.
-Path.prototype.extend = function(pathOrCommands) {
-    if (pathOrCommands.commands) {
-        pathOrCommands = pathOrCommands.commands;
-    }
-
-    Array.prototype.push.apply(this.commands, pathOrCommands);
-};
-
-// Draw the path to a 2D context.
-Path.prototype.draw = function(ctx) {
-    ctx.beginPath();
-    for (var i = 0; i < this.commands.length; i += 1) {
-        var cmd = this.commands[i];
-        if (cmd.type === 'M') {
-            ctx.moveTo(cmd.x, cmd.y);
-        } else if (cmd.type === 'L') {
-            ctx.lineTo(cmd.x, cmd.y);
-        } else if (cmd.type === 'C') {
-            ctx.bezierCurveTo(cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y);
-        } else if (cmd.type === 'Q') {
-            ctx.quadraticCurveTo(cmd.x1, cmd.y1, cmd.x, cmd.y);
-        } else if (cmd.type === 'Z') {
-            ctx.closePath();
-        }
-    }
-
-    if (this.fill) {
-        ctx.fillStyle = this.fill;
-        ctx.fill();
-    }
-
-    if (this.stroke) {
-        ctx.strokeStyle = this.stroke;
-        ctx.lineWidth = this.strokeWidth;
-        ctx.stroke();
-    }
-};
-
-// Convert the Path to a string of path data instructions
-// See http://www.w3.org/TR/SVG/paths.html#PathData
-// Parameters:
-// - decimalPlaces: The amount of decimal places for floating-point values (default: 2)
-Path.prototype.toPathData = function(decimalPlaces) {
-    decimalPlaces = decimalPlaces !== undefined ? decimalPlaces : 2;
-
-    function floatToString(v) {
-        if (Math.round(v) === v) {
-            return '' + Math.round(v);
-        } else {
-            return v.toFixed(decimalPlaces);
-        }
-    }
-
-    function packValues() {
-        var s = '';
-        for (var i = 0; i < arguments.length; i += 1) {
-            var v = arguments[i];
-            if (v >= 0 && i > 0) {
-                s += ' ';
-            }
-
-            s += floatToString(v);
-        }
-
-        return s;
-    }
-
-    var d = '';
-    for (var i = 0; i < this.commands.length; i += 1) {
-        var cmd = this.commands[i];
-        if (cmd.type === 'M') {
-            d += 'M' + packValues(cmd.x, cmd.y);
-        } else if (cmd.type === 'L') {
-            d += 'L' + packValues(cmd.x, cmd.y);
-        } else if (cmd.type === 'C') {
-            d += 'C' + packValues(cmd.x1, cmd.y1, cmd.x2, cmd.y2, cmd.x, cmd.y);
-        } else if (cmd.type === 'Q') {
-            d += 'Q' + packValues(cmd.x1, cmd.y1, cmd.x, cmd.y);
-        } else if (cmd.type === 'Z') {
-            d += 'Z';
-        }
-    }
-
-    return d;
-};
-
-// Convert the path to a SVG <path> element, as a string.
-// Parameters:
-// - decimalPlaces: The amount of decimal places for floating-point values (default: 2)
-Path.prototype.toSVG = function(decimalPlaces) {
-    var svg = '<path d="';
-    svg += this.toPathData(decimalPlaces);
-    svg += '"';
-    if (this.fill & this.fill !== 'black') {
-        if (this.fill === null) {
-            svg += ' fill="none"';
-        } else {
-            svg += ' fill="' + this.fill + '"';
-        }
-    }
-
-    if (this.stroke) {
-        svg += ' stroke="' + this.stroke + '" stroke-width="' + this.strokeWidth + '"';
-    }
-
-    svg += '/>';
-    return svg;
-};
-
-exports.Path = Path;
-
-},{}],11:[function(_dereq_,module,exports){
-// Table metadata
-
-'use strict';
-
-var check = _dereq_('./check');
-var encode = _dereq_('./types').encode;
-var sizeOf = _dereq_('./types').sizeOf;
-
-function Table(tableName, fields, options) {
-    var i;
-    for (i = 0; i < fields.length; i += 1) {
-        var field = fields[i];
-        this[field.name] = field.value;
-    }
-
-    this.tableName = tableName;
-    this.fields = fields;
-    if (options) {
-        var optionKeys = Object.keys(options);
-        for (i = 0; i < optionKeys.length; i += 1) {
-            var k = optionKeys[i];
-            var v = options[k];
-            if (this[k] !== undefined) {
-                this[k] = v;
-            }
-        }
-    }
-}
-
-Table.prototype.sizeOf = function() {
-    var v = 0;
-    for (var i = 0; i < this.fields.length; i += 1) {
-        var field = this.fields[i];
-        var value = this[field.name];
-        if (value === undefined) {
-            value = field.value;
-        }
-
-        if (typeof value.sizeOf === 'function') {
-            v += value.sizeOf();
-        } else {
-            var sizeOfFunction = sizeOf[field.type];
-            check.assert(typeof sizeOfFunction === 'function', 'Could not find sizeOf function for field' + field.name);
-            v += sizeOfFunction(value);
-        }
-    }
-
-    return v;
-};
-
-Table.prototype.encode = function() {
-    return encode.TABLE(this);
-};
-
-exports.Table = Table;
-
-},{"./check":2,"./types":26}],12:[function(_dereq_,module,exports){
-// The `CFF` table contains the glyph outlines in PostScript format.
-// https://www.microsoft.com/typography/OTSPEC/cff.htm
-// http://download.microsoft.com/download/8/0/1/801a191c-029d-4af3-9642-555f6fe514ee/cff.pdf
-// http://download.microsoft.com/download/8/0/1/801a191c-029d-4af3-9642-555f6fe514ee/type2.pdf
-
-'use strict';
-
-var encoding = _dereq_('../encoding');
-var glyphset = _dereq_('../glyphset');
-var parse = _dereq_('../parse');
-var path = _dereq_('../path');
-var table = _dereq_('../table');
-
-// Custom equals function that can also check lists.
-function equals(a, b) {
-    if (a === b) {
-        return true;
-    } else if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-            return false;
-        }
-
-        for (var i = 0; i < a.length; i += 1) {
-            if (!equals(a[i], b[i])) {
-                return false;
-            }
-        }
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Parse a `CFF` INDEX array.
-// An index array consists of a list of offsets, then a list of objects at those offsets.
-function parseCFFIndex(data, start, conversionFn) {
-    //var i, objectOffset, endOffset;
-    var offsets = [];
-    var objects = [];
-    var count = parse.getCard16(data, start);
-    var i;
-    var objectOffset;
-    var endOffset;
-    if (count !== 0) {
-        var offsetSize = parse.getByte(data, start + 2);
-        objectOffset = start + ((count + 1) * offsetSize) + 2;
-        var pos = start + 3;
-        for (i = 0; i < count + 1; i += 1) {
-            offsets.push(parse.getOffset(data, pos, offsetSize));
-            pos += offsetSize;
-        }
-
-        // The total size of the index array is 4 header bytes + the value of the last offset.
-        endOffset = objectOffset + offsets[count];
-    } else {
-        endOffset = start + 2;
-    }
-
-    for (i = 0; i < offsets.length - 1; i += 1) {
-        var value = parse.getBytes(data, objectOffset + offsets[i], objectOffset + offsets[i + 1]);
-        if (conversionFn) {
-            value = conversionFn(value);
-        }
-
-        objects.push(value);
-    }
-
-    return {objects: objects, startOffset: start, endOffset: endOffset};
-}
-
-// Parse a `CFF` DICT real value.
-function parseFloatOperand(parser) {
-    var s = '';
-    var eof = 15;
-    var lookup = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', 'E', 'E-', null, '-'];
-    while (true) {
-        var b = parser.parseByte();
-        var n1 = b >> 4;
-        var n2 = b & 15;
-
-        if (n1 === eof) {
-            break;
-        }
-
-        s += lookup[n1];
-
-        if (n2 === eof) {
-            break;
-        }
-
-        s += lookup[n2];
-    }
-
-    return parseFloat(s);
-}
-
-// Parse a `CFF` DICT operand.
-function parseOperand(parser, b0) {
-    var b1;
-    var b2;
-    var b3;
-    var b4;
-    if (b0 === 28) {
-        b1 = parser.parseByte();
-        b2 = parser.parseByte();
-        return b1 << 8 | b2;
-    }
-
-    if (b0 === 29) {
-        b1 = parser.parseByte();
-        b2 = parser.parseByte();
-        b3 = parser.parseByte();
-        b4 = parser.parseByte();
-        return b1 << 24 | b2 << 16 | b3 << 8 | b4;
-    }
-
-    if (b0 === 30) {
-        return parseFloatOperand(parser);
-    }
-
-    if (b0 >= 32 && b0 <= 246) {
-        return b0 - 139;
-    }
-
-    if (b0 >= 247 && b0 <= 250) {
-        b1 = parser.parseByte();
-        return (b0 - 247) * 256 + b1 + 108;
-    }
-
-    if (b0 >= 251 && b0 <= 254) {
-        b1 = parser.parseByte();
-        return -(b0 - 251) * 256 - b1 - 108;
-    }
-
-    throw new Error('Invalid b0 ' + b0);
-}
-
-// Convert the entries returned by `parseDict` to a proper dictionary.
-// If a value is a list of one, it is unpacked.
-function entriesToObject(entries) {
-    var o = {};
-    for (var i = 0; i < entries.length; i += 1) {
-        var key = entries[i][0];
-        var values = entries[i][1];
-        var value;
-        if (values.length === 1) {
-            value = values[0];
-        } else {
-            value = values;
-        }
-
-        if (o.hasOwnProperty(key)) {
-            throw new Error('Object ' + o + ' already has key ' + key);
-        }
-
-        o[key] = value;
-    }
-
-    return o;
-}
-
-// Parse a `CFF` DICT object.
-// A dictionary contains key-value pairs in a compact tokenized format.
-function parseCFFDict(data, start, size) {
-    start = start !== undefined ? start : 0;
-    var parser = new parse.Parser(data, start);
-    var entries = [];
-    var operands = [];
-    size = size !== undefined ? size : data.length;
-
-    while (parser.relativeOffset < size) {
-        var op = parser.parseByte();
-
-        // The first byte for each dict item distinguishes between operator (key) and operand (value).
-        // Values <= 21 are operators.
-        if (op <= 21) {
-            // Two-byte operators have an initial escape byte of 12.
-            if (op === 12) {
-                op = 1200 + parser.parseByte();
-            }
-
-            entries.push([op, operands]);
-            operands = [];
-        } else {
-            // Since the operands (values) come before the operators (keys), we store all operands in a list
-            // until we encounter an operator.
-            operands.push(parseOperand(parser, op));
-        }
-    }
-
-    return entriesToObject(entries);
-}
-
-// Given a String Index (SID), return the value of the string.
-// Strings below index 392 are standard CFF strings and are not encoded in the font.
-function getCFFString(strings, index) {
-    if (index <= 390) {
-        index = encoding.cffStandardStrings[index];
-    } else {
-        index = strings[index - 391];
-    }
-
-    return index;
-}
-
-// Interpret a dictionary and return a new dictionary with readable keys and values for missing entries.
-// This function takes `meta` which is a list of objects containing `operand`, `name` and `default`.
-function interpretDict(dict, meta, strings) {
-    var newDict = {};
-
-    // Because we also want to include missing values, we start out from the meta list
-    // and lookup values in the dict.
-    for (var i = 0; i < meta.length; i += 1) {
-        var m = meta[i];
-        var value = dict[m.op];
-        if (value === undefined) {
-            value = m.value !== undefined ? m.value : null;
-        }
-
-        if (m.type === 'SID') {
-            value = getCFFString(strings, value);
-        }
-
-        newDict[m.name] = value;
-    }
-
-    return newDict;
-}
-
-// Parse the CFF header.
-function parseCFFHeader(data, start) {
-    var header = {};
-    header.formatMajor = parse.getCard8(data, start);
-    header.formatMinor = parse.getCard8(data, start + 1);
-    header.size = parse.getCard8(data, start + 2);
-    header.offsetSize = parse.getCard8(data, start + 3);
-    header.startOffset = start;
-    header.endOffset = start + 4;
-    return header;
-}
-
-var TOP_DICT_META = [
-    {name: 'version', op: 0, type: 'SID'},
-    {name: 'notice', op: 1, type: 'SID'},
-    {name: 'copyright', op: 1200, type: 'SID'},
-    {name: 'fullName', op: 2, type: 'SID'},
-    {name: 'familyName', op: 3, type: 'SID'},
-    {name: 'weight', op: 4, type: 'SID'},
-    {name: 'isFixedPitch', op: 1201, type: 'number', value: 0},
-    {name: 'italicAngle', op: 1202, type: 'number', value: 0},
-    {name: 'underlinePosition', op: 1203, type: 'number', value: -100},
-    {name: 'underlineThickness', op: 1204, type: 'number', value: 50},
-    {name: 'paintType', op: 1205, type: 'number', value: 0},
-    {name: 'charstringType', op: 1206, type: 'number', value: 2},
-    {name: 'fontMatrix', op: 1207, type: ['real', 'real', 'real', 'real', 'real', 'real'], value: [0.001, 0, 0, 0.001, 0, 0]},
-    {name: 'uniqueId', op: 13, type: 'number'},
-    {name: 'fontBBox', op: 5, type: ['number', 'number', 'number', 'number'], value: [0, 0, 0, 0]},
-    {name: 'strokeWidth', op: 1208, type: 'number', value: 0},
-    {name: 'xuid', op: 14, type: [], value: null},
-    {name: 'charset', op: 15, type: 'offset', value: 0},
-    {name: 'encoding', op: 16, type: 'offset', value: 0},
-    {name: 'charStrings', op: 17, type: 'offset', value: 0},
-    {name: 'private', op: 18, type: ['number', 'offset'], value: [0, 0]}
-];
-
-var PRIVATE_DICT_META = [
-    {name: 'subrs', op: 19, type: 'offset', value: 0},
-    {name: 'defaultWidthX', op: 20, type: 'number', value: 0},
-    {name: 'nominalWidthX', op: 21, type: 'number', value: 0}
-];
-
-// Parse the CFF top dictionary. A CFF table can contain multiple fonts, each with their own top dictionary.
-// The top dictionary contains the essential metadata for the font, together with the private dictionary.
-function parseCFFTopDict(data, strings) {
-    var dict = parseCFFDict(data, 0, data.byteLength);
-    return interpretDict(dict, TOP_DICT_META, strings);
-}
-
-// Parse the CFF private dictionary. We don't fully parse out all the values, only the ones we need.
-function parseCFFPrivateDict(data, start, size, strings) {
-    var dict = parseCFFDict(data, start, size);
-    return interpretDict(dict, PRIVATE_DICT_META, strings);
-}
-
-// Parse the CFF charset table, which contains internal names for all the glyphs.
-// This function will return a list of glyph names.
-// See Adobe TN #5176 chapter 13, "Charsets".
-function parseCFFCharset(data, start, nGlyphs, strings) {
-    var i;
-    var sid;
-    var count;
-    var parser = new parse.Parser(data, start);
-
-    // The .notdef glyph is not included, so subtract 1.
-    nGlyphs -= 1;
-    var charset = ['.notdef'];
-
-    var format = parser.parseCard8();
-    if (format === 0) {
-        for (i = 0; i < nGlyphs; i += 1) {
-            sid = parser.parseSID();
-            charset.push(getCFFString(strings, sid));
-        }
-    } else if (format === 1) {
-        while (charset.length <= nGlyphs) {
-            sid = parser.parseSID();
-            count = parser.parseCard8();
-            for (i = 0; i <= count; i += 1) {
-                charset.push(getCFFString(strings, sid));
-                sid += 1;
-            }
-        }
-    } else if (format === 2) {
-        while (charset.length <= nGlyphs) {
-            sid = parser.parseSID();
-            count = parser.parseCard16();
-            for (i = 0; i <= count; i += 1) {
-                charset.push(getCFFString(strings, sid));
-                sid += 1;
-            }
-        }
-    } else {
-        throw new Error('Unknown charset format ' + format);
-    }
-
-    return charset;
-}
-
-// Parse the CFF encoding data. Only one encoding can be specified per font.
-// See Adobe TN #5176 chapter 12, "Encodings".
-function parseCFFEncoding(data, start, charset) {
-    var i;
-    var code;
-    var enc = {};
-    var parser = new parse.Parser(data, start);
-    var format = parser.parseCard8();
-    if (format === 0) {
-        var nCodes = parser.parseCard8();
-        for (i = 0; i < nCodes; i += 1) {
-            code = parser.parseCard8();
-            enc[code] = i;
-        }
-    } else if (format === 1) {
-        var nRanges = parser.parseCard8();
-        code = 1;
-        for (i = 0; i < nRanges; i += 1) {
-            var first = parser.parseCard8();
-            var nLeft = parser.parseCard8();
-            for (var j = first; j <= first + nLeft; j += 1) {
-                enc[j] = code;
-                code += 1;
-            }
-        }
-    } else {
-        throw new Error('Unknown encoding format ' + format);
-    }
-
-    return new encoding.CffEncoding(enc, charset);
-}
-
-// Take in charstring code and return a Glyph object.
-// The encoding is described in the Type 2 Charstring Format
-// https://www.microsoft.com/typography/OTSPEC/charstr2.htm
-function parseCFFCharstring(font, glyph, code) {
-    var c1x;
-    var c1y;
-    var c2x;
-    var c2y;
-    var p = new path.Path();
-    var stack = [];
-    var nStems = 0;
-    var haveWidth = false;
-    var width = font.defaultWidthX;
-    var open = false;
-    var x = 0;
-    var y = 0;
-
-    function newContour(x, y) {
-        if (open) {
-            p.closePath();
-        }
-
-        p.moveTo(x, y);
-        open = true;
-    }
-
-    function parseStems() {
-        var hasWidthArg;
-
-        // The number of stem operators on the stack is always even.
-        // If the value is uneven, that means a width is specified.
-        hasWidthArg = stack.length % 2 !== 0;
-        if (hasWidthArg && !haveWidth) {
-            width = stack.shift() + font.nominalWidthX;
-        }
-
-        nStems += stack.length >> 1;
-        stack.length = 0;
-        haveWidth = true;
-    }
-
-    function parse(code) {
-        var b1;
-        var b2;
-        var b3;
-        var b4;
-        var codeIndex;
-        var subrCode;
-        var jpx;
-        var jpy;
-        var c3x;
-        var c3y;
-        var c4x;
-        var c4y;
-
-        var i = 0;
-        while (i < code.length) {
-            var v = code[i];
-            i += 1;
-            switch (v) {
-            case 1: // hstem
-                parseStems();
-                break;
-            case 3: // vstem
-                parseStems();
-                break;
-            case 4: // vmoveto
-                if (stack.length > 1 && !haveWidth) {
-                    width = stack.shift() + font.nominalWidthX;
-                    haveWidth = true;
-                }
-
-                y += stack.pop();
-                newContour(x, y);
-                break;
-            case 5: // rlineto
-                while (stack.length > 0) {
-                    x += stack.shift();
-                    y += stack.shift();
-                    p.lineTo(x, y);
-                }
-
-                break;
-            case 6: // hlineto
-                while (stack.length > 0) {
-                    x += stack.shift();
-                    p.lineTo(x, y);
-                    if (stack.length === 0) {
-                        break;
-                    }
-
-                    y += stack.shift();
-                    p.lineTo(x, y);
-                }
-
-                break;
-            case 7: // vlineto
-                while (stack.length > 0) {
-                    y += stack.shift();
-                    p.lineTo(x, y);
-                    if (stack.length === 0) {
-                        break;
-                    }
-
-                    x += stack.shift();
-                    p.lineTo(x, y);
-                }
-
-                break;
-            case 8: // rrcurveto
-                while (stack.length > 0) {
-                    c1x = x + stack.shift();
-                    c1y = y + stack.shift();
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x + stack.shift();
-                    y = c2y + stack.shift();
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                break;
-            case 10: // callsubr
-                codeIndex = stack.pop() + font.subrsBias;
-                subrCode = font.subrs[codeIndex];
-                if (subrCode) {
-                    parse(subrCode);
-                }
-
-                break;
-            case 11: // return
-                return;
-            case 12: // flex operators
-                v = code[i];
-                i += 1;
-                switch (v) {
-                case 35: // flex
-                    // |- dx1 dy1 dx2 dy2 dx3 dy3 dx4 dy4 dx5 dy5 dx6 dy6 fd flex (12 35) |-
-                    c1x = x   + stack.shift();    // dx1
-                    c1y = y   + stack.shift();    // dy1
-                    c2x = c1x + stack.shift();    // dx2
-                    c2y = c1y + stack.shift();    // dy2
-                    jpx = c2x + stack.shift();    // dx3
-                    jpy = c2y + stack.shift();    // dy3
-                    c3x = jpx + stack.shift();    // dx4
-                    c3y = jpy + stack.shift();    // dy4
-                    c4x = c3x + stack.shift();    // dx5
-                    c4y = c3y + stack.shift();    // dy5
-                    x = c4x + stack.shift();      // dx6
-                    y = c4y + stack.shift();      // dy6
-                    stack.shift();                // flex depth
-                    p.curveTo(c1x, c1y, c2x, c2y, jpx, jpy);
-                    p.curveTo(c3x, c3y, c4x, c4y, x, y);
-                    break;
-                case 34: // hflex
-                    // |- dx1 dx2 dy2 dx3 dx4 dx5 dx6 hflex (12 34) |-
-                    c1x = x   + stack.shift();    // dx1
-                    c1y = y;                      // dy1
-                    c2x = c1x + stack.shift();    // dx2
-                    c2y = c1y + stack.shift();    // dy2
-                    jpx = c2x + stack.shift();    // dx3
-                    jpy = c2y;                    // dy3
-                    c3x = jpx + stack.shift();    // dx4
-                    c3y = c2y;                    // dy4
-                    c4x = c3x + stack.shift();    // dx5
-                    c4y = y;                      // dy5
-                    x = c4x + stack.shift();      // dx6
-                    p.curveTo(c1x, c1y, c2x, c2y, jpx, jpy);
-                    p.curveTo(c3x, c3y, c4x, c4y, x, y);
-                    break;
-                case 36: // hflex1
-                    // |- dx1 dy1 dx2 dy2 dx3 dx4 dx5 dy5 dx6 hflex1 (12 36) |-
-                    c1x = x   + stack.shift();    // dx1
-                    c1y = y   + stack.shift();    // dy1
-                    c2x = c1x + stack.shift();    // dx2
-                    c2y = c1y + stack.shift();    // dy2
-                    jpx = c2x + stack.shift();    // dx3
-                    jpy = c2y;                    // dy3
-                    c3x = jpx + stack.shift();    // dx4
-                    c3y = c2y;                    // dy4
-                    c4x = c3x + stack.shift();    // dx5
-                    c4y = c3y + stack.shift();    // dy5
-                    x = c4x + stack.shift();      // dx6
-                    p.curveTo(c1x, c1y, c2x, c2y, jpx, jpy);
-                    p.curveTo(c3x, c3y, c4x, c4y, x, y);
-                    break;
-                case 37: // flex1
-                    // |- dx1 dy1 dx2 dy2 dx3 dy3 dx4 dy4 dx5 dy5 d6 flex1 (12 37) |-
-                    c1x = x   + stack.shift();    // dx1
-                    c1y = y   + stack.shift();    // dy1
-                    c2x = c1x + stack.shift();    // dx2
-                    c2y = c1y + stack.shift();    // dy2
-                    jpx = c2x + stack.shift();    // dx3
-                    jpy = c2y + stack.shift();    // dy3
-                    c3x = jpx + stack.shift();    // dx4
-                    c3y = jpy + stack.shift();    // dy4
-                    c4x = c3x + stack.shift();    // dx5
-                    c4y = c3y + stack.shift();    // dy5
-                    if (Math.abs(c4x - x) > Math.abs(c4y - y)) {
-                        x = c4x + stack.shift();
-                    } else {
-                        y = c4y + stack.shift();
-                    }
-
-                    p.curveTo(c1x, c1y, c2x, c2y, jpx, jpy);
-                    p.curveTo(c3x, c3y, c4x, c4y, x, y);
-                    break;
-                default:
-                    console.log('Glyph ' + glyph.index + ': unknown operator ' + 1200 + v);
-                    stack.length = 0;
-                }
-                break;
-            case 14: // endchar
-                if (stack.length > 0 && !haveWidth) {
-                    width = stack.shift() + font.nominalWidthX;
-                    haveWidth = true;
-                }
-
-                if (open) {
-                    p.closePath();
-                    open = false;
-                }
-
-                break;
-            case 18: // hstemhm
-                parseStems();
-                break;
-            case 19: // hintmask
-            case 20: // cntrmask
-                parseStems();
-                i += (nStems + 7) >> 3;
-                break;
-            case 21: // rmoveto
-                if (stack.length > 2 && !haveWidth) {
-                    width = stack.shift() + font.nominalWidthX;
-                    haveWidth = true;
-                }
-
-                y += stack.pop();
-                x += stack.pop();
-                newContour(x, y);
-                break;
-            case 22: // hmoveto
-                if (stack.length > 1 && !haveWidth) {
-                    width = stack.shift() + font.nominalWidthX;
-                    haveWidth = true;
-                }
-
-                x += stack.pop();
-                newContour(x, y);
-                break;
-            case 23: // vstemhm
-                parseStems();
-                break;
-            case 24: // rcurveline
-                while (stack.length > 2) {
-                    c1x = x + stack.shift();
-                    c1y = y + stack.shift();
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x + stack.shift();
-                    y = c2y + stack.shift();
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                x += stack.shift();
-                y += stack.shift();
-                p.lineTo(x, y);
-                break;
-            case 25: // rlinecurve
-                while (stack.length > 6) {
-                    x += stack.shift();
-                    y += stack.shift();
-                    p.lineTo(x, y);
-                }
-
-                c1x = x + stack.shift();
-                c1y = y + stack.shift();
-                c2x = c1x + stack.shift();
-                c2y = c1y + stack.shift();
-                x = c2x + stack.shift();
-                y = c2y + stack.shift();
-                p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                break;
-            case 26: // vvcurveto
-                if (stack.length % 2) {
-                    x += stack.shift();
-                }
-
-                while (stack.length > 0) {
-                    c1x = x;
-                    c1y = y + stack.shift();
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x;
-                    y = c2y + stack.shift();
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                break;
-            case 27: // hhcurveto
-                if (stack.length % 2) {
-                    y += stack.shift();
-                }
-
-                while (stack.length > 0) {
-                    c1x = x + stack.shift();
-                    c1y = y;
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x + stack.shift();
-                    y = c2y;
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                break;
-            case 28: // shortint
-                b1 = code[i];
-                b2 = code[i + 1];
-                stack.push(((b1 << 24) | (b2 << 16)) >> 16);
-                i += 2;
-                break;
-            case 29: // callgsubr
-                codeIndex = stack.pop() + font.gsubrsBias;
-                subrCode = font.gsubrs[codeIndex];
-                if (subrCode) {
-                    parse(subrCode);
-                }
-
-                break;
-            case 30: // vhcurveto
-                while (stack.length > 0) {
-                    c1x = x;
-                    c1y = y + stack.shift();
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x + stack.shift();
-                    y = c2y + (stack.length === 1 ? stack.shift() : 0);
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                    if (stack.length === 0) {
-                        break;
-                    }
-
-                    c1x = x + stack.shift();
-                    c1y = y;
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    y = c2y + stack.shift();
-                    x = c2x + (stack.length === 1 ? stack.shift() : 0);
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                break;
-            case 31: // hvcurveto
-                while (stack.length > 0) {
-                    c1x = x + stack.shift();
-                    c1y = y;
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    y = c2y + stack.shift();
-                    x = c2x + (stack.length === 1 ? stack.shift() : 0);
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                    if (stack.length === 0) {
-                        break;
-                    }
-
-                    c1x = x;
-                    c1y = y + stack.shift();
-                    c2x = c1x + stack.shift();
-                    c2y = c1y + stack.shift();
-                    x = c2x + stack.shift();
-                    y = c2y + (stack.length === 1 ? stack.shift() : 0);
-                    p.curveTo(c1x, c1y, c2x, c2y, x, y);
-                }
-
-                break;
-            default:
-                if (v < 32) {
-                    console.log('Glyph ' + glyph.index + ': unknown operator ' + v);
-                } else if (v < 247) {
-                    stack.push(v - 139);
-                } else if (v < 251) {
-                    b1 = code[i];
-                    i += 1;
-                    stack.push((v - 247) * 256 + b1 + 108);
-                } else if (v < 255) {
-                    b1 = code[i];
-                    i += 1;
-                    stack.push(-(v - 251) * 256 - b1 - 108);
-                } else {
-                    b1 = code[i];
-                    b2 = code[i + 1];
-                    b3 = code[i + 2];
-                    b4 = code[i + 3];
-                    i += 4;
-                    stack.push(((b1 << 24) | (b2 << 16) | (b3 << 8) | b4) / 65536);
-                }
-            }
-        }
-    }
-
-    parse(code);
-
-    glyph.advanceWidth = width;
-    return p;
-}
-
-// Subroutines are encoded using the negative half of the number space.
-// See type 2 chapter 4.7 "Subroutine operators".
-function calcCFFSubroutineBias(subrs) {
-    var bias;
-    if (subrs.length < 1240) {
-        bias = 107;
-    } else if (subrs.length < 33900) {
-        bias = 1131;
-    } else {
-        bias = 32768;
-    }
-
-    return bias;
-}
-
-// Parse the `CFF` table, which contains the glyph outlines in PostScript format.
-function parseCFFTable(data, start, font) {
-    font.tables.cff = {};
-    var header = parseCFFHeader(data, start);
-    var nameIndex = parseCFFIndex(data, header.endOffset, parse.bytesToString);
-    var topDictIndex = parseCFFIndex(data, nameIndex.endOffset);
-    var stringIndex = parseCFFIndex(data, topDictIndex.endOffset, parse.bytesToString);
-    var globalSubrIndex = parseCFFIndex(data, stringIndex.endOffset);
-    font.gsubrs = globalSubrIndex.objects;
-    font.gsubrsBias = calcCFFSubroutineBias(font.gsubrs);
-
-    var topDictData = new DataView(new Uint8Array(topDictIndex.objects[0]).buffer);
-    var topDict = parseCFFTopDict(topDictData, stringIndex.objects);
-    font.tables.cff.topDict = topDict;
-
-    var privateDictOffset = start + topDict['private'][1];
-    var privateDict = parseCFFPrivateDict(data, privateDictOffset, topDict['private'][0], stringIndex.objects);
-    font.defaultWidthX = privateDict.defaultWidthX;
-    font.nominalWidthX = privateDict.nominalWidthX;
-
-    if (privateDict.subrs !== 0) {
-        var subrOffset = privateDictOffset + privateDict.subrs;
-        var subrIndex = parseCFFIndex(data, subrOffset);
-        font.subrs = subrIndex.objects;
-        font.subrsBias = calcCFFSubroutineBias(font.subrs);
-    } else {
-        font.subrs = [];
-        font.subrsBias = 0;
-    }
-
-    // Offsets in the top dict are relative to the beginning of the CFF data, so add the CFF start offset.
-    var charStringsIndex = parseCFFIndex(data, start + topDict.charStrings);
-    font.nGlyphs = charStringsIndex.objects.length;
-
-    var charset = parseCFFCharset(data, start + topDict.charset, font.nGlyphs, stringIndex.objects);
-    if (topDict.encoding === 0) { // Standard encoding
-        font.cffEncoding = new encoding.CffEncoding(encoding.cffStandardEncoding, charset);
-    } else if (topDict.encoding === 1) { // Expert encoding
-        font.cffEncoding = new encoding.CffEncoding(encoding.cffExpertEncoding, charset);
-    } else {
-        font.cffEncoding = parseCFFEncoding(data, start + topDict.encoding, charset);
-    }
-
-    // Prefer the CMAP encoding to the CFF encoding.
-    font.encoding = font.encoding || font.cffEncoding;
-
-    font.glyphs = new glyphset.GlyphSet(font);
-    for (var i = 0; i < font.nGlyphs; i += 1) {
-        var charString = charStringsIndex.objects[i];
-        font.glyphs.push(i, glyphset.cffGlyphLoader(font, i, parseCFFCharstring, charString));
-    }
-}
-
-// Convert a string to a String ID (SID).
-// The list of strings is modified in place.
-function encodeString(s, strings) {
-    var sid;
-
-    // Is the string in the CFF standard strings?
-    var i = encoding.cffStandardStrings.indexOf(s);
-    if (i >= 0) {
-        sid = i;
-    }
-
-    // Is the string already in the string index?
-    i = strings.indexOf(s);
-    if (i >= 0) {
-        sid = i + encoding.cffStandardStrings.length;
-    } else {
-        sid = encoding.cffStandardStrings.length + strings.length;
-        strings.push(s);
-    }
-
-    return sid;
-}
-
-function makeHeader() {
-    return new table.Table('Header', [
-        {name: 'major', type: 'Card8', value: 1},
-        {name: 'minor', type: 'Card8', value: 0},
-        {name: 'hdrSize', type: 'Card8', value: 4},
-        {name: 'major', type: 'Card8', value: 1}
-    ]);
-}
-
-function makeNameIndex(fontNames) {
-    var t = new table.Table('Name INDEX', [
-        {name: 'names', type: 'INDEX', value: []}
-    ]);
-    t.names = [];
-    for (var i = 0; i < fontNames.length; i += 1) {
-        t.names.push({name: 'name_' + i, type: 'NAME', value: fontNames[i]});
-    }
-
-    return t;
-}
-
-// Given a dictionary's metadata, create a DICT structure.
-function makeDict(meta, attrs, strings) {
-    var m = {};
-    for (var i = 0; i < meta.length; i += 1) {
-        var entry = meta[i];
-        var value = attrs[entry.name];
-        if (value !== undefined && !equals(value, entry.value)) {
-            if (entry.type === 'SID') {
-                value = encodeString(value, strings);
-            }
-
-            m[entry.op] = {name: entry.name, type: entry.type, value: value};
-        }
-    }
-
-    return m;
-}
-
-// The Top DICT houses the global font attributes.
-function makeTopDict(attrs, strings) {
-    var t = new table.Table('Top DICT', [
-        {name: 'dict', type: 'DICT', value: {}}
-    ]);
-    t.dict = makeDict(TOP_DICT_META, attrs, strings);
-    return t;
-}
-
-function makeTopDictIndex(topDict) {
-    var t = new table.Table('Top DICT INDEX', [
-        {name: 'topDicts', type: 'INDEX', value: []}
-    ]);
-    t.topDicts = [{name: 'topDict_0', type: 'TABLE', value: topDict}];
-    return t;
-}
-
-function makeStringIndex(strings) {
-    var t = new table.Table('String INDEX', [
-        {name: 'strings', type: 'INDEX', value: []}
-    ]);
-    t.strings = [];
-    for (var i = 0; i < strings.length; i += 1) {
-        t.strings.push({name: 'string_' + i, type: 'STRING', value: strings[i]});
-    }
-
-    return t;
-}
-
-function makeGlobalSubrIndex() {
-    // Currently we don't use subroutines.
-    return new table.Table('Global Subr INDEX', [
-        {name: 'subrs', type: 'INDEX', value: []}
-    ]);
-}
-
-function makeCharsets(glyphNames, strings) {
-    var t = new table.Table('Charsets', [
-        {name: 'format', type: 'Card8', value: 0}
-    ]);
-    for (var i = 0; i < glyphNames.length; i += 1) {
-        var glyphName = glyphNames[i];
-        var glyphSID = encodeString(glyphName, strings);
-        t.fields.push({name: 'glyph_' + i, type: 'SID', value: glyphSID});
-    }
-
-    return t;
-}
-
-function glyphToOps(glyph) {
-    var ops = [];
-    var path = glyph.path;
-    ops.push({name: 'width', type: 'NUMBER', value: glyph.advanceWidth});
-    var x = 0;
-    var y = 0;
-    for (var i = 0; i < path.commands.length; i += 1) {
-        var dx;
-        var dy;
-        var cmd = path.commands[i];
-        if (cmd.type === 'Q') {
-            // CFF only supports bézier curves, so convert the quad to a bézier.
-            var _13 = 1 / 3;
-            var _23 = 2 / 3;
-
-            // We're going to create a new command so we don't change the original path.
-            cmd = {
-                type: 'C',
-                x: cmd.x,
-                y: cmd.y,
-                x1: _13 * x + _23 * cmd.x1,
-                y1: _13 * y + _23 * cmd.y1,
-                x2: _13 * cmd.x + _23 * cmd.x1,
-                y2: _13 * cmd.y + _23 * cmd.y1
-            };
-        }
-
-        if (cmd.type === 'M') {
-            dx = Math.round(cmd.x - x);
-            dy = Math.round(cmd.y - y);
-            ops.push({name: 'dx', type: 'NUMBER', value: dx});
-            ops.push({name: 'dy', type: 'NUMBER', value: dy});
-            ops.push({name: 'rmoveto', type: 'OP', value: 21});
-            x = Math.round(cmd.x);
-            y = Math.round(cmd.y);
-        } else if (cmd.type === 'L') {
-            dx = Math.round(cmd.x - x);
-            dy = Math.round(cmd.y - y);
-            ops.push({name: 'dx', type: 'NUMBER', value: dx});
-            ops.push({name: 'dy', type: 'NUMBER', value: dy});
-            ops.push({name: 'rlineto', type: 'OP', value: 5});
-            x = Math.round(cmd.x);
-            y = Math.round(cmd.y);
-        } else if (cmd.type === 'C') {
-            var dx1 = Math.round(cmd.x1 - x);
-            var dy1 = Math.round(cmd.y1 - y);
-            var dx2 = Math.round(cmd.x2 - cmd.x1);
-            var dy2 = Math.round(cmd.y2 - cmd.y1);
-            dx = Math.round(cmd.x - cmd.x2);
-            dy = Math.round(cmd.y - cmd.y2);
-            ops.push({name: 'dx1', type: 'NUMBER', value: dx1});
-            ops.push({name: 'dy1', type: 'NUMBER', value: dy1});
-            ops.push({name: 'dx2', type: 'NUMBER', value: dx2});
-            ops.push({name: 'dy2', type: 'NUMBER', value: dy2});
-            ops.push({name: 'dx', type: 'NUMBER', value: dx});
-            ops.push({name: 'dy', type: 'NUMBER', value: dy});
-            ops.push({name: 'rrcurveto', type: 'OP', value: 8});
-            x = Math.round(cmd.x);
-            y = Math.round(cmd.y);
-        }
-
-        // Contours are closed automatically.
-
-    }
-
-    ops.push({name: 'endchar', type: 'OP', value: 14});
-    return ops;
-}
-
-function makeCharStringsIndex(glyphs) {
-    var t = new table.Table('CharStrings INDEX', [
-        {name: 'charStrings', type: 'INDEX', value: []}
-    ]);
-
-    for (var i = 0; i < glyphs.length; i += 1) {
-        var glyph = glyphs.get(i);
-        var ops = glyphToOps(glyph);
-        t.charStrings.push({name: glyph.name, type: 'CHARSTRING', value: ops});
-    }
-
-    return t;
-}
-
-function makePrivateDict(attrs, strings) {
-    var t = new table.Table('Private DICT', [
-        {name: 'dict', type: 'DICT', value: {}}
-    ]);
-    t.dict = makeDict(PRIVATE_DICT_META, attrs, strings);
-    return t;
-}
-
-function makePrivateDictIndex(privateDict) {
-    var t = new table.Table('Private DICT INDEX', [
-        {name: 'privateDicts', type: 'INDEX', value: []}
-    ]);
-    t.privateDicts = [{name: 'privateDict_0', type: 'TABLE', value: privateDict}];
-    return t;
-}
-
-function makeCFFTable(glyphs, options) {
-    var t = new table.Table('CFF ', [
-        {name: 'header', type: 'TABLE'},
-        {name: 'nameIndex', type: 'TABLE'},
-        {name: 'topDictIndex', type: 'TABLE'},
-        {name: 'stringIndex', type: 'TABLE'},
-        {name: 'globalSubrIndex', type: 'TABLE'},
-        {name: 'charsets', type: 'TABLE'},
-        {name: 'charStringsIndex', type: 'TABLE'},
-        {name: 'privateDictIndex', type: 'TABLE'}
-    ]);
-
-    var fontScale = 1 / options.unitsPerEm;
-    // We use non-zero values for the offsets so that the DICT encodes them.
-    // This is important because the size of the Top DICT plays a role in offset calculation,
-    // and the size shouldn't change after we've written correct offsets.
-    var attrs = {
-        version: options.version,
-        fullName: options.fullName,
-        familyName: options.familyName,
-        weight: options.weightName,
-        fontMatrix: [fontScale, 0, 0, fontScale, 0, 0],
-        charset: 999,
-        encoding: 0,
-        charStrings: 999,
-        private: [0, 999]
-    };
-
-    var privateAttrs = {};
-
-    var glyphNames = [];
-    var glyph;
-
-    // Skip first glyph (.notdef)
-    for (var i = 1; i < glyphs.length; i += 1) {
-        glyph = glyphs.get(i);
-        glyphNames.push(glyph.name);
-    }
-
-    var strings = [];
-
-    t.header = makeHeader();
-    t.nameIndex = makeNameIndex([options.postScriptName]);
-    var topDict = makeTopDict(attrs, strings);
-    t.topDictIndex = makeTopDictIndex(topDict);
-    t.globalSubrIndex = makeGlobalSubrIndex();
-    t.charsets = makeCharsets(glyphNames, strings);
-    t.charStringsIndex = makeCharStringsIndex(glyphs);
-    var privateDict = makePrivateDict(privateAttrs, strings);
-    t.privateDictIndex = makePrivateDictIndex(privateDict);
-
-    // Needs to come at the end, to encode all custom strings used in the font.
-    t.stringIndex = makeStringIndex(strings);
-
-    var startOffset = t.header.sizeOf() +
-        t.nameIndex.sizeOf() +
-        t.topDictIndex.sizeOf() +
-        t.stringIndex.sizeOf() +
-        t.globalSubrIndex.sizeOf();
-    attrs.charset = startOffset;
-
-    // We use the CFF standard encoding; proper encoding will be handled in cmap.
-    attrs.encoding = 0;
-    attrs.charStrings = attrs.charset + t.charsets.sizeOf();
-    attrs.private[1] = attrs.charStrings + t.charStringsIndex.sizeOf();
-
-    // Recreate the Top DICT INDEX with the correct offsets.
-    topDict = makeTopDict(attrs, strings);
-    t.topDictIndex = makeTopDictIndex(topDict);
-
-    return t;
-}
-
-exports.parse = parseCFFTable;
-exports.make = makeCFFTable;
-
-},{"../encoding":4,"../glyphset":7,"../parse":9,"../path":10,"../table":11}],13:[function(_dereq_,module,exports){
-// The `cmap` table stores the mappings from characters to glyphs.
-// https://www.microsoft.com/typography/OTSPEC/cmap.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the `cmap` table. This table stores the mappings from characters to glyphs.
-// There are many available formats, but we only support the Windows format 4.
-// This function returns a `CmapEncoding` object or null if no supported format could be found.
-function parseCmapTable(data, start) {
-    var i;
-    var cmap = {};
-    cmap.version = parse.getUShort(data, start);
-    check.argument(cmap.version === 0, 'cmap table version should be 0.');
-
-    // The cmap table can contain many sub-tables, each with their own format.
-    // We're only interested in a "platform 3" table. This is a Windows format.
-    cmap.numTables = parse.getUShort(data, start + 2);
-    var offset = -1;
-    for (i = 0; i < cmap.numTables; i += 1) {
-        var platformId = parse.getUShort(data, start + 4 + (i * 8));
-        var encodingId = parse.getUShort(data, start + 4 + (i * 8) + 2);
-        if (platformId === 3 && (encodingId === 1 || encodingId === 0)) {
-            offset = parse.getULong(data, start + 4 + (i * 8) + 4);
-            break;
-        }
-    }
-
-    if (offset === -1) {
-        // There is no cmap table in the font that we support, so return null.
-        // This font will be marked as unsupported.
-        return null;
-    }
-
-    var p = new parse.Parser(data, start + offset);
-    cmap.format = p.parseUShort();
-    check.argument(cmap.format === 4, 'Only format 4 cmap tables are supported.');
-
-    // Length in bytes of the sub-tables.
-    cmap.length = p.parseUShort();
-    cmap.language = p.parseUShort();
-
-    // segCount is stored x 2.
-    var segCount;
-    cmap.segCount = segCount = p.parseUShort() >> 1;
-
-    // Skip searchRange, entrySelector, rangeShift.
-    p.skip('uShort', 3);
-
-    // The "unrolled" mapping from character codes to glyph indices.
-    cmap.glyphIndexMap = {};
-
-    var endCountParser = new parse.Parser(data, start + offset + 14);
-    var startCountParser = new parse.Parser(data, start + offset + 16 + segCount * 2);
-    var idDeltaParser = new parse.Parser(data, start + offset + 16 + segCount * 4);
-    var idRangeOffsetParser = new parse.Parser(data, start + offset + 16 + segCount * 6);
-    var glyphIndexOffset = start + offset + 16 + segCount * 8;
-    for (i = 0; i < segCount - 1; i += 1) {
-        var glyphIndex;
-        var endCount = endCountParser.parseUShort();
-        var startCount = startCountParser.parseUShort();
-        var idDelta = idDeltaParser.parseShort();
-        var idRangeOffset = idRangeOffsetParser.parseUShort();
-        for (var c = startCount; c <= endCount; c += 1) {
-            if (idRangeOffset !== 0) {
-                // The idRangeOffset is relative to the current position in the idRangeOffset array.
-                // Take the current offset in the idRangeOffset array.
-                glyphIndexOffset = (idRangeOffsetParser.offset + idRangeOffsetParser.relativeOffset - 2);
-
-                // Add the value of the idRangeOffset, which will move us into the glyphIndex array.
-                glyphIndexOffset += idRangeOffset;
-
-                // Then add the character index of the current segment, multiplied by 2 for USHORTs.
-                glyphIndexOffset += (c - startCount) * 2;
-                glyphIndex = parse.getUShort(data, glyphIndexOffset);
-                if (glyphIndex !== 0) {
-                    glyphIndex = (glyphIndex + idDelta) & 0xFFFF;
-                }
-            } else {
-                glyphIndex = (c + idDelta) & 0xFFFF;
-            }
-
-            cmap.glyphIndexMap[c] = glyphIndex;
-        }
-    }
-
-    return cmap;
-}
-
-function addSegment(t, code, glyphIndex) {
-    t.segments.push({
-        end: code,
-        start: code,
-        delta: -(code - glyphIndex),
-        offset: 0
-    });
-}
-
-function addTerminatorSegment(t) {
-    t.segments.push({
-        end: 0xFFFF,
-        start: 0xFFFF,
-        delta: 1,
-        offset: 0
-    });
-}
-
-function makeCmapTable(glyphs) {
-    var i;
-    var t = new table.Table('cmap', [
-        {name: 'version', type: 'USHORT', value: 0},
-        {name: 'numTables', type: 'USHORT', value: 1},
-        {name: 'platformID', type: 'USHORT', value: 3},
-        {name: 'encodingID', type: 'USHORT', value: 1},
-        {name: 'offset', type: 'ULONG', value: 12},
-        {name: 'format', type: 'USHORT', value: 4},
-        {name: 'length', type: 'USHORT', value: 0},
-        {name: 'language', type: 'USHORT', value: 0},
-        {name: 'segCountX2', type: 'USHORT', value: 0},
-        {name: 'searchRange', type: 'USHORT', value: 0},
-        {name: 'entrySelector', type: 'USHORT', value: 0},
-        {name: 'rangeShift', type: 'USHORT', value: 0}
-    ]);
-
-    t.segments = [];
-    for (i = 0; i < glyphs.length; i += 1) {
-        var glyph = glyphs.get(i);
-        for (var j = 0; j < glyph.unicodes.length; j += 1) {
-            addSegment(t, glyph.unicodes[j], i);
-        }
-
-        t.segments = t.segments.sort(function(a, b) {
-            return a.start - b.start;
-        });
-    }
-
-    addTerminatorSegment(t);
-
-    var segCount;
-    segCount = t.segments.length;
-    t.segCountX2 = segCount * 2;
-    t.searchRange = Math.pow(2, Math.floor(Math.log(segCount) / Math.log(2))) * 2;
-    t.entrySelector = Math.log(t.searchRange / 2) / Math.log(2);
-    t.rangeShift = t.segCountX2 - t.searchRange;
-
-    // Set up parallel segment arrays.
-    var endCounts = [];
-    var startCounts = [];
-    var idDeltas = [];
-    var idRangeOffsets = [];
-    var glyphIds = [];
-
-    for (i = 0; i < segCount; i += 1) {
-        var segment = t.segments[i];
-        endCounts = endCounts.concat({name: 'end_' + i, type: 'USHORT', value: segment.end});
-        startCounts = startCounts.concat({name: 'start_' + i, type: 'USHORT', value: segment.start});
-        idDeltas = idDeltas.concat({name: 'idDelta_' + i, type: 'SHORT', value: segment.delta});
-        idRangeOffsets = idRangeOffsets.concat({name: 'idRangeOffset_' + i, type: 'USHORT', value: segment.offset});
-        if (segment.glyphId !== undefined) {
-            glyphIds = glyphIds.concat({name: 'glyph_' + i, type: 'USHORT', value: segment.glyphId});
-        }
-    }
-
-    t.fields = t.fields.concat(endCounts);
-    t.fields.push({name: 'reservedPad', type: 'USHORT', value: 0});
-    t.fields = t.fields.concat(startCounts);
-    t.fields = t.fields.concat(idDeltas);
-    t.fields = t.fields.concat(idRangeOffsets);
-    t.fields = t.fields.concat(glyphIds);
-
-    t.length = 14 + // Subtable header
-        endCounts.length * 2 +
-        2 + // reservedPad
-        startCounts.length * 2 +
-        idDeltas.length * 2 +
-        idRangeOffsets.length * 2 +
-        glyphIds.length * 2;
-
-    return t;
-}
-
-exports.parse = parseCmapTable;
-exports.make = makeCmapTable;
-
-},{"../check":2,"../parse":9,"../table":11}],14:[function(_dereq_,module,exports){
-// The `glyf` table describes the glyphs in TrueType outline format.
-// http://www.microsoft.com/typography/otspec/glyf.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var glyphset = _dereq_('../glyphset');
-var parse = _dereq_('../parse');
-var path = _dereq_('../path');
-
-// Parse the coordinate data for a glyph.
-function parseGlyphCoordinate(p, flag, previousValue, shortVectorBitMask, sameBitMask) {
-    var v;
-    if ((flag & shortVectorBitMask) > 0) {
-        // The coordinate is 1 byte long.
-        v = p.parseByte();
-        // The `same` bit is re-used for short values to signify the sign of the value.
-        if ((flag & sameBitMask) === 0) {
-            v = -v;
-        }
-
-        v = previousValue + v;
-    } else {
-        //  The coordinate is 2 bytes long.
-        // If the `same` bit is set, the coordinate is the same as the previous coordinate.
-        if ((flag & sameBitMask) > 0) {
-            v = previousValue;
-        } else {
-            // Parse the coordinate as a signed 16-bit delta value.
-            v = previousValue + p.parseShort();
-        }
-    }
-
-    return v;
-}
-
-// Parse a TrueType glyph.
-function parseGlyph(glyph, data, start) {
-    var p = new parse.Parser(data, start);
-    glyph.numberOfContours = p.parseShort();
-    glyph.xMin = p.parseShort();
-    glyph.yMin = p.parseShort();
-    glyph.xMax = p.parseShort();
-    glyph.yMax = p.parseShort();
-    var flags;
-    var flag;
-    if (glyph.numberOfContours > 0) {
-        var i;
-        // This glyph is not a composite.
-        var endPointIndices = glyph.endPointIndices = [];
-        for (i = 0; i < glyph.numberOfContours; i += 1) {
-            endPointIndices.push(p.parseUShort());
-        }
-
-        glyph.instructionLength = p.parseUShort();
-        glyph.instructions = [];
-        for (i = 0; i < glyph.instructionLength; i += 1) {
-            glyph.instructions.push(p.parseByte());
-        }
-
-        var numberOfCoordinates = endPointIndices[endPointIndices.length - 1] + 1;
-        flags = [];
-        for (i = 0; i < numberOfCoordinates; i += 1) {
-            flag = p.parseByte();
-            flags.push(flag);
-            // If bit 3 is set, we repeat this flag n times, where n is the next byte.
-            if ((flag & 8) > 0) {
-                var repeatCount = p.parseByte();
-                for (var j = 0; j < repeatCount; j += 1) {
-                    flags.push(flag);
-                    i += 1;
-                }
-            }
-        }
-
-        check.argument(flags.length === numberOfCoordinates, 'Bad flags.');
-
-        if (endPointIndices.length > 0) {
-            var points = [];
-            var point;
-            // X/Y coordinates are relative to the previous point, except for the first point which is relative to 0,0.
-            if (numberOfCoordinates > 0) {
-                for (i = 0; i < numberOfCoordinates; i += 1) {
-                    flag = flags[i];
-                    point = {};
-                    point.onCurve = !!(flag & 1);
-                    point.lastPointOfContour = endPointIndices.indexOf(i) >= 0;
-                    points.push(point);
-                }
-
-                var px = 0;
-                for (i = 0; i < numberOfCoordinates; i += 1) {
-                    flag = flags[i];
-                    point = points[i];
-                    point.x = parseGlyphCoordinate(p, flag, px, 2, 16);
-                    px = point.x;
-                }
-
-                var py = 0;
-                for (i = 0; i < numberOfCoordinates; i += 1) {
-                    flag = flags[i];
-                    point = points[i];
-                    point.y = parseGlyphCoordinate(p, flag, py, 4, 32);
-                    py = point.y;
-                }
-            }
-
-            glyph.points = points;
-        } else {
-            glyph.points = [];
-        }
-    } else if (glyph.numberOfContours === 0) {
-        glyph.points = [];
-    } else {
-        glyph.isComposite = true;
-        glyph.points = [];
-        glyph.components = [];
-        var moreComponents = true;
-        while (moreComponents) {
-            flags = p.parseUShort();
-            var component = {
-                glyphIndex: p.parseUShort(),
-                xScale: 1,
-                scale01: 0,
-                scale10: 0,
-                yScale: 1,
-                dx: 0,
-                dy: 0
-            };
-            if ((flags & 1) > 0) {
-                // The arguments are words
-                component.dx = p.parseShort();
-                component.dy = p.parseShort();
-            } else {
-                // The arguments are bytes
-                component.dx = p.parseChar();
-                component.dy = p.parseChar();
-            }
-
-            if ((flags & 8) > 0) {
-                // We have a scale
-                component.xScale = component.yScale = p.parseF2Dot14();
-            } else if ((flags & 64) > 0) {
-                // We have an X / Y scale
-                component.xScale = p.parseF2Dot14();
-                component.yScale = p.parseF2Dot14();
-            } else if ((flags & 128) > 0) {
-                // We have a 2x2 transformation
-                component.xScale = p.parseF2Dot14();
-                component.scale01 = p.parseF2Dot14();
-                component.scale10 = p.parseF2Dot14();
-                component.yScale = p.parseF2Dot14();
-            }
-
-            glyph.components.push(component);
-            moreComponents = !!(flags & 32);
-        }
-    }
-}
-
-// Transform an array of points and return a new array.
-function transformPoints(points, transform) {
-    var newPoints = [];
-    for (var i = 0; i < points.length; i += 1) {
-        var pt = points[i];
-        var newPt = {
-            x: transform.xScale * pt.x + transform.scale01 * pt.y + transform.dx,
-            y: transform.scale10 * pt.x + transform.yScale * pt.y + transform.dy,
-            onCurve: pt.onCurve,
-            lastPointOfContour: pt.lastPointOfContour
-        };
-        newPoints.push(newPt);
-    }
-
-    return newPoints;
-}
-
-function getContours(points) {
-    var contours = [];
-    var currentContour = [];
-    for (var i = 0; i < points.length; i += 1) {
-        var pt = points[i];
-        currentContour.push(pt);
-        if (pt.lastPointOfContour) {
-            contours.push(currentContour);
-            currentContour = [];
-        }
-    }
-
-    check.argument(currentContour.length === 0, 'There are still points left in the current contour.');
-    return contours;
-}
-
-// Convert the TrueType glyph outline to a Path.
-function getPath(points) {
-    var p = new path.Path();
-    if (!points) {
-        return p;
-    }
-
-    var contours = getContours(points);
-    for (var i = 0; i < contours.length; i += 1) {
-        var contour = contours[i];
-        var firstPt = contour[0];
-        var lastPt = contour[contour.length - 1];
-        var curvePt;
-        var realFirstPoint;
-        if (firstPt.onCurve) {
-            curvePt = null;
-            // The first point will be consumed by the moveTo command,
-            // so skip it in the loop.
-            realFirstPoint = true;
-        } else {
-            if (lastPt.onCurve) {
-                // If the first point is off-curve and the last point is on-curve,
-                // start at the last point.
-                firstPt = lastPt;
-            } else {
-                // If both first and last points are off-curve, start at their middle.
-                firstPt = { x: (firstPt.x + lastPt.x) / 2, y: (firstPt.y + lastPt.y) / 2 };
-            }
-
-            curvePt = firstPt;
-            // The first point is synthesized, so don't skip the real first point.
-            realFirstPoint = false;
-        }
-
-        p.moveTo(firstPt.x, firstPt.y);
-
-        for (var j = realFirstPoint ? 1 : 0; j < contour.length; j += 1) {
-            var pt = contour[j];
-            var prevPt = j === 0 ? firstPt : contour[j - 1];
-            if (prevPt.onCurve && pt.onCurve) {
-                // This is a straight line.
-                p.lineTo(pt.x, pt.y);
-            } else if (prevPt.onCurve && !pt.onCurve) {
-                curvePt = pt;
-            } else if (!prevPt.onCurve && !pt.onCurve) {
-                var midPt = { x: (prevPt.x + pt.x) / 2, y: (prevPt.y + pt.y) / 2 };
-                p.quadraticCurveTo(prevPt.x, prevPt.y, midPt.x, midPt.y);
-                curvePt = pt;
-            } else if (!prevPt.onCurve && pt.onCurve) {
-                // Previous point off-curve, this point on-curve.
-                p.quadraticCurveTo(curvePt.x, curvePt.y, pt.x, pt.y);
-                curvePt = null;
-            } else {
-                throw new Error('Invalid state.');
-            }
-        }
-
-        if (firstPt !== lastPt) {
-            // Connect the last and first points
-            if (curvePt) {
-                p.quadraticCurveTo(curvePt.x, curvePt.y, firstPt.x, firstPt.y);
-            } else {
-                p.lineTo(firstPt.x, firstPt.y);
-            }
-        }
-    }
-
-    p.closePath();
-    return p;
-}
-
-function buildPath(glyphs, glyph) {
-    if (glyph.isComposite) {
-        for (var j = 0; j < glyph.components.length; j += 1) {
-            var component = glyph.components[j];
-            var componentGlyph = glyphs.get(component.glyphIndex);
-            if (componentGlyph.points) {
-                var transformedPoints = transformPoints(componentGlyph.points, component);
-                glyph.points = glyph.points.concat(transformedPoints);
-            }
-        }
-    }
-
-    return getPath(glyph.points);
-}
-
-// Parse all the glyphs according to the offsets from the `loca` table.
-function parseGlyfTable(data, start, loca, font) {
-    var glyphs = new glyphset.GlyphSet(font);
-    var i;
-
-    // The last element of the loca table is invalid.
-    for (i = 0; i < loca.length - 1; i += 1) {
-        var offset = loca[i];
-        var nextOffset = loca[i + 1];
-        if (offset !== nextOffset) {
-            glyphs.push(i, glyphset.ttfGlyphLoader(font, i, parseGlyph, data, start + offset, buildPath));
-        } else {
-            glyphs.push(i, glyphset.glyphLoader(font, i));
-        }
-    }
-
-    return glyphs;
-}
-
-exports.parse = parseGlyfTable;
-
-},{"../check":2,"../glyphset":7,"../parse":9,"../path":10}],15:[function(_dereq_,module,exports){
-// The `GPOS` table contains kerning pairs, among other things.
-// https://www.microsoft.com/typography/OTSPEC/gpos.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var parse = _dereq_('../parse');
-
-// Parse ScriptList and FeatureList tables of GPOS, GSUB, GDEF, BASE, JSTF tables.
-// These lists are unused by now, this function is just the basis for a real parsing.
-function parseTaggedListTable(data, start) {
-    var p = new parse.Parser(data, start);
-    var n = p.parseUShort();
-    var list = [];
-    for (var i = 0; i < n; i++) {
-        list[p.parseTag()] = { offset: p.parseUShort() };
-    }
-
-    return list;
-}
-
-// Parse a coverage table in a GSUB, GPOS or GDEF table.
-// Format 1 is a simple list of glyph ids,
-// Format 2 is a list of ranges. It is expanded in a list of glyphs, maybe not the best idea.
-function parseCoverageTable(data, start) {
-    var p = new parse.Parser(data, start);
-    var format = p.parseUShort();
-    var count =  p.parseUShort();
-    if (format === 1) {
-        return p.parseUShortList(count);
-    }
-    else if (format === 2) {
-        var coverage = [];
-        for (; count--;) {
-            var begin = p.parseUShort();
-            var end = p.parseUShort();
-            var index = p.parseUShort();
-            for (var i = begin; i <= end; i++) {
-                coverage[index++] = i;
-            }
-        }
-
-        return coverage;
-    }
-}
-
-// Parse a Class Definition Table in a GSUB, GPOS or GDEF table.
-// Returns a function that gets a class value from a glyph ID.
-function parseClassDefTable(data, start) {
-    var p = new parse.Parser(data, start);
-    var format = p.parseUShort();
-    if (format === 1) {
-        // Format 1 specifies a range of consecutive glyph indices, one class per glyph ID.
-        var startGlyph = p.parseUShort();
-        var glyphCount = p.parseUShort();
-        var classes = p.parseUShortList(glyphCount);
-        return function(glyphID) {
-            return classes[glyphID - startGlyph] || 0;
-        };
-    }
-    else if (format === 2) {
-        // Format 2 defines multiple groups of glyph indices that belong to the same class.
-        var rangeCount = p.parseUShort();
-        var startGlyphs = [];
-        var endGlyphs = [];
-        var classValues = [];
-        for (var i = 0; i < rangeCount; i++) {
-            startGlyphs[i] = p.parseUShort();
-            endGlyphs[i] = p.parseUShort();
-            classValues[i] = p.parseUShort();
-        }
-
-        return function(glyphID) {
-            var l = 0;
-            var r = startGlyphs.length - 1;
-            while (l < r) {
-                var c = (l + r + 1) >> 1;
-                if (glyphID < startGlyphs[c]) {
-                    r = c - 1;
-                } else {
-                    l = c;
-                }
-            }
-
-            if (startGlyphs[l] <= glyphID && glyphID <= endGlyphs[l]) {
-                return classValues[l] || 0;
-            }
-
-            return 0;
-        };
-    }
-}
-
-// Parse a pair adjustment positioning subtable, format 1 or format 2
-// The subtable is returned in the form of a lookup function.
-function parsePairPosSubTable(data, start) {
-    var p = new parse.Parser(data, start);
-    // This part is common to format 1 and format 2 subtables
-    var format = p.parseUShort();
-    var coverageOffset = p.parseUShort();
-    var coverage = parseCoverageTable(data, start + coverageOffset);
-    // valueFormat 4: XAdvance only, 1: XPlacement only, 0: no ValueRecord for second glyph
-    // Only valueFormat1=4 and valueFormat2=0 is supported.
-    var valueFormat1 = p.parseUShort();
-    var valueFormat2 = p.parseUShort();
-    var value1;
-    var value2;
-    if (valueFormat1 !== 4 || valueFormat2 !== 0) return;
-    var sharedPairSets = {};
-    if (format === 1) {
-        // Pair Positioning Adjustment: Format 1
-        var pairSetCount = p.parseUShort();
-        var pairSet = [];
-        // Array of offsets to PairSet tables-from beginning of PairPos subtable-ordered by Coverage Index
-        var pairSetOffsets = p.parseOffset16List(pairSetCount);
-        for (var firstGlyph = 0; firstGlyph < pairSetCount; firstGlyph++) {
-            var pairSetOffset = pairSetOffsets[firstGlyph];
-            var sharedPairSet = sharedPairSets[pairSetOffset];
-            if (!sharedPairSet) {
-                // Parse a pairset table in a pair adjustment subtable format 1
-                sharedPairSet = {};
-                p.relativeOffset = pairSetOffset;
-                var pairValueCount = p.parseUShort();
-                for (; pairValueCount--;) {
-                    var secondGlyph = p.parseUShort();
-                    if (valueFormat1) value1 = p.parseShort();
-                    if (valueFormat2) value2 = p.parseShort();
-                    // We only support valueFormat1 = 4 and valueFormat2 = 0,
-                    // so value1 is the XAdvance and value2 is empty.
-                    sharedPairSet[secondGlyph] = value1;
-                }
-            }
-
-            pairSet[coverage[firstGlyph]] = sharedPairSet;
-        }
-
-        return function(leftGlyph, rightGlyph) {
-            var pairs = pairSet[leftGlyph];
-            if (pairs) return pairs[rightGlyph];
-        };
-    }
-    else if (format === 2) {
-        // Pair Positioning Adjustment: Format 2
-        var classDef1Offset = p.parseUShort();
-        var classDef2Offset = p.parseUShort();
-        var class1Count = p.parseUShort();
-        var class2Count = p.parseUShort();
-        var getClass1 = parseClassDefTable(data, start + classDef1Offset);
-        var getClass2 = parseClassDefTable(data, start + classDef2Offset);
-
-        // Parse kerning values by class pair.
-        var kerningMatrix = [];
-        for (var i = 0; i < class1Count; i++) {
-            var kerningRow = kerningMatrix[i] = [];
-            for (var j = 0; j < class2Count; j++) {
-                if (valueFormat1) value1 = p.parseShort();
-                if (valueFormat2) value2 = p.parseShort();
-                // We only support valueFormat1 = 4 and valueFormat2 = 0,
-                // so value1 is the XAdvance and value2 is empty.
-                kerningRow[j] = value1;
-            }
-        }
-
-        // Convert coverage list to a hash
-        var covered = {};
-        for (i = 0; i < coverage.length; i++) covered[coverage[i]] = 1;
-
-        // Get the kerning value for a specific glyph pair.
-        return function(leftGlyph, rightGlyph) {
-            if (!covered[leftGlyph]) return;
-            var class1 = getClass1(leftGlyph);
-            var class2 = getClass2(rightGlyph);
-            var kerningRow = kerningMatrix[class1];
-
-            if (kerningRow) {
-                return kerningRow[class2];
-            }
-        };
-    }
-}
-
-// Parse a LookupTable (present in of GPOS, GSUB, GDEF, BASE, JSTF tables).
-function parseLookupTable(data, start) {
-    var p = new parse.Parser(data, start);
-    var lookupType = p.parseUShort();
-    var lookupFlag = p.parseUShort();
-    var useMarkFilteringSet = lookupFlag & 0x10;
-    var subTableCount = p.parseUShort();
-    var subTableOffsets = p.parseOffset16List(subTableCount);
-    var table = {
-        lookupType: lookupType,
-        lookupFlag: lookupFlag,
-        markFilteringSet: useMarkFilteringSet ? p.parseUShort() : -1
-    };
-    // LookupType 2, Pair adjustment
-    if (lookupType === 2) {
-        var subtables = [];
-        for (var i = 0; i < subTableCount; i++) {
-            subtables.push(parsePairPosSubTable(data, start + subTableOffsets[i]));
-        }
-        // Return a function which finds the kerning values in the subtables.
-        table.getKerningValue = function(leftGlyph, rightGlyph) {
-            for (var i = subtables.length; i--;) {
-                var value = subtables[i](leftGlyph, rightGlyph);
-                if (value !== undefined) return value;
-            }
-
-            return 0;
-        };
-    }
-
-    return table;
-}
-
-// Parse the `GPOS` table which contains, among other things, kerning pairs.
-// https://www.microsoft.com/typography/OTSPEC/gpos.htm
-function parseGposTable(data, start, font) {
-    var p = new parse.Parser(data, start);
-    var tableVersion = p.parseFixed();
-    check.argument(tableVersion === 1, 'Unsupported GPOS table version.');
-
-    // ScriptList and FeatureList - ignored for now
-    parseTaggedListTable(data, start + p.parseUShort());
-    // 'kern' is the feature we are looking for.
-    parseTaggedListTable(data, start + p.parseUShort());
-
-    // LookupList
-    var lookupListOffset = p.parseUShort();
-    p.relativeOffset = lookupListOffset;
-    var lookupCount = p.parseUShort();
-    var lookupTableOffsets = p.parseOffset16List(lookupCount);
-    var lookupListAbsoluteOffset = start + lookupListOffset;
-    for (var i = 0; i < lookupCount; i++) {
-        var table = parseLookupTable(data, lookupListAbsoluteOffset + lookupTableOffsets[i]);
-        if (table.lookupType === 2 && !font.getGposKerningValue) font.getGposKerningValue = table.getKerningValue;
-    }
-}
-
-exports.parse = parseGposTable;
-
-},{"../check":2,"../parse":9}],16:[function(_dereq_,module,exports){
-// The `head` table contains global information about the font.
-// https://www.microsoft.com/typography/OTSPEC/head.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the header `head` table
-function parseHeadTable(data, start) {
-    var head = {};
-    var p = new parse.Parser(data, start);
-    head.version = p.parseVersion();
-    head.fontRevision = Math.round(p.parseFixed() * 1000) / 1000;
-    head.checkSumAdjustment = p.parseULong();
-    head.magicNumber = p.parseULong();
-    check.argument(head.magicNumber === 0x5F0F3CF5, 'Font header has wrong magic number.');
-    head.flags = p.parseUShort();
-    head.unitsPerEm = p.parseUShort();
-    head.created = p.parseLongDateTime();
-    head.modified = p.parseLongDateTime();
-    head.xMin = p.parseShort();
-    head.yMin = p.parseShort();
-    head.xMax = p.parseShort();
-    head.yMax = p.parseShort();
-    head.macStyle = p.parseUShort();
-    head.lowestRecPPEM = p.parseUShort();
-    head.fontDirectionHint = p.parseShort();
-    head.indexToLocFormat = p.parseShort();     // 50
-    head.glyphDataFormat = p.parseShort();
-    return head;
-}
-
-function makeHeadTable(options) {
-    return new table.Table('head', [
-        {name: 'version', type: 'FIXED', value: 0x00010000},
-        {name: 'fontRevision', type: 'FIXED', value: 0x00010000},
-        {name: 'checkSumAdjustment', type: 'ULONG', value: 0},
-        {name: 'magicNumber', type: 'ULONG', value: 0x5F0F3CF5},
-        {name: 'flags', type: 'USHORT', value: 0},
-        {name: 'unitsPerEm', type: 'USHORT', value: 1000},
-        {name: 'created', type: 'LONGDATETIME', value: 0},
-        {name: 'modified', type: 'LONGDATETIME', value: 0},
-        {name: 'xMin', type: 'SHORT', value: 0},
-        {name: 'yMin', type: 'SHORT', value: 0},
-        {name: 'xMax', type: 'SHORT', value: 0},
-        {name: 'yMax', type: 'SHORT', value: 0},
-        {name: 'macStyle', type: 'USHORT', value: 0},
-        {name: 'lowestRecPPEM', type: 'USHORT', value: 0},
-        {name: 'fontDirectionHint', type: 'SHORT', value: 2},
-        {name: 'indexToLocFormat', type: 'SHORT', value: 0},
-        {name: 'glyphDataFormat', type: 'SHORT', value: 0}
-    ], options);
-}
-
-exports.parse = parseHeadTable;
-exports.make = makeHeadTable;
-
-},{"../check":2,"../parse":9,"../table":11}],17:[function(_dereq_,module,exports){
-// The `hhea` table contains information for horizontal layout.
-// https://www.microsoft.com/typography/OTSPEC/hhea.htm
-
-'use strict';
-
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the horizontal header `hhea` table
-function parseHheaTable(data, start) {
-    var hhea = {};
-    var p = new parse.Parser(data, start);
-    hhea.version = p.parseVersion();
-    hhea.ascender = p.parseShort();
-    hhea.descender = p.parseShort();
-    hhea.lineGap = p.parseShort();
-    hhea.advanceWidthMax = p.parseUShort();
-    hhea.minLeftSideBearing = p.parseShort();
-    hhea.minRightSideBearing = p.parseShort();
-    hhea.xMaxExtent = p.parseShort();
-    hhea.caretSlopeRise = p.parseShort();
-    hhea.caretSlopeRun = p.parseShort();
-    hhea.caretOffset = p.parseShort();
-    p.relativeOffset += 8;
-    hhea.metricDataFormat = p.parseShort();
-    hhea.numberOfHMetrics = p.parseUShort();
-    return hhea;
-}
-
-function makeHheaTable(options) {
-    return new table.Table('hhea', [
-        {name: 'version', type: 'FIXED', value: 0x00010000},
-        {name: 'ascender', type: 'FWORD', value: 0},
-        {name: 'descender', type: 'FWORD', value: 0},
-        {name: 'lineGap', type: 'FWORD', value: 0},
-        {name: 'advanceWidthMax', type: 'UFWORD', value: 0},
-        {name: 'minLeftSideBearing', type: 'FWORD', value: 0},
-        {name: 'minRightSideBearing', type: 'FWORD', value: 0},
-        {name: 'xMaxExtent', type: 'FWORD', value: 0},
-        {name: 'caretSlopeRise', type: 'SHORT', value: 1},
-        {name: 'caretSlopeRun', type: 'SHORT', value: 0},
-        {name: 'caretOffset', type: 'SHORT', value: 0},
-        {name: 'reserved1', type: 'SHORT', value: 0},
-        {name: 'reserved2', type: 'SHORT', value: 0},
-        {name: 'reserved3', type: 'SHORT', value: 0},
-        {name: 'reserved4', type: 'SHORT', value: 0},
-        {name: 'metricDataFormat', type: 'SHORT', value: 0},
-        {name: 'numberOfHMetrics', type: 'USHORT', value: 0}
-    ], options);
-}
-
-exports.parse = parseHheaTable;
-exports.make = makeHheaTable;
-
-},{"../parse":9,"../table":11}],18:[function(_dereq_,module,exports){
-// The `hmtx` table contains the horizontal metrics for all glyphs.
-// https://www.microsoft.com/typography/OTSPEC/hmtx.htm
-
-'use strict';
-
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the `hmtx` table, which contains the horizontal metrics for all glyphs.
-// This function augments the glyph array, adding the advanceWidth and leftSideBearing to each glyph.
-function parseHmtxTable(data, start, numMetrics, numGlyphs, glyphs) {
-    var advanceWidth;
-    var leftSideBearing;
-    var p = new parse.Parser(data, start);
-    for (var i = 0; i < numGlyphs; i += 1) {
-        // If the font is monospaced, only one entry is needed. This last entry applies to all subsequent glyphs.
-        if (i < numMetrics) {
-            advanceWidth = p.parseUShort();
-            leftSideBearing = p.parseShort();
-        }
-
-        var glyph = glyphs.get(i);
-        glyph.advanceWidth = advanceWidth;
-        glyph.leftSideBearing = leftSideBearing;
-    }
-}
-
-function makeHmtxTable(glyphs) {
-    var t = new table.Table('hmtx', []);
-    for (var i = 0; i < glyphs.length; i += 1) {
-        var glyph = glyphs.get(i);
-        var advanceWidth = glyph.advanceWidth || 0;
-        var leftSideBearing = glyph.leftSideBearing || 0;
-        t.fields.push({name: 'advanceWidth_' + i, type: 'USHORT', value: advanceWidth});
-        t.fields.push({name: 'leftSideBearing_' + i, type: 'SHORT', value: leftSideBearing});
-    }
-
-    return t;
-}
-
-exports.parse = parseHmtxTable;
-exports.make = makeHmtxTable;
-
-},{"../parse":9,"../table":11}],19:[function(_dereq_,module,exports){
-// The `kern` table contains kerning pairs.
-// Note that some fonts use the GPOS OpenType layout table to specify kerning.
-// https://www.microsoft.com/typography/OTSPEC/kern.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var parse = _dereq_('../parse');
-
-// Parse the `kern` table which contains kerning pairs.
-function parseKernTable(data, start) {
-    var pairs = {};
-    var p = new parse.Parser(data, start);
-    var tableVersion = p.parseUShort();
-    check.argument(tableVersion === 0, 'Unsupported kern table version.');
-    // Skip nTables.
-    p.skip('uShort', 1);
-    var subTableVersion = p.parseUShort();
-    check.argument(subTableVersion === 0, 'Unsupported kern sub-table version.');
-    // Skip subTableLength, subTableCoverage
-    p.skip('uShort', 2);
-    var nPairs = p.parseUShort();
-    // Skip searchRange, entrySelector, rangeShift.
-    p.skip('uShort', 3);
-    for (var i = 0; i < nPairs; i += 1) {
-        var leftIndex = p.parseUShort();
-        var rightIndex = p.parseUShort();
-        var value = p.parseShort();
-        pairs[leftIndex + ',' + rightIndex] = value;
-    }
-
-    return pairs;
-}
-
-exports.parse = parseKernTable;
-
-},{"../check":2,"../parse":9}],20:[function(_dereq_,module,exports){
-// The `loca` table stores the offsets to the locations of the glyphs in the font.
-// https://www.microsoft.com/typography/OTSPEC/loca.htm
-
-'use strict';
-
-var parse = _dereq_('../parse');
-
-// Parse the `loca` table. This table stores the offsets to the locations of the glyphs in the font,
-// relative to the beginning of the glyphData table.
-// The number of glyphs stored in the `loca` table is specified in the `maxp` table (under numGlyphs)
-// The loca table has two versions: a short version where offsets are stored as uShorts, and a long
-// version where offsets are stored as uLongs. The `head` table specifies which version to use
-// (under indexToLocFormat).
-function parseLocaTable(data, start, numGlyphs, shortVersion) {
-    var p = new parse.Parser(data, start);
-    var parseFn = shortVersion ? p.parseUShort : p.parseULong;
-    // There is an extra entry after the last index element to compute the length of the last glyph.
-    // That's why we use numGlyphs + 1.
-    var glyphOffsets = [];
-    for (var i = 0; i < numGlyphs + 1; i += 1) {
-        var glyphOffset = parseFn.call(p);
-        if (shortVersion) {
-            // The short table version stores the actual offset divided by 2.
-            glyphOffset *= 2;
-        }
-
-        glyphOffsets.push(glyphOffset);
-    }
-
-    return glyphOffsets;
-}
-
-exports.parse = parseLocaTable;
-
-},{"../parse":9}],21:[function(_dereq_,module,exports){
-// The `maxp` table establishes the memory requirements for the font.
-// We need it just to get the number of glyphs in the font.
-// https://www.microsoft.com/typography/OTSPEC/maxp.htm
-
-'use strict';
-
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the maximum profile `maxp` table.
-function parseMaxpTable(data, start) {
-    var maxp = {};
-    var p = new parse.Parser(data, start);
-    maxp.version = p.parseVersion();
-    maxp.numGlyphs = p.parseUShort();
-    if (maxp.version === 1.0) {
-        maxp.maxPoints = p.parseUShort();
-        maxp.maxContours = p.parseUShort();
-        maxp.maxCompositePoints = p.parseUShort();
-        maxp.maxCompositeContours = p.parseUShort();
-        maxp.maxZones = p.parseUShort();
-        maxp.maxTwilightPoints = p.parseUShort();
-        maxp.maxStorage = p.parseUShort();
-        maxp.maxFunctionDefs = p.parseUShort();
-        maxp.maxInstructionDefs = p.parseUShort();
-        maxp.maxStackElements = p.parseUShort();
-        maxp.maxSizeOfInstructions = p.parseUShort();
-        maxp.maxComponentElements = p.parseUShort();
-        maxp.maxComponentDepth = p.parseUShort();
-    }
-
-    return maxp;
-}
-
-function makeMaxpTable(numGlyphs) {
-    return new table.Table('maxp', [
-        {name: 'version', type: 'FIXED', value: 0x00005000},
-        {name: 'numGlyphs', type: 'USHORT', value: numGlyphs}
-    ]);
-}
-
-exports.parse = parseMaxpTable;
-exports.make = makeMaxpTable;
-
-},{"../parse":9,"../table":11}],22:[function(_dereq_,module,exports){
-// The `name` naming table.
-// https://www.microsoft.com/typography/OTSPEC/name.htm
-
-'use strict';
-
-var encode = _dereq_('../types').encode;
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// NameIDs for the name table.
-var nameTableNames = [
-    'copyright',              // 0
-    'fontFamily',             // 1
-    'fontSubfamily',          // 2
-    'uniqueID',               // 3
-    'fullName',               // 4
-    'version',                // 5
-    'postScriptName',         // 6
-    'trademark',              // 7
-    'manufacturer',           // 8
-    'designer',               // 9
-    'description',            // 10
-    'manufacturerURL',        // 11
-    'designerURL',            // 12
-    'licence',                // 13
-    'licenceURL',             // 14
-    'reserved',               // 15
-    'preferredFamily',        // 16
-    'preferredSubfamily',     // 17
-    'compatibleFullName',     // 18
-    'sampleText',             // 19
-    'postScriptFindFontName', // 20
-    'wwsFamily',              // 21
-    'wwsSubfamily'            // 22
-];
-
-// Parse the naming `name` table
-// Only Windows Unicode English names are supported.
-// Format 1 additional fields are not supported
-function parseNameTable(data, start) {
-    var name = {};
-    var p = new parse.Parser(data, start);
-    name.format = p.parseUShort();
-    var count = p.parseUShort();
-    var stringOffset = p.offset + p.parseUShort();
-    var unknownCount = 0;
-    for (var i = 0; i < count; i++) {
-        var platformID = p.parseUShort();
-        var encodingID = p.parseUShort();
-        var languageID = p.parseUShort();
-        var nameID = p.parseUShort();
-        var property = nameTableNames[nameID];
-        var byteLength = p.parseUShort();
-        var offset = p.parseUShort();
-        // platformID - encodingID - languageID standard combinations :
-        // 1 - 0 - 0 : Macintosh, Roman, English
-        // 3 - 1 - 0x409 : Windows, Unicode BMP (UCS-2), en-US
-        if (platformID === 3 && encodingID === 1 && languageID === 0x409) {
-            var codePoints = [];
-            var length = byteLength / 2;
-            for (var j = 0; j < length; j++, offset += 2) {
-                codePoints[j] = parse.getShort(data, stringOffset + offset);
-            }
-
-            var str = String.fromCharCode.apply(null, codePoints);
-            if (property) {
-                name[property] = str;
-            }
-            else {
-                unknownCount++;
-                name['unknown' + unknownCount] = str;
-            }
-        }
-
-    }
-
-    if (name.format === 1) {
-        name.langTagCount = p.parseUShort();
-    }
-
-    return name;
-}
-
-function makeNameRecord(platformID, encodingID, languageID, nameID, length, offset) {
-    return new table.Table('NameRecord', [
-        {name: 'platformID', type: 'USHORT', value: platformID},
-        {name: 'encodingID', type: 'USHORT', value: encodingID},
-        {name: 'languageID', type: 'USHORT', value: languageID},
-        {name: 'nameID', type: 'USHORT', value: nameID},
-        {name: 'length', type: 'USHORT', value: length},
-        {name: 'offset', type: 'USHORT', value: offset}
-    ]);
-}
-
-function addMacintoshNameRecord(t, recordID, s, offset) {
-    // Macintosh, Roman, English
-    var stringBytes = encode.STRING(s);
-    t.records.push(makeNameRecord(1, 0, 0, recordID, stringBytes.length, offset));
-    t.strings.push(stringBytes);
-    offset += stringBytes.length;
-    return offset;
-}
-
-function addWindowsNameRecord(t, recordID, s, offset) {
-    // Windows, Unicode BMP (UCS-2), US English
-    var utf16Bytes = encode.UTF16(s);
-    t.records.push(makeNameRecord(3, 1, 0x0409, recordID, utf16Bytes.length, offset));
-    t.strings.push(utf16Bytes);
-    offset += utf16Bytes.length;
-    return offset;
-}
-
-function makeNameTable(options) {
-    var t = new table.Table('name', [
-        {name: 'format', type: 'USHORT', value: 0},
-        {name: 'count', type: 'USHORT', value: 0},
-        {name: 'stringOffset', type: 'USHORT', value: 0}
-    ]);
-    t.records = [];
-    t.strings = [];
-    var offset = 0;
-    var i;
-    var s;
-    // Add Macintosh records first
-    for (i = 0; i < nameTableNames.length; i += 1) {
-        if (options[nameTableNames[i]] !== undefined) {
-            s = options[nameTableNames[i]];
-            offset = addMacintoshNameRecord(t, i, s, offset);
-        }
-    }
-    // Then add Windows records
-    for (i = 0; i < nameTableNames.length; i += 1) {
-        if (options[nameTableNames[i]] !== undefined) {
-            s = options[nameTableNames[i]];
-            offset = addWindowsNameRecord(t, i, s, offset);
-        }
-    }
-
-    t.count = t.records.length;
-    t.stringOffset = 6 + t.count * 12;
-    for (i = 0; i < t.records.length; i += 1) {
-        t.fields.push({name: 'record_' + i, type: 'TABLE', value: t.records[i]});
-    }
-
-    for (i = 0; i < t.strings.length; i += 1) {
-        t.fields.push({name: 'string_' + i, type: 'LITERAL', value: t.strings[i]});
-    }
-
-    return t;
-}
-
-exports.parse = parseNameTable;
-exports.make = makeNameTable;
-
-},{"../parse":9,"../table":11,"../types":26}],23:[function(_dereq_,module,exports){
-// The `OS/2` table contains metrics required in OpenType fonts.
-// https://www.microsoft.com/typography/OTSPEC/os2.htm
-
-'use strict';
-
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-var unicodeRanges = [
-    {begin: 0x0000, end: 0x007F}, // Basic Latin
-    {begin: 0x0080, end: 0x00FF}, // Latin-1 Supplement
-    {begin: 0x0100, end: 0x017F}, // Latin Extended-A
-    {begin: 0x0180, end: 0x024F}, // Latin Extended-B
-    {begin: 0x0250, end: 0x02AF}, // IPA Extensions
-    {begin: 0x02B0, end: 0x02FF}, // Spacing Modifier Letters
-    {begin: 0x0300, end: 0x036F}, // Combining Diacritical Marks
-    {begin: 0x0370, end: 0x03FF}, // Greek and Coptic
-    {begin: 0x2C80, end: 0x2CFF}, // Coptic
-    {begin: 0x0400, end: 0x04FF}, // Cyrillic
-    {begin: 0x0530, end: 0x058F}, // Armenian
-    {begin: 0x0590, end: 0x05FF}, // Hebrew
-    {begin: 0xA500, end: 0xA63F}, // Vai
-    {begin: 0x0600, end: 0x06FF}, // Arabic
-    {begin: 0x07C0, end: 0x07FF}, // NKo
-    {begin: 0x0900, end: 0x097F}, // Devanagari
-    {begin: 0x0980, end: 0x09FF}, // Bengali
-    {begin: 0x0A00, end: 0x0A7F}, // Gurmukhi
-    {begin: 0x0A80, end: 0x0AFF}, // Gujarati
-    {begin: 0x0B00, end: 0x0B7F}, // Oriya
-    {begin: 0x0B80, end: 0x0BFF}, // Tamil
-    {begin: 0x0C00, end: 0x0C7F}, // Telugu
-    {begin: 0x0C80, end: 0x0CFF}, // Kannada
-    {begin: 0x0D00, end: 0x0D7F}, // Malayalam
-    {begin: 0x0E00, end: 0x0E7F}, // Thai
-    {begin: 0x0E80, end: 0x0EFF}, // Lao
-    {begin: 0x10A0, end: 0x10FF}, // Georgian
-    {begin: 0x1B00, end: 0x1B7F}, // Balinese
-    {begin: 0x1100, end: 0x11FF}, // Hangul Jamo
-    {begin: 0x1E00, end: 0x1EFF}, // Latin Extended Additional
-    {begin: 0x1F00, end: 0x1FFF}, // Greek Extended
-    {begin: 0x2000, end: 0x206F}, // General Punctuation
-    {begin: 0x2070, end: 0x209F}, // Superscripts And Subscripts
-    {begin: 0x20A0, end: 0x20CF}, // Currency Symbol
-    {begin: 0x20D0, end: 0x20FF}, // Combining Diacritical Marks For Symbols
-    {begin: 0x2100, end: 0x214F}, // Letterlike Symbols
-    {begin: 0x2150, end: 0x218F}, // Number Forms
-    {begin: 0x2190, end: 0x21FF}, // Arrows
-    {begin: 0x2200, end: 0x22FF}, // Mathematical Operators
-    {begin: 0x2300, end: 0x23FF}, // Miscellaneous Technical
-    {begin: 0x2400, end: 0x243F}, // Control Pictures
-    {begin: 0x2440, end: 0x245F}, // Optical Character Recognition
-    {begin: 0x2460, end: 0x24FF}, // Enclosed Alphanumerics
-    {begin: 0x2500, end: 0x257F}, // Box Drawing
-    {begin: 0x2580, end: 0x259F}, // Block Elements
-    {begin: 0x25A0, end: 0x25FF}, // Geometric Shapes
-    {begin: 0x2600, end: 0x26FF}, // Miscellaneous Symbols
-    {begin: 0x2700, end: 0x27BF}, // Dingbats
-    {begin: 0x3000, end: 0x303F}, // CJK Symbols And Punctuation
-    {begin: 0x3040, end: 0x309F}, // Hiragana
-    {begin: 0x30A0, end: 0x30FF}, // Katakana
-    {begin: 0x3100, end: 0x312F}, // Bopomofo
-    {begin: 0x3130, end: 0x318F}, // Hangul Compatibility Jamo
-    {begin: 0xA840, end: 0xA87F}, // Phags-pa
-    {begin: 0x3200, end: 0x32FF}, // Enclosed CJK Letters And Months
-    {begin: 0x3300, end: 0x33FF}, // CJK Compatibility
-    {begin: 0xAC00, end: 0xD7AF}, // Hangul Syllables
-    {begin: 0xD800, end: 0xDFFF}, // Non-Plane 0 *
-    {begin: 0x10900, end: 0x1091F}, // Phoenicia
-    {begin: 0x4E00, end: 0x9FFF}, // CJK Unified Ideographs
-    {begin: 0xE000, end: 0xF8FF}, // Private Use Area (plane 0)
-    {begin: 0x31C0, end: 0x31EF}, // CJK Strokes
-    {begin: 0xFB00, end: 0xFB4F}, // Alphabetic Presentation Forms
-    {begin: 0xFB50, end: 0xFDFF}, // Arabic Presentation Forms-A
-    {begin: 0xFE20, end: 0xFE2F}, // Combining Half Marks
-    {begin: 0xFE10, end: 0xFE1F}, // Vertical Forms
-    {begin: 0xFE50, end: 0xFE6F}, // Small Form Variants
-    {begin: 0xFE70, end: 0xFEFF}, // Arabic Presentation Forms-B
-    {begin: 0xFF00, end: 0xFFEF}, // Halfwidth And Fullwidth Forms
-    {begin: 0xFFF0, end: 0xFFFF}, // Specials
-    {begin: 0x0F00, end: 0x0FFF}, // Tibetan
-    {begin: 0x0700, end: 0x074F}, // Syriac
-    {begin: 0x0780, end: 0x07BF}, // Thaana
-    {begin: 0x0D80, end: 0x0DFF}, // Sinhala
-    {begin: 0x1000, end: 0x109F}, // Myanmar
-    {begin: 0x1200, end: 0x137F}, // Ethiopic
-    {begin: 0x13A0, end: 0x13FF}, // Cherokee
-    {begin: 0x1400, end: 0x167F}, // Unified Canadian Aboriginal Syllabics
-    {begin: 0x1680, end: 0x169F}, // Ogham
-    {begin: 0x16A0, end: 0x16FF}, // Runic
-    {begin: 0x1780, end: 0x17FF}, // Khmer
-    {begin: 0x1800, end: 0x18AF}, // Mongolian
-    {begin: 0x2800, end: 0x28FF}, // Braille Patterns
-    {begin: 0xA000, end: 0xA48F}, // Yi Syllables
-    {begin: 0x1700, end: 0x171F}, // Tagalog
-    {begin: 0x10300, end: 0x1032F}, // Old Italic
-    {begin: 0x10330, end: 0x1034F}, // Gothic
-    {begin: 0x10400, end: 0x1044F}, // Deseret
-    {begin: 0x1D000, end: 0x1D0FF}, // Byzantine Musical Symbols
-    {begin: 0x1D400, end: 0x1D7FF}, // Mathematical Alphanumeric Symbols
-    {begin: 0xFF000, end: 0xFFFFD}, // Private Use (plane 15)
-    {begin: 0xFE00, end: 0xFE0F}, // Variation Selectors
-    {begin: 0xE0000, end: 0xE007F}, // Tags
-    {begin: 0x1900, end: 0x194F}, // Limbu
-    {begin: 0x1950, end: 0x197F}, // Tai Le
-    {begin: 0x1980, end: 0x19DF}, // New Tai Lue
-    {begin: 0x1A00, end: 0x1A1F}, // Buginese
-    {begin: 0x2C00, end: 0x2C5F}, // Glagolitic
-    {begin: 0x2D30, end: 0x2D7F}, // Tifinagh
-    {begin: 0x4DC0, end: 0x4DFF}, // Yijing Hexagram Symbols
-    {begin: 0xA800, end: 0xA82F}, // Syloti Nagri
-    {begin: 0x10000, end: 0x1007F}, // Linear B Syllabary
-    {begin: 0x10140, end: 0x1018F}, // Ancient Greek Numbers
-    {begin: 0x10380, end: 0x1039F}, // Ugaritic
-    {begin: 0x103A0, end: 0x103DF}, // Old Persian
-    {begin: 0x10450, end: 0x1047F}, // Shavian
-    {begin: 0x10480, end: 0x104AF}, // Osmanya
-    {begin: 0x10800, end: 0x1083F}, // Cypriot Syllabary
-    {begin: 0x10A00, end: 0x10A5F}, // Kharoshthi
-    {begin: 0x1D300, end: 0x1D35F}, // Tai Xuan Jing Symbols
-    {begin: 0x12000, end: 0x123FF}, // Cuneiform
-    {begin: 0x1D360, end: 0x1D37F}, // Counting Rod Numerals
-    {begin: 0x1B80, end: 0x1BBF}, // Sundanese
-    {begin: 0x1C00, end: 0x1C4F}, // Lepcha
-    {begin: 0x1C50, end: 0x1C7F}, // Ol Chiki
-    {begin: 0xA880, end: 0xA8DF}, // Saurashtra
-    {begin: 0xA900, end: 0xA92F}, // Kayah Li
-    {begin: 0xA930, end: 0xA95F}, // Rejang
-    {begin: 0xAA00, end: 0xAA5F}, // Cham
-    {begin: 0x10190, end: 0x101CF}, // Ancient Symbols
-    {begin: 0x101D0, end: 0x101FF}, // Phaistos Disc
-    {begin: 0x102A0, end: 0x102DF}, // Carian
-    {begin: 0x1F030, end: 0x1F09F}  // Domino Tiles
-];
-
-function getUnicodeRange(unicode) {
-    for (var i = 0; i < unicodeRanges.length; i += 1) {
-        var range = unicodeRanges[i];
-        if (unicode >= range.begin && unicode < range.end) {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-// Parse the OS/2 and Windows metrics `OS/2` table
-function parseOS2Table(data, start) {
-    var os2 = {};
-    var p = new parse.Parser(data, start);
-    os2.version = p.parseUShort();
-    os2.xAvgCharWidth = p.parseShort();
-    os2.usWeightClass = p.parseUShort();
-    os2.usWidthClass = p.parseUShort();
-    os2.fsType = p.parseUShort();
-    os2.ySubscriptXSize = p.parseShort();
-    os2.ySubscriptYSize = p.parseShort();
-    os2.ySubscriptXOffset = p.parseShort();
-    os2.ySubscriptYOffset = p.parseShort();
-    os2.ySuperscriptXSize = p.parseShort();
-    os2.ySuperscriptYSize = p.parseShort();
-    os2.ySuperscriptXOffset = p.parseShort();
-    os2.ySuperscriptYOffset = p.parseShort();
-    os2.yStrikeoutSize = p.parseShort();
-    os2.yStrikeoutPosition = p.parseShort();
-    os2.sFamilyClass = p.parseShort();
-    os2.panose = [];
-    for (var i = 0; i < 10; i++) {
-        os2.panose[i] = p.parseByte();
-    }
-
-    os2.ulUnicodeRange1 = p.parseULong();
-    os2.ulUnicodeRange2 = p.parseULong();
-    os2.ulUnicodeRange3 = p.parseULong();
-    os2.ulUnicodeRange4 = p.parseULong();
-    os2.achVendID = String.fromCharCode(p.parseByte(), p.parseByte(), p.parseByte(), p.parseByte());
-    os2.fsSelection = p.parseUShort();
-    os2.usFirstCharIndex = p.parseUShort();
-    os2.usLastCharIndex = p.parseUShort();
-    os2.sTypoAscender = p.parseShort();
-    os2.sTypoDescender = p.parseShort();
-    os2.sTypoLineGap = p.parseShort();
-    os2.usWinAscent = p.parseUShort();
-    os2.usWinDescent = p.parseUShort();
-    if (os2.version >= 1) {
-        os2.ulCodePageRange1 = p.parseULong();
-        os2.ulCodePageRange2 = p.parseULong();
-    }
-
-    if (os2.version >= 2) {
-        os2.sxHeight = p.parseShort();
-        os2.sCapHeight = p.parseShort();
-        os2.usDefaultChar = p.parseUShort();
-        os2.usBreakChar = p.parseUShort();
-        os2.usMaxContent = p.parseUShort();
-    }
-
-    return os2;
-}
-
-function makeOS2Table(options) {
-    return new table.Table('OS/2', [
-        {name: 'version', type: 'USHORT', value: 0x0003},
-        {name: 'xAvgCharWidth', type: 'SHORT', value: 0},
-        {name: 'usWeightClass', type: 'USHORT', value: 0},
-        {name: 'usWidthClass', type: 'USHORT', value: 0},
-        {name: 'fsType', type: 'USHORT', value: 0},
-        {name: 'ySubscriptXSize', type: 'SHORT', value: 650},
-        {name: 'ySubscriptYSize', type: 'SHORT', value: 699},
-        {name: 'ySubscriptXOffset', type: 'SHORT', value: 0},
-        {name: 'ySubscriptYOffset', type: 'SHORT', value: 140},
-        {name: 'ySuperscriptXSize', type: 'SHORT', value: 650},
-        {name: 'ySuperscriptYSize', type: 'SHORT', value: 699},
-        {name: 'ySuperscriptXOffset', type: 'SHORT', value: 0},
-        {name: 'ySuperscriptYOffset', type: 'SHORT', value: 479},
-        {name: 'yStrikeoutSize', type: 'SHORT', value: 49},
-        {name: 'yStrikeoutPosition', type: 'SHORT', value: 258},
-        {name: 'sFamilyClass', type: 'SHORT', value: 0},
-        {name: 'bFamilyType', type: 'BYTE', value: 0},
-        {name: 'bSerifStyle', type: 'BYTE', value: 0},
-        {name: 'bWeight', type: 'BYTE', value: 0},
-        {name: 'bProportion', type: 'BYTE', value: 0},
-        {name: 'bContrast', type: 'BYTE', value: 0},
-        {name: 'bStrokeVariation', type: 'BYTE', value: 0},
-        {name: 'bArmStyle', type: 'BYTE', value: 0},
-        {name: 'bLetterform', type: 'BYTE', value: 0},
-        {name: 'bMidline', type: 'BYTE', value: 0},
-        {name: 'bXHeight', type: 'BYTE', value: 0},
-        {name: 'ulUnicodeRange1', type: 'ULONG', value: 0},
-        {name: 'ulUnicodeRange2', type: 'ULONG', value: 0},
-        {name: 'ulUnicodeRange3', type: 'ULONG', value: 0},
-        {name: 'ulUnicodeRange4', type: 'ULONG', value: 0},
-        {name: 'achVendID', type: 'CHARARRAY', value: 'XXXX'},
-        {name: 'fsSelection', type: 'USHORT', value: 0},
-        {name: 'usFirstCharIndex', type: 'USHORT', value: 0},
-        {name: 'usLastCharIndex', type: 'USHORT', value: 0},
-        {name: 'sTypoAscender', type: 'SHORT', value: 0},
-        {name: 'sTypoDescender', type: 'SHORT', value: 0},
-        {name: 'sTypoLineGap', type: 'SHORT', value: 0},
-        {name: 'usWinAscent', type: 'USHORT', value: 0},
-        {name: 'usWinDescent', type: 'USHORT', value: 0},
-        {name: 'ulCodePageRange1', type: 'ULONG', value: 0},
-        {name: 'ulCodePageRange2', type: 'ULONG', value: 0},
-        {name: 'sxHeight', type: 'SHORT', value: 0},
-        {name: 'sCapHeight', type: 'SHORT', value: 0},
-        {name: 'usDefaultChar', type: 'USHORT', value: 0},
-        {name: 'usBreakChar', type: 'USHORT', value: 0},
-        {name: 'usMaxContext', type: 'USHORT', value: 0}
-    ], options);
-}
-
-exports.unicodeRanges = unicodeRanges;
-exports.getUnicodeRange = getUnicodeRange;
-exports.parse = parseOS2Table;
-exports.make = makeOS2Table;
-
-},{"../parse":9,"../table":11}],24:[function(_dereq_,module,exports){
-// The `post` table stores additional PostScript information, such as glyph names.
-// https://www.microsoft.com/typography/OTSPEC/post.htm
-
-'use strict';
-
-var encoding = _dereq_('../encoding');
-var parse = _dereq_('../parse');
-var table = _dereq_('../table');
-
-// Parse the PostScript `post` table
-function parsePostTable(data, start) {
-    var post = {};
-    var p = new parse.Parser(data, start);
-    var i;
-    post.version = p.parseVersion();
-    post.italicAngle = p.parseFixed();
-    post.underlinePosition = p.parseShort();
-    post.underlineThickness = p.parseShort();
-    post.isFixedPitch = p.parseULong();
-    post.minMemType42 = p.parseULong();
-    post.maxMemType42 = p.parseULong();
-    post.minMemType1 = p.parseULong();
-    post.maxMemType1 = p.parseULong();
-    switch (post.version) {
-    case 1:
-        post.names = encoding.standardNames.slice();
-        break;
-    case 2:
-        post.numberOfGlyphs = p.parseUShort();
-        post.glyphNameIndex = new Array(post.numberOfGlyphs);
-        for (i = 0; i < post.numberOfGlyphs; i++) {
-            post.glyphNameIndex[i] = p.parseUShort();
-        }
-
-        post.names = [];
-        for (i = 0; i < post.numberOfGlyphs; i++) {
-            if (post.glyphNameIndex[i] >= encoding.standardNames.length) {
-                var nameLength = p.parseChar();
-                post.names.push(p.parseString(nameLength));
-            }
-        }
-
-        break;
-    case 2.5:
-        post.numberOfGlyphs = p.parseUShort();
-        post.offset = new Array(post.numberOfGlyphs);
-        for (i = 0; i < post.numberOfGlyphs; i++) {
-            post.offset[i] = p.parseChar();
-        }
-
-        break;
-    }
-    return post;
-}
-
-function makePostTable() {
-    return new table.Table('post', [
-        {name: 'version', type: 'FIXED', value: 0x00030000},
-        {name: 'italicAngle', type: 'FIXED', value: 0},
-        {name: 'underlinePosition', type: 'FWORD', value: 0},
-        {name: 'underlineThickness', type: 'FWORD', value: 0},
-        {name: 'isFixedPitch', type: 'ULONG', value: 0},
-        {name: 'minMemType42', type: 'ULONG', value: 0},
-        {name: 'maxMemType42', type: 'ULONG', value: 0},
-        {name: 'minMemType1', type: 'ULONG', value: 0},
-        {name: 'maxMemType1', type: 'ULONG', value: 0}
-    ]);
-}
-
-exports.parse = parsePostTable;
-exports.make = makePostTable;
-
-},{"../encoding":4,"../parse":9,"../table":11}],25:[function(_dereq_,module,exports){
-// The `sfnt` wrapper provides organization for the tables in the font.
-// It is the top-level data structure in a font.
-// https://www.microsoft.com/typography/OTSPEC/otff.htm
-// Recommendations for creating OpenType Fonts:
-// http://www.microsoft.com/typography/otspec140/recom.htm
-
-'use strict';
-
-var check = _dereq_('../check');
-var table = _dereq_('../table');
-
-var cmap = _dereq_('./cmap');
-var cff = _dereq_('./cff');
-var head = _dereq_('./head');
-var hhea = _dereq_('./hhea');
-var hmtx = _dereq_('./hmtx');
-var maxp = _dereq_('./maxp');
-var _name = _dereq_('./name');
-var os2 = _dereq_('./os2');
-var post = _dereq_('./post');
-
-function log2(v) {
-    return Math.log(v) / Math.log(2) | 0;
-}
-
-function computeCheckSum(bytes) {
-    while (bytes.length % 4 !== 0) {
-        bytes.push(0);
-    }
-
-    var sum = 0;
-    for (var i = 0; i < bytes.length; i += 4) {
-        sum += (bytes[i] << 24) +
-            (bytes[i + 1] << 16) +
-            (bytes[i + 2] << 8) +
-            (bytes[i + 3]);
-    }
-
-    sum %= Math.pow(2, 32);
-    return sum;
-}
-
-function makeTableRecord(tag, checkSum, offset, length) {
-    return new table.Table('Table Record', [
-        {name: 'tag', type: 'TAG', value: tag !== undefined ? tag : ''},
-        {name: 'checkSum', type: 'ULONG', value: checkSum !== undefined ? checkSum : 0},
-        {name: 'offset', type: 'ULONG', value: offset !== undefined ? offset : 0},
-        {name: 'length', type: 'ULONG', value: length !== undefined ? length : 0}
-    ]);
-}
-
-function makeSfntTable(tables) {
-    var sfnt = new table.Table('sfnt', [
-        {name: 'version', type: 'TAG', value: 'OTTO'},
-        {name: 'numTables', type: 'USHORT', value: 0},
-        {name: 'searchRange', type: 'USHORT', value: 0},
-        {name: 'entrySelector', type: 'USHORT', value: 0},
-        {name: 'rangeShift', type: 'USHORT', value: 0}
-    ]);
-    sfnt.tables = tables;
-    sfnt.numTables = tables.length;
-    var highestPowerOf2 = Math.pow(2, log2(sfnt.numTables));
-    sfnt.searchRange = 16 * highestPowerOf2;
-    sfnt.entrySelector = log2(highestPowerOf2);
-    sfnt.rangeShift = sfnt.numTables * 16 - sfnt.searchRange;
-
-    var recordFields = [];
-    var tableFields = [];
-
-    var offset = sfnt.sizeOf() + (makeTableRecord().sizeOf() * sfnt.numTables);
-    while (offset % 4 !== 0) {
-        offset += 1;
-        tableFields.push({name: 'padding', type: 'BYTE', value: 0});
-    }
-
-    for (var i = 0; i < tables.length; i += 1) {
-        var t = tables[i];
-        check.argument(t.tableName.length === 4, 'Table name' + t.tableName + ' is invalid.');
-        var tableLength = t.sizeOf();
-        var tableRecord = makeTableRecord(t.tableName, computeCheckSum(t.encode()), offset, tableLength);
-        recordFields.push({name: tableRecord.tag + ' Table Record', type: 'TABLE', value: tableRecord});
-        tableFields.push({name: t.tableName + ' table', type: 'TABLE', value: t});
-        offset += tableLength;
-        check.argument(!isNaN(offset), 'Something went wrong calculating the offset.');
-        while (offset % 4 !== 0) {
-            offset += 1;
-            tableFields.push({name: 'padding', type: 'BYTE', value: 0});
-        }
-    }
-
-    // Table records need to be sorted alphabetically.
-    recordFields.sort(function(r1, r2) {
-        if (r1.value.tag > r2.value.tag) {
-            return 1;
-        } else {
-            return -1;
-        }
-    });
-
-    sfnt.fields = sfnt.fields.concat(recordFields);
-    sfnt.fields = sfnt.fields.concat(tableFields);
-    return sfnt;
-}
-
-// Get the metrics for a character. If the string has more than one character
-// this function returns metrics for the first available character.
-// You can provide optional fallback metrics if no characters are available.
-function metricsForChar(font, chars, notFoundMetrics) {
-    for (var i = 0; i < chars.length; i += 1) {
-        var glyphIndex = font.charToGlyphIndex(chars[i]);
-        if (glyphIndex > 0) {
-            var glyph = font.glyphs.get(glyphIndex);
-            return glyph.getMetrics();
-        }
-    }
-
-    return notFoundMetrics;
-}
-
-function average(vs) {
-    var sum = 0;
-    for (var i = 0; i < vs.length; i += 1) {
-        sum += vs[i];
-    }
-
-    return sum / vs.length;
-}
-
-// Convert the font object to a SFNT data structure.
-// This structure contains all the necessary tables and metadata to create a binary OTF file.
-function fontToSfntTable(font) {
-    var xMins = [];
-    var yMins = [];
-    var xMaxs = [];
-    var yMaxs = [];
-    var advanceWidths = [];
-    var leftSideBearings = [];
-    var rightSideBearings = [];
-    var firstCharIndex;
-    var lastCharIndex = 0;
-    var ulUnicodeRange1 = 0;
-    var ulUnicodeRange2 = 0;
-    var ulUnicodeRange3 = 0;
-    var ulUnicodeRange4 = 0;
-
-    for (var i = 0; i < font.glyphs.length; i += 1) {
-        var glyph = font.glyphs.get(i);
-        var unicode = glyph.unicode | 0;
-        if (firstCharIndex > unicode || firstCharIndex === null) {
-            firstCharIndex = unicode;
-        }
-
-        if (lastCharIndex < unicode) {
-            lastCharIndex = unicode;
-        }
-
-        var position = os2.getUnicodeRange(unicode);
-        if (position < 32) {
-            ulUnicodeRange1 |= 1 << position;
-        } else if (position < 64) {
-            ulUnicodeRange2 |= 1 << position - 32;
-        } else if (position < 96) {
-            ulUnicodeRange3 |= 1 << position - 64;
-        } else if (position < 123) {
-            ulUnicodeRange4 |= 1 << position - 96;
-        } else {
-            throw new Error('Unicode ranges bits > 123 are reserved for internal usage');
-        }
-        // Skip non-important characters.
-        if (glyph.name === '.notdef') continue;
-        var metrics = glyph.getMetrics();
-        xMins.push(metrics.xMin);
-        yMins.push(metrics.yMin);
-        xMaxs.push(metrics.xMax);
-        yMaxs.push(metrics.yMax);
-        leftSideBearings.push(metrics.leftSideBearing);
-        rightSideBearings.push(metrics.rightSideBearing);
-        advanceWidths.push(glyph.advanceWidth);
-    }
-
-    var globals = {
-        xMin: Math.min.apply(null, xMins),
-        yMin: Math.min.apply(null, yMins),
-        xMax: Math.max.apply(null, xMaxs),
-        yMax: Math.max.apply(null, yMaxs),
-        advanceWidthMax: Math.max.apply(null, advanceWidths),
-        advanceWidthAvg: average(advanceWidths),
-        minLeftSideBearing: Math.min.apply(null, leftSideBearings),
-        maxLeftSideBearing: Math.max.apply(null, leftSideBearings),
-        minRightSideBearing: Math.min.apply(null, rightSideBearings)
-    };
-    globals.ascender = font.ascender !== undefined ? font.ascender : globals.yMax;
-    globals.descender = font.descender !== undefined ? font.descender : globals.yMin;
-
-    var headTable = head.make({
-        unitsPerEm: font.unitsPerEm,
-        xMin: globals.xMin,
-        yMin: globals.yMin,
-        xMax: globals.xMax,
-        yMax: globals.yMax
-    });
-
-    var hheaTable = hhea.make({
-        ascender: globals.ascender,
-        descender: globals.descender,
-        advanceWidthMax: globals.advanceWidthMax,
-        minLeftSideBearing: globals.minLeftSideBearing,
-        minRightSideBearing: globals.minRightSideBearing,
-        xMaxExtent: globals.maxLeftSideBearing + (globals.xMax - globals.xMin),
-        numberOfHMetrics: font.glyphs.length
-    });
-
-    var maxpTable = maxp.make(font.glyphs.length);
-
-    var os2Table = os2.make({
-        xAvgCharWidth: Math.round(globals.advanceWidthAvg),
-        usWeightClass: 500, // Medium FIXME Make this configurable
-        usWidthClass: 5, // Medium (normal) FIXME Make this configurable
-        usFirstCharIndex: firstCharIndex,
-        usLastCharIndex: lastCharIndex,
-        ulUnicodeRange1: ulUnicodeRange1,
-        ulUnicodeRange2: ulUnicodeRange2,
-        ulUnicodeRange3: ulUnicodeRange3,
-        ulUnicodeRange4: ulUnicodeRange4,
-        // See http://typophile.com/node/13081 for more info on vertical metrics.
-        // We get metrics for typical characters (such as "x" for xHeight).
-        // We provide some fallback characters if characters are unavailable: their
-        // ordering was chosen experimentally.
-        sTypoAscender: globals.ascender,
-        sTypoDescender: globals.descender,
-        sTypoLineGap: 0,
-        usWinAscent: globals.ascender,
-        usWinDescent: -globals.descender,
-        sxHeight: metricsForChar(font, 'xyvw', {yMax: 0}).yMax,
-        sCapHeight: metricsForChar(font, 'HIKLEFJMNTZBDPRAGOQSUVWXY', globals).yMax,
-        usBreakChar: font.hasChar(' ') ? 32 : 0 // Use space as the break character, if available.
-    });
-
-    var hmtxTable = hmtx.make(font.glyphs);
-    var cmapTable = cmap.make(font.glyphs);
-
-    var fullName = font.familyName + ' ' + font.styleName;
-    var postScriptName = font.familyName.replace(/\s/g, '') + '-' + font.styleName;
-    var nameTable = _name.make({
-        copyright: font.copyright,
-        fontFamily: font.familyName,
-        fontSubfamily: font.styleName,
-        uniqueID: font.manufacturer + ':' + fullName,
-        fullName: fullName,
-        version: font.version,
-        postScriptName: postScriptName,
-        trademark: font.trademark,
-        manufacturer: font.manufacturer,
-        designer: font.designer,
-        description: font.description,
-        manufacturerURL: font.manufacturerURL,
-        designerURL: font.designerURL,
-        license: font.license,
-        licenseURL: font.licenseURL,
-        preferredFamily: font.familyName,
-        preferredSubfamily: font.styleName
-    });
-    var postTable = post.make();
-    var cffTable = cff.make(font.glyphs, {
-        version: font.version,
-        fullName: fullName,
-        familyName: font.familyName,
-        weightName: font.styleName,
-        postScriptName: postScriptName,
-        unitsPerEm: font.unitsPerEm
-    });
-    // Order the tables according to the the OpenType specification 1.4.
-    var tables = [headTable, hheaTable, maxpTable, os2Table, nameTable, cmapTable, postTable, cffTable, hmtxTable];
-
-    var sfntTable = makeSfntTable(tables);
-
-    // Compute the font's checkSum and store it in head.checkSumAdjustment.
-    var bytes = sfntTable.encode();
-    var checkSum = computeCheckSum(bytes);
-    var tableFields = sfntTable.fields;
-    var checkSumAdjusted = false;
-    for (i = 0; i < tableFields.length; i += 1) {
-        if (tableFields[i].name === 'head table') {
-            tableFields[i].value.checkSumAdjustment = 0xB1B0AFBA - checkSum;
-            checkSumAdjusted = true;
-            break;
-        }
-    }
-
-    if (!checkSumAdjusted) {
-        throw new Error('Could not find head table with checkSum to adjust.');
-    }
-
-    return sfntTable;
-}
-
-exports.computeCheckSum = computeCheckSum;
-exports.make = makeSfntTable;
-exports.fontToTable = fontToSfntTable;
-
-},{"../check":2,"../table":11,"./cff":12,"./cmap":13,"./head":16,"./hhea":17,"./hmtx":18,"./maxp":21,"./name":22,"./os2":23,"./post":24}],26:[function(_dereq_,module,exports){
-// Data types used in the OpenType font file.
-// All OpenType fonts use Motorola-style byte ordering (Big Endian)
-
-/* global WeakMap */
-
-'use strict';
-
-var check = _dereq_('./check');
-
-var LIMIT16 = 32768; // The limit at which a 16-bit number switches signs == 2^15
-var LIMIT32 = 2147483648; // The limit at which a 32-bit number switches signs == 2 ^ 31
-
-var decode = {};
-var encode = {};
-var sizeOf = {};
-
-// Return a function that always returns the same value.
-function constant(v) {
-    return function() {
-        return v;
-    };
-}
-
-// OpenType data types //////////////////////////////////////////////////////
-
-// Convert an 8-bit unsigned integer to a list of 1 byte.
-encode.BYTE = function(v) {
-    check.argument(v >= 0 && v <= 255, 'Byte value should be between 0 and 255.');
-    return [v];
-};
-
-sizeOf.BYTE = constant(1);
-
-// Convert a 8-bit signed integer to a list of 1 byte.
-encode.CHAR = function(v) {
-    return [v.charCodeAt(0)];
-};
-
-sizeOf.BYTE = constant(1);
-
-// Convert an ASCII string to a list of bytes.
-encode.CHARARRAY = function(v) {
-    var b = [];
-    for (var i = 0; i < v.length; i += 1) {
-        b.push(v.charCodeAt(i));
-    }
-
-    return b;
-};
-
-sizeOf.CHARARRAY = function(v) {
-    return v.length;
-};
-
-// Convert a 16-bit unsigned integer to a list of 2 bytes.
-encode.USHORT = function(v) {
-    return [(v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.USHORT = constant(2);
-
-// Convert a 16-bit signed integer to a list of 2 bytes.
-encode.SHORT = function(v) {
-    // Two's complement
-    if (v >= LIMIT16) {
-        v = -(2 * LIMIT16 - v);
-    }
-
-    return [(v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.SHORT = constant(2);
-
-// Convert a 24-bit unsigned integer to a list of 3 bytes.
-encode.UINT24 = function(v) {
-    return [(v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.UINT24 = constant(3);
-
-// Convert a 32-bit unsigned integer to a list of 4 bytes.
-encode.ULONG = function(v) {
-    return [(v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.ULONG = constant(4);
-
-// Convert a 32-bit unsigned integer to a list of 4 bytes.
-encode.LONG = function(v) {
-    // Two's complement
-    if (v >= LIMIT32) {
-        v = -(2 * LIMIT32 - v);
-    }
-
-    return [(v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.LONG = constant(4);
-
-encode.FIXED = encode.ULONG;
-sizeOf.FIXED = sizeOf.ULONG;
-
-encode.FWORD = encode.SHORT;
-sizeOf.FWORD = sizeOf.SHORT;
-
-encode.UFWORD = encode.USHORT;
-sizeOf.UFWORD = sizeOf.USHORT;
-
-// FIXME Implement LONGDATETIME
-encode.LONGDATETIME = function() {
-    return [0, 0, 0, 0, 0, 0, 0, 0];
-};
-
-sizeOf.LONGDATETIME = constant(8);
-
-// Convert a 4-char tag to a list of 4 bytes.
-encode.TAG = function(v) {
-    check.argument(v.length === 4, 'Tag should be exactly 4 ASCII characters.');
-    return [v.charCodeAt(0),
-            v.charCodeAt(1),
-            v.charCodeAt(2),
-            v.charCodeAt(3)];
-};
-
-sizeOf.TAG = constant(4);
-
-// CFF data types ///////////////////////////////////////////////////////////
-
-encode.Card8 = encode.BYTE;
-sizeOf.Card8 = sizeOf.BYTE;
-
-encode.Card16 = encode.USHORT;
-sizeOf.Card16 = sizeOf.USHORT;
-
-encode.OffSize = encode.BYTE;
-sizeOf.OffSize = sizeOf.BYTE;
-
-encode.SID = encode.USHORT;
-sizeOf.SID = sizeOf.USHORT;
-
-// Convert a numeric operand or charstring number to a variable-size list of bytes.
-encode.NUMBER = function(v) {
-    if (v >= -107 && v <= 107) {
-        return [v + 139];
-    } else if (v >= 108 && v <= 1131) {
-        v = v - 108;
-        return [(v >> 8) + 247, v & 0xFF];
-    } else if (v >= -1131 && v <= -108) {
-        v = -v - 108;
-        return [(v >> 8) + 251, v & 0xFF];
-    } else if (v >= -32768 && v <= 32767) {
-        return encode.NUMBER16(v);
-    } else {
-        return encode.NUMBER32(v);
-    }
-};
-
-sizeOf.NUMBER = function(v) {
-    return encode.NUMBER(v).length;
-};
-
-// Convert a signed number between -32768 and +32767 to a three-byte value.
-// This ensures we always use three bytes, but is not the most compact format.
-encode.NUMBER16 = function(v) {
-    return [28, (v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.NUMBER16 = constant(2);
-
-// Convert a signed number between -(2^31) and +(2^31-1) to a four-byte value.
-// This is useful if you want to be sure you always use four bytes,
-// at the expense of wasting a few bytes for smaller numbers.
-encode.NUMBER32 = function(v) {
-    return [29, (v >> 24) & 0xFF, (v >> 16) & 0xFF, (v >> 8) & 0xFF, v & 0xFF];
-};
-
-sizeOf.NUMBER32 = constant(4);
-
-encode.REAL = function(v) {
-    var value = v.toString();
-
-    // Some numbers use an epsilon to encode the value. (e.g. JavaScript will store 0.0000001 as 1e-7)
-    // This code converts it back to a number without the epsilon.
-    var m = /\.(\d*?)(?:9{5,20}|0{5,20})\d{0,2}(?:e(.+)|$)/.exec(value);
-    if (m) {
-        var epsilon = parseFloat('1e' + ((m[2] ? +m[2] : 0) + m[1].length));
-        value = (Math.round(v * epsilon) / epsilon).toString();
-    }
-
-    var nibbles = '';
-    var i;
-    var ii;
-    for (i = 0, ii = value.length; i < ii; i += 1) {
-        var c = value[i];
-        if (c === 'e') {
-            nibbles += value[++i] === '-' ? 'c' : 'b';
-        } else if (c === '.') {
-            nibbles += 'a';
-        } else if (c === '-') {
-            nibbles += 'e';
-        } else {
-            nibbles += c;
-        }
-    }
-
-    nibbles += (nibbles.length & 1) ? 'f' : 'ff';
-    var out = [30];
-    for (i = 0, ii = nibbles.length; i < ii; i += 2) {
-        out.push(parseInt(nibbles.substr(i, 2), 16));
-    }
-
-    return out;
-};
-
-sizeOf.REAL = function(v) {
-    return encode.REAL(v).length;
-};
-
-encode.NAME = encode.CHARARRAY;
-sizeOf.NAME = sizeOf.CHARARRAY;
-
-encode.STRING = encode.CHARARRAY;
-sizeOf.STRING = sizeOf.CHARARRAY;
-
-// Convert a ASCII string to a list of UTF16 bytes.
-encode.UTF16 = function(v) {
-    var b = [];
-    for (var i = 0; i < v.length; i += 1) {
-        b.push(0);
-        b.push(v.charCodeAt(i));
-    }
-
-    return b;
-};
-
-sizeOf.UTF16 = function(v) {
-    return v.length * 2;
-};
-
-// Convert a list of values to a CFF INDEX structure.
-// The values should be objects containing name / type / value.
-encode.INDEX = function(l) {
-    var i;
-    //var offset, offsets, offsetEncoder, encodedOffsets, encodedOffset, data,
-    //    dataSize, i, v;
-    // Because we have to know which data type to use to encode the offsets,
-    // we have to go through the values twice: once to encode the data and
-    // calculate the offets, then again to encode the offsets using the fitting data type.
-    var offset = 1; // First offset is always 1.
-    var offsets = [offset];
-    var data = [];
-    var dataSize = 0;
-    for (i = 0; i < l.length; i += 1) {
-        var v = encode.OBJECT(l[i]);
-        Array.prototype.push.apply(data, v);
-        dataSize += v.length;
-        offset += v.length;
-        offsets.push(offset);
-    }
-
-    if (data.length === 0) {
-        return [0, 0];
-    }
-
-    var encodedOffsets = [];
-    var offSize = (1 + Math.floor(Math.log(dataSize) / Math.log(2)) / 8) | 0;
-    var offsetEncoder = [undefined, encode.BYTE, encode.USHORT, encode.UINT24, encode.ULONG][offSize];
-    for (i = 0; i < offsets.length; i += 1) {
-        var encodedOffset = offsetEncoder(offsets[i]);
-        Array.prototype.push.apply(encodedOffsets, encodedOffset);
-    }
-
-    return Array.prototype.concat(encode.Card16(l.length),
-                           encode.OffSize(offSize),
-                           encodedOffsets,
-                           data);
-};
-
-sizeOf.INDEX = function(v) {
-    return encode.INDEX(v).length;
-};
-
-// Convert an object to a CFF DICT structure.
-// The keys should be numeric.
-// The values should be objects containing name / type / value.
-encode.DICT = function(m) {
-    var d = [];
-    var keys = Object.keys(m);
-    var length = keys.length;
-
-    for (var i = 0; i < length; i += 1) {
-        // Object.keys() return string keys, but our keys are always numeric.
-        var k = parseInt(keys[i], 0);
-        var v = m[k];
-        // Value comes before the key.
-        d = d.concat(encode.OPERAND(v.value, v.type));
-        d = d.concat(encode.OPERATOR(k));
-    }
-
-    return d;
-};
-
-sizeOf.DICT = function(m) {
-    return encode.DICT(m).length;
-};
-
-encode.OPERATOR = function(v) {
-    if (v < 1200) {
-        return [v];
-    } else {
-        return [12, v - 1200];
-    }
-};
-
-encode.OPERAND = function(v, type) {
-    var d = [];
-    if (Array.isArray(type)) {
-        for (var i = 0; i < type.length; i += 1) {
-            check.argument(v.length === type.length, 'Not enough arguments given for type' + type);
-            d = d.concat(encode.OPERAND(v[i], type[i]));
-        }
-    } else {
-        if (type === 'SID') {
-            d = d.concat(encode.NUMBER(v));
-        } else if (type === 'offset') {
-            // We make it easy for ourselves and always encode offsets as
-            // 4 bytes. This makes offset calculation for the top dict easier.
-            d = d.concat(encode.NUMBER32(v));
-        } else if (type === 'number') {
-            d = d.concat(encode.NUMBER(v));
-        } else if (type === 'real') {
-            d = d.concat(encode.REAL(v));
-        } else {
-            throw new Error('Unknown operand type ' + type);
-            // FIXME Add support for booleans
-        }
-    }
-
-    return d;
-};
-
-encode.OP = encode.BYTE;
-sizeOf.OP = sizeOf.BYTE;
-
-// memoize charstring encoding using WeakMap if available
-var wmm = typeof WeakMap === 'function' && new WeakMap();
-// Convert a list of CharString operations to bytes.
-encode.CHARSTRING = function(ops) {
-    if (wmm && wmm.has(ops)) {
-        return wmm.get(ops);
-    }
-
-    var d = [];
-    var length = ops.length;
-
-    for (var i = 0; i < length; i += 1) {
-        var op = ops[i];
-        d = d.concat(encode[op.type](op.value));
-    }
-
-    if (wmm) {
-        wmm.set(ops, d);
-    }
-
-    return d;
-};
-
-sizeOf.CHARSTRING = function(ops) {
-    return encode.CHARSTRING(ops).length;
-};
-
-// Utility functions ////////////////////////////////////////////////////////
-
-// Convert an object containing name / type / value to bytes.
-encode.OBJECT = function(v) {
-    var encodingFunction = encode[v.type];
-    check.argument(encodingFunction !== undefined, 'No encoding function for type ' + v.type);
-    return encodingFunction(v.value);
-};
-
-// Convert a table object to bytes.
-// A table contains a list of fields containing the metadata (name, type and default value).
-// The table itself has the field values set as attributes.
-encode.TABLE = function(table) {
-    var d = [];
-    var length = table.fields.length;
-
-    for (var i = 0; i < length; i += 1) {
-        var field = table.fields[i];
-        var encodingFunction = encode[field.type];
-        check.argument(encodingFunction !== undefined, 'No encoding function for field type ' + field.type);
-        var value = table[field.name];
-        if (value === undefined) {
-            value = field.value;
-        }
-
-        var bytes = encodingFunction(value);
-        d = d.concat(bytes);
-    }
-
-    return d;
-};
-
-// Merge in a list of bytes.
-encode.LITERAL = function(v) {
-    return v;
-};
-
-sizeOf.LITERAL = function(v) {
-    return v.length;
-};
-
-exports.decode = decode;
-exports.encode = encode;
-exports.sizeOf = sizeOf;
-
-},{"./check":2}],27:[function(_dereq_,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.p5 = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!
   * Reqwest! A general purpose XHR connection manager
   * license MIT (c) Dustin Diaz 2014
@@ -5519,53 +615,51 @@ exports.sizeOf = sizeOf;
   return reqwest
 });
 
-},{}],28:[function(_dereq_,module,exports){
-/**
- * @module Shape
- * @submodule 3D Primitives
- * @for p5
- * @requires core
- * @requires p5.Geometry3D
- */
-
+},{}],2:[function(require,module,exports){
 'use strict';
 
-var p5 = _dereq_('../core/core');
-_dereq_('./p5.Geometry3D');
+var p5 = require('../core/core');
+require('./p5.Geometry3D');
 
 /**
- * Draw a plane with given a width and height
- * @method plane
- * @param  {Number} width      width of the plane
- * @param  {Number} height     height of the plane
- * @return {p5}                the p5 object
- * @example
- * <div>
+ * draw a plane with given a width and height
+ * @param  {Number} width             the width of the plane
+ * @param  {Number} height            the height of the plane
+ * @param  {Number} detailX(optional) number of vertices on horizontal surface
+ * @param  {Number} detailY(optional) number of vertices on horizontal surface
+ * example
+ * <div class="norender">
  * <code>
- * //draw a plane with width 200 and height 200
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   plane(200, 200);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   plane(100, 100);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
-p5.prototype.plane = function(width, height){
+p5.prototype.plane = function(width, height, detailX, detailY){
 
-  width = width || 50;
-  height = height || 50;
+  width = width || 1;
+  height = height || 1;
 
-  //details for plane are highly optional
-  var detailX = typeof arguments[2] === Number ? arguments[2] : 1;
-  var detailY = typeof arguments[3] === Number ? arguments[3] : 1;
+  detailX = detailX || 1;
+  detailY = detailY || 1;
 
   var gId = 'plane|'+width+'|'+height+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5580,47 +674,51 @@ p5.prototype.plane = function(width, height){
 
     var obj = geometry3d.generateObj();
 
-    this._renderer.initBuffer(gId, [obj]);
+    this._graphics.initBuffer(gId, obj);
 
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
 };
 
 /**
- * Draw a sphere with given raduis
- * @method sphere
- * @param  {Number} radius            radius of circle
- * @param  {Number} [detail]          optional: number of segments,
- *                                    the more segments the smoother geometry
- *                                    default is 24
- * @return {p5}                       the p5 object
- * @example
- * <div>
+ * draw a sphere with given raduis
+ * @param  {Number} radius            radius of the sphere
+ * @param  {Number} detailX(optional) number of vertices on horizontal surface
+ * @param  {Number} detailY(optional) number of vertices on vertical surface
+ * example
+ * <div class="norender">
  * <code>
- * // draw a sphere with radius 200
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   sphere(200);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   sphere(100);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
-p5.prototype.sphere = function(radius, detail){
+p5.prototype.sphere = function(radius, detailX, detailY){
 
   radius = radius || 50;
 
-  var detailX = detail || 24;
-  var detailY = detail || 16;
+  detailX = detailX || 10;
+  detailY = detailY || 6;
 
   var gId = 'sphere|'+radius+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5635,53 +733,55 @@ p5.prototype.sphere = function(radius, detail){
 
     geometry3d.parametricGeometry(createSphere, detailX, detailY);
 
-    var obj = geometry3d.generateObj(true, true);
+    var obj = geometry3d.generateObj();
 
-    this._renderer.initBuffer(gId, [obj]);
+    this._graphics.initBuffer(gId, obj);
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
   return this;
 };
 
 /**
- * Draw a cylinder with given radius and height
- * @method  cylinder
+ * draw a cylinder with given radius and height
  * @param  {Number} radius            radius of the surface
  * @param  {Number} height            height of the cylinder
- * @param  {Number} [detail]          optional: number of segments,
- *                                    the more segments the smoother geometry
- *                                    default is 24
- * @return {p5}                       the p5 object
- * @example
- * <div>
+ * @param  {Number} detailX(optional) number of vertices on horizontal surface
+ * @param  {Number} detailY(optional) number of vertices on vertical surface
+ * example
+ * <div class="norender">
  * <code>
- * //draw a spining sylinder with radius 200 and height 200
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   rotateX(frameCount * 0.01);
- *   rotateZ(frameCount * 0.01);
- *   cylinder(200, 200);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   cylinder(100, 200);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
-p5.prototype.cylinder = function(radius, height, detail){
+p5.prototype.cylinder = function(radius, height, detailX, detailY){
 
   radius = radius || 50;
   height = height || 50;
 
-  var detailX = detail || 24;
-  var detailY = detail || 16;
+  detailX = detailX || 12;
+  detailY = detailY || 8;
 
   var gId = 'cylinder|'+radius+'|'+height+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5694,7 +794,7 @@ p5.prototype.cylinder = function(radius, height, detail){
     };
 
     geometry3d.parametricGeometry(createCylinder, detailX, detailY);
-    var obj = geometry3d.generateObj(true);
+    geometry3d.mergeVertices();
 
     var createTop = function(u, v){
       var theta = 2 * Math.PI * u;
@@ -5709,10 +809,8 @@ p5.prototype.cylinder = function(radius, height, detail){
       }
     };
 
-    var geometry3d1 = new p5.Geometry3D();
-    geometry3d1.parametricGeometry(
-      createTop, detailX, 1);
-    var obj1 = geometry3d1.generateObj();
+    geometry3d.parametricGeometry(
+      createTop, detailX, 1, geometry3d.vertices.length);
 
     var createBottom = function(u, v){
       var theta = 2 * Math.PI * u;
@@ -5726,58 +824,59 @@ p5.prototype.cylinder = function(radius, height, detail){
       }
     };
 
-    var geometry3d2 = new p5.Geometry3D();
-    geometry3d2.parametricGeometry(
-      createBottom, detailX, 1);
-    var obj2 = geometry3d2.generateObj();
+    geometry3d.parametricGeometry(
+      createBottom, detailX, 1, geometry3d.vertices.length);
 
+    var obj = geometry3d.generateObj(true);
 
-    this._renderer.initBuffer(gId, [obj, obj1, obj2]);
+    this._graphics.initBuffer(gId, obj);
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
   return this;
 };
 
 
 /**
- * Draw a cone with given radius and height
- * @method cone
+ * draw a cone with given radius and height
  * @param  {Number} radius            radius of the bottom surface
  * @param  {Number} height            height of the cone
- * @param  {Number} [detail]          optional: number of segments,
- *                                    the more segments the smoother geometry
- *                                    default is 24
- * @return {p5}                       the p5 object
- * @example
- * <div>
+ * @param  {Number} detailX(optional) number of vertices on horizontal surface
+ * @param  {Number} detailY(optional) number of vertices on vertical surface
+ * example
+ * <div class="norender">
  * <code>
- * //draw a spining cone with radius 200 and height 200
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   rotateX(frameCount * 0.01);
- *   rotateZ(frameCount * 0.01);
- *   cone(200, 200);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   cone(100, 200);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
-p5.prototype.cone = function(radius, height, detail){
+p5.prototype.cone = function(radius, height, detailX, detailY){
 
   radius = radius || 50;
   height = height || 50;
 
-  var detailX = detail || 24;
-  var detailY = detail || 16;
+  detailX = detailX || 10;
+  detailY = detailY || 6;
 
   var gId = 'cone|'+radius+'|'+height+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5790,9 +889,8 @@ p5.prototype.cone = function(radius, height, detail){
     };
 
     geometry3d.parametricGeometry(createCone, detailX, detailY);
-    var obj = geometry3d.generateObj(true);
+    geometry3d.mergeVertices();
 
-    var geometry3d1 = new p5.Geometry3D();
     var createBottom = function(u, v){
       var theta = 2 * Math.PI * u;
       var x = radius * (1 - v) * Math.sin(-theta);
@@ -5801,56 +899,59 @@ p5.prototype.cone = function(radius, height, detail){
       return new p5.Vector(x, y, z);
     };
 
-    geometry3d1.parametricGeometry(
-      createBottom, detailX, 1);
-    var obj1 = geometry3d1.generateObj();
+    geometry3d.parametricGeometry(
+      createBottom, detailX, 1, geometry3d.vertices.length);
 
-    this._renderer.initBuffer(gId, [obj, obj1]);
+    var obj = geometry3d.generateObj(true);
+
+    this._graphics.initBuffer(gId, obj);
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
   return this;
 };
 
 
 /**
- * Draw a torus with given radius and tube radius
- * @method torus
+ * draw a torus with given radius and tube radius
  * @param  {Number} radius            radius of the whole ring
  * @param  {Number} tubeRadius        radius of the tube
- * @param  {Number} [detail]          optional: number of segments,
- *                                    the more segments the smoother geometry
- *                                    default is 24
- * @return {p5}                       the p5 object
- * @example
- * <div>
+ * @param  {Number} detailX(optional) number of vertices on horizontal surface
+ * @param  {Number} detailY(optional) number of vertices on vertical surface
+ * example
+ * <div class="norender">
  * <code>
- * //draw a spining torus with radius 200 and tube radius 60
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   rotateX(frameCount * 0.01);
- *   rotateY(frameCount * 0.01);
- *   torus(200, 60);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   torus(100, 20);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
-p5.prototype.torus = function(radius, tubeRadius, detail){
+p5.prototype.torus = function(radius, tubeRadius, detailX, detailY){
 
   radius = radius || 50;
-  tubeRadius = tubeRadius || 10;
+  tubeRadius = tubeRadius || 20;
 
-  var detailX = detail || 24;
-  var detailY = detail || 16;
+  detailX = detailX || 12;
+  detailY = detailY || 6;
 
   var gId = 'torus|'+radius+'|'+tubeRadius+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5865,53 +966,56 @@ p5.prototype.torus = function(radius, tubeRadius, detail){
 
     geometry3d.parametricGeometry(createTorus, detailX, detailY);
 
-    var obj = geometry3d.generateObj(true);
+    var obj = geometry3d.generateObj();
 
-    this._renderer.initBuffer(gId, [obj]);
+    this._graphics.initBuffer(gId, obj);
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
   return this;
 };
 
 /**
- * Draw a box with given width, height and depth
- * @method  box
+ * draw a box with given widht, height and depth
  * @param  {Number} width  width of the box
  * @param  {Number} height height of the box
  * @param  {Number} depth  depth of the box
- * @return {p5}            the p5 object
- * @example
- * <div>
+ * example
+ * <div class="norender">
  * <code>
- * //draw a spining box with width, height and depth 200
  * function setup(){
- *   createCanvas(100, 100, WEBGL);
+ *   createCanvas(windowWidth, windowHeight, 'webgl');
  * }
  *
+ * var theta = 0;
+ *
  * function draw(){
- *   background(200);
- *   rotateX(frameCount * 0.01);
- *   rotateY(frameCount * 0.01);
- *   box(200, 200, 200);
- * }
+ *   background(255, 255, 255, 255);
+ *   translate(0, 0, -100);
+ *   push();
+ *   rotateZ(theta);
+ *   rotateX(theta);
+ *   rotateY(theta);
+ *   box(100, 100, 100);
+ *   pop();
+ *   theta += 0.05;
  * </code>
  * </div>
  */
 p5.prototype.box = function(width, height, depth){
 
-  width = width || 50;
+  width = width || 10;
   height = height || width;
   depth = depth || width;
 
-  //details for box are highly optional
+  //detail for box as optional
   var detailX = typeof arguments[3] === Number ? arguments[3] : 1;
   var detailY = typeof arguments[4] === Number ? arguments[4] : 1;
 
   var gId = 'cube|'+width+'|'+height+'|'+depth+'|'+detailX+'|'+detailY;
 
-  if(!this._renderer.geometryInHash(gId)){
+  if(!this._graphics.geometryInHash(gId)){
 
     var geometry3d = new p5.Geometry3D();
 
@@ -5965,977 +1069,82 @@ p5.prototype.box = function(width, height, depth){
     geometry3d.parametricGeometry(
       createPlane6, detailX, detailY, geometry3d.vertices.length);
 
-    var obj = geometry3d.generateObj();
+    var obj = geometry3d.generateObj(true);
 
-    this._renderer.initBuffer(gId, [obj]);
+    this._graphics.initBuffer(gId, obj);
   }
 
-  this._renderer.drawBuffer(gId);
+  this._graphics.drawBuffer(gId);
 
   return this;
 
 };
 
 module.exports = p5;
-},{"../core/core":48,"./p5.Geometry3D":34}],29:[function(_dereq_,module,exports){
-/**
- * @module Lights, Camera
- * @submodule Camera
- * @for p5
- * @requires core
- */
 
+},{"../core/core":17,"./p5.Geometry3D":4}],3:[function(require,module,exports){
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
- * Sets camera position
- * @method camera
- * @param  {Number} x  camera postion value on x axis
- * @param  {Number} y  camera postion value on y axis
- * @param  {Number} z  camera postion value on z axis
- * @return {p5}        the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *  //move the camera away from the plane by a sin wave
- *  camera(0, 0, sin(frameCount * 0.01) * 100);
- *  plane(120, 120);
- * }
- * </code>
- * </div>
- */
-p5.prototype.camera = function(x, y, z){
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  this._validateParameters(
-    'camera',
-    args,
-    ['Number', 'Number', 'Number']
-  );
-  //what it manipulates is the model view matrix
-  this._renderer.translate(-x, -y, -z);
-};
-
-/**
- * Sets perspective camera
- * @method  perspective
- * @param  {Number} fovy   camera frustum vertical field of view,
- *                         from bottom to top of view, in degrees
- * @param  {Number} aspect camera frustum aspect ratio
- * @param  {Number} near   frustum near plane length
- * @param  {Number} far    frustum far plane length
- * @return {p5}            the p5 object
- * @example
- * <div>
- * <code>
- * //drag mouse to toggle the world!
- * //you will see there's a vanish point
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- *   perspective(60 / 180 * PI, width/height, 0.1, 100);
- * }
- * function draw(){
- *  background(200);
- *  orbitControl();
- *  for(var i = -1; i < 2; i++){
- *     for(var j = -2; j < 3; j++){
- *       push();
- *       translate(i*160, 0, j*160);
- *       box(40, 40, 40);
- *       pop();
- *     }
- *   }
- * }
- * </code>
- * </div>
- */
-p5.prototype.perspective = function(fovy,aspect,near,far) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  this._validateParameters(
-    'perspective',
-    args,
-    ['Number', 'Number', 'Number', 'Number']
-  );
-  this._renderer.uPMatrix = p5.Matrix.identity();
-  this._renderer.uPMatrix.perspective(fovy,aspect,near,far);
-  this._renderer._setCamera = true;
-};
-
-/**
- * Setup ortho camera
- * @method  ortho
- * @param  {Number} left   camera frustum left plane
- * @param  {Number} right  camera frustum right plane
- * @param  {Number} bottom camera frustum bottom plane
- * @param  {Number} top    camera frustum top plane
- * @param  {Number} near   camera frustum near plane
- * @param  {Number} far    camera frustum far plane
- * @return {p5}            the p5 object
- * @example
- * <div>
- * <code>
- * //drag mouse to toggle the world!
- * //there's no vanish point
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- *   ortho(-width/2, width/2, height/2, -height/2, 0.1, 100);
- * }
- * function draw(){
- *  background(200);
- *  orbitControl();
- *  for(var i = -1; i < 2; i++){
- *     for(var j = -2; j < 3; j++){
- *       push();
- *       translate(i*160, 0, j*160);
- *       box(40, 40, 40);
- *       pop();
- *     }
- *   }
- * }
- * </code>
- * </div>
- */
-p5.prototype.ortho = function(left,right,bottom,top,near,far) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  this._validateParameters(
-    'ortho',
-    args,
-      ['Number', 'Number', 'Number', 'Number', 'Number', 'Number']
-  );
-  left /= this.width;
-  right /= this.width;
-  top /= this.height;
-  bottom /= this.height;
-  this._renderer.uPMatrix = p5.Matrix.identity();
-  this._renderer.uPMatrix.ortho(left,right,bottom,top,near,far);
-  this._renderer._setCamera = true;
-};
-
-module.exports = p5;
-
-},{"../core/core":48}],30:[function(_dereq_,module,exports){
-//@TODO: documentation of immediate mode
-
-'use strict';
-
-var p5 = _dereq_('../core/core');
-
-//////////////////////////////////////////////
-// _primitives2D in 3D space
-//////////////////////////////////////////////
-
-p5.Renderer3D.prototype._primitives2D = function(arr){
-  this._setDefaultCamera();
-  var gl = this.GL;
-  var shaderProgram = this._getColorVertexShader();
-
-  //create vertice buffer
-  var vertexPositionBuffer = this.verticeBuffer;
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexPositionBuffer);
-
-  gl.bufferData(
-    gl.ARRAY_BUFFER, new Float32Array(arr), gl.STATIC_DRAW);
-  gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute,
-    3, gl.FLOAT, false, 0, 0);
-
-  //create vertexcolor buffer
-  var vertexColorBuffer = this.colorBuffer;
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer);
-  var color = this._getCurColor();
-  var colors = [];
-  for(var i = 0; i < arr.length / 3; i++){
-    colors = colors.concat(color);
-  }
-
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-  gl.vertexAttribPointer(shaderProgram.vertexColorAttribute,
-    4, gl.FLOAT, false, 0, 0);
-
-  //matrix
-  var mId = 'vertexColorVert|vertexColorFrag';
-  this.setMatrixUniforms(mId);
-};
-
-p5.Renderer3D.prototype.point = function(x, y, z){
-  var gl = this.GL;
-  this._primitives2D([x, y, z]);
-  gl.drawArrays(gl.POINTS, 0, 1);
-  return this;
-};
-
-p5.Renderer3D.prototype.line = function(x1, y1, z1, x2, y2, z2){
-  var gl = this.GL;
-  this._primitives2D([x1, y1, z1, x2, y2, z2]);
-  gl.drawArrays(gl.LINES, 0, 2);
-  return this;
-};
-
-p5.Renderer3D.prototype.triangle = function
-(x1, y1, z1, x2, y2, z2, x3, y3, z3){
-  var gl = this.GL;
-  this._primitives2D([x1, y1, z1, x2, y2, z2, x3, y3, z3]);
-  this._strokeCheck();
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  return this;
-};
-
-//@TODO: how to define the order of 4 points
-p5.Renderer3D.prototype.quad = function
-(x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4){
-  var gl = this.GL;
-  this._primitives2D(
-    [x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4]);
-  this._strokeCheck();
-  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-  return this;
-};
-
-p5.Renderer3D.prototype.beginShape = function(mode){
-  this.shapeMode = mode;
-  this.verticeStack = [];
-  return this;
-};
-
-p5.Renderer3D.prototype.vertex = function(x, y, z){
-  this.verticeStack.push(x, y, z);
-  return this;
-};
-
-p5.Renderer3D.prototype.endShape = function(){
-  var gl = this.GL;
-  this._primitives2D(this.verticeStack);
-  this.verticeStack = [];
-
-  switch(this.shapeMode){
-    case 'POINTS':
-      gl.drawArrays(gl.POINTS, 0, 1);
-      break;
-    case 'LINES':
-      gl.drawArrays(gl.LINES, 0, 2);
-      break;
-    case 'TRIANGLES':
-      this._strokeCheck();
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      break;
-    case 'TRIANGLE_STRIP':
-      this._strokeCheck();
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      break;
-    default:
-      this._strokeCheck();
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-      break;
-  }
-  return this;
-};
-
-//@TODO: figure out how to actually do stroke on shapes in 3D
-p5.Renderer3D.prototype._strokeCheck = function(){
-  if(this.drawMode === 'stroke'){
-    throw new Error(
-      'stroke for shapes in 3D not yet implemented, use fill for now :('
-    );
-  }
-};
-
-//@TODO
-p5.Renderer3D.prototype.strokeWeight = function() {
-  throw new Error('strokeWeight for 3d not yet implemented');
-};
-
-//////////////////////////////////////////////
-// COLOR
-//////////////////////////////////////////////
-
-p5.Renderer3D.prototype.fill = function(r, g, b, a) {
-  var color = this._pInst.color.apply(this._pInst, arguments);
-  var colorNormalized = color._array;
-  this.curColor = colorNormalized;
-  this.drawMode = 'fill';
-  return this;
-};
-
-p5.Renderer3D.prototype.stroke = function(r, g, b, a) {
-  var color = this._pInst.color.apply(this._pInst, arguments);
-  var colorNormalized = color._array;
-  this.curColor = colorNormalized;
-  this.drawMode = 'stroke';
-  return this;
-};
-
-p5.Renderer3D.prototype._getColorVertexShader = function(){
-  var gl = this.GL;
-  var mId = 'vertexColorVert|vertexColorFrag';
-  var shaderProgram;
-
-  if(!this.materialInHash(mId)){
-    shaderProgram =
-      this.initShaders('vertexColorVert', 'vertexColorFrag', true);
-    this.mHash[mId] = shaderProgram;
-    shaderProgram.vertexColorAttribute =
-    gl.getAttribLocation(shaderProgram, 'aVertexColor');
-    gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-  }else{
-    shaderProgram = this.mHash[mId];
-  }
-  return shaderProgram;
-};
-
-module.exports = p5.Renderer3D;
-
-},{"../core/core":48}],31:[function(_dereq_,module,exports){
-'use strict';
-
-var p5 = _dereq_('../core/core');
-
-//@TODO: implement full orbit controls including
-//pan, zoom, quaternion rotation, etc.
-p5.prototype.orbitControl = function(){
-  if(this.mouseIsPressed){
-    this.rotateY((this.mouseX - this.width / 2) / (this.width / 2));
-    this.rotateX((this.mouseY - this.height / 2) / (this.width / 2));
-  }
-  return this;
-};
-
-module.exports = p5;
-},{"../core/core":48}],32:[function(_dereq_,module,exports){
-/**
- * @module Lights, Camera
- * @submodule Lights
- * @for p5
- * @requires core
- */
-
-'use strict';
-
-var p5 = _dereq_('../core/core');
-
-/**
- * Creates an ambient light with a color
- * @method  ambientLight
- * @param  {Number|Array|String|p5.Color} v1  gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}            [v2] optional: green or saturation value
- * @param  {Number}            [v3] optional: blue or brightness value
- * @param  {Number}            [a]  optional: opacity
- * @return {p5}                the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *   background(0);
- *   ambientLight(150);
- *   ambientMaterial(250);
- *   sphere(200);
- * }
- * </code>
- * </div>
- */
-p5.prototype.ambientLight = function(v1, v2, v3, a){
-  var gl = this._renderer.GL;
-  var shaderProgram = this._renderer._getShader(
-    'lightVert', 'lightTextureFrag');
-
-  gl.useProgram(shaderProgram);
-  shaderProgram.uAmbientColor = gl.getUniformLocation(
-    shaderProgram,
-    'uAmbientColor[' + this._renderer.ambientLightCount + ']');
-
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, arguments);
-  var colors = color._array;
-
-  gl.uniform3f( shaderProgram.uAmbientColor,
-    colors[0], colors[1], colors[2]);
-
-  //in case there's no material color for the geometry
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
-  gl.uniform4f( shaderProgram.uMaterialColor, 1, 1, 1, 1);
-
-  this._renderer.ambientLightCount ++;
-  shaderProgram.uAmbientLightCount =
-    gl.getUniformLocation(shaderProgram, 'uAmbientLightCount');
-  gl.uniform1i(shaderProgram.uAmbientLightCount,
-    this._renderer.ambientLightCount);
-
-  return this;
-};
-
-/**
- * Creates a directional light with a color and a direction
- * @method  directionalLight
- * @param  {Number|Array|String|p5.Color} v1   gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}          [v2] optional: green or saturation value
- * @param  {Number}          [v3] optional: blue or brightness value
- * @param  {Number}          [a]  optional: opacity
- * @param  {Number|p5.Vector} x   x axis direction or a p5.Vector
- * @param  {Number}          [y]  optional: y axis direction
- * @param  {Number}          [z]  optional: z axis direction
- * @return {p5}              the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *   background(0);
- *   //move your mouse to change light direction
- *   var dirX = (mouseX / width - 0.5) *2;
- *   var dirY = (mouseY / height - 0.5) *(-2);
- *   directionalLight(250, 250, 250, dirX, dirY, 0.25);
- *   ambientMaterial(250);
- *   sphere(200, 128);
- * }
- * </code>
- * </div>
- */
-p5.prototype.directionalLight = function(v1, v2, v3, a, x, y, z) {
-  // TODO(jgessner): Find an example using this and profile it.
-  // var args = new Array(arguments.length);
-  // for (var i = 0; i < args.length; ++i) {
-  //   args[i] = arguments[i];
-  // }
-  // this._validateParameters(
-  //   'directionalLight',
-  //   args,
-  //   [
-  //     //rgbaxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //rgbxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //caxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //cxyz
-  //     ['Number', 'Number', 'Number', 'Number'],
-  //     ['String', 'Number', 'Number', 'Number'],
-  //     ['Array', 'Number', 'Number', 'Number'],
-  //     ['Object', 'Number', 'Number', 'Number'],
-  //     //rgbavector
-  //     ['Number', 'Number', 'Number', 'Number', 'Object'],
-  //     //rgbvector
-  //     ['Number', 'Number', 'Number', 'Object'],
-  //     //cavector
-  //     ['Number', 'Number', 'Object'],
-  //     //cvector
-  //     ['Number', 'Object'],
-  //     ['String', 'Object'],
-  //     ['Array', 'Object'],
-  //     ['Object', 'Object']
-  //   ]
-  // );
-
-  var gl = this._renderer.GL;
-  var shaderProgram = this._renderer._getShader(
-    'lightVert', 'lightTextureFrag');
-
-  gl.useProgram(shaderProgram);
-  shaderProgram.uDirectionalColor = gl.getUniformLocation(
-    shaderProgram,
-    'uDirectionalColor[' + this._renderer.directionalLightCount + ']');
-
-  //@TODO: check parameters number
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, [v1, v2, v3]);
-  var colors = color._array;
-
-  gl.uniform3f( shaderProgram.uDirectionalColor,
-    colors[0], colors[1], colors[2]);
-
-  var _x, _y, _z;
-
-  if(typeof arguments[arguments.length-1] === 'number'){
-    _x = arguments[arguments.length-3];
-    _y = arguments[arguments.length-2];
-    _z = arguments[arguments.length-1];
-
-  }else{
-    try{
-      _x = arguments[arguments.length-1].x;
-      _y = arguments[arguments.length-1].y;
-      _z = arguments[arguments.length-1].z;
-    }
-    catch(error){
-      throw error;
-    }
-  }
-
-  shaderProgram.uLightingDirection = gl.getUniformLocation(
-    shaderProgram,
-    'uLightingDirection[' + this._renderer.directionalLightCount + ']');
-  gl.uniform3f( shaderProgram.uLightingDirection, _x, _y, _z);
-
-  //in case there's no material color for the geometry
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
-  gl.uniform4f( shaderProgram.uMaterialColor, 1, 1, 1, 1);
-
-  this._renderer.directionalLightCount ++;
-  shaderProgram.uDirectionalLightCount =
-    gl.getUniformLocation(shaderProgram, 'uDirectionalLightCount');
-  gl.uniform1i(shaderProgram.uDirectionalLightCount,
-    this._renderer.directionalLightCount);
-
-  return this;
-};
-
-/**
- * Creates a point light with a color and a light position
- * @method  pointLight
- * @param  {Number|Array|String|p5.Color} v1   gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}          [v2] optional: green or saturation value
- * @param  {Number}          [v3] optional: blue or brightness value
- * @param  {Number}          [a]  optional: opacity
- * @param  {Number|p5.Vector} x   x axis position or a p5.Vector
- * @param  {Number}          [y]  optional: y axis position
- * @param  {Number}          [z]  optional: z axis position
- * @return {p5}              the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *   background(0);
- *   //move your mouse to change light position
- *   var locY = (mouseY / height - 0.5) *(-2);
- *   var locX = (mouseX / width - 0.5) *2;
- *   //to set the light position,
- *   //think of the world's coordinate as:
- *   // -1,1 -------- 1,1
- *   //   |            |
- *   //   |            |
- *   //   |            |
- *   // -1,-1---------1,-1
- *   pointLight(250, 250, 250, locX, locY, 0);
- *   ambientMaterial(250);
- *   sphere(200, 128);
- * }
- * </code>
- * </div>
- */
-p5.prototype.pointLight = function(v1, v2, v3, a, x, y, z) {
-  // TODO(jgessner): Find an example using this and profile it.
-  // var args = new Array(arguments.length);
-  // for (var i = 0; i < args.length; ++i) {
-  //   args[i] = arguments[i];
-  // }
-  // this._validateParameters(
-  //   'pointLight',
-  //   arguments,
-  //   [
-  //     //rgbaxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //rgbxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //caxyz
-  //     ['Number', 'Number', 'Number', 'Number', 'Number'],
-  //     //cxyz
-  //     ['Number', 'Number', 'Number', 'Number'],
-  //     ['String', 'Number', 'Number', 'Number'],
-  //     ['Array', 'Number', 'Number', 'Number'],
-  //     ['Object', 'Number', 'Number', 'Number'],
-  //     //rgbavector
-  //     ['Number', 'Number', 'Number', 'Number', 'Object'],
-  //     //rgbvector
-  //     ['Number', 'Number', 'Number', 'Object'],
-  //     //cavector
-  //     ['Number', 'Number', 'Object'],
-  //     //cvector
-  //     ['Number', 'Object'],
-  //     ['String', 'Object'],
-  //     ['Array', 'Object'],
-  //     ['Object', 'Object']
-  //   ]
-  // );
-
-  var gl = this._renderer.GL;
-  var shaderProgram = this._renderer._getShader(
-    'lightVert', 'lightTextureFrag');
-
-  gl.useProgram(shaderProgram);
-  shaderProgram.uPointLightColor = gl.getUniformLocation(
-    shaderProgram,
-    'uPointLightColor[' + this._renderer.pointLightCount + ']');
-
-  //@TODO: check parameters number
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, [v1, v2, v3]);
-  var colors = color._array;
-
-  gl.uniform3f( shaderProgram.uPointLightColor,
-    colors[0], colors[1], colors[2]);
-
-  var _x, _y, _z;
-
-  if(typeof arguments[arguments.length-1] === 'number'){
-    _x = arguments[arguments.length-3];
-    _y = arguments[arguments.length-2];
-    _z = arguments[arguments.length-1];
-
-  }else{
-    try{
-      _x = arguments[arguments.length-1].x;
-      _y = arguments[arguments.length-1].y;
-      _z = arguments[arguments.length-1].z;
-    }
-    catch(error){
-      throw error;
-    }
-  }
-
-  shaderProgram.uPointLightLocation = gl.getUniformLocation(
-    shaderProgram,
-    'uPointLightLocation[' + this._renderer.pointLightCount + ']');
-  gl.uniform3f( shaderProgram.uPointLightLocation, _x, _y, _z);
-
-  //in case there's no material color for the geometry
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
-  gl.uniform4f( shaderProgram.uMaterialColor, 1, 1, 1, 1);
-
-  this._renderer.pointLightCount ++;
-  shaderProgram.uPointLightCount =
-    gl.getUniformLocation(shaderProgram, 'uPointLightCount');
-  gl.uniform1i(shaderProgram.uPointLightCount,
-    this._renderer.pointLightCount);
-
-  return this;
-};
-
-module.exports = p5;
-
-},{"../core/core":48}],33:[function(_dereq_,module,exports){
-/**
- * @module Lights, Camera
- * @submodule Material
- * @for p5
- * @requires core
- */
-
-'use strict';
-
-var p5 = _dereq_('../core/core');
-//require('./p5.Texture');
-
-/**
- * Normal material for geometry
- * @method normalMaterial
- * @return {p5}                the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- *
- * function draw(){
- *  background(0);
- *  normalMaterial();
- *  sphere(200);
- * }
- * </code>
- * </div>
- */
+* [normal description]
+* @return {[type]} [description]
+*/
 p5.prototype.normalMaterial = function(){
-  this._renderer._getShader('normalVert', 'normalFrag');
-  return this;
-};
 
-/**
- * Texture for geometry
- * @method texture
- * @return {p5}                the p5 object
- * @example
- * <div>
- * <code>
- * var img;
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- *   img = loadImage("assets/cat.jpg");
- * }
- *
- * function draw(){
- *   background(0);
- *   rotateZ(frameCount * 0.01);
- *   rotateX(frameCount * 0.01);
- *   rotateY(frameCount * 0.01);
- *   //pass image as texture
- *   texture(img);
- *   box(200, 200, 200);
- * }
- * </code>
- * </div>
- */
-p5.prototype.texture = function(image){
-  var gl = this._renderer.GL;
-  var shaderProgram = this._renderer._getShader('lightVert',
-    'lightTextureFrag');
-  gl.useProgram(shaderProgram);
-  if (image instanceof p5.Image) {
-    //check if image is already used as texture
-    if(!image.isTexture){
-      //createTexture and set isTexture to true
-      var tex = gl.createTexture();
-      image.createTexture(tex);
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
-      image._setProperty('isTexture', true);
-    }
-    //otherwise we're good to bind texture without creating
-    //a new one on the gl
-    else {
-      //TODO
-    }
-    image.loadPixels();
-    var data = new Uint8Array(image.pixels);
-    gl.texImage2D(gl.TEXTURE_2D, 0,
-      gl.RGBA, image.width, image.height,
-      0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+  var mId = 'normalVert|normalFrag';
+
+  if(!this._graphics.materialInHash(mId)){
+    this._graphics.initShaders('normalVert', 'normalFrag');
   }
-  //if param is a video
-  else if (image instanceof p5.MediaElement){
-    if(!image.loadedmetadata) {return;}
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,
-    gl.UNSIGNED_BYTE, image.elt);
-  }
-  else {
-    //@TODO handle following cases:
-    //- 2D canvas (p5 inst)
-  }
-  if (_isPowerOf2(image.width) && _isPowerOf2(image.height)) {
-    gl.generateMipmap(gl.TEXTURE_2D);
-  } else {
-    //@TODO this is problematic
-    //image.width = _nextHighestPOT(image.width);
-    //image.height = _nextHighestPOT(image.height);
-    gl.texParameteri(gl.TEXTURE_2D,
-    gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,
-    gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,
-    gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_2D,
-    gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  }
-  //this is where we'd activate multi textures
-  //eg. gl.activeTexture(gl.TEXTURE0 + (unit || 0));
-  //but for now we just have a single texture.
-  //@TODO need to extend this functionality
-  //gl.activeTexture(gl.TEXTURE0 + 0);
-  //gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.uniform1i(gl.getUniformLocation(shaderProgram, 'uSampler'), 0);
-  gl.uniform1i(gl.getUniformLocation(shaderProgram, 'isTexture'), true);
-  return this;
-};
 
-/**
- * Helper functions; Checks whether val is a pot
- * more info on power of 2 here:
- * https://www.opengl.org/wiki/NPOT_Texture
- * @param  {Number}  value
- * @return {Boolean}
- */
-function _isPowerOf2 (value){
-  return (value & (value - 1)) === 0;
-}
-
-/**
- * returns the next highest power of 2 value
- * @param  {Number} value [description]
- * @return {Number}       [description]
- */
-// function _nextHighestPOT (value){
-//   --value;
-//   for (var i = 1; i < 32; i <<= 1) {
-//     value = value | value >> i;
-//   }
-//   return value + 1;
-// }
-
-/**
- * Basic material for geometry with a given color
- * @method  basicMaterial
- * @param  {Number|Array|String|p5.Color} v1  gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}            [v2] optional: green or saturation value
- * @param  {Number}            [v3] optional: blue or brightness value
- * @param  {Number}            [a]  optional: opacity
- * @return {p5}                the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- *
- * function draw(){
- *  background(0);
- *  basicMaterial(250, 0, 0);
- *  rotateX(frameCount * 0.01);
- *  rotateY(frameCount * 0.01);
- *  rotateZ(frameCount * 0.01);
- *  box(200, 200, 200);
- * }
- * </code>
- * </div>
- */
-p5.prototype.basicMaterial = function(v1, v2, v3, a){
-  var gl = this._renderer.GL;
-
-  var shaderProgram = this._renderer._getShader('normalVert', 'basicFrag');
-
-  gl.useProgram(shaderProgram);
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
-
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, arguments);
-  var colors = color._array;
-
-  gl.uniform4f( shaderProgram.uMaterialColor,
-    colors[0], colors[1], colors[2], colors[3]);
+  this._graphics.saveShaders(mId);
 
   return this;
 
 };
 
 /**
- * Ambient material for geometry with a given color
- * @method  ambientMaterial
- * @param  {Number|Array|String|p5.Color} v1  gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}            [v2] optional: green or saturation value
- * @param  {Number}            [v3] optional: blue or brightness value
- * @param  {Number}            [a]  optional: opacity
-* @return {p5}                 the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *  background(0);
- *  ambientLight(100);
- *  pointLight(250, 250, 250, 100, 100, 0);
- *  ambientMaterial(250);
- *  sphere(200, 128);
- * }
- * </code>
- * </div>
- */
-p5.prototype.ambientMaterial = function(v1, v2, v3, a) {
-  var gl = this._renderer.GL;
-  var shaderProgram =
-    this._renderer._getShader('lightVert', 'lightTextureFrag');
+* [basic description]
+* @param  {[type]} r [description]
+* @param  {[type]} g [description]
+* @param  {[type]} b [description]
+* @param  {[type]} a [description]
+* @return {[type]}   [description]
+*/
+p5.prototype.basicMaterial = function(r, g, b, a){
 
-  gl.useProgram(shaderProgram);
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
+  r = r / 255 || 0.5;
+  g = g / 255 || r;
+  b = b / 255 || r;
+  a = a || 1.0;
 
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, arguments);
-  var colors = color._array;
+  var mId = 'normalVert|basicFrag';
 
-  gl.uniform4f(shaderProgram.uMaterialColor,
-    colors[0], colors[1], colors[2], colors[3]);
+  if(!this._graphics.materialInHash(mId)){
+    //@TODO: figure out how to do this
+    // var sp = this._graphics.initShaders(
+    // shaders.normalVert, shaders.basicFrag, {
+    //   uMaterialColor: [r, g, b, a]
+    // });
+    // sp.uMaterialColorLoc = gl.getUniformLocation(
+    // shaderProgram, 'uMaterialColor' );
+    //  gl.uniform4f( program.uMaterialColorLoc, 1.0, 1.0, 1.0, 1.0 );
+    this._graphics.initShaders('normalVert', 'basicFrag');
+  }
 
-  shaderProgram.uSpecular = gl.getUniformLocation(
-    shaderProgram, 'uSpecular' );
-  gl.uniform1i(shaderProgram.uSpecular, false);
-
-  gl.uniform1i(gl.getUniformLocation(shaderProgram, 'isTexture'), false);
+  this._graphics.saveShaders(mId);
 
   return this;
-};
 
-/**
- * Specular material for geometry with a given color
- * @method specularMaterial
- * @param  {Number|Array|String|p5.Color} v1  gray value,
- * red or hue value (depending on the current color mode),
- * or color Array, or CSS color string
- * @param  {Number}            [v2] optional: green or saturation value
- * @param  {Number}            [v3] optional: blue or brightness value
- * @param  {Number}            [a]  optional: opacity
- * @return {p5}                the p5 object
- * @example
- * <div>
- * <code>
- * function setup(){
- *   createCanvas(100, 100, WEBGL);
- * }
- * function draw(){
- *  background(0);
- *  ambientLight(100);
- *  pointLight(250, 250, 250, 100, 100, 0);
- *  specularMaterial(250);
- *  sphere(200, 128);
- * }
- * </code>
- * </div>
- */
-p5.prototype.specularMaterial = function(v1, v2, v3, a) {
-  var gl = this._renderer.GL;
-  var shaderProgram =
-    this._renderer._getShader('lightVert', 'lightTextureFrag');
-
-  gl.useProgram(shaderProgram);
-  shaderProgram.uMaterialColor = gl.getUniformLocation(
-    shaderProgram, 'uMaterialColor' );
-
-  var color = this._renderer._pInst.color.apply(
-    this._renderer._pInst, arguments);
-  var colors = color._array;
-
-  gl.uniform4f(shaderProgram.uMaterialColor,
-    colors[0], colors[1], colors[2], colors[3]);
-
-  shaderProgram.uSpecular = gl.getUniformLocation(
-    shaderProgram, 'uSpecular' );
-  gl.uniform1i(shaderProgram.uSpecular, true);
-
-  gl.uniform1i(gl.getUniformLocation(shaderProgram, 'isTexture'), false);
-
-  return this;
 };
 
 module.exports = p5;
-
-},{"../core/core":48}],34:[function(_dereq_,module,exports){
-//some of the functions are adjusted from Three.js(http://threejs.org)
-
+},{"../core/core":17}],4:[function(require,module,exports){
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * p5 Geometry3D class
@@ -6954,8 +1163,7 @@ p5.Geometry3D = function(){
   //each faceNormal is a p5.Vector
   //[[p5.Vector, p5.Vector, p5.Vector],[p5.Vector, p5.Vector, p5.Vector],...]
   this.faceNormals = [];
-  //an array of array holding uvs (group according to faces)
-  //[[[0, 0], [1, 0], [1, 0]],...]
+  //an array of p5.Vector holding uvs
   this.uvs = [];
 };
 
@@ -6967,14 +1175,11 @@ p5.Geometry3D = function(){
  * @param  {Number} offset  offset of vertices index
  */
 p5.Geometry3D.prototype.parametricGeometry = function
-//@TODO: put func as the last parameters
 (func, detailX, detailY, offset){
 
   var i, j, p;
   var u, v;
   offset = offset || 0;
-  this.detailX = detailX;
-  this.detailY = detailY;
 
   var sliceCount = detailX + 1;
   for (i = 0; i <= detailY; i++){
@@ -7008,6 +1213,76 @@ p5.Geometry3D.prototype.parametricGeometry = function
       this.uvs.push([uvb, uvc, uvd]);
     }
   }
+
+};
+
+/**
+ * merge duplicated vertices
+ */
+p5.Geometry3D.prototype.mergeVertices= function () {
+
+  var verticesMap = {};
+  var unique = [], changes = [];
+
+  var v, key;
+  var precisionPoints = 4;
+  var precision = Math.pow(10, precisionPoints);
+  var i, face;
+  var indices;
+
+  for (i = 0; i < this.vertices.length; i ++) {
+
+    v = this.vertices[i];
+    key = Math.round(v.x * precision) + '_' +
+    Math.round(v.y * precision) + '_' +
+    Math.round(v.z * precision);
+
+    if (verticesMap[key] === undefined) {
+      verticesMap[key] = i;
+      unique.push(this.vertices[i]);
+      changes[i] = unique.length - 1;
+    } else {
+      changes[i] = changes[verticesMap[key]];
+    }
+
+  }
+  // if faces are completely degenerate after merging vertices, we
+  // have to remove them from the geometry.
+  var faceIndicesToRemove = [];
+
+  for (i = 0; i < this.faces.length; i ++) {
+
+    face = this.faces[i];
+
+    face[0] = changes[face[0]];
+    face[1] = changes[face[1]];
+    face[2] = changes[face[2]];
+
+    indices = [face[0], face[1], face[2]];
+
+    var dupIndex = - 1;
+
+    // if any duplicate vertices are found in a Face
+    // we have to remove the face as nothing can be saved
+    for (var n = 0; n < 3; n ++) {
+      if (indices[n] === indices[(n + 1) % 3]) {
+        dupIndex = n;
+        faceIndicesToRemove.push(i);
+        break;
+      }
+    }
+  }
+
+  for (i = faceIndicesToRemove.length - 1; i >= 0; i --) {
+    var idx = faceIndicesToRemove[i];
+    this.faces.splice(idx, 1);
+  }
+
+  // Use unique set of vertices
+  var diff = this.vertices.length - unique.length;
+  this.vertices = unique;
+  return diff;
+
 };
 
 /**
@@ -7079,83 +1354,19 @@ p5.Geometry3D.prototype.computeVertexNormals = function (){
 
 };
 
-p5.Geometry3D.prototype.averageNormals = function() {
-
-  for(var i = 0; i <= this.detailY; i++){
-    var offset = this.detailX + 1;
-    var temp = p5.Vector
-      .add(this.vertexNormals[i*offset],
-        this.vertexNormals[i*offset + this.detailX]);
-    temp = p5.Vector.div(temp, 2);
-    this.vertexNormals[i*offset] = temp;
-    this.vertexNormals[i*offset + this.detailX] = temp;
-  }
-};
-
-p5.Geometry3D.prototype.averagePoleNormals = function() {
-
-  //average the north pole
-  var sum = new p5.Vector(0, 0, 0);
-  for(var i = 0; i < this.detailX; i++){
-    sum.add(this.vertexNormals[i]);
-  }
-  sum = p5.Vector.div(sum, this.detailX);
-
-  for(i = 0; i < this.detailX; i++){
-    this.vertexNormals[i] = sum;
-  }
-
-  //average the south pole
-  sum = new p5.Vector(0, 0, 0);
-  for(i = this.vertices.length - 1;
-    i > this.vertices.length - 1 - this.detailX; i--){
-    sum.add(this.vertexNormals[i]);
-  }
-  sum = p5.Vector.div(sum, this.detailX);
-
-  for(i = this.vertices.length - 1;
-    i > this.vertices.length - 1 - this.detailX; i--){
-    this.vertexNormals[i] = sum;
-  }
-};
-
-/**
- * [generateUV description]
- * @param  {Array} faces [description]
- * @param  {Array} uvs   [description]
- */
-p5.Geometry3D.prototype.generateUV = function(faces, uvs){
-
-  faces = flatten(faces);
-  uvs = flatten(uvs);
-  var arr = [];
-  faces.forEach(function(item, index){
-    arr[item] = uvs[index];
-  });
-  return flatten(arr);
-};
-
-
 /**
  * generate an object containing information needed to create buffer
  */
-p5.Geometry3D.prototype.generateObj = function(average, sphere){
-
+p5.Geometry3D.prototype.generateObj = function(noMerge){
+  if(!noMerge){
+    this.mergeVertices();
+  }
   this.computeFaceNormals();
   this.computeVertexNormals();
-
-  if(average){
-    this.averageNormals();
-  }
-
-  if(sphere){
-    this.averagePoleNormals();
-  }
 
   var obj = {
     vertices: turnVectorArrayIntoNumberArray(this.vertices),
     vertexNormals: turnVectorArrayIntoNumberArray(this.vertexNormals),
-    uvs: this.generateUV(this.faces, this.uvs),
     faces: flatten(this.faces),
     len: this.faces.length * 3
   };
@@ -7188,21 +1399,17 @@ function turnVectorArrayIntoNumberArray(arr){
 }
 
 module.exports = p5.Geometry3D;
-},{"../core/core":48}],35:[function(_dereq_,module,exports){
+},{"../core/core":17}],5:[function(require,module,exports){
 /**
 * @requires constants
 * @todo see methods below needing further implementation.
-* future consideration: implement SIMD optimizations
-* when browser compatibility becomes available
-* https://developer.mozilla.org/en-US/docs/Web/JavaScript/
-*   Reference/Global_Objects/SIMD
 */
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var polarGeometry = _dereq_('../math/polargeometry');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var polarGeometry = require('../math/polargeometry');
+var constants = require('../core/constants');
 var GLMAT_ARRAY_TYPE = (
     typeof Float32Array !== 'undefined') ?
   Float32Array : Array;
@@ -7210,7 +1417,7 @@ var GLMAT_ARRAY_TYPE = (
 /**
  * A class to describe a 4x4 matrix
  * for model and view matrix manipulation in the p5js webgl renderer.
- * class p5.Matrix
+ * @class p5.Matrix
  * @constructor
  * @param {Array} [mat4] array literal of our 4x4 matrix
  */
@@ -7525,46 +1732,52 @@ p5.Matrix.prototype.mult = function(multMatrix){
 
 /**
  * scales a p5.Matrix by scalars or a vector
- * @param  {p5.Vector | Array }
+ * @param  {p5.Vector | Array | Numbers}
  *                      vector to scale by
  * @return {p5.Matrix}  this
  */
 p5.Matrix.prototype.scale = function() {
   var x,y,z;
-  var args = new Array(arguments.length);
-  for(var i = 0; i < args.length; i++) {
-    args[i] = arguments[i];
-  }
   //if our 1st arg is a type p5.Vector
-  if (args[0] instanceof p5.Vector){
-    x = args[0].x;
-    y = args[0].y;
-    z = args[0].z;
+  if (arguments[0] instanceof p5.Vector){
+    x = arguments[0].x;
+    y = arguments[0].y;
+    z = arguments[0].z;
   }
   //otherwise if it's an array
-  else if (args[0] instanceof Array){
-    x = args[0][0];
-    y = args[0][1];
-    z = args[0][2];
+  else if (arguments[0] instanceof Array){
+    x = arguments[0][0];
+    y = arguments[0][1];
+    z = arguments[0][2];
   }
-  var _dest = new GLMAT_ARRAY_TYPE(16);
-  _dest[0] = this.mat4[0] * x;
-  _dest[1] = this.mat4[1] * x;
-  _dest[2] = this.mat4[2] * x;
-  _dest[3] = this.mat4[3] * x;
-  _dest[4] = this.mat4[4] * y;
-  _dest[5] = this.mat4[5] * y;
-  _dest[6] = this.mat4[6] * y;
-  _dest[7] = this.mat4[7] * y;
-  _dest[8] = this.mat4[8] * z;
-  _dest[9] = this.mat4[9] * z;
-  _dest[10] = this.mat4[10] * z;
-  _dest[11] = this.mat4[11] * z;
-  _dest[12] = this.mat4[12];
-  _dest[13] = this.mat4[13];
-  _dest[14] = this.mat4[14];
-  _dest[15] = this.mat4[15];
+  //otherwise it's probably some numbers
+  else {
+    //short circuit eval to make sure we maintain
+    //component size
+    x = arguments[0] || 1;
+    y = arguments[1] || 1;
+    z = arguments[2] || 1;
+  }
 
+  var _dest = new GLMAT_ARRAY_TYPE(16);
+
+  for (var i = 0; i < this.mat4.length; i++) {
+    var row = i % 4;
+    switch(row){
+    case 0:
+      _dest[i] = this.mat4[i]*x;
+      break;
+    case 1:
+      _dest[i] = this.mat4[i]*y;
+      break;
+    case 2:
+      _dest[i] = this.mat4[i]*z;
+      break;
+    case 3:
+      _dest[i] = this.mat4[i];
+      break;
+    }
+  }
   this.mat4 = _dest;
   return this;
 };
@@ -7747,6 +1960,470 @@ p5.Matrix.prototype.ortho = function(left,right,bottom,top,near,far){
   return this;
 };
 
+module.exports = p5.Matrix;
+},{"../core/constants":16,"../core/core":17,"../math/polargeometry":46}],6:[function(require,module,exports){
+'use strict';
+
+var p5 = require('../core/core');
+var shaders = require('./shaders');
+require('../core/p5.Renderer');
+require('./p5.Matrix');
+var gl;
+var uMVMatrixStack = [];
+var shaderStack = [];
+
+//@TODO should probably implement an override for these attributes
+var attributes = {
+  alpha: false,
+  depth: true,
+  stencil: true,
+  antialias: false,
+  premultipliedAlpha: false,
+  preserveDrawingBuffer: false
+};
+
+/**
+ * 3D graphics class.  Can also be used as an off-screen graphics buffer.
+ * A p5.Renderer3D object can be constructed
+ *
+ */
+p5.Renderer3D = function(elt, pInst, isMainCanvas) {
+  p5.Renderer.call(this, elt, pInst, isMainCanvas);
+
+  try {
+    this.drawingContext = this.canvas.getContext('webgl', attributes) ||
+      this.canvas.getContext('experimental-webgl', attributes);
+    if (this.drawingContext === null) {
+      throw 'Error creating webgl context';
+    } else {
+      console.log('p5.Renderer3D: enabled webgl context');
+    }
+  } catch (er) {
+    console.error(er);
+  }
+
+  this.isP3D = true; //lets us know we're in 3d mode
+  gl = this.drawingContext;
+  gl.clearColor(1.0, 1.0, 1.0, 1.0); //background is initialized white
+  gl.clearDepth(1);
+  gl.enable(gl.DEPTH_TEST);
+  gl.depthFunc(gl.LEQUAL);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+  //create our default matrices
+  this.initHash();
+  this.initMatrix();
+  return this;
+};
+
+/**
+ * [prototype description]
+ * @type {[type]}
+ */
+p5.Renderer3D.prototype = Object.create(p5.Renderer.prototype);
+
+/**
+ * [_applyDefaults description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype._applyDefaults = function() {
+  return this;
+};
+
+/**
+ * [resize description]
+ * @param  {[type]} w [description]
+ * @param  {[type]} h [description]
+ * @return {[type]}   [description]
+ */
+p5.Renderer3D.prototype.resize = function(w,h) {
+  p5.Renderer.prototype.resize.call(this, w,h);
+  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+};
+
+//////////////////////////////////////////////
+// COLOR | Setting
+//////////////////////////////////////////////
+
+/**
+ * [background description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.background = function() {
+  var _col = this._pInst.color.apply(this._pInst, arguments);
+  // gl.clearColor(0.0,0.0,0.0,1.0);
+  var _r = (_col.color_array[0]) / 255;
+  var _g = (_col.color_array[1]) / 255;
+  var _b = (_col.color_array[2]) / 255;
+  var _a = (_col.color_array[3]) / 255;
+  gl.clearColor(_r, _g, _b, _a);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  this.resetMatrix();
+  this.emptyShaderStack();
+};
+
+//@TODO implement this
+// p5.Renderer3D.prototype.clear = function() {
+//@TODO
+// };
+
+//@TODO implement this
+// p5.Renderer3D.prototype.fill = function() {
+//@TODO
+// };
+
+//////////////////////////////////////////////
+// SHADER
+//////////////////////////////////////////////
+
+/**
+ * [initShaders description]
+ * @param  {[type]} vertId [description]
+ * @param  {[type]} fragId [description]
+ * @return {[type]}        [description]
+ */
+p5.Renderer3D.prototype.initShaders = function(vertId, fragId) {
+  //set up our default shaders by:
+  // 1. create the shader,
+  // 2. load the shader source,
+  // 3. compile the shader
+  var _vertShader = gl.createShader(gl.VERTEX_SHADER);
+  //load in our default vertex shader
+  gl.shaderSource(_vertShader, shaders[vertId]);
+  gl.compileShader(_vertShader);
+  // if our vertex shader failed compilation?
+  if (!gl.getShaderParameter(_vertShader, gl.COMPILE_STATUS)) {
+    alert('Yikes! An error occurred compiling the shaders:' +
+      gl.getShaderInfoLog(_vertShader));
+    return null;
+  }
+
+  var _fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+  //load in our material frag shader
+  gl.shaderSource(_fragShader, shaders[fragId]);
+  gl.compileShader(_fragShader);
+  // if our frag shader failed compilation?
+  if (!gl.getShaderParameter(_fragShader, gl.COMPILE_STATUS)) {
+    alert('Darn! An error occurred compiling the shaders:' +
+      gl.getShaderInfoLog(_fragShader));
+    return null;
+  }
+
+  var shaderProgram = gl.createProgram();
+  gl.attachShader(shaderProgram, _vertShader);
+  gl.attachShader(shaderProgram, _fragShader);
+  gl.linkProgram(shaderProgram);
+  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+    alert('Snap! Error linking shader program');
+  }
+  gl.useProgram(shaderProgram);
+  //END SHADERS SETUP
+
+  // var vertexResolution =
+  // gl.getUniformLocation(shaderProgram, 'u_resolution');
+  // @TODO replace 4th argument with far plane once we implement
+  // a view frustrum
+
+  //vertex position Attribute
+  shaderProgram.vertexPositionAttribute =
+    gl.getAttribLocation(shaderProgram, 'position');
+  gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+
+  //vertex normal Attribute
+  shaderProgram.vertexNormalAttribute =
+    gl.getAttribLocation(shaderProgram, 'normal');
+  gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
+
+  //projection Matrix uniform
+  shaderProgram.uPMatrixUniform =
+    gl.getUniformLocation(shaderProgram, 'transformMatrix');
+  //model view Matrix uniform
+  shaderProgram.uMVMatrixUniform =
+    gl.getUniformLocation(shaderProgram, 'modelviewMatrix');
+
+  //normal Matrix uniform
+  shaderProgram.uNMatrixUniform =
+  gl.getUniformLocation(shaderProgram, 'normalMatrix');
+
+  this.mHash[vertId + '|' + fragId] = shaderProgram;
+
+  return shaderProgram;
+};
+
+/**
+ * [saveShaders description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.saveShaders = function(mId){
+  shaderStack.push(mId);
+};
+
+/**
+ * [emptyShaderStack description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.emptyShaderStack = function(){
+  shaderStack = [];
+};
+
+/**
+ * [getCurShader description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.getCurShaderKey = function(){
+  var key = shaderStack[shaderStack.length - 1];
+  if(key === undefined){
+    //@TODO: make a default shader
+    key = 'normalVert|normalFrag';
+    this.initShaders('normalVert', 'normalFrag');
+    this.saveShaders(key);
+  }
+  return key;
+};
+
+//////////////////////////////////////////////
+// HASH | Stroing geometriy and materil info
+//////////////////////////////////////////////
+
+/**
+ * [initBuffer description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.initHash = function(){
+  this.gHash = {};
+  this.mHash = {};
+};
+
+/**
+ * [geometryInHash description]
+ * @param  {[type]} gId [description]
+ * @return {[type]}     [description]
+ */
+p5.Renderer3D.prototype.geometryInHash = function(gId){
+  return this.gHash[gId] !== undefined;
+};
+
+/**
+ * [materialInHash description]
+ * @param  {[type]} mId [description]
+ * @return {[type]}     [description]
+ */
+p5.Renderer3D.prototype.materialInHash = function(mId){
+  return this.mHash[mId] !== undefined;
+};
+
+//////////////////////////////////////////////
+// BUFFER | deal with gl buffer
+//////////////////////////////////////////////
+
+/**
+ * [initBuffer description]
+ * @param  {String} gId    key of the geometry object
+ * @param  {Object} obj    an object containing geometry information
+ */
+p5.Renderer3D.prototype.initBuffer = function(gId, obj) {
+
+  this.gHash[gId] = {};
+  this.gHash[gId].len = obj.len;
+  this.gHash[gId].vertexBuffer = gl.createBuffer();
+  this.gHash[gId].normalBuffer = gl.createBuffer();
+  this.gHash[gId].indexBuffer = gl.createBuffer();
+
+  var shaderProgram = this.mHash[this.getCurShaderKey()];
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].vertexBuffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER, new Float32Array(obj.vertices), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(
+    shaderProgram.vertexPositionAttribute,
+    3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].normalBuffer);
+  gl.bufferData(
+    gl.ARRAY_BUFFER, new Float32Array(obj.vertexNormals), gl.STATIC_DRAW);
+  gl.vertexAttribPointer(
+    shaderProgram.vertexNormalAttribute,
+    3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.gHash[gId].indexBuffer);
+  gl.bufferData
+   (gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(obj.faces), gl.STATIC_DRAW);
+};
+
+/**
+ * [drawBuffer description]
+ * @param  {String} gId     key of the geometery object
+ */
+p5.Renderer3D.prototype.drawBuffer = function(gId) {
+
+  var shaderKey = this.getCurShaderKey();
+  var shaderProgram = this.mHash[shaderKey];
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].vertexBuffer);
+  gl.vertexAttribPointer(
+    shaderProgram.vertexPositionAttribute,
+    3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].normalBuffer);
+  gl.vertexAttribPointer(
+    shaderProgram.vertexNormalAttribute,
+    3, gl.FLOAT, false, 0, 0);
+
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.gHash[gId].indexBuffer);
+
+  this.setMatrixUniforms(shaderKey);
+
+  gl.drawElements(
+    gl.TRIANGLES, this.gHash[gId].len,
+     gl.UNSIGNED_SHORT, 0);
+};
+
+/**
+ * Sets the Matrix Uniforms inside our default shader.
+ * @param {String} shaderKey key of current shader
+ */
+p5.Renderer3D.prototype.setMatrixUniforms = function(shaderKey) {
+
+  var shaderProgram = this.mHash[shaderKey];
+
+  gl.useProgram(shaderProgram);
+
+  gl.uniformMatrix4fv(
+    shaderProgram.uPMatrixUniform,
+    false, this.uPMatrix.mat4);
+
+  gl.uniformMatrix4fv(
+    shaderProgram.uMVMatrixUniform,
+    false, this.uMVMatrix.mat4);
+
+  this.uNMatrix = new p5.Matrix();
+  this.uNMatrix.invert(this.uMVMatrix);
+  this.uNMatrix.transpose(this.uNMatrix);
+
+  gl.uniformMatrix4fv(
+    shaderProgram.uNMatrixUniform,
+    false, this.uNMatrix.mat4);
+};
+
+//////////////////////////////////////////////
+// MATRIX
+//////////////////////////////////////////////
+
+/**
+ * [initMatrix description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.initMatrix = function(){
+  this.uMVMatrix = new p5.Matrix();
+  this.uPMatrix  = new p5.Matrix();
+  this.uNMatrix = new p5.Matrix();
+  var _w = this.width;
+  var _h = this.height;
+  this.uPMatrix.perspective(60 / 180 * Math.PI, _w / _h, 0.1, 100);
+};
+
+/**
+ * resets the model view matrix to a mat4 identity
+ * matrix.
+ * @return {void}
+ */
+p5.Renderer3D.prototype.resetMatrix = function() {
+  this.uMVMatrix = p5.Matrix.identity();
+};
+
+/**
+ * [translate description]
+ * @param  {[type]} x [description]
+ * @param  {[type]} y [description]
+ * @param  {[type]} z [description]
+ * @return {[type]}   [description]
+ * @todo implement handle for components or vector as args
+ */
+p5.Renderer3D.prototype.translate = function(x, y, z) {
+  //@TODO: figure out how to fit the resolution
+  x = x / 100;
+  y = -y / 100;
+  z = z / 100;
+  this.uMVMatrix.translate([x,y,z]);
+  return this;
+};
+
+/**
+ * Scales the Model View Matrix by a vector
+ * @param  {Number} x [description]
+ * @param  {Number} y [description]
+ * @param  {Number} z [description]
+ * @return {this}   [description]
+ */
+p5.Renderer3D.prototype.scale = function(x, y, z) {
+  this.uMVMatrix.scale([x,y,z]);
+  return this;
+};
+
+/**
+ * [rotateX description]
+ * @param  {[type]} rad [description]
+ * @return {[type]}     [description]
+ */
+p5.Renderer3D.prototype.rotateX = function(rad) {
+  this.uMVMatrix.rotateX(rad);
+  return this;
+};
+
+/**
+ * [rotateY description]
+ * @param  {[type]} rad [description]
+ * @return {[type]}     [description]
+ */
+p5.Renderer3D.prototype.rotateY = function(rad) {
+  this.uMVMatrix.rotateY(rad);
+  return this;
+};
+
+/**
+ * [rotateZ description]
+ * @param  {[type]} rad [description]
+ * @return {[type]}     [description]
+ */
+p5.Renderer3D.prototype.rotateZ = function(rad) {
+  this.uMVMatrix.rotateZ(rad);
+  return this;
+};
+
+/**
+ * pushes a copy of the model view matrix onto the
+ * MV Matrix stack.
+ * NOTE to self: could probably make this more readable
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.push = function() {
+  uMVMatrixStack.push(this.uMVMatrix.copy());
+};
+
+/**
+ * [pop description]
+ * @return {[type]} [description]
+ */
+p5.Renderer3D.prototype.pop = function() {
+  if (uMVMatrixStack.length === 0) {
+    throw 'Invalid popMatrix!';
+  }
+  this.uMVMatrix = uMVMatrixStack.pop();
+};
+
+/**
+ * [orbitControl description]
+ * @return {[type]} [description]
+ */
+//@TODO: fix this fake orbitControl
+p5.prototype.orbitControl = function(){
+  if(this.mouseIsPressed){
+    this.rotateX((this.mouseX - this.width / 2) / (this.width / 2));
+    this.rotateY((this.mouseY - this.height / 2) / (this.width / 2));
+  }
+  return this;
+};
+
 /**
  * PRIVATE
  */
@@ -7793,610 +2470,298 @@ p5.Matrix.prototype.ortho = function(left,right,bottom,top,near,far){
 //  0.0,0.0,0.0,1.0
 //];
 
-module.exports = p5.Matrix;
-},{"../core/constants":47,"../core/core":48,"../math/polargeometry":77}],36:[function(_dereq_,module,exports){
-'use strict';
-
-var p5 = _dereq_('../core/core');
-var shader = _dereq_('./shader');
-_dereq_('../core/p5.Renderer');
-_dereq_('./p5.Matrix');
-var uMVMatrixStack = [];
-var RESOLUTION = 1000;
-
-//@TODO should probably implement an override for these attributes
-var attributes = {
-  alpha: true,
-  depth: true,
-  stencil: true,
-  antialias: false,
-  premultipliedAlpha: false,
-  preserveDrawingBuffer: false
-};
-
-/**
- * 3D graphics class.  Can also be used as an off-screen graphics buffer.
- * A p5.Renderer3D object can be constructed
- *
- */
-p5.Renderer3D = function(elt, pInst, isMainCanvas) {
-  p5.Renderer.call(this, elt, pInst, isMainCanvas);
-
-  try {
-    this.drawingContext = this.canvas.getContext('webgl', attributes) ||
-      this.canvas.getContext('experimental-webgl', attributes);
-    if (this.drawingContext === null) {
-      throw new Error('Error creating webgl context');
-    } else {
-      console.log('p5.Renderer3D: enabled webgl context');
-    }
-  } catch (er) {
-    throw new Error(er);
-  }
-
-  this.isP3D = true; //lets us know we're in 3d mode
-  this.GL = this.drawingContext;
-  var gl = this.GL;
-  gl.clearColor(1.0, 1.0, 1.0, 1.0); //background is initialized white
-  gl.clearDepth(1);
-  gl.enable(gl.DEPTH_TEST);
-  gl.depthFunc(gl.LEQUAL);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  this._init();
-  return this;
-};
-
-p5.Renderer3D.prototype = Object.create(p5.Renderer.prototype);
-
-p5.Renderer3D.prototype._applyDefaults = function() {
-  return this;
-};
-
-//////////////////////////////////////////////
-// Setting
-//////////////////////////////////////////////
-
-p5.Renderer3D.prototype._init = function(first_argument) {
-  var gl = this.GL;
-  //for our default matrices
-  this.initMatrix();
-  this.initHash();
-  //for immedidate mode
-  this.verticeStack = [];
-  this.verticeBuffer = gl.createBuffer();
-  this.colorBuffer = gl.createBuffer();
-  //for camera
-  this._setCamera = false;
-  //for counting lights
-  this.ambientLightCount = 0;
-  this.directionalLightCount = 0;
-  this.pointLightCount = 0;
-};
-
-p5.Renderer3D.prototype._update = function() {
-  this.resetMatrix();
-  this.translate(0, 0, -800);
-  this.ambientLightCount = 0;
-  this.directionalLightCount = 0;
-  this.pointLightCount = 0;
-  this.verticeStack = [];
-};
-
-/**
- * [resize description]
- * @param  {[type]} w [description]
- * @param  {[tyoe]} h [description]
- * @return {[type]}   [description]
- */
-p5.Renderer3D.prototype.resize = function(w,h) {
-  var gl = this.GL;
-  p5.Renderer.prototype.resize.call(this, w, h);
-  gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-};
-
-/**
- * [background description]
- * @return {[type]} [description]
- */
-p5.Renderer3D.prototype.background = function() {
-  var gl = this.GL;
-  var _col = this._pInst.color.apply(this._pInst, arguments);
-  // gl.clearColor(0.0,0.0,0.0,1.0);
-  var _r = (_col.levels[0]) / 255;
-  var _g = (_col.levels[1]) / 255;
-  var _b = (_col.levels[2]) / 255;
-  var _a = (_col.levels[3]) / 255;
-  gl.clearColor(_r, _g, _b, _a);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-};
-
-//@TODO implement this
-// p5.Renderer3D.prototype.clear = function() {
-//@TODO
-// };
-
-//////////////////////////////////////////////
-// SHADER
-//////////////////////////////////////////////
-
-/**
- * [initShaders description]
- * @param  {[type]} vertId [description]
- * @param  {[type]} fragId [description]
- * @return {[type]}        [description]
- */
-p5.Renderer3D.prototype.initShaders = function(vertId, fragId, immediateMode) {
-  var gl = this.GL;
-  //set up our default shaders by:
-  // 1. create the shader,
-  // 2. load the shader source,
-  // 3. compile the shader
-  var _vertShader = gl.createShader(gl.VERTEX_SHADER);
-  //load in our default vertex shader
-  gl.shaderSource(_vertShader, shader[vertId]);
-  gl.compileShader(_vertShader);
-  // if our vertex shader failed compilation?
-  if (!gl.getShaderParameter(_vertShader, gl.COMPILE_STATUS)) {
-    alert('Yikes! An error occurred compiling the shaders:' +
-      gl.getShaderInfoLog(_vertShader));
-    return null;
-  }
-
-  var _fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-  //load in our material frag shader
-  gl.shaderSource(_fragShader, shader[fragId]);
-  gl.compileShader(_fragShader);
-  // if our frag shader failed compilation?
-  if (!gl.getShaderParameter(_fragShader, gl.COMPILE_STATUS)) {
-    alert('Darn! An error occurred compiling the shaders:' +
-      gl.getShaderInfoLog(_fragShader));
-    return null;
-  }
-
-  var shaderProgram = gl.createProgram();
-  gl.attachShader(shaderProgram, _vertShader);
-  gl.attachShader(shaderProgram, _fragShader);
-  gl.linkProgram(shaderProgram);
-  if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert('Snap! Error linking shader program');
-  }
-  //END SHADERS SETUP
-
-  this._getLocation(shaderProgram, immediateMode);
-
-  return shaderProgram;
-};
-
-p5.Renderer3D.prototype._getLocation = function(shaderProgram, immediateMode) {
-  var gl = this.GL;
-  gl.useProgram(shaderProgram);
-  shaderProgram.uResolution =
-    gl.getUniformLocation(shaderProgram, 'uResolution');
-  gl.uniform1f(shaderProgram.uResolution, RESOLUTION);
-
-  //vertex position Attribute
-  shaderProgram.vertexPositionAttribute =
-    gl.getAttribLocation(shaderProgram, 'aPosition');
-  gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-
-  //projection Matrix uniform
-  shaderProgram.uPMatrixUniform =
-    gl.getUniformLocation(shaderProgram, 'uProjectionMatrix');
-  //model view Matrix uniform
-  shaderProgram.uMVMatrixUniform =
-    gl.getUniformLocation(shaderProgram, 'uModelViewMatrix');
-
-  //@TODO: figure out a better way instead of if statement
-  if(immediateMode === undefined){
-    //vertex normal Attribute
-    shaderProgram.vertexNormalAttribute =
-      gl.getAttribLocation(shaderProgram, 'aNormal');
-    gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
-
-    //normal Matrix uniform
-    shaderProgram.uNMatrixUniform =
-    gl.getUniformLocation(shaderProgram, 'uNormalMatrix');
-
-    //texture coordinate Attribute
-    shaderProgram.textureCoordAttribute =
-      gl.getAttribLocation(shaderProgram, 'aTexCoord');
-    gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-
-    shaderProgram.samplerUniform =
-    gl.getUniformLocation(shaderProgram, 'uSampler');
-  }
-};
-
-p5.Renderer3D.prototype.setMatrixUniforms = function(shaderKey) {
-  var gl = this.GL;
-  var shaderProgram = this.mHash[shaderKey];
-
-  gl.useProgram(shaderProgram);
-
-  gl.uniformMatrix4fv(
-    shaderProgram.uPMatrixUniform,
-    false, this.uPMatrix.mat4);
-
-  gl.uniformMatrix4fv(
-    shaderProgram.uMVMatrixUniform,
-    false, this.uMVMatrix.mat4);
-
-  this.uNMatrix = new p5.Matrix();
-  this.uNMatrix.invert(this.uMVMatrix);
-  this.uNMatrix.transpose(this.uNMatrix);
-
-  gl.uniformMatrix4fv(
-    shaderProgram.uNMatrixUniform,
-    false, this.uNMatrix.mat4);
-};
-//////////////////////////////////////////////
-// GET CURRENT | for shader and color
-//////////////////////////////////////////////
-p5.Renderer3D.prototype._getShader = function(vertId, fragId, immediateMode) {
-  var mId = vertId+ '|' + fragId;
-  //create it and put it into hashTable
-  if(!this.materialInHash(mId)){
-    var shaderProgram = this.initShaders(vertId, fragId, immediateMode);
-    this.mHash[mId] = shaderProgram;
-  }
-  this.curShaderId = mId;
-
-  return this.mHash[this.curShaderId];
-};
-
-p5.Renderer3D.prototype._getCurShaderId = function(){
-  //if it's not defined yet
-  if(this.curShaderId === undefined){
-    //default shader: normalMaterial()
-    var mId = 'normalVert|normalFrag';
-    var shaderProgram = this.initShaders('normalVert', 'normalFrag');
-    this.mHash[mId] = shaderProgram;
-    this.curShaderId = mId;
-  }
-
-  return this.curShaderId;
-};
-
-p5.Renderer3D.prototype._getCurColor = function() {
-  //default color: gray
-  if(this.curColor === undefined) {
-    this.curColor = [0.5, 0.5, 0.5, 1.0];
-  }
-  return this.curColor;
-};
-
-//////////////////////////////////////////////
-// HASH | for material and geometry
-//////////////////////////////////////////////
-
-p5.Renderer3D.prototype.initHash = function(){
-  this.gHash = {};
-  this.mHash = {};
-};
-
-p5.Renderer3D.prototype.geometryInHash = function(gId){
-  return this.gHash[gId] !== undefined;
-};
-
-p5.Renderer3D.prototype.materialInHash = function(mId){
-  return this.mHash[mId] !== undefined;
-};
-
-//////////////////////////////////////////////
-// MATRIX
-//////////////////////////////////////////////
-
-p5.Renderer3D.prototype.initMatrix = function(){
-  this.uMVMatrix = new p5.Matrix();
-  this.uPMatrix  = new p5.Matrix();
-  this.uNMatrix = new p5.Matrix();
-};
-
-p5.Renderer3D.prototype.resetMatrix = function() {
-  this.uMVMatrix = p5.Matrix.identity();
-  //this.uPMatrix = p5.Matrix.identity();
-};
-
-//detect if user didn't set the camera
-//then call this function below
-p5.Renderer3D.prototype._setDefaultCamera = function(){
-  if(!this._setCamera){
-    var _w = this.width;
-    var _h = this.height;
-    this.uPMatrix = p5.Matrix.identity();
-    this.uPMatrix.perspective(60 / 180 * Math.PI, _w / _h, 0.1, 100);
-    this._setCamera = true;
-  }
-};
-
-/**
- * [translate description]
- * @param  {[type]} x [description]
- * @param  {[type]} y [description]
- * @param  {[type]} z [description]
- * @return {[type]}   [description]
- * @todo implement handle for components or vector as args
- */
-p5.Renderer3D.prototype.translate = function(x, y, z) {
-  //@TODO: figure out how to fit the resolution
-  x = x / RESOLUTION;
-  y = -y / RESOLUTION;
-  z = z / RESOLUTION;
-  this.uMVMatrix.translate([x,y,z]);
-  return this;
-};
-
-/**
- * Scales the Model View Matrix by a vector
- * @param  {Number | p5.Vector | Array} x [description]
- * @param  {Number} [y] y-axis scalar
- * @param  {Number} [z] z-axis scalar
- * @return {this}   [description]
- */
-p5.Renderer3D.prototype.scale = function(x,y,z) {
-  this.uMVMatrix.scale([x,y,z]);
-  return this;
-};
-
-/**
- * [rotate description]
- * @param  {Number} rad  angle in radians
- * @param  {p5.Vector | Array} axis axis to rotate around
- * @return {p5.Renderer3D}      [description]
- */
-p5.Renderer3D.prototype.rotate = function(rad, axis){
-  this.uMVMatrix.rotate(rad, axis);
-  return this;
-};
-
-/**
- * [rotateX description]
- * @param  {Number} rad radians to rotate
- * @return {[type]}     [description]
- */
-p5.Renderer3D.prototype.rotateX = function(rad) {
-  this.uMVMatrix.rotateX(rad);
-  return this;
-};
-
-/**
- * [rotateY description]
- * @param  {Number} rad rad radians to rotate
- * @return {[type]}     [description]
- */
-p5.Renderer3D.prototype.rotateY = function(rad) {
-  this.uMVMatrix.rotateY(rad);
-  return this;
-};
-
-/**
- * [rotateZ description]
- * @param  {Number} rad rad radians to rotate
- * @return {[type]}     [description]
- */
-p5.Renderer3D.prototype.rotateZ = function(rad) {
-  this.uMVMatrix.rotateZ(rad);
-  return this;
-};
-
-/**
- * pushes a copy of the model view matrix onto the
- * MV Matrix stack.
- * NOTE to self: could probably make this more readable
- * @return {[type]} [description]
- */
-p5.Renderer3D.prototype.push = function() {
-  uMVMatrixStack.push(this.uMVMatrix.copy());
-};
-
-/**
- * [pop description]
- * @return {[type]} [description]
- */
-p5.Renderer3D.prototype.pop = function() {
-  if (uMVMatrixStack.length === 0) {
-    throw new Error('Invalid popMatrix!');
-  }
-  this.uMVMatrix = uMVMatrixStack.pop();
-};
-
 module.exports = p5.Renderer3D;
+},{"../core/core":17,"../core/p5.Renderer":23,"./p5.Matrix":5,"./shaders":7}],7:[function(require,module,exports){
+/*
+Part of the Processing project - http://processing.org
 
-},{"../core/core":48,"../core/p5.Renderer":54,"./p5.Matrix":35,"./shader":38}],37:[function(_dereq_,module,exports){
-//retained mode is used by rendering 3d_primitives
+Copyright (c) 2011-13 Ben Fry and Casey Reas
 
-'use strict';
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License version 2.1 as published by the Free Software Foundation.
 
-var p5 = _dereq_('../core/core');
-var hashCount = 0;
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
 
-/**
- * createBuffer
- * @param  {String} gId  key of the geometry object
- * @param  {Array}  arr  array holding bject containing geometry information
+You should have received a copy of the GNU Lesser General
+Public License along with this library; if not, write to the
+Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+Boston, MA  02111-1307  USA
  */
-p5.Renderer3D.prototype.createBuffer = function(gId, arr) {
-
-  hashCount ++;
-  if(hashCount > 1000){
-    var key = Object.keys(this.gHash)[0];
-    delete this.gHash[key];
-    hashCount --;
-  }
-
-  var gl = this.GL;
-  this.gHash[gId] = {};
-  this.gHash[gId].len = [];
-  this.gHash[gId].vertexBuffer = [];
-  this.gHash[gId].normalBuffer = [];
-  this.gHash[gId].uvBuffer = [];
-  this.gHash[gId].indexBuffer =[];
-
-  arr.forEach(function(obj){
-    this.gHash[gId].len.push(obj.len);
-    this.gHash[gId].vertexBuffer.push(gl.createBuffer());
-    this.gHash[gId].normalBuffer.push(gl.createBuffer());
-    this.gHash[gId].uvBuffer.push(gl.createBuffer());
-    this.gHash[gId].indexBuffer.push(gl.createBuffer());
-  }.bind(this));
-};
-
 /**
- * initBuffer description
- * @param  {String} gId    key of the geometry object
- * @param  {Array}  arr    array holding bject containing geometry information
+ * @description Default full shaders for our WebGL context
  */
-p5.Renderer3D.prototype.initBuffer = function(gId, arr) {
-  this._setDefaultCamera();
-  var gl = this.GL;
-  this.createBuffer(gId, arr);
-
-  var shaderProgram = this.mHash[this._getCurShaderId()];
-
-  arr.forEach(function(obj, i){
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].vertexBuffer[i]);
-    gl.bufferData(
-      gl.ARRAY_BUFFER, new Float32Array(obj.vertices), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(
-      shaderProgram.vertexPositionAttribute,
-      3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].normalBuffer[i]);
-    gl.bufferData(
-      gl.ARRAY_BUFFER, new Float32Array(obj.vertexNormals), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(
-      shaderProgram.vertexNormalAttribute,
-      3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].uvBuffer[i]);
-    gl.bufferData(
-      gl.ARRAY_BUFFER, new Float32Array(obj.uvs), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(
-      shaderProgram.textureCoordAttribute,
-      2, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.gHash[gId].indexBuffer[i]);
-    gl.bufferData
-     (gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(obj.faces), gl.STATIC_DRAW);
-  }.bind(this));
-};
-
-/**
- * drawBuffer
- * @param  {String} gId     key of the geometery object
- */
-p5.Renderer3D.prototype.drawBuffer = function(gId) {
-  this._setDefaultCamera();
-  var gl = this.GL;
-  var shaderKey = this._getCurShaderId();
-  var shaderProgram = this.mHash[shaderKey];
-
-  this.gHash[gId].len.forEach(function(d, i){
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].vertexBuffer[i]);
-    gl.vertexAttribPointer(
-      shaderProgram.vertexPositionAttribute,
-      3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].normalBuffer[i]);
-    gl.vertexAttribPointer(
-      shaderProgram.vertexNormalAttribute,
-      3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.gHash[gId].uvBuffer[i]);
-    gl.vertexAttribPointer(
-      shaderProgram.textureCoordAttribute,
-      2, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.gHash[gId].indexBuffer[i]);
-
-    this.setMatrixUniforms(shaderKey);
-
-    gl.drawElements(
-      gl.TRIANGLES, this.gHash[gId].len[i],
-       gl.UNSIGNED_SHORT, 0);
-  }.bind(this));
-};
-
-module.exports = p5.Renderer3D;
-},{"../core/core":48}],38:[function(_dereq_,module,exports){
-
-
 module.exports = {
-  vertexColorVert:
-    "attribute vec3 aPosition;\nattribute vec4 aVertexColor;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform float uResolution;\n\nvarying vec4 vColor;\n\nvoid main(void) {\n  vec4 positionVec4 = vec4(aPosition / uResolution * vec3(1.0, -1.0, 1.0), 1.0);\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n  vColor = aVertexColor;\n}",
-  vertexColorFrag:
-    "precision mediump float;\nvarying vec4 vColor;\nvoid main(void) {\n  gl_FragColor = vColor;\n}",
-  normalVert:
-    "attribute vec3 aPosition;\nattribute vec3 aNormal;\nattribute vec2 aTexCoord;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform mat4 uNormalMatrix;\nuniform float uResolution;\n\nvarying vec3 vVertexNormal;\nvarying highp vec2 vVertTexCoord;\n\nvoid main(void) {\n  vec4 positionVec4 = vec4(aPosition / uResolution, 1.0);\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n  vVertexNormal = vec3( uNormalMatrix * vec4( aNormal, 1.0 ) );\n  vVertTexCoord = aTexCoord;\n}",
-  normalFrag:
-    "precision mediump float;\nvarying vec3 vVertexNormal;\nvoid main(void) {\n  gl_FragColor = vec4(vVertexNormal, 1.0);\n}",
-  basicFrag:
-    "precision mediump float;\nvarying vec3 vVertexNormal;\nuniform vec4 uMaterialColor;\nvoid main(void) {\n  gl_FragColor = uMaterialColor;\n}",
-  lightVert:
-    "attribute vec3 aPosition;\nattribute vec3 aNormal;\nattribute vec2 aTexCoord;\n\nuniform mat4 uModelViewMatrix;\nuniform mat4 uProjectionMatrix;\nuniform mat4 uNormalMatrix;\nuniform float uResolution;\nuniform int uAmbientLightCount;\nuniform int uDirectionalLightCount;\nuniform int uPointLightCount;\n\nuniform vec3 uAmbientColor[8];\nuniform vec3 uLightingDirection[8];\nuniform vec3 uDirectionalColor[8];\nuniform vec3 uPointLightLocation[8];\nuniform vec3 uPointLightColor[8];\nuniform bool uSpecular;\n\nvarying vec3 vVertexNormal;\nvarying vec2 vVertTexCoord;\nvarying vec3 vLightWeighting;\n\nvec3 ambientLightFactor = vec3(0.0, 0.0, 0.0);\nvec3 directionalLightFactor = vec3(0.0, 0.0, 0.0);\nvec3 pointLightFactor = vec3(0.0, 0.0, 0.0);\nvec3 pointLightFactor2 = vec3(0.0, 0.0, 0.0);\n\nvoid main(void){\n\n  vec4 positionVec4 = vec4(aPosition / uResolution, 1.0);\n  gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;\n\n  vec3 vertexNormal = vec3( uNormalMatrix * vec4( aNormal, 1.0 ) );\n  vVertexNormal = vertexNormal;\n  vVertTexCoord = aTexCoord;\n\n  vec4 mvPosition = uModelViewMatrix * vec4(aPosition / uResolution, 1.0);\n  vec3 eyeDirection = normalize(-mvPosition.xyz);\n\n  float shininess = 32.0;\n  float specularFactor = 2.0;\n  float diffuseFactor = 0.3;\n\n  for(int i = 0; i < 8; i++){\n    if(uAmbientLightCount == i) break;\n    ambientLightFactor += uAmbientColor[i];\n  }\n\n  for(int j = 0; j < 8; j++){\n    if(uDirectionalLightCount == j) break;\n    vec3 dir = uLightingDirection[j];\n    float directionalLightWeighting = max(dot(vertexNormal, dir), 0.0);\n    directionalLightFactor += uDirectionalColor[j] * directionalLightWeighting;\n  }\n\n  for(int k = 0; k < 8; k++){\n    if(uPointLightCount == k) break;\n    vec3 loc = uPointLightLocation[k];\n    //loc = loc / uResolution;\n    vec3 lightDirection = normalize(loc - mvPosition.xyz);\n\n    float directionalLightWeighting = max(dot(vertexNormal, lightDirection), 0.0);\n    pointLightFactor += uPointLightColor[k] * directionalLightWeighting;\n\n    //factor2 for specular\n    vec3 reflectionDirection = reflect(-lightDirection, vertexNormal);\n    float specularLightWeighting = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);\n\n    pointLightFactor2 += uPointLightColor[k] * (specularFactor * specularLightWeighting\n      +  directionalLightWeighting * diffuseFactor);\n  }\n  \n  if(!uSpecular){\n    vLightWeighting =  ambientLightFactor + directionalLightFactor + pointLightFactor;\n  }else{\n    vLightWeighting = ambientLightFactor + directionalLightFactor + pointLightFactor2;\n  }\n\n}",
-  lightTextureFrag:
-    "precision mediump float;\n\nuniform vec4 uMaterialColor;\nuniform sampler2D uSampler;\nuniform bool isTexture;\n\nvarying vec3 vLightWeighting;\nvarying highp vec2 vVertTexCoord;\n\nvoid main(void) {\n  if(!isTexture){\n    gl_FragColor = vec4(vec3(uMaterialColor.rgb * vLightWeighting), uMaterialColor.a);\n  }else{\n    vec4 textureColor = texture2D(uSampler, vVertTexCoord);\n    if(vLightWeighting == vec3(0., 0., 0.)){\n      gl_FragColor = textureColor;\n    }else{\n      gl_FragColor = vec4(vec3(textureColor.rgb * vLightWeighting), textureColor.a); \n    }\n  }\n}"
+  texLightVert : [
+    'uniform mat4 modelviewMatrix;',
+    'uniform mat4 transformMatrix;',
+    'uniform mat3 normalMatrix;',
+    'uniform mat4 texMatrix;',
+
+    'uniform int lightCount;',
+    'uniform vec4 lightPosition[8];',
+    'uniform vec3 lightNormal[8];',
+    'uniform vec3 lightAmbient[8];',
+    'uniform vec3 lightDiffuse[8];',
+    'uniform vec3 lightSpecular[8];',
+    'uniform vec3 lightFalloff[8];',
+    'uniform vec2 lightSpot[8];',
+
+    'attribute vec4 position;',
+    'attribute vec4 color;',
+    'attribute vec3 normal;',
+    'attribute vec2 texCoord;',
+
+    'attribute vec4 ambient;',
+    'attribute vec4 specular;',
+    'attribute vec4 emissive;',
+    'attribute float shininess;',
+
+    'varying vec4 vertColor;',
+    'varying vec4 backVertColor;',
+    'varying vec4 vertTexCoord;',
+
+    'const float zero_float = 0.0;',
+    'const float one_float = 1.0;',
+    'const vec3 zero_vec3 = vec3(0);',
+
+    'float falloffFactor(vec3 lightPos, vec3 vertPos, vec3 coeff) {',
+    'vec3 lpv = lightPos - vertPos;',
+    'vec3 dist = vec3(one_float);',
+    'dist.z = dot(lpv, lpv);',
+    'dist.y = sqrt(dist.z);',
+    'return one_float / dot(dist, coeff);',
+    '}',
+
+    'float spotFactor(vec3 lightPos,vec3 vertPos,',
+    'vec3 lightNorm,float minCos,float spotExp) {',
+    'vec3 lpv = normalize(lightPos - vertPos);',
+    'vec3 nln = -one_float * lightNorm;',
+    'float spotCos = dot(nln, lpv);',
+    'return spotCos <= minCos ? zero_float : pow(spotCos, spotExp);',
+    '}',
+    'float lambertFactor(vec3 lightDir, vec3 vecNormal) {',
+    'return max(zero_float, dot(lightDir, vecNormal));',
+    '}',
+
+    'float blinnPhongFactor(vec3 lightDir,',
+    'vec3 vertPos,vec3 vecNormal, float shine) {',
+    'vec3 np = normalize(vertPos);',
+    'vec3 ldp = normalize(lightDir - np);',
+    'return pow(max(zero_float, dot(ldp, vecNormal)), shine);',
+    '}',
+
+    'void main() {',
+      // Vertex in clip coordinates
+    'gl_Position = transformMatrix * position;',
+
+      // Vertex in eye coordinates
+    'vec3 ecVertex = vec3(modelviewMatrix * position);',
+
+      // Normal vector in eye coordinates
+    'vec3 ecNormal = normalize(normalMatrix * normal);',
+    'vec3 ecNormalInv = ecNormal * -one_float;',
+
+    // Light calculations
+    'vec3 totalAmbient = vec3(0, 0, 0);',
+
+    'vec3 totalFrontDiffuse = vec3(0, 0, 0);',
+    'vec3 totalFrontSpecular = vec3(0, 0, 0);',
+
+    'vec3 totalBackDiffuse = vec3(0, 0, 0);',
+    'vec3 totalBackSpecular = vec3(0, 0, 0);',
+
+    'for (int i = 0; i < 8; i++) {',
+    'if (lightCount == i) break;',
+
+    'vec3 lightPos = lightPosition[i].xyz;',
+    'bool isDir = zero_float < lightPosition[i].w;',
+    'float spotCos = lightSpot[i].x;',
+    'float spotExp = lightSpot[i].y;',
+
+    'vec3 lightDir;',
+    'float falloff;',
+    'float spotf;',
+
+    'if (isDir) {',
+    'falloff = one_float;',
+    'lightDir = -one_float * lightNormal[i];',
+    '} else {',
+    'falloff = falloffFactor(lightPos, ecVertex, lightFalloff[i]);',
+    'lightDir = normalize(lightPos - ecVertex);',
+    '}',
+
+    'spotf=spotExp > zero_float ? spotFactor(lightPos,',
+    'ecVertex,',
+    'lightNormal[i],',
+    'spotCos,',
+    'spotExp):one_float;',
+
+    'if (any(greaterThan(lightAmbient[i], zero_vec3))) {',
+    'totalAmbient+= lightAmbient[i] * falloff;',
+    '}',
+
+    'if (any(greaterThan(lightDiffuse[i], zero_vec3))) {',
+    'totalFrontDiffuse  += lightDiffuse[i] * falloff * spotf *',
+    'lambertFactor(lightDir, ecNormal);',
+    'totalBackDiffuse   += lightDiffuse[i] * falloff * spotf *',
+    'lambertFactor(lightDir, ecNormalInv);',
+    '}',
+
+    'if (any(greaterThan(lightSpecular[i], zero_vec3))) {',
+    'totalFrontSpecular += lightSpecular[i] * falloff * spotf * ',
+    'blinnPhongFactor(lightDir, ecVertex, ecNormal, shininess);',
+    'totalBackSpecular  += lightSpecular[i] * falloff * spotf *',
+    'blinnPhongFactor(lightDir, ecVertex, ecNormalInv, shininess);',
+    '}',
+    '}',
+
+    // Calculating final color as result of all lights (plus emissive term).
+    // Transparency is determined exclusively by the diffuse component.
+    'vertColor =vec4(totalAmbient, 0) * ambient + ',
+    'vec4(totalFrontDiffuse, 1) * color +' ,
+    'vec4(totalFrontSpecular, 0) * specular +',
+    'vec4(emissive.rgb, 0);',
+
+    'backVertColor = vec4(totalAmbient, 0) * ambient + ',
+    'vec4(totalBackDiffuse, 1) * color +',
+    'vec4(totalBackSpecular, 0) * specular +',
+    'vec4(emissive.rgb, 0);',
+
+      // Calculating texture coordinates, with r and q set both to one
+    'vertTexCoord = texMatrix * vec4(texCoord, 1.0, 1.0);',
+    '}'
+  ].join('\n'),
+  texLightFrag : [
+    'precision mediump float;',
+    'precision mediump int;',
+    'uniform sampler2D texture;',
+
+    'uniform vec2 texOffset;',
+
+    'varying vec4 vertColor;',
+    'varying vec4 backVertColor;',
+    'varying vec4 vertTexCoord;',
+
+    'void main() {',
+    'gl_FragColor = texture2D(texture,vertTexCoord.st)*',
+    '(gl_FrontFacing ? vertColor : backVertColor);',
+    '}'
+  ].join('\n'),
+  normalVert: [
+    'attribute vec3 position;',
+    'attribute vec3 normal;',
+
+    'uniform mat4 modelviewMatrix;',
+    'uniform mat4 transformMatrix;',
+    'uniform mat4 normalMatrix;',
+
+    'varying vec3 vertexNormal;',
+
+    'void main(void) {',
+    'vec3 zeroToOne = position / 1000.0;',
+    'vec4 positionVec4 = vec4(zeroToOne, 1.);',
+    'gl_Position = transformMatrix * modelviewMatrix * positionVec4;',
+    'vertexNormal = vec3( normalMatrix * vec4( normal, 1.0 ) );',
+    '}'
+  ].join('\n'),
+  normalFrag: [
+    'precision mediump float;',
+    'varying vec3 vertexNormal;',
+    'void main(void) {',
+    'gl_FragColor = vec4(vertexNormal, 1.0);',
+    '}'
+  ].join('\n'),
+  basicFrag: [
+    'precision mediump float;',
+    'varying vec3 vertexNormal;',
+    //'uniform vec3 uBasic'
+    'void main(void) {',
+    // 'gl_FragColor = vec4(vertexNormal * uBasic, 1.0);',
+    'gl_FragColor = vec4(vertexNormal * vec3(0.5, 0.5, 0.5), 1.0);',
+    '}'
+   ].join('\n'),
+  vertexColorVert:[
+    'attribute vec3 position;',
+
+    'attribute vec4 aVertexColor;',
+
+    'uniform mat4 modelviewMatrix;',
+    'uniform mat4 transformMatrix;',
+
+    'varying vec4 vColor;',
+    'void main(void) {',
+    'vec3 zeroToOne = position / 1000.0;',
+    'vec4 positionVec4 = vec4(zeroToOne, 1.);',
+    'gl_Position = transformMatrix * modelviewMatrix * positionVec4;',
+    'vColor = aVertexColor;',
+    '}'
+  ].join('\n'),
+  vertexColorFrag:[
+    'precision mediump float;',
+    'varying vec4 vColor;',
+    'void main(void) {',
+    '    gl_FragColor = vColor;',
+    '}'
+  ].join('\n')
 };
-},{}],39:[function(_dereq_,module,exports){
+},{}],8:[function(require,module,exports){
 
 'use strict';
 
-var p5 = _dereq_('./core/core');
-_dereq_('./color/p5.Color');
-_dereq_('./core/p5.Element');
-_dereq_('./typography/p5.Font');
-_dereq_('./core/p5.Graphics');
-_dereq_('./core/p5.Renderer2D');
+var p5 = require('./core/core');
+require('./color/p5.Color');
+require('./core/p5.Element');
+require('./typography/p5.Font');
+require('./core/p5.Graphics');
+require('./core/p5.Renderer2D');
 
-_dereq_('./image/p5.Image');
-_dereq_('./math/p5.Vector');
-_dereq_('./io/p5.TableRow');
-_dereq_('./io/p5.Table');
+require('./image/p5.Image');
+require('./math/p5.Vector');
+require('./io/p5.TableRow');
+require('./io/p5.Table');
 
-_dereq_('./color/creating_reading');
-_dereq_('./color/setting');
-_dereq_('./core/constants');
-_dereq_('./utilities/conversion');
-_dereq_('./utilities/array_functions');
-_dereq_('./utilities/string_functions');
-_dereq_('./core/environment');
-_dereq_('./image/image');
-_dereq_('./image/loading_displaying');
-_dereq_('./image/pixels');
-_dereq_('./io/files');
-_dereq_('./events/keyboard');
-_dereq_('./events/acceleration'); //john
-_dereq_('./events/mouse');
-_dereq_('./utilities/time_date');
-_dereq_('./events/touch');
-_dereq_('./math/math');
-_dereq_('./math/calculation');
-_dereq_('./math/random');
-_dereq_('./math/noise');
-_dereq_('./math/trigonometry');
-_dereq_('./core/rendering');
-_dereq_('./core/2d_primitives');
+require('./color/creating_reading');
+require('./color/setting');
+require('./core/constants');
+require('./utilities/conversion');
+require('./utilities/array_functions');
+require('./utilities/string_functions');
+require('./core/environment');
+require('./image/image');
+require('./image/loading_displaying');
+require('./image/pixels');
+require('./io/files');
+require('./events/keyboard');
+require('./events/acceleration'); //john
+require('./events/mouse');
+require('./utilities/time_date');
+require('./events/touch');
+require('./math/math');
+require('./math/calculation');
+require('./math/random');
+require('./math/noise');
+require('./math/trigonometry');
+require('./core/rendering');
+require('./core/2d_primitives');
 
-_dereq_('./core/attributes');
-_dereq_('./core/curves');
-_dereq_('./core/vertex');
-_dereq_('./core/structure');
-_dereq_('./core/transform');
-_dereq_('./typography/attributes');
-_dereq_('./typography/loading_displaying');
+require('./core/attributes');
+require('./core/curves');
+require('./core/vertex');
+require('./core/structure');
+require('./core/transform');
+require('./typography/attributes');
+require('./typography/loading_displaying');
 
-_dereq_('./3d/p5.Renderer3D');
-_dereq_('./3d/p5.Geometry3D');
-_dereq_('./3d/retainedMode3D');
-_dereq_('./3d/immediateMode3D');
-_dereq_('./3d/3d_primitives');
-_dereq_('./3d/p5.Matrix');
-_dereq_('./3d/material');
-_dereq_('./3d/light');
-_dereq_('./3d/shader');
-_dereq_('./3d/camera');
-_dereq_('./3d/interaction');
+require('./3d/p5.Renderer3D');
+require('./3d/p5.Geometry3D');
+require('./3d/3d_primitives');
+require('./3d/shaders');
+require('./3d/p5.Matrix');
+require('./3d/material');
 
 /**
  * _globalInit
@@ -8428,275 +2793,283 @@ if (document.readyState === 'complete') {
 }
 
 module.exports = p5;
-},{"./3d/3d_primitives":28,"./3d/camera":29,"./3d/immediateMode3D":30,"./3d/interaction":31,"./3d/light":32,"./3d/material":33,"./3d/p5.Geometry3D":34,"./3d/p5.Matrix":35,"./3d/p5.Renderer3D":36,"./3d/retainedMode3D":37,"./3d/shader":38,"./color/creating_reading":41,"./color/p5.Color":42,"./color/setting":43,"./core/2d_primitives":44,"./core/attributes":45,"./core/constants":47,"./core/core":48,"./core/curves":49,"./core/environment":50,"./core/p5.Element":52,"./core/p5.Graphics":53,"./core/p5.Renderer2D":55,"./core/rendering":56,"./core/structure":58,"./core/transform":59,"./core/vertex":60,"./events/acceleration":61,"./events/keyboard":62,"./events/mouse":63,"./events/touch":64,"./image/image":66,"./image/loading_displaying":67,"./image/p5.Image":68,"./image/pixels":69,"./io/files":70,"./io/p5.Table":71,"./io/p5.TableRow":72,"./math/calculation":73,"./math/math":74,"./math/noise":75,"./math/p5.Vector":76,"./math/random":78,"./math/trigonometry":79,"./typography/attributes":80,"./typography/loading_displaying":81,"./typography/p5.Font":82,"./utilities/array_functions":83,"./utilities/conversion":84,"./utilities/string_functions":85,"./utilities/time_date":86}],40:[function(_dereq_,module,exports){
+},{"./3d/3d_primitives":2,"./3d/material":3,"./3d/p5.Geometry3D":4,"./3d/p5.Matrix":5,"./3d/p5.Renderer3D":6,"./3d/shaders":7,"./color/creating_reading":10,"./color/p5.Color":11,"./color/setting":12,"./core/2d_primitives":13,"./core/attributes":14,"./core/constants":16,"./core/core":17,"./core/curves":18,"./core/environment":19,"./core/p5.Element":21,"./core/p5.Graphics":22,"./core/p5.Renderer2D":24,"./core/rendering":25,"./core/structure":27,"./core/transform":28,"./core/vertex":29,"./events/acceleration":30,"./events/keyboard":31,"./events/mouse":32,"./events/touch":33,"./image/image":35,"./image/loading_displaying":36,"./image/p5.Image":37,"./image/pixels":38,"./io/files":39,"./io/p5.Table":40,"./io/p5.TableRow":41,"./math/calculation":42,"./math/math":43,"./math/noise":44,"./math/p5.Vector":45,"./math/random":47,"./math/trigonometry":48,"./typography/attributes":49,"./typography/loading_displaying":50,"./typography/p5.Font":51,"./utilities/array_functions":52,"./utilities/conversion":53,"./utilities/string_functions":54,"./utilities/time_date":55}],9:[function(require,module,exports){
 /**
- * module Conversion
- * submodule Color Conversion
+ * module Utils
+ * submodule Color Utils
  * @for p5
- * @requires core
  */
 
-'use strict';
+var p5 = require('../core/core');
+
+p5.ColorUtils = {};
 
 /**
- * Conversions adapted from <http://www.easyrgb.com/math.html>.
- *
- * In these functions, hue is always in the range [0,1); all other components
- * are in the range [0,1]. 'Brightness' and 'value' are used interchangeably.
+ * For a color expressed as an HSBA array, return the corresponding RGBA value
+ * @param {Array} hsba An 'array' object that represents a list of HSB colors
+ * @param {Array} maxes An 'array' object that represents the HSB range maxes
+ * @return {Array} an array of RGBA values, on a scale of 0-255
  */
-
-var p5 = _dereq_('../core/core');
-var RGBA = [];  // We will reuse this array whenever we convert to RGBA.
-
-p5.ColorConversion = {};
-
-/**
- * Convert an HSBA array to HSLA.
- */
-p5.ColorConversion._hsbaToHSLA = function(hsba) {
-  var hue = hsba[0];
-  var sat = hsba[1];
-  var val = hsba[2];
-
-  // Calculate lightness.
-  var li = (2 - sat) * val / 2;
-
-  // Convert saturation.
-  if (li !== 0) {
-    if (li === 1) {
-      sat = 0;
-    } else if (li < 0.5) {
-      sat = sat / (2 - sat);
-    } else {
-      sat = sat * val / (2 - li * 2);
-    }
-  }
-
-  // Hue and alpha stay the same.
-  return [hue, sat, li, hsba[3]];
-};
-
-/**
- * Convert an HSBA array to RGBA.
- */
-p5.ColorConversion._hsbaToRGBA = function(hsba) {
-  var hue = hsba[0] * 6;  // We will split hue into 6 sectors.
-  var sat = hsba[1];
-  var val = hsba[2];
-
-  RGBA.length = 0;  // Clear persistent RGBA array.
-
-  if (sat === 0) {
-    RGBA = [val, val, val, hsba[3]];  // Return early if grayscale.
+p5.ColorUtils.hsbaToRGBA = function(hsba, maxes) {
+  var h = hsba[0];
+  var s = hsba[1];
+  var v = hsba[2];
+  var a = hsba[3] || maxes[3];
+  h /= maxes[0];
+  s /= maxes[1];
+  v /= maxes[2];
+  a /= maxes[3];
+  // Adapted from http://www.easyrgb.com/math.html
+  // hsv values = 0 - 1, rgb values = 0 - 255
+  var RGBA = [];
+  if(s===0){
+    RGBA = [Math.round(v*255), Math.round(v*255), Math.round(v*255), a*255];
   } else {
-    var sector = Math.floor(hue);
-    var tint1 = val * (1 - sat);
-    var tint2 = val * (1 - sat * (hue - sector));
-    var tint3 = val * (1 - sat * (1 + sector - hue));
-    var red, green, blue;
-    if (sector === 0) {  // Red to yellow.
-      red = val;
-      green = tint3;
-      blue = tint1;
-    } else if (sector === 1) {  // Yellow to green.
-      red = tint2;
-      green = val;
-      blue = tint1;
-    } else if (sector === 2) {  // Green to cyan.
-      red = tint1;
-      green = val;
-      blue = tint3;
-    } else if (sector === 3) {  // Cyan to blue.
-      red = tint1;
-      green = tint2;
-      blue = val;
-    } else if (sector === 4) {  // Blue to magenta.
-      red = tint3;
-      green = tint1;
-      blue = val;
-    } else {  // Magenta to red.
-      red = val;
-      green = tint1;
-      blue = tint2;
+    // h must be < 1
+    var var_h = h * 6;
+    if (var_h===6) {
+      var_h = 0;
     }
-    RGBA = [red, green, blue, hsba[3]];
+    //Or ... var_i = floor( var_h )
+    var var_i = Math.floor( var_h );
+    var var_1 = v*(1-s);
+    var var_2 = v*(1-s*(var_h-var_i));
+    var var_3 = v*(1-s*(1-(var_h-var_i)));
+    var r;
+    var g;
+    var b;
+    if(var_i===0){
+      r = v;
+      g = var_3;
+      b = var_1;
+    }else if(var_i===1){
+      r = var_2;
+      g = v;
+      b = var_1;
+    }else if(var_i===2){
+      r = var_1;
+      g = v;
+      b = var_3;
+    }else if(var_i===3){
+      r = var_1;
+      g = var_2;
+      b = v;
+    }else if (var_i===4){
+      r = var_3;
+      g = var_1;
+      b = v;
+    }else{
+      r = v;
+      g = var_1;
+      b = var_2;
+    }
+    RGBA = [
+      Math.round(r * 255),
+      Math.round(g * 255),
+      Math.round(b * 255),
+      a * 255
+    ];
   }
-
   return RGBA;
 };
 
 /**
- * Convert an HSLA array to HSBA.
+ * For a color expressed as an RGBA array, return the corresponding HSBA value
+ *
+ * @param {Array} rgba An 'array' object that represents a list of RGB colors
+ * @param {Array} maxes An 'array' object that represents the RGB range maxes
+ * @return {Array} an array of HSB values, scaled by the HSB-space maxes
  */
-p5.ColorConversion._hslaToHSBA = function(hsla) {
-  var hue = hsla[0];
-  var sat = hsla[1];
-  var li = hsla[2];
+p5.ColorUtils.rgbaToHSBA = function(rgba, maxes) {
+  var r = rgba[0]/maxes[0];
+  var g = rgba[1]/maxes[1];
+  var b = rgba[2]/maxes[2];
+  var a = rgba[3]/maxes[3];
 
-  // Calculate brightness.
-  var val;
-  if (li < 0.5) {
-    val = (1 + sat) * li;
-  } else {
-    val = li + sat - li * sat;
+  var min = Math.min(r, g, b); //Min. value of RGB
+  var max = Math.max(r, g, b); //Max. value of RGB
+  var delta_max = max - min;             //Delta RGB value
+
+  var h;
+  var s;
+  var v = max;
+
+  if (delta_max === 0) { //This is a gray, no chroma...
+    h = 0; //HSV results from 0 to 1
+    s = 0;
   }
+  else { //Chromatic data...
+    s = delta_max/max;
 
-  // Convert saturation.
-  sat = 2 * (val - li) / val;
+    var delta_r = ( ( ( max - r ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
+    var delta_g = ( ( ( max - g ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
+    var delta_b = ( ( ( max - b ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
 
-  // Hue and alpha stay the same.
-  return [hue, sat, val, hsla[3]];
+    if (r === max) {
+      h = delta_b - delta_g;
+    } else if (g === max) {
+      h = 1/3 + delta_r - delta_b;
+    } else if (b === max) {
+      h = 2/3 + delta_g - delta_r;
+    }
+
+    if (h < 0) {
+      h += 1;
+    }
+    if (h > 1) {
+      h -= 1;
+    }
+  }
+  return [
+      Math.round(h * 360),
+      Math.round(s * 100),
+      Math.round(v * 100),
+      a * 1
+    ];
 };
 
 /**
- * Convert an HSLA array to RGBA.
+ * For a color expressed as an HSLA array, return the corresponding RGBA value
  *
- * We need to change basis from HSLA to something that can be more easily be
- * projected onto RGBA. We will choose hue and brightness as our first two
- * components, and pick a convenient third one ('zest') so that we don't need
- * to calculate formal HSBA saturation.
+ * @param  {Array} hsla An 'array' object that represents a list of HSL colors
+ * @param  {Array} maxes An 'array' object that represents the HSL range maxes
+ *
+ * @return {Array} an array of RGBA values, on a scale of 0-255
  */
-p5.ColorConversion._hslaToRGBA = function(hsla){
-  var hue = hsla[0] * 6;  // We will split hue into 6 sectors.
-  var sat = hsla[1];
-  var li = hsla[2];
-
-  RGBA.length = 0;  // Clear persistent RGBA array.
-
-  if (sat === 0) {
-    RGBA = [li, li, li, hsla[3]]; // Return early if grayscale.
+p5.ColorUtils.hslaToRGBA = function(hsla, maxes){
+  var h = hsla[0];
+  var s = hsla[1];
+  var l = hsla[2];
+  var a = hsla[3] || maxes[3];
+  h /= maxes[0];
+  s /= maxes[1];
+  l /= maxes[2];
+  a /= maxes[3];
+  // Adapted from http://www.easyrgb.com/math.html
+  // hsl values = 0 - 1, rgb values = 0 - 255
+  var rgba = [];
+  if(s === 0){
+    rgba = [Math.round(l*255), Math.round(l*255), Math.round(l*255), a];
   } else {
+    var m, n, r, g, b;
 
-    // Calculate brightness.
-    var val;
-    if (li < 0.5) {
-      val = (1 + sat) * li;
-    } else {
-      val = li + sat - li * sat;
-    }
+    n = l < 0.5 ? l * (1 + s) : (l + s) - (s * l);
+    m = 2 * l - n;
 
-    // Define zest.
-    var zest = 2 * li - val;
-
-    // Implement projection (project onto green by default).
-    var hzvToRGB = function(hue, zest, val) {
-      if (hue < 0) {  // Hue must wrap to allow projection onto red and blue.
-        hue += 6;
-      } else if (hue >= 6) {
-        hue -= 6;
+    var convert = function(x, y, hue){
+      if (hue < 0) {
+        hue += 1;
+      } else if (hue > 1) {
+        hue -= 1;
       }
-      if (hue < 1) {  // Red to yellow (increasing green).
-        return (zest + (val - zest) * hue);
-      } else if (hue < 3) {  // Yellow to cyan (greatest green).
-        return val;
-      } else if (hue < 4) {  // Cyan to blue (decreasing green).
-        return (zest + (val - zest) * (4 - hue));
-      } else {  // Blue to red (least green).
-        return zest;
+
+      if ( ( 6 * hue ) < 1 ) {
+        return ( x + ( y - x ) * 6 * hue );
+      } else if ( ( 2 * hue ) < 1 ) {
+        return ( y );
+      } else if ( ( 3 * hue ) < 2 ) {
+        return ( x + ( y - x ) * ( ( 2 / 3 ) - hue ) * 6 );
+      } else {
+        return x;
       }
     };
 
-    // Perform projections, offsetting hue as necessary.
-    RGBA = [hzvToRGB(hue + 2, zest, val),
-            hzvToRGB(hue    , zest, val),
-            hzvToRGB(hue - 2, zest, val),
-            hsla[3]];
+    r = convert( m, n, h + ( 1 / 3 ) );
+    g = convert( m, n, h );
+    b = convert( m, n, h - ( 1 / 3 ) );
+
+    rgba = [
+      Math.round(r * 255),
+      Math.round(g * 255),
+      Math.round(b * 255),
+      Math.round(a * 255)
+    ];
+
   }
 
-  return RGBA;
+  return rgba;
+
 };
 
 /**
- * Convert an RGBA array to HSBA.
+ * For a color expressed as an RGBA array, return the corresponding HSBA value
+ *
+ * @param {Array} rgba An 'array' object that represents a list of RGB colors
+ * @param {Array} maxes An 'array' object that represents the RGB range maxes
+ * @return {Array} an array of HSL values, scaled by the HSL-space maxes
  */
-p5.ColorConversion._rgbaToHSBA = function(rgba) {
-  var red = rgba[0];
-  var green = rgba[1];
-  var blue = rgba[2];
+p5.ColorUtils.rgbaToHSLA = function(rgba, maxes) {
+  var r = rgba[0]/maxes[0];
+  var g = rgba[1]/maxes[1];
+  var b = rgba[2]/maxes[2];
+  var a = rgba[3]/maxes[3];
 
-  var val = Math.max(red, green, blue);
-  var chroma = val - Math.min(red, green, blue);
+  var min = Math.min(r, g, b); //Min. value of RGB
+  var max = Math.max(r, g, b); //Max. value of RGB
+  var delta_max = max - min;             //Delta RGB value
 
-  var hue, sat;
-  if (chroma === 0) {  // Return early if grayscale.
-    hue = 0;
-    sat = 0;
-  }
-  else {
-    sat = chroma / val;
-    if (red === val) {  // Magenta to yellow.
-      hue = (green - blue) / chroma;
-    } else if (green === val) { // Yellow to cyan.
-      hue = 2 + (blue - red) / chroma;
-    } else if (blue === val) {  // Cyan to magenta.
-      hue = 4 + (red - green) / chroma;
+  var h;
+  var s;
+  var l = (max + min) / 2;
+
+  var delta_r;
+  var delta_g;
+  var delta_b;
+
+  if (delta_max === 0) { // This is a gray, no chroma...
+    h = 0;             // HSL results from 0 to 1
+    s = 0;
+  } else {              // Chromatic data...
+
+    delta_r = ( ( ( max - r ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
+    delta_g = ( ( ( max - g ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
+    delta_b = ( ( ( max - b ) / 6 ) + ( delta_max / 2 ) ) / delta_max;
+
+    if ( r === max ){
+      h = delta_b - delta_g;
+    } else if ( g === max ){
+      h = ( 1 / 3 ) + delta_r - delta_b;
+    } else if ( b === max ) {
+      h = ( 2 / 3 ) + delta_g - delta_r;
     }
-    if (hue < 0) {  // Confine hue to the interval [0, 1).
-      hue += 6;
-    } else if (hue >= 6) {
-      hue -= 6;
+
+    if ( h < 0 ) {
+      h += 1;
     }
-  }
 
-  return [hue / 6, sat, val, rgba[3]];
-};
+    if ( h > 1 ) {
+      h -= 1;
+    }
 
-/**
- * Convert an RGBA array to HSLA.
- */
-p5.ColorConversion._rgbaToHSLA = function(rgba) {
-  var red = rgba[0];
-  var green = rgba[1];
-  var blue = rgba[2];
-
-  var val = Math.max(red, green, blue);
-  var min = Math.min(red, green, blue);
-  var li = val + min;  // We will halve this later.
-  var chroma = val - min;
-
-  var hue, sat;
-  if (chroma === 0) {  // Return early if grayscale.
-    hue = 0;
-    sat = 0;
-  } else {
-    if (li < 1) {
-      sat = chroma / li;
+    if ( l < 0.5 ){
+      s = delta_max / ( max + min );
     } else {
-      sat = chroma / (2 - chroma);
+      s = delta_max / ( 2 - max - min );
     }
-    if (red === val) {  // Magenta to yellow.
-      hue = (green - blue) / chroma;
-    } else if (green === val) {  // Yellow to cyan.
-      hue = 2 + (blue - red) / chroma;
-    } else if (blue === val) {  // Cyan to magenta.
-      hue = 4 + (red - green) / chroma;
-    }
-    if (hue < 0) {  // Confine hue to the interval [0, 1).
-      hue += 6;
-    } else if (hue >= 6) {
-      hue -= 6;
-    }
-  }
 
-  return [hue / 6, sat, li / 2, rgba[3]];
+  }
+  return [
+      Math.round(h * 360),
+      Math.round(s * 100),
+      Math.round(l * 100),
+      a * 1
+    ];
 };
 
-module.exports = p5.ColorConversion;
+module.exports = p5.ColorUtils;
 
-},{"../core/core":48}],41:[function(_dereq_,module,exports){
+},{"../core/core":17}],10:[function(require,module,exports){
 /**
  * @module Color
  * @submodule Creating & Reading
  * @for p5
  * @requires core
- * @requires constants
  */
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
-_dereq_('./p5.Color');
+var p5 = require('../core/core');
+require('./p5.Color');
 
 /**
  * Extracts the alpha value from a color or pixel array.
@@ -8718,14 +3091,14 @@ _dereq_('./p5.Color');
  */
 p5.prototype.alpha = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getAlpha();
+    return this.color(c).getAlpha();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
 };
 
 /**
- * Extracts the blue value from a color or pixel array.
+ * Extracts the blue value from a color or a pixel array.
  *
  * @method blue
  * @param {Object} obj p5.Color object or pixel array
@@ -8745,17 +3118,17 @@ p5.prototype.alpha = function(c) {
  */
 p5.prototype.blue = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getBlue();
+    return this.color(c).getBlue();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
 };
 
 /**
- * Extracts the HSB brightness value from a color or pixel array.
+ * Extracts the brightness value from a color.
  *
  * @method brightness
- * @param {Object} color p5.Color object or pixel array
+ * @param {Object} color p5.Color object
  * @example
  * <div>
  * <code>
@@ -8772,7 +3145,7 @@ p5.prototype.blue = function(c) {
  */
 p5.prototype.brightness = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getBrightness();
+    return this.color(c).getBrightness();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
@@ -8808,7 +3181,7 @@ p5.prototype.brightness = function(c) {
  * @example
  * <div>
  * <code>
- * var c = color(255, 204, 0);  // Define color 'c'
+ * c = color(255, 204, 0);  // Define color 'c'
  * fill(c);  // Use color variable 'c' as fill color
  * noStroke();  // Don't draw a stroke around shapes
  * rect(30, 20, 55, 55);  // Draw rectangle
@@ -8817,14 +3190,14 @@ p5.prototype.brightness = function(c) {
  *
  * <div>
  * <code>
- * var c = color(255, 204, 0);  // Define color 'c'
+ * c = color(255, 204, 0);  // Define color 'c'
  * fill(c);  // Use color variable 'c' as fill color
  * noStroke();  // Don't draw a stroke around shapes
  * ellipse(25, 25, 80, 80);  // Draw left circle
  *
  * // Using only one value with color()
  * // generates a grayscale value.
- * var c = color(65);  // Update 'c' with grayscale value
+ * c = color(65);  // Update 'c' with grayscale value
  * fill(c);  // Use updated 'c' as fill color
  * ellipse(75, 75, 80, 80);  // Draw right circle
  * </code>
@@ -8833,7 +3206,7 @@ p5.prototype.brightness = function(c) {
  * <div>
  * <code>
  * // Named SVG & CSS colors may be used,
- * var c = color('magenta');
+ * c = color('magenta');
  * fill(c);  // Use 'c' as fill color
  * noStroke();  // Don't draw a stroke around shapes
  * rect(20, 20, 60, 60);  // Draw rectangle
@@ -8843,80 +3216,53 @@ p5.prototype.brightness = function(c) {
  * <div>
  * <code>
  * // as can hex color codes:
- * noStroke();  // Don't draw a stroke around shapes
- * var c = color('#0f0');
+ * c = color('#4F66A1');
  * fill(c);  // Use 'c' as fill color
- * rect(0, 10, 45, 80);  // Draw rectangle
- *
- * c = color('#00ff00');
- * fill(c);  // Use updated 'c' as fill color
- * rect(55, 10, 45, 80);  // Draw rectangle
+ * noStroke();  // Don't draw a stroke around shapes
+ * rect(20, 20, 60, 60);  // Draw rectangle
  * </code>
  * </div>
  *
  * <div>
  * <code>
  * // RGB and RGBA color strings are also supported:
- * // these all set to the same color (solid blue)
- * var c;
- * noStroke();  // Don't draw a stroke around shapes
+ * // these all set 'c' to the same color (solid blue)
  * c = color('rgb(0,0,255)');
- * fill(c); // Use 'c' as fill color
- * rect(10, 10, 35, 35);  // Draw rectangle
- *
  * c = color('rgb(0%, 0%, 100%)');
- * fill(c); // Use updated 'c' as fill color
- * rect(55, 10, 35, 35);  // Draw rectangle
- *
  * c = color('rgba(0, 0, 255, 1)');
- * fill(c); // Use updated 'c' as fill color
- * rect(10, 55, 35, 35);  // Draw rectangle
- *
  * c = color('rgba(0%, 0%, 100%, 1)');
- * fill(c); // Use updated 'c' as fill color
- * rect(55, 55, 35, 35);  // Draw rectangle
+ * fill(c);  // Use 'c' as fill color
+ * noStroke();  // Don't draw a stroke around shapes
+ * rect(20, 20, 60, 60);  // Draw rectangle
  * </code>
  * </div>
+ *
  *
  * <div>
  * <code>
  * // HSL color is also supported and can be specified
  * // by value
- * var c;
- * noStroke();  // Don't draw a stroke around shapes
- * c = color('hsl(160, 100%, 50%)');
+ * colorMode(HSL)
+ * c = color(156, 100, 50, 1);
  * fill(c);  // Use 'c' as fill color
- * rect(0, 10, 45, 80);  // Draw rectangle
- *
- * c = color('hsla(160, 100%, 50%, 0.5)');
- * fill(c); // Use updated 'c' as fill color
- * rect(55, 10, 45, 80);  // Draw rectangle
+ * noStroke();  // Don't draw a stroke around shapes
+ * rect(20, 20, 60, 60);  // Draw rectangle
  * </code>
  * </div>
  *
  * <div>
  * <code>
- * // HSB color is also supported and can be specified
- * // by value
- * var c;
- * noStroke();  // Don't draw a stroke around shapes
- * c = color('hsb(160, 100%, 50%)');
+ * // or by string
+ * c = color('hsla(156, 100%, 50%, 1)');
  * fill(c);  // Use 'c' as fill color
- * rect(0, 10, 45, 80);  // Draw rectangle
- *
- * c = color('hsba(160, 100%, 50%, 0.5)');
- * fill(c); // Use updated 'c' as fill color
- * rect(55, 10, 45, 80);  // Draw rectangle
+ * noStroke();  // Don't draw a stroke around shapes
+ * rect(20, 20, 60, 60);  // Draw rectangle
  * </code>
  * </div>
  *
- * <div>
- * <code>
- * var c;  // Declare color 'c'
- * noStroke();  // Don't draw a stroke around shapes
  *
- * // If no colorMode is specified, then the
- * // default of RGB with scale of 0-255 is used.
+ * // if switching from RGB to HSB or HSL both modes must be declared
+ * colorMode(RGB, 255);  // Use RGB with scale of 0-255
  * c = color(50, 55, 100);  // Create a color for 'c'
  * fill(c);  // Use color variable 'c' as fill color
  * rect(0, 10, 45, 80);  // Draw left rect
@@ -8928,21 +3274,21 @@ p5.prototype.brightness = function(c) {
  * </code>
  * </div>
  */
-p5.prototype.color = function() {
+p5.prototype.color = function () {
   if (arguments[0] instanceof p5.Color) {
-    return arguments[0];  // Do nothing if argument is already a color object.
+    return arguments[0];
   } else if (arguments[0] instanceof Array) {
     return new p5.Color(this, arguments[0]);
   } else {
-    return new p5.Color(this, arguments);
+    var args = Array.prototype.slice.call(arguments);
+    return new p5.Color(this, args);
   }
 };
-
 /**
  * Extracts the green value from a color or pixel array.
  *
  * @method green
- * @param {Object} color p5.Color object or pixel array
+ * @param {Object} color p5.Color object
  * @example
  * <div>
  * <code>
@@ -8959,23 +3305,17 @@ p5.prototype.color = function() {
  */
 p5.prototype.green = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getGreen();
+    return this.color(c).getGreen();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
 };
 
 /**
- * Extracts the hue value from a color or pixel array.
- *
- * Hue exists in both HSB and HSL. This function will return the
- * HSB-normalized hue when supplied with an HSB color object (or when supplied
- * with a pixel array while the color mode is HSB), but will default to the
- * HSL-normalized hue otherwise. (The values will only be different if the
- * maximum hue setting for each system is different.)
+ * Extracts the hue value from a color.
  *
  * @method hue
- * @param {Object} color p5.Color object or pixel array
+ * @param {Object} color p5.Color object
  * @example
  * <div>
  * <code>
@@ -8991,23 +3331,27 @@ p5.prototype.green = function(c) {
  * </div>
  */
 p5.prototype.hue = function(c) {
-  if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getHue();
-  } else {
-    throw new Error('Needs p5.Color or pixel array as argument.');
+  if (!(c instanceof p5.Color)) {
+    throw new Error('Needs p5.Color as argument.');
   }
+  return c.getHue();
 };
 
 /**
- * Blends two colors to find a third color somewhere between them. The amt
- * parameter is the amount to interpolate between the two values where 0.0
- * equal to the first color, 0.1 is very near the first color, 0.5 is halfway
- * in between, etc. An amount below 0 will be treated as 0. Likewise, amounts
- * above 1 will be capped at 1. This is different from the behavior of lerp(),
- * but necessary because otherwise numbers outside the range will produce
- * strange and unexpected colors.
+ * Calculates a color or colors between two color at a specific increment,
+ * using gamma correction to blend colors in the linear RGB space.
+ * The amt parameter is the amount to interpolate between the two values
+ * where 0.0 equal to the first point, 0.1 is very near the first point,
+ * 0.5 is halfway in between, etc. An amount below 0 will be treated as 0.
+ * Likewise, amounts above 1 will be capped at 1. This is different from
+ * the behavior of lerp(), but necessary because otherwise numbers outside
+ * the range will produce strange and unexpected colors.
  *
- * The way that colours are interpolated depends on the current color mode.
+ * The regular RGB color representation stores the square root of the
+ * displayed color, not the value itself. Your monitor behaves as if it
+ * squares the color values before displaying it. lerpColor first transforms
+ * colors into the linear color space before blending, to correctly mix the
+ * colors as two rays of light.
  *
  * @method lerpColor
  * @param  {Array/Number} c1  interpolate from this color
@@ -9017,12 +3361,10 @@ p5.prototype.hue = function(c) {
  * @example
  * <div>
  * <code>
- * colorMode(RGB);
  * stroke(255);
  * background(51);
- * from = color(218, 165, 32);
- * to = color(72, 61, 139);
- * colorMode(RGB);  // Try changing to HSB.
+ * from = color(204, 102, 0);
+ * to = color(0, 102, 153);
  * interA = lerpColor(from, to, .33);
  * interB = lerpColor(from, to, .66);
  * fill(from);
@@ -9036,56 +3378,33 @@ p5.prototype.hue = function(c) {
  * </code>
  * </div>
  */
-p5.prototype.lerpColor = function(c1, c2, amt) {
-  var mode = this._renderer._colorMode;
-  var maxes = this._renderer._colorMaxes;
-  var l0, l1, l2, l3;
-  var fromArray, toArray;
-
-  if (mode === constants.RGB) {
-    fromArray = c1.levels.map(function(level) {
-      return level / 255;
-    });
-    toArray = c2.levels.map(function(level) {
-      return level / 255;
-    });
-  } else if (mode === constants.HSB) {
-    c1._getBrightness();  // Cache hsba so it definitely exists.
-    c2._getBrightness();
-    fromArray = c1.hsba;
-    toArray = c2.hsba;
-  } else if (mode === constants.HSL) {
-    c1._getLightness();  // Cache hsla so it definitely exists.
-    c2._getLightness();
-    fromArray = c1.hsla;
-    toArray = c2.hsla;
-  } else {
-    throw new Error (mode + 'cannot be used for interpolation.');
-  }
-
-  // Prevent extrapolation.
+p5.prototype.lerpColor = function (c1, c2, amt) {
   amt = Math.max(Math.min(amt, 1), 0);
-
-  // Perform interpolation.
-  l0 = this.lerp(fromArray[0], toArray[0], amt);
-  l1 = this.lerp(fromArray[1], toArray[1], amt);
-  l2 = this.lerp(fromArray[2], toArray[2], amt);
-  l3 = this.lerp(fromArray[3], toArray[3], amt);
-
-  // Scale components.
-  l0 *= maxes[mode][0];
-  l1 *= maxes[mode][1];
-  l2 *= maxes[mode][2];
-  l3 *= maxes[mode][3];
-
-  return this.color(l0, l1, l2, l3);
+  if (c1 instanceof Array) {
+    var c = [];
+    for (var i = 0; i < c1.length; i++) {
+      c.push(Math.sqrt(p5.prototype.lerp(c1[i]*c1[i], c2[i]*c2[i], amt)));
+    }
+    return c;
+  } else if (c1 instanceof p5.Color) {
+    var pc = [];
+    for (var j = 0; j < 4; j++) {
+      pc.push(Math.sqrt(p5.prototype.lerp(
+        c1.rgba[j]*c1.rgba[j],
+        c2.rgba[j]*c2.rgba[j],
+        amt)));
+    }
+    return new p5.Color(this, pc);
+  } else {
+    return Math.sqrt(p5.prototype.lerp(c1*c1, c2*c2, amt));
+  }
 };
 
 /**
- * Extracts the HSL lightness value from a color or pixel array.
+ * Extracts the lightness value from a color.
  *
  * @method lightness
- * @param {Object} color p5.Color object or pixel array
+ * @param {Object} color p5.Color object
  * @example
  * <div>
  * <code>
@@ -9100,9 +3419,10 @@ p5.prototype.lerpColor = function(c1, c2, amt) {
  * </code>
  * </div>
  */
+
 p5.prototype.lightness = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getLightness();
+    return this.color(c).getLightness();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
@@ -9126,35 +3446,20 @@ p5.prototype.lightness = function(c) {
  * rect(50, 20, 35, 60);  // Draw right rectangle
  * </code>
  * </div>
- *
- * <div>
- * <code>
- * colorMode(RGB, 255);
- * var c = color(127, 255, 0);
- * colorMode(RGB, 1);
- * var myColor = red(c);
- * print(myColor);
- * </code>
- * </div>
  */
 p5.prototype.red = function(c) {
   if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getRed();
+    return this.color(c).getRed();
   } else {
     throw new Error('Needs p5.Color or pixel array as argument.');
   }
 };
 
 /**
- * Extracts the saturation value from a color or pixel array.
- *
- * Saturation is scaled differently in HSB and HSL. This function will return
- * the HSB saturation when supplied with an HSB color object (or when supplied
- * with a pixel array while the color mode is HSB), but will default to the
- * HSL saturation otherwise.
+ * Extracts the saturation value from a color.
  *
  * @method saturation
- * @param {Object} color p5.Color object or pixel array
+ * @param {Object} color p5.Color object
  * @example
  * <div>
  * <code>
@@ -9170,322 +3475,317 @@ p5.prototype.red = function(c) {
  * </div>
  */
 p5.prototype.saturation = function(c) {
-  if (c instanceof p5.Color || c instanceof Array) {
-    return this.color(c)._getSaturation();
-  } else {
-    throw new Error('Needs p5.Color or pixel array as argument.');
+  if (!(c instanceof p5.Color)) {
+    throw new Error('Needs p5.Color as argument.');
   }
+  return c.getSaturation();
 };
+
+
 
 module.exports = p5;
 
-},{"../core/constants":47,"../core/core":48,"./p5.Color":42}],42:[function(_dereq_,module,exports){
+},{"../core/core":17,"./p5.Color":11}],11:[function(require,module,exports){
 /**
  * @module Color
  * @submodule Creating & Reading
  * @for p5
- * @requires core
- * @requires constants
- * @requires color_conversion
  */
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
-var color_conversion = _dereq_('./color_conversion');
+var p5 = require('../core/core');
+var color_utils = require('./color_utils');
+var constants = require('../core/constants');
 
 /**
- * We define colors to be immutable objects. Each color stores the color mode
- * and level maxes that applied at the time of its construction. These are
- * used to interpret the input arguments and to format the output e.g. when
- * saturation() is requested.
- *
- * Internally we store an array representing the ideal RGBA values in floating
- * point form, normalized from 0 to 1. From this we calculate the closest
- * screen color (RGBA levels from 0 to 255) and expose this to the renderer.
- *
- * We also cache normalized, floating point components of the color in various
- * representations as they are calculated. This is done to prevent repeating a
- * conversion that has already been performed.
  *
  * @class p5.Color
  * @constructor
  */
-p5.Color = function(pInst, vals) {
+p5.Color = function (pInst, vals) {
+  this.maxArr = pInst._colorMaxes[pInst._colorMode];
+  this.color_array = p5.Color._getFormattedColor.apply(pInst, vals);
+  var isHSB = pInst._colorMode === constants.HSB,
+      isRGB = pInst._colorMode === constants.RGB,
+      isHSL = pInst._colorMode === constants.HSL;
 
-  // Record color mode and maxes at time of construction.
-  this.mode = pInst._renderer._colorMode;
-  this.maxes = pInst._renderer._colorMaxes;
-
-  // Calculate normalized RGBA values.
-  if (this.mode !== constants.RGB &&
-      this.mode !== constants.HSL &&
-      this.mode !== constants.HSB) {
-    throw new Error(this.mode + ' is an invalid colorMode.');
+  if (isRGB) {
+    this.rgba = this.color_array;
+  } else if (isHSL) {
+    this.hsla = this.color_array;
+    this.rgba = color_utils.hslaToRGBA(this.color_array, this.maxArr);
+  } else if (isHSB) {
+    this.hsba = this.color_array;
+    this.rgba = color_utils.hsbaToRGBA(this.color_array, this.maxArr);
   } else {
-    this._array = p5.Color._parseInputs.apply(pInst, vals);
+    throw new Error(pInst._colorMode + 'is an invalid colorMode.');
   }
-
-  // Expose closest screen color.
-  this.levels = this._array.map(function(level) {
-    return Math.round(level * 255);
-  });
 
   return this;
 };
 
+p5.Color.prototype.getHue = function() {
+  // Hue is consistent in both HSL & HSB
+  if (this.hsla || this.hsba) {
+    return this.hsla ? this.hsla[0] : this.hsba[0];
+  } else {
+    this.hsla = color_utils.rgbaToHSLA(this.color_array, this.maxArr);
+    return this.hsla[0];
+  }
+};
+
+p5.Color.prototype.getSaturation = function() {
+  // Saturation exists in both HSB and HSL, but returns different values
+  // We are preferring HSL here (because it is a web color space)
+  // until the global flag issue can be resolved
+  if (this.hsla) {
+    return this.hsla[1];
+  } else if (this.hsba) {
+    return this.hsba[1];
+  } else {
+    this.hsla = color_utils.rgbaToHSLA(this.color_array, this.maxArr);
+    return this.hsla[1];
+  }
+};
+
+// Brightness only exists as an HSB value
+p5.Color.prototype.getBrightness = function() {
+  if (this.hsba) {
+    return this.hsba[2];
+  } else {
+    this.hsba = color_utils.rgbaToHSBA(this.color_array, this.maxArr);
+    return this.hsba[2];
+  }
+};
+
+// Lightness only exists as an HSL value
+p5.Color.prototype.getLightness = function() {
+  if (this.hsla) {
+    return this.hsla[2];
+  } else {
+    this.hsla = color_utils.rgbaToHSLA(this.color_array, this.maxArr);
+    return this.hsla[2];
+  }
+};
+
+p5.Color.prototype.getRed = function() {
+  return this.rgba[0];
+};
+
+p5.Color.prototype.getGreen = function() {
+  return this.rgba[1];
+};
+
+p5.Color.prototype.getBlue = function() {
+  return this.rgba[2];
+};
+
+p5.Color.prototype.getAlpha = function() {
+  // Again this is a little sleight of hand until the global flag
+  // issue is resolved. The presumption is that if alpha has been
+  // specified in 0-1 space, the user wants that value out
+  if (this.hsba || this.hsla) {
+    return this.hsla ? this.hsla[3] : this.hsba[3];
+  } else {
+    return this.rgba[3];
+  }
+};
+
 p5.Color.prototype.toString = function() {
-  var a = this.levels;
-  a[3] = this._array[3];  // String representation uses normalized alpha.
-  return 'rgba('+a[0]+','+a[1]+','+a[2]+','+ a[3] +')';
-};
-
-p5.Color.prototype._getAlpha = function() {
-  return this._array[3] * this.maxes[this.mode][3];
-};
-
-p5.Color.prototype._getBlue = function() {
-  return this._array[2] * this.maxes[constants.RGB][2];
-};
-
-p5.Color.prototype._getBrightness = function() {
-  if (!this.hsba) {
-    this.hsba = color_conversion._rgbaToHSBA(this._array);
+  var a = this.rgba;
+  for (var i=0; i<3; i++) {
+    a[i] = Math.floor(a[i]);
   }
-  return this.hsba[2] * this.maxes[constants.HSB][2];
-};
-
-p5.Color.prototype._getGreen = function() {
-  return this._array[1] * this.maxes[constants.RGB][1];
+  var alpha = typeof a[3] !== 'undefined' ? a[3] / 255 : 1;
+  return 'rgba('+a[0]+','+a[1]+','+a[2]+','+ alpha +')';
 };
 
 /**
- * Hue is the same in HSB and HSL, but the maximum value may be different.
- * This function will return the HSB-normalized saturation when supplied with
- * an HSB color object, but will default to the HSL-normalized saturation
- * otherwise.
+ * These Regular Expressions are used to build up the patterns for matching
+ * viable CSS color strings: fragmenting the regexes in this way increases
+ * the legibility and comprehensibility of the code
  */
-p5.Color.prototype._getHue = function() {
-  if (this.mode === constants.HSB) {
-    if (!this.hsba) {
-      this.hsba = color_conversion._rgbaToHSBA(this._array);
-    }
-    return this.hsba[0] * this.maxes[constants.HSB][0];
-  } else {
-    if (!this.hsla) {
-      this.hsla = color_conversion._rgbaToHSLA(this._array);
-    }
-    return this.hsla[0] * this.maxes[constants.HSL][0];
-  }
-};
+// Match any number of whitespace characters (including no whitespace)
+var WHITESPACE = /\s*/;
+// Match whole-number values, e.g `255` or `79`
+var INTEGER = /(\d{1,3})/;
+// Match decimal values, e.g `129.6`, `79`, or `.9`
+// Note: R, G or B values of `.9` are not parsed by IE: however, they are
+// supported here to provide more consistent color string parsing
+var DECIMAL = /((?:\d+(?:\.\d+)?)|(?:\.\d+))/;
+// Match decimal values followed by a percent sign
+var PERCENT = new RegExp(DECIMAL.source + '%');
 
-p5.Color.prototype._getLightness = function() {
-  if (!this.hsla) {
-    this.hsla = color_conversion._rgbaToHSLA(this._array);
-  }
-  return this.hsla[2] * this.maxes[constants.HSL][2];
-};
-
-p5.Color.prototype._getRed = function() {
-  return this._array[0] * this.maxes[constants.RGB][0];
-};
-
-/**
- * Saturation is scaled differently in HSB and HSL. This function will return
- * the HSB saturation when supplied with an HSB color object, but will default
- * to the HSL saturation otherwise.
- */
-p5.Color.prototype._getSaturation = function() {
-  if (this.mode === constants.HSB) {
-    if (!this.hsba) {
-      this.hsba = color_conversion._rgbaToHSBA(this._array);
-    }
-    return this.hsba[1] * this.maxes[constants.HSB][1];
-  } else {
-    if (!this.hsla) {
-      this.hsla = color_conversion._rgbaToHSLA(this._array);
-    }
-    return this.hsla[1] * this.maxes[constants.HSL][1];
-  }
-};
-
-/**
- * CSS named colors.
- */
 var namedColors = {
-  aliceblue:             '#f0f8ff',
-  antiquewhite:          '#faebd7',
-  aqua:                  '#00ffff',
-  aquamarine:            '#7fffd4',
-  azure:                 '#f0ffff',
-  beige:                 '#f5f5dc',
-  bisque:                '#ffe4c4',
-  black:                 '#000000',
-  blanchedalmond:        '#ffebcd',
-  blue:                  '#0000ff',
-  blueviolet:            '#8a2be2',
-  brown:                 '#a52a2a',
-  burlywood:             '#deb887',
-  cadetblue:             '#5f9ea0',
-  chartreuse:            '#7fff00',
-  chocolate:             '#d2691e',
-  coral:                 '#ff7f50',
-  cornflowerblue:        '#6495ed',
-  cornsilk:              '#fff8dc',
-  crimson:               '#dc143c',
-  cyan:                  '#00ffff',
-  darkblue:              '#00008b',
-  darkcyan:              '#008b8b',
-  darkgoldenrod:         '#b8860b',
-  darkgray:              '#a9a9a9',
-  darkgreen:             '#006400',
-  darkgrey:              '#a9a9a9',
-  darkkhaki:             '#bdb76b',
-  darkmagenta:           '#8b008b',
-  darkolivegreen:        '#556b2f',
-  darkorange:            '#ff8c00',
-  darkorchid:            '#9932cc',
-  darkred:               '#8b0000',
-  darksalmon:            '#e9967a',
-  darkseagreen:          '#8fbc8f',
-  darkslateblue:         '#483d8b',
-  darkslategray:         '#2f4f4f',
-  darkslategrey:         '#2f4f4f',
-  darkturquoise:         '#00ced1',
-  darkviolet:            '#9400d3',
-  deeppink:              '#ff1493',
-  deepskyblue:           '#00bfff',
-  dimgray:               '#696969',
-  dimgrey:               '#696969',
-  dodgerblue:            '#1e90ff',
-  firebrick:             '#b22222',
-  floralwhite:           '#fffaf0',
-  forestgreen:           '#228b22',
-  fuchsia:               '#ff00ff',
-  gainsboro:             '#dcdcdc',
-  ghostwhite:            '#f8f8ff',
-  gold:                  '#ffd700',
-  goldenrod:             '#daa520',
-  gray:                  '#808080',
-  green:                 '#008000',
-  greenyellow:           '#adff2f',
-  grey:                  '#808080',
-  honeydew:              '#f0fff0',
-  hotpink:               '#ff69b4',
-  indianred:             '#cd5c5c',
-  indigo:                '#4b0082',
-  ivory:                 '#fffff0',
-  khaki:                 '#f0e68c',
-  lavender:              '#e6e6fa',
-  lavenderblush:         '#fff0f5',
-  lawngreen:             '#7cfc00',
-  lemonchiffon:          '#fffacd',
-  lightblue:             '#add8e6',
-  lightcoral:            '#f08080',
-  lightcyan:             '#e0ffff',
-  lightgoldenrodyellow:  '#fafad2',
-  lightgray:             '#d3d3d3',
-  lightgreen:            '#90ee90',
-  lightgrey:             '#d3d3d3',
-  lightpink:             '#ffb6c1',
-  lightsalmon:           '#ffa07a',
-  lightseagreen:         '#20b2aa',
-  lightskyblue:          '#87cefa',
-  lightslategray:        '#778899',
-  lightslategrey:        '#778899',
-  lightsteelblue:        '#b0c4de',
-  lightyellow:           '#ffffe0',
-  lime:                  '#00ff00',
-  limegreen:             '#32cd32',
-  linen:                 '#faf0e6',
-  magenta:               '#ff00ff',
-  maroon:                '#800000',
-  mediumaquamarine:      '#66cdaa',
-  mediumblue:            '#0000cd',
-  mediumorchid:          '#ba55d3',
-  mediumpurple:          '#9370db',
-  mediumseagreen:        '#3cb371',
-  mediumslateblue:       '#7b68ee',
-  mediumspringgreen:     '#00fa9a',
-  mediumturquoise:       '#48d1cc',
-  mediumvioletred:       '#c71585',
-  midnightblue:          '#191970',
-  mintcream:             '#f5fffa',
-  mistyrose:             '#ffe4e1',
-  moccasin:              '#ffe4b5',
-  navajowhite:           '#ffdead',
-  navy:                  '#000080',
-  oldlace:               '#fdf5e6',
-  olive:                 '#808000',
-  olivedrab:             '#6b8e23',
-  orange:                '#ffa500',
-  orangered:             '#ff4500',
-  orchid:                '#da70d6',
-  palegoldenrod:         '#eee8aa',
-  palegreen:             '#98fb98',
-  paleturquoise:         '#afeeee',
-  palevioletred:         '#db7093',
-  papayawhip:            '#ffefd5',
-  peachpuff:             '#ffdab9',
-  peru:                  '#cd853f',
-  pink:                  '#ffc0cb',
-  plum:                  '#dda0dd',
-  powderblue:            '#b0e0e6',
-  purple:                '#800080',
-  red:                   '#ff0000',
-  rosybrown:             '#bc8f8f',
-  royalblue:             '#4169e1',
-  saddlebrown:           '#8b4513',
-  salmon:                '#fa8072',
-  sandybrown:            '#f4a460',
-  seagreen:              '#2e8b57',
-  seashell:              '#fff5ee',
-  sienna:                '#a0522d',
-  silver:                '#c0c0c0',
-  skyblue:               '#87ceeb',
-  slateblue:             '#6a5acd',
-  slategray:             '#708090',
-  slategrey:             '#708090',
-  snow:                  '#fffafa',
-  springgreen:           '#00ff7f',
-  steelblue:             '#4682b4',
-  tan:                   '#d2b48c',
-  teal:                  '#008080',
-  thistle:               '#d8bfd8',
-  tomato:                '#ff6347',
-  turquoise:             '#40e0d0',
-  violet:                '#ee82ee',
-  wheat:                 '#f5deb3',
-  white:                 '#ffffff',
-  whitesmoke:            '#f5f5f5',
-  yellow:                '#ffff00',
-  yellowgreen:           '#9acd32'
+  aliceblue: '#f0f8ff',
+  antiquewhite: '#faebd7',
+  aqua: '#00ffff',
+  aquamarine: '#7fffd4',
+  azure: '#f0ffff',
+  beige: '#f5f5dc',
+  bisque: '#ffe4c4',
+  black: '#000000',
+  blanchedalmond: '#ffebcd',
+  blue: '#0000ff',
+  blueviolet: '#8a2be2',
+  brown: '#a52a2a',
+  burlywood: '#deb887',
+  cadetblue: '#5f9ea0',
+  chartreuse: '#7fff00',
+  chocolate: '#d2691e',
+  coral: '#ff7f50',
+  cornflowerblue: '#6495ed',
+  cornsilk: '#fff8dc',
+  crimson: '#dc143c',
+  cyan: '#00ffff',
+  darkblue: '#00008b',
+  darkcyan: '#008b8b',
+  darkgoldenrod: '#b8860b',
+  darkgray: '#a9a9a9',
+  darkgreen: '#006400',
+  darkgrey: '#a9a9a9',
+  darkkhaki: '#bdb76b',
+  darkmagenta: '#8b008b',
+  darkolivegreen: '#556b2f',
+  darkorange: '#ff8c00',
+  darkorchid: '#9932cc',
+  darkred: '#8b0000',
+  darksalmon: '#e9967a',
+  darkseagreen: '#8fbc8f',
+  darkslateblue: '#483d8b',
+  darkslategray: '#2f4f4f',
+  darkslategrey: '#2f4f4f',
+  darkturquoise: '#00ced1',
+  darkviolet: '#9400d3',
+  deeppink: '#ff1493',
+  deepskyblue: '#00bfff',
+  dimgray: '#696969',
+  dimgrey: '#696969',
+  dodgerblue: '#1e90ff',
+  firebrick: '#b22222',
+  floralwhite: '#fffaf0',
+  forestgreen: '#228b22',
+  fuchsia: '#ff00ff',
+  gainsboro: '#dcdcdc',
+  ghostwhite: '#f8f8ff',
+  gold: '#ffd700',
+  goldenrod: '#daa520',
+  gray: '#808080',
+  green: '#008000',
+  greenyellow: '#adff2f',
+  grey: '#808080',
+  honeydew: '#f0fff0',
+  hotpink: '#ff69b4',
+  indianred: '#cd5c5c',
+  indigo: '#4b0082',
+  ivory: '#fffff0',
+  khaki: '#f0e68c',
+  lavender: '#e6e6fa',
+  lavenderblush: '#fff0f5',
+  lawngreen: '#7cfc00',
+  lemonchiffon: '#fffacd',
+  lightblue: '#add8e6',
+  lightcoral: '#f08080',
+  lightcyan: '#e0ffff',
+  lightgoldenrodyellow: '#fafad2',
+  lightgray: '#d3d3d3',
+  lightgreen: '#90ee90',
+  lightgrey: '#d3d3d3',
+  lightpink: '#ffb6c1',
+  lightsalmon: '#ffa07a',
+  lightseagreen: '#20b2aa',
+  lightskyblue: '#87cefa',
+  lightslategray: '#778899',
+  lightslategrey: '#778899',
+  lightsteelblue: '#b0c4de',
+  lightyellow: '#ffffe0',
+  lime: '#00ff00',
+  limegreen: '#32cd32',
+  linen: '#faf0e6',
+  magenta: '#ff00ff',
+  maroon: '#800000',
+  mediumaquamarine: '#66cdaa',
+  mediumblue: '#0000cd',
+  mediumorchid: '#ba55d3',
+  mediumpurple: '#9370db',
+  mediumseagreen: '#3cb371',
+  mediumslateblue: '#7b68ee',
+  mediumspringgreen: '#00fa9a',
+  mediumturquoise: '#48d1cc',
+  mediumvioletred: '#c71585',
+  midnightblue: '#191970',
+  mintcream: '#f5fffa',
+  mistyrose: '#ffe4e1',
+  moccasin: '#ffe4b5',
+  navajowhite: '#ffdead',
+  navy: '#000080',
+  oldlace: '#fdf5e6',
+  olive: '#808000',
+  olivedrab: '#6b8e23',
+  orange: '#ffa500',
+  orangered: '#ff4500',
+  orchid: '#da70d6',
+  palegoldenrod: '#eee8aa',
+  palegreen: '#98fb98',
+  paleturquoise: '#afeeee',
+  palevioletred: '#db7093',
+  papayawhip: '#ffefd5',
+  peachpuff: '#ffdab9',
+  peru: '#cd853f',
+  pink: '#ffc0cb',
+  plum: '#dda0dd',
+  powderblue: '#b0e0e6',
+  purple: '#800080',
+  red: '#ff0000',
+  rosybrown: '#bc8f8f',
+  royalblue: '#4169e1',
+  saddlebrown: '#8b4513',
+  salmon: '#fa8072',
+  sandybrown: '#f4a460',
+  seagreen: '#2e8b57',
+  seashell: '#fff5ee',
+  sienna: '#a0522d',
+  silver: '#c0c0c0',
+  skyblue: '#87ceeb',
+  slateblue: '#6a5acd',
+  slategray: '#708090',
+  slategrey: '#708090',
+  snow: '#fffafa',
+  springgreen: '#00ff7f',
+  steelblue: '#4682b4',
+  tan: '#d2b48c',
+  teal: '#008080',
+  thistle: '#d8bfd8',
+  tomato: '#ff6347',
+  turquoise: '#40e0d0',
+  violet: '#ee82ee',
+  wheat: '#f5deb3',
+  white: '#ffffff',
+  whitesmoke: '#f5f5f5',
+  yellow: '#ffff00',
+  yellowgreen: '#9acd32'
 };
 
-/**
- * These regular expressions are used to build up the patterns for matching
- * viable CSS color strings: fragmenting the regexes in this way increases the
- * legibility and comprehensibility of the code.
- *
- * Note that RGB values of .9 are not parsed by IE, but are supported here for
- * color string consistency.
- */
-var WHITESPACE = /\s*/;  // Match zero or more whitespace characters.
-var INTEGER = /(\d{1,3})/;  // Match integers: 79, 255, etc.
-var DECIMAL = /((?:\d+(?:\.\d+)?)|(?:\.\d+))/;  // Match 129.6, 79, .9, etc.
-var PERCENT = new RegExp(DECIMAL.source + '%');  // Match 12.9%, 79%, .9%, etc.
-
-/**
- * Full color string patterns. The capture groups are necessary.
- */
+// Regular Expressions for use identifying color pattern strings
 var colorPatterns = {
-  // Match colors in format #XXX, e.g. #416.
+  /**
+   * Regular expression for matching colors in format #XXX,
+   * e.g. #416
+   */
   HEX3: /^#([a-f0-9])([a-f0-9])([a-f0-9])$/i,
 
-  // Match colors in format #XXXXXX, e.g. #b4d455.
+  /**
+   * Regular expression for matching colors in format #XXXXXX,
+   * e.g. #b4d455
+   */
   HEX6: /^#([a-f0-9]{2})([a-f0-9]{2})([a-f0-9]{2})$/i,
 
-  // Match colors in format rgb(R, G, B), e.g. rgb(255, 0, 128).
+  /**
+   * Regular expression for matching colors in format rgb(R, G, B),
+   * e.g. rgb(255, 0, 128)
+   */
   RGB: new RegExp([
+    // Defining RegExp this way makes it more obvious where whitespace
+    // (`\s*`) is permitted between tokens
     '^rgb\\(',
     INTEGER.source,
     ',',
@@ -9495,8 +3795,14 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format rgb(R%, G%, B%), e.g. rgb(100%, 0%, 28.9%).
+
+  /**
+   * Regular expression for matching colors in format rgb(R%, G%, B%),
+   * e.g. rgb(100%, 0%, 28.9%)
+   */
   RGB_PERCENT: new RegExp([
+    // Defining RegExp this way makes it more obvious where whitespace
+    // (`\s*`) is permitted between tokens
     '^rgb\\(',
     PERCENT.source,
     ',',
@@ -9506,7 +3812,10 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format rgb(R, G, B, A), e.g. rgb(255, 0, 128, 0.25).
+  /**
+   * Regular expression for matching colors in format rgb(R, G, B, A),
+   * e.g. rgb(255, 0, 128, 0.25)
+   */
   RGBA: new RegExp([
     '^rgba\\(',
     INTEGER.source,
@@ -9519,7 +3828,10 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format rgb(R%, G%, B%, A), e.g. rgb(100%, 0%, 28.9%, 0.5).
+  /**
+   * Regular expression for matching colors in format rgb(R%, G%, B%, A),
+   * e.g. rgb(100%, 0%, 28.9%. 0.5)
+   */
   RGBA_PERCENT: new RegExp([
     '^rgba\\(',
     PERCENT.source,
@@ -9532,7 +3844,10 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format hsla(H, S%, L%), e.g. hsl(100, 40%, 28.9%).
+  /**
+   * Regular expression for matching colors in format hsla(H, S%, L%),
+   * e.g. hsl(100, 40%, 28.9%,)
+   */
   HSL: new RegExp([
     '^hsl\\(',
     INTEGER.source,
@@ -9543,7 +3858,10 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format hsla(H, S%, L%, A), e.g. hsla(100, 40%, 28.9%, 0.5).
+  /**
+   * Regular expression for matching colors in format hsla(H, S%, L%, A),
+   * e.g. hsla(100, 40%, 28.9%, 0.5)
+   */
   HSLA: new RegExp([
     '^hsla\\(',
     INTEGER.source,
@@ -9556,34 +3874,11 @@ var colorPatterns = {
     '\\)$'
   ].join(WHITESPACE.source), 'i'),
 
-  // Match colors in format hsb(H, S%, B%), e.g. hsb(100, 40%, 28.9%).
-  HSB: new RegExp([
-    '^hsb\\(',
-    INTEGER.source,
-    ',',
-    PERCENT.source,
-    ',',
-    PERCENT.source,
-    '\\)$'
-  ].join(WHITESPACE.source), 'i'),
-
-  // Match colors in format hsba(H, S%, B%, A), e.g. hsba(100, 40%, 28.9%, 0.5).
-  HSBA: new RegExp([
-    '^hsba\\(',
-    INTEGER.source,
-    ',',
-    PERCENT.source,
-    ',',
-    PERCENT.source,
-    ',',
-    DECIMAL.source,
-    '\\)$'
-  ].join(WHITESPACE.source), 'i')
 };
 
 /**
- * For a number of different inputs, returns a color formatted as [r, g, b, a]
- * arrays, with each component normalized between 0 and 1.
+ * For a number of different inputs, returns a color formatted as
+ * [r, g, b, a].
  *
  * @param {Array-like} args An 'array-like' object that represents a list of
  *                          arguments
@@ -9605,183 +3900,126 @@ var colorPatterns = {
  * </code>
  * </div>
  */
-p5.Color._parseInputs = function() {
-  var numArgs = arguments.length;
-  var mode = this._renderer._colorMode;
-  var maxes = this._renderer._colorMaxes;
-  var results = [];
+p5.Color._getFormattedColor = function () {
+  var numArgs = arguments.length,
+      mode    = this._colorMode,
+      first, second, third, alpha, str, vals;
 
-  if (numArgs >= 3) {  // Argument is a list of component values.
 
-    results[0] = arguments[0] / maxes[mode][0];
-    results[1] = arguments[1] / maxes[mode][1];
-    results[2] = arguments[2] / maxes[mode][2];
+  // Handle [r,g,b,a] or [h,s,l,a] color values
+  if (numArgs >= 3) {
+    first   = arguments[0];
+    second  = arguments[1];
+    third   = arguments[2];
+    alpha   = typeof arguments[3] === 'number' ?
+              arguments[3] : this._colorMaxes[mode][3];
 
-    // Alpha may be undefined, so default it to 100%.
-    if (typeof arguments[3] === 'number') {
-      results[3] = arguments[3] / maxes[mode][3];
-    } else {
-      results[3] = 1;
-    }
-
-    // Constrain components to the range [0,1].
-    results = results.map(function(value) {
-      return Math.max(Math.min(value, 1), 0);
-    });
-
-    // Convert to RGBA and return.
-    if (mode === constants.HSL) {
-      return color_conversion._hslaToRGBA(results);
-    } else if (mode === constants.HSB) {
-      return color_conversion._hsbaToRGBA(results);
-    } else {
-      return results;
-    }
-
+  // Handle strings: named colors, hex values, css strings
   } else if (numArgs === 1 && typeof arguments[0] === 'string') {
+    str = arguments[0].trim().toLowerCase();
 
-    var str = arguments[0].trim().toLowerCase();
-
-    // Return if string is a named colour.
     if (namedColors[str]) {
-      return p5.Color._parseInputs.apply(this, [namedColors[str]]);
+      // Handle named color values
+      return p5.Color._getFormattedColor.apply(this, [namedColors[str]]);
     }
 
-    // Try RGBA pattern matching.
-    if (colorPatterns.HEX3.test(str)) {  // #rgb
-      results = colorPatterns.HEX3.exec(str).slice(1).map(function(color) {
-        return parseInt(color + color, 16) / 255;
+    // Work through available string patterns to determine how to proceed
+    if (colorPatterns.HEX3.test(str)) {
+      vals = colorPatterns.HEX3.exec(str).slice(1).map(function(color) {
+        // Expand #RGB to #RRGGBB
+        return parseInt(color + color, 16);
       });
-      results[3] = 1;
-      return results;
-    } else if (colorPatterns.HEX6.test(str)) {  // #rrggbb
-      results = colorPatterns.HEX6.exec(str).slice(1).map(function(color) {
-        return parseInt(color, 16) / 255;
+    } else if (colorPatterns.HEX6.test(str)) {
+      vals = colorPatterns.HEX6.exec(str).slice(1).map(function(color) {
+        return parseInt(color, 16);
       });
-      results[3] = 1;
-      return results;
-    } else if (colorPatterns.RGB.test(str)) {  // rgb(R,G,B)
-      results = colorPatterns.RGB.exec(str).slice(1).map(function(color) {
-        return color / 255;
+    } else if (colorPatterns.RGB.test(str)) {
+      vals = colorPatterns.RGB.exec(str).slice(1).map(function(color) {
+        return parseInt(color, 10);
       });
-      results[3] = 1;
-      return results;
-    } else if (colorPatterns.RGB_PERCENT.test(str)) {  // rgb(R%,G%,B%)
-      results = colorPatterns.RGB_PERCENT.exec(str).slice(1)
+    } else if (colorPatterns.RGB_PERCENT.test(str)) {
+      vals = colorPatterns.RGB_PERCENT.exec(str).slice(1)
         .map(function(color) {
-          return parseFloat(color) / 100;
+          return parseInt(parseFloat(color) / 100 * 255, 10);
         });
-      results[3] = 1;
-      return results;
-    } else if (colorPatterns.RGBA.test(str)) {  // rgba(R,G,B,A)
-      results = colorPatterns.RGBA.exec(str).slice(1)
+    } else if (colorPatterns.RGBA.test(str)) {
+      vals = colorPatterns.RGBA.exec(str).slice(1)
         .map(function(color, idx) {
           if (idx === 3) {
-            return parseFloat(color);
+            // Alpha value is a decimal: multiply by 255
+            return parseInt(parseFloat(color) * 255, 10);
           }
-          return color / 255;
+          return parseInt(color, 10);
         });
-      return results;
-    } else if (colorPatterns.RGBA_PERCENT.test(str)) {  // rgba(R%,G%,B%,A%)
-      results = colorPatterns.RGBA_PERCENT.exec(str).slice(1)
+    } else if (colorPatterns.RGBA_PERCENT.test(str)) {
+      vals = colorPatterns.RGBA_PERCENT.exec(str).slice(1)
         .map(function(color, idx) {
           if (idx === 3) {
-            return parseFloat(color);
+            // Alpha value is a decimal: multiply by 255
+            return parseInt(parseFloat(color) * 255, 10);
           }
-          return parseFloat(color) / 100;
+          return parseInt(parseFloat(color) / 100 * 255, 10);
         });
-      return results;
-    }
-
-    // Try HSLA pattern matching.
-    if (colorPatterns.HSL.test(str)) {  // hsl(H,S,L)
-      results = colorPatterns.HSL.exec(str).slice(1)
-        .map(function(color, idx) {
-        if (idx === 0) {
-          return parseInt(color, 10) / 360;
-        }
-        return parseInt(color, 10) / 100;
+    } else if (colorPatterns.HSL.test(str)) {
+      vals = colorPatterns.HSL.exec(str).slice(1).map(function(color) {
+        return parseInt(color, 10);
       });
-      results[3] = 1;
-    } else if (colorPatterns.HSLA.test(str)) {  // hsla(H,S,L,A)
-      results = colorPatterns.HSLA.exec(str).slice(1)
-        .map(function(color, idx) {
-        if (idx === 0) {
-          return parseInt(color, 10) / 360;
-        }
-        else if (idx === 3) {
-          return parseFloat(color);
-        }
-        return parseInt(color, 10) / 100;
+    } else if (colorPatterns.HSLA.test(str)) {
+      vals = colorPatterns.HSLA.exec(str).slice(1).map(function(color) {
+        return parseFloat(color, 10);
       });
-    }
-    if (results.length) {
-      return color_conversion._hslaToRGBA(results);
-    }
-
-    // Try HSBA pattern matching.
-    if (colorPatterns.HSB.test(str)) {  // hsb(H,S,B)
-      results = colorPatterns.HSB.exec(str).slice(1)
-        .map(function(color, idx) {
-        if (idx === 0) {
-          return parseInt(color, 10) / 360;
-        }
-        return parseInt(color, 10) / 100;
-      });
-      results[3] = 1;
-    } else if (colorPatterns.HSBA.test(str)) {  // hsba(H,S,B,A)
-      results = colorPatterns.HSBA.exec(str).slice(1)
-        .map(function(color, idx) {
-        if (idx === 0) {
-          return parseInt(color, 10) / 360;
-        }
-        else if (idx === 3) {
-          return parseFloat(color);
-        }
-        return parseInt(color, 10) / 100;
-      });
-    }
-    if (results.length) {
-      return color_conversion._hsbaToRGBA(results);
-    }
-
-    // Input did not match any CSS color pattern: default to white.
-    results = [1, 1, 1, 1];
-
-  } else if ((numArgs === 1 || numArgs === 2) &&
-              typeof arguments[0] === 'number') {  // 'Grayscale' mode.
-
-    /**
-     * For HSB and HSL, interpret the gray level as a brightness/lightness
-     * value (they are equivalent when chroma is zero). For RGB, normalize the
-     * gray level according to the blue maximum.
-     */
-    results[0] = arguments[0] / maxes[mode][2];
-    results[1] = arguments[0] / maxes[mode][2];
-    results[2] = arguments[0] / maxes[mode][2];
-
-    // Alpha may be undefined, so default it to 100%.
-    if (typeof arguments[1] === 'number') {
-      results[3] = arguments[1] / maxes[mode][3];
     } else {
-      results[3] = 1;
+      // Input did not match any CSS Color pattern: Default to white
+      vals = [255];
     }
 
-    // Constrain components to the range [0,1].
-    results = results.map(function(value) {
-      return Math.max(Math.min(value, 1), 0);
-    });
+    // Re-run _getFormattedColor with the values parsed out of the string
+    return p5.Color._getFormattedColor.apply(this, vals);
 
+  // Handle greyscale color mode
+  } else if (numArgs === 1 && typeof arguments[0] === 'number') {
+    // When users pass only one argument, they are presumed to be
+    // working in grayscale mode.
+    if (mode === constants.RGB) {
+      first = second = third = arguments[0];
+    } else if (mode === constants.HSB || mode === constants.HSL) {
+      // In order for grayscale to work with HSB & HSL, the saturation
+      // (the second argument) must be 0.
+      first = third = arguments[0];
+      second = 0;
+    }
+    alpha = typeof arguments[1] === 'number' ?
+                   arguments[1] : this._colorMaxes[mode][3];
+
+  // Handle brightness and alpha (grayscale)
+  } else if (numArgs === 2 &&
+             typeof arguments[0] === 'number' &&
+             typeof arguments[1] === 'number') {
+    // When users pass only one argument, they are presumed to be
+    // working in grayscale mode.
+    if (mode === constants.RGB) {
+      first = second = third = arguments[0];
+    } else if (mode === constants.HSB || mode === constants.HSL) {
+      // In order for grayscale to work with HSB & HSL, the saturation
+      // (the second argument) must be 0.
+      first = third = arguments[0];
+      second = 0;
+    }
+    alpha = arguments[1];
   } else {
     throw new Error (arguments + 'is not a valid color representation.');
   }
-
-  return results;
+  return [
+    first,
+    second,
+    third,
+    alpha
+  ];
 };
 
 module.exports = p5.Color;
 
-},{"../core/constants":47,"../core/core":48,"./color_conversion":40}],43:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17,"./color_utils":9}],12:[function(require,module,exports){
 /**
  * @module Color
  * @submodule Setting
@@ -9792,9 +4030,20 @@ module.exports = p5.Color;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
-_dereq_('./p5.Color');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
+require('./p5.Color');
+
+p5.prototype._doStroke = true;
+p5.prototype._doFill = true;
+p5.prototype._strokeSet = false;
+p5.prototype._fillSet = false;
+p5.prototype._colorMode = constants.RGB;
+p5.prototype._colorMaxes = {
+  rgb: [255, 255, 255, 255],
+  hsb: [360, 100, 100, 1],
+  hsl: [360, 100, 100, 1]
+};
 
 /**
  * The background() function sets the color used for the background of the
@@ -9899,7 +4148,7 @@ p5.prototype.background = function() {
   if (arguments[0] instanceof p5.Image) {
     this.image(arguments[0], 0, 0, this.width, this.height);
   } else {
-    this._renderer.background.apply(this._renderer, arguments);
+    this._graphics.background.apply(this._graphics, arguments);
   }
   return this;
 };
@@ -9920,32 +4169,28 @@ p5.prototype.background = function() {
  * </div>
  */
 p5.prototype.clear = function() {
-  this._renderer.clear();
+  this._graphics.clear();
   return this;
 };
 
 /**
- * colorMode() changes the way p5.js interprets color data. By default, the
- * parameters for fill(), stroke(), background(), and color() are defined by
- * values between 0 and 255 using the RGB color model. This is equivalent to
- * setting colorMode(RGB, 255). Setting colorMode(HSB) lets you use the HSB
- * system instead. By default, this is colorMode(HSB, 360, 100, 100, 1). You
- * can also use HSL.
- *
- * Note: existing color objects remember the mode that they were created in,
- * so you can change modes as you like without affecting their appearance.
+ * Changes the way p5.js interprets color data. By default, the parameters
+ * for fill(), stroke(), background(), and color() are defined by values
+ * between 0 and 255 using the RGB color model. The colorMode() function is
+ * used to switch color systems. Regardless of color system, all value ranges
+ * are presumed to be 0–255 unless explicitly set otherwise. That is,
+ * for a standard HSB range, one would pass colorMode(HSB, 360, 100, 100, 1).
  *
  * @method colorMode
- * @param {Number|Constant} mode   either RGB or HSB, corresponding to
- *                                 Red/Green/Blue and Hue/Saturation/Brightness
- *                                 (or Lightness)
- * @param {Number|Constant} [max1] range for the red or hue depending on the
- *                                 current color mode, or range for all values
- * @param {Number|Constant} [max2] range for the green or saturation depending
- *                                 on the current color mode
- * @param {Number|Constant} [max3] range for the blue or brightness/lighntess
- *                                 depending on the current color mode
- * @param {Number|Constant} [maxA] range for the alpha
+ * @param {Number|Constant} mode either RGB or HSB, corresponding to
+ *                               Red/Green/Blue and Hue/Saturation/Brightness
+ * @param {Number|Constant} max1 range for the red or hue depending on the
+ *                               current color mode, or range for all values
+ * @param {Number|Constant} max2 range for the green or saturation depending
+ *                               on the current color mode
+ * @param {Number|Constant} max3 range for the blue or brightness depending
+ *                               on the current color mode
+ * @param {Number|Constant} maxA range for the alpha
  * @example
  * <div>
  * <code>
@@ -9972,58 +4217,29 @@ p5.prototype.clear = function() {
  * }
  * </code>
  * </div>
- *
- * <div>
- * <code>
- * colorMode(RGB, 255);
- * var c = color(127, 255, 0);
- *
- * colorMode(RGB, 1);
- * var myColor = c._getRed();
- * text(myColor, 10, 10, 80, 80);
- * </code>
- * </div>
- *
- * <div>
- * <code>
- * noFill();
- * colorMode(RGB, 255, 255, 255, 1);
- * background(255);
- *
- * strokeWeight(4);
- * stroke(255, 0 , 10, 0.3);
- * ellipse(40, 40, 50, 50);
- * ellipse(50, 50, 40, 40);
- * </code>
- * </div>
  */
 p5.prototype.colorMode = function() {
   if (arguments[0] === constants.RGB ||
       arguments[0] === constants.HSB ||
       arguments[0] === constants.HSL) {
+    this._colorMode = arguments[0];
 
-    // Set color mode.
-    this._renderer._colorMode = arguments[0];
+    var maxArr = this._colorMaxes[this._colorMode];
 
-    // Set color maxes.
-    var maxes = this._renderer._colorMaxes[this._renderer._colorMode];
     if (arguments.length === 2) {
-      maxes[0] = arguments[1];  // Red
-      maxes[1] = arguments[1];  // Green
-      maxes[2] = arguments[1];  // Blue
-      maxes[3] = arguments[1];  // Alpha
-    } else if (arguments.length === 4) {
-      maxes[0] = arguments[1];  // Red
-      maxes[1] = arguments[2];  // Green
-      maxes[2] = arguments[3];  // Blue
-    } else if (arguments.length === 5) {
-      maxes[0] = arguments[1];  // Red
-      maxes[1] = arguments[2];  // Green
-      maxes[2] = arguments[3];  // Blue
-      maxes[3] = arguments[4];  // Alpha
+      maxArr[0] = arguments[1];
+      maxArr[1] = arguments[1];
+      maxArr[2] = arguments[1];
+      maxArr[3] = arguments[1];
+    } else if (arguments.length > 2) {
+      maxArr[0] = arguments[1];
+      maxArr[1] = arguments[2];
+      maxArr[2] = arguments[3];
+    }
+    if (arguments.length === 5) {
+      maxArr[3] = arguments[4];
     }
   }
-
   return this;
 };
 
@@ -10140,9 +4356,9 @@ p5.prototype.colorMode = function() {
  * </div>
  */
 p5.prototype.fill = function() {
-  this._renderer._setProperty('_fillSet', true);
-  this._renderer._setProperty('_doFill', true);
-  this._renderer.fill.apply(this._renderer, arguments);
+  this._setProperty('_fillSet', true);
+  this._setProperty('_doFill', true);
+  this._graphics.fill.apply(this._graphics, arguments);
   return this;
 };
 
@@ -10161,7 +4377,7 @@ p5.prototype.fill = function() {
  * </div>
  */
 p5.prototype.noFill = function() {
-  this._renderer._setProperty('_doFill', false);
+  this._setProperty('_doFill', false);
   return this;
 };
 
@@ -10179,7 +4395,7 @@ p5.prototype.noFill = function() {
  * </div>
  */
 p5.prototype.noStroke = function() {
-  this._renderer._setProperty('_doStroke', false);
+  this._setProperty('_doStroke', false);
   return this;
 };
 
@@ -10306,15 +4522,17 @@ p5.prototype.noStroke = function() {
  * </div>
  */
 p5.prototype.stroke = function() {
-  this._renderer._setProperty('_strokeSet', true);
-  this._renderer._setProperty('_doStroke', true);
-  this._renderer.stroke.apply(this._renderer, arguments);
+  this._setProperty('_strokeSet', true);
+  this._setProperty('_doStroke', true);
+  this._graphics.stroke.apply(this._graphics, arguments);
   return this;
 };
 
+
+
 module.exports = p5;
 
-},{"../core/constants":47,"../core/core":48,"./p5.Color":42}],44:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17,"./p5.Color":11}],13:[function(require,module,exports){
 /**
  * @module Shape
  * @submodule 2D Primitives
@@ -10325,21 +4543,16 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
+var p5 = require('./core');
+var constants = require('./constants');
 
-_dereq_('./error_helpers');
+require('./error_helpers');
 
 /**
  * Draw an arc to the screen. If called with only a, b, c, d, start, and
- * stop, the arc will be drawn as an open pie. If mode is provided, the arc
+ * stop, the arc will pe drawn as an open pie. If mode is provided, the arc
  * will be drawn either open, as a chord, or as a pie as specified. The
- * origin may be changed with the ellipseMode() function.<br><br>
- * Note that drawing a full circle (ex: 0 to TWO_PI) will appear blank
- * because 0 and TWO_PI are the same position on the unit circle. The
- * best way to handle this is by using the ellipse() function instead
- * to create a closed ellipse, and to use the arc() function
- * only to draw parts of an ellipse.
+ * origin may be changed with the ellipseMode() function.
  *
  * @method arc
  * @param  {Number} a      x-coordinate of the arc's ellipse
@@ -10381,13 +4594,9 @@ _dereq_('./error_helpers');
  * </div>
  */
 p5.prototype.arc = function(x, y, w, h, start, stop, mode) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   this._validateParameters(
     'arc',
-    args,
+    arguments,
     [
       ['Number', 'Number', 'Number', 'Number', 'Number', 'Number'],
       [ 'Number', 'Number', 'Number', 'Number',
@@ -10395,7 +4604,7 @@ p5.prototype.arc = function(x, y, w, h, start, stop, mode) {
     ]
   );
 
-  if (!this._renderer._doStroke && !this._renderer._doFill) {
+  if (!this._doStroke && !this._doFill) {
     return this;
   }
   if (this._angleMode === constants.DEGREES) {
@@ -10438,7 +4647,7 @@ p5.prototype.arc = function(x, y, w, h, start, stop, mode) {
   // p5 supports negative width and heights for ellipses
   w = Math.abs(w);
   h = Math.abs(h);
-  this._renderer.arc(x, y, w, h, start, stop, mode);
+  this._graphics.arc(x, y, w, h, start, stop, mode);
   return this;
 };
 
@@ -10462,25 +4671,21 @@ p5.prototype.arc = function(x, y, w, h, start, stop, mode) {
  * </div>
  */
 p5.prototype.ellipse = function(x, y, w, h) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   this._validateParameters(
     'ellipse',
-    args,
+    arguments,
     ['Number', 'Number', 'Number', 'Number']
   );
 
-  if (!this._renderer._doStroke && !this._renderer._doFill) {
+  if (!this._doStroke && !this._doFill) {
     return this;
   }
   // p5 supports negative width and heights for ellipses
   w = Math.abs(w);
   h = Math.abs(h);
-  //@TODO add catch block here if this._renderer
+  //@TODO add catch block here if this._graphics
   //doesn't have the method implemented yet
-  this._renderer.ellipse(x, y, w, h);
+  this._graphics.ellipse(x, y, w, h);
   return this;
 };
 /**
@@ -10516,60 +4721,47 @@ p5.prototype.ellipse = function(x, y, w, h) {
  */
 ////commented out original
 // p5.prototype.line = function(x1, y1, x2, y2) {
-//   if (!this._renderer._doStroke) {
+//   if (!this._doStroke) {
 //     return this;
 //   }
-//   if(this._renderer.isP3D){
+//   if(this._graphics.isP3D){
 //   } else {
-//     this._renderer.line(x1, y1, x2, y2);
+//     this._graphics.line(x1, y1, x2, y2);
 //   }
 // };
 p5.prototype.line = function() {
-  if (!this._renderer._doStroke) {
+  this._validateParameters(
+    'line',
+    arguments,
+    [
+      ['Number', 'Number', 'Number', 'Number'],
+      ['Number', 'Number', 'Number', 'Number', 'Number', 'Number']
+    ]
+  );
+
+  if (!this._doStroke) {
     return this;
   }
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   //check whether we should draw a 3d line or 2d
-  if(this._renderer.isP3D){
-    this._validateParameters(
-      'line',
-      args,
-      [
-        ['Number', 'Number', 'Number', 'Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.line(
-      args[0],
-      args[1],
-      args[2],
-      args[3],
-      args[4],
-      args[5]);
+  if(this._graphics.isP3D){
+    this._graphics.line(arguments[0],
+      arguments[1],
+      arguments[2],
+      arguments[3],
+      arguments[4],
+      arguments[5]);
   } else {
-    this._validateParameters(
-      'line',
-      args,
-      [
-        ['Number', 'Number', 'Number', 'Number'],
-      ]
-    );
-    this._renderer.line(
-      args[0],
-      args[1],
-      args[2],
-      args[3]);
+    this._graphics.line(arguments[0],
+      arguments[1],
+      arguments[2],
+      arguments[3]);
   }
-  return this;
 };
 
 /**
  * Draws a point, a coordinate in space at the dimension of one pixel.
  * The first parameter is the horizontal value for the point, the second
- * value is the vertical value for the point. The color of the point is
- * determined by the current stroke.
+ * value is the vertical value for the point.
  *
  * @method point
  * @param  {Number} x the x-coordinate
@@ -10585,41 +4777,17 @@ p5.prototype.line = function() {
  * </code>
  * </div>
  */
-p5.prototype.point = function() {
-  if (!this._renderer._doStroke) {
+p5.prototype.point = function(x, y) {
+  this._validateParameters(
+    'point',
+    arguments,
+    ['Number', 'Number']
+  );
+
+  if (!this._doStroke) {
     return this;
   }
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  //check whether we should draw a 3d line or 2d
-  if(this._renderer.isP3D){
-    this._validateParameters(
-      'point',
-      args,
-      [
-        ['Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.point(
-      args[0],
-      args[1],
-      args[2]
-      );
-  } else {
-    this._validateParameters(
-      'point',
-      args,
-      [
-        ['Number', 'Number']
-      ]
-    );
-    this._renderer.point(
-      args[0],
-      args[1]
-    );
-  }
+  this._graphics.point(x, y);
   return this;
 };
 
@@ -10648,59 +4816,18 @@ p5.prototype.point = function() {
  * </code>
  * </div>
  */
-p5.prototype.quad = function() {
-  if (!this._renderer._doStroke && !this._renderer._doFill) {
+p5.prototype.quad = function(x1, y1, x2, y2, x3, y3, x4, y4) {
+  this._validateParameters(
+    'quad',
+    arguments,
+    [ 'Number', 'Number', 'Number', 'Number',
+      'Number', 'Number', 'Number', 'Number' ]
+  );
+
+  if (!this._doStroke && !this._doFill) {
     return this;
   }
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  if(this._renderer.isP3D){
-    this._validateParameters(
-      'quad',
-      args,
-      [
-        [ 'Number', 'Number', 'Number',
-          'Number', 'Number', 'Number',
-          'Number', 'Number', 'Number',
-          'Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.quad(
-      args[0],
-      args[1],
-      args[2],
-      args[3],
-      args[4],
-      args[5],
-      args[6],
-      args[7],
-      args[8],
-      args[9],
-      args[10],
-      args[11]
-      );
-  } else {
-    this._validateParameters(
-      'quad',
-      args,
-      [
-        [ 'Number', 'Number', 'Number', 'Number',
-          'Number', 'Number', 'Number', 'Number' ]
-      ]
-    );
-    this._renderer.quad(
-     args[0],
-     args[1],
-     args[2],
-     args[3],
-     args[4],
-     args[5],
-     args[6],
-    args[7]
-    );
-  }
+  this._graphics.quad(x1, y1, x2, y2, x3, y3, x4, y4);
   return this;
 };
 
@@ -10749,25 +4876,21 @@ p5.prototype.quad = function() {
 * </div>
 */
 p5.prototype.rect = function (x, y, w, h, tl, tr, br, bl) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   this._validateParameters(
     'rect',
-    args,
+    arguments,
     [
       ['Number', 'Number', 'Number', 'Number'],
       ['Number', 'Number', 'Number', 'Number', 'Number'],
-      ['Number', 'Number', 'Number', 'Number',
-       'Number', 'Number', 'Number', 'Number']
+      [ 'Number', 'Number', 'Number', 'Number',
+        'Number', 'Number', 'Number', 'Number', 'Number' ]
     ]
   );
 
-  if (!this._renderer._doStroke && !this._renderer._doFill) {
+  if (!this._doStroke && !this._doFill) {
     return;
   }
-  this._renderer.rect(x, y, w, h, tl, tr, br, bl);
+  this._graphics.rect(x, y, w, h, tl, tr, br, bl);
   return this;
 };
 
@@ -10791,58 +4914,23 @@ p5.prototype.rect = function (x, y, w, h, tl, tr, br, bl) {
 * </code>
 * </div>
 */
-p5.prototype.triangle = function() {
+p5.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
+  this._validateParameters(
+    'triangle',
+    arguments,
+    ['Number', 'Number', 'Number', 'Number', 'Number', 'Number']
+  );
 
-  if (!this._renderer._doStroke && !this._renderer._doFill) {
+  if (!this._doStroke && !this._doFill) {
     return this;
   }
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  if(this._renderer.isP3D){
-    this._validateParameters(
-      'triangle',
-      args,
-      [
-        ['Number', 'Number', 'Number', 'Number', 'Number', 'Number',
-         'Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.triangle(
-      args[0],
-      args[1],
-      args[2],
-      args[3],
-      args[4],
-      args[5],
-      args[6],
-      args[7],
-      args[8]
-      );
-  } else {
-    this._validateParameters(
-      'triangle',
-      args,
-      [
-        ['Number', 'Number', 'Number', 'Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.triangle(
-     args[0],
-     args[1],
-     args[2],
-     args[3],
-     args[4],
-     args[5]
-    );
-  }
+  this._graphics.triangle(x1, y1, x2, y2, x3, y3);
   return this;
 };
 
 module.exports = p5;
 
-},{"./constants":47,"./core":48,"./error_helpers":51}],45:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17,"./error_helpers":20}],14:[function(require,module,exports){
 /**
  * @module Shape
  * @submodule Attributes
@@ -10853,8 +4941,11 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
+var p5 = require('./core');
+var constants = require('./constants');
+
+p5.prototype._rectMode = constants.CORNER;
+p5.prototype._ellipseMode = constants.CENTER;
 
 /**
  * Modifies the location from which ellipses are drawn by changing the way
@@ -10912,7 +5003,7 @@ p5.prototype.ellipseMode = function(m) {
     m === constants.CORNERS ||
     m === constants.RADIUS ||
     m === constants.CENTER) {
-    this._renderer._ellipseMode = m;
+    this._ellipseMode = m;
   }
   return this;
 };
@@ -10937,7 +5028,7 @@ p5.prototype.ellipseMode = function(m) {
  * </div>
  */
 p5.prototype.noSmooth = function() {
-  this._renderer.noSmooth();
+  this._graphics.noSmooth();
   return this;
 };
 
@@ -10997,7 +5088,7 @@ p5.prototype.rectMode = function(m) {
     m === constants.CORNERS ||
     m === constants.RADIUS ||
     m === constants.CENTER) {
-    this._renderer._rectMode = m;
+    this._rectMode = m;
   }
   return this;
 };
@@ -11023,7 +5114,7 @@ p5.prototype.rectMode = function(m) {
  * </div>
  */
 p5.prototype.smooth = function() {
-  this._renderer.smooth();
+  this._graphics.smooth();
   return this;
 };
 
@@ -11052,7 +5143,7 @@ p5.prototype.strokeCap = function(cap) {
   if (cap === constants.ROUND ||
     cap === constants.SQUARE ||
     cap === constants.PROJECT) {
-    this._renderer.strokeCap(cap);
+    this._graphics.strokeCap(cap);
   }
   return this;
 };
@@ -11110,7 +5201,7 @@ p5.prototype.strokeJoin = function(join) {
   if (join === constants.ROUND ||
     join === constants.BEVEL ||
     join === constants.MITER) {
-    this._renderer.strokeJoin(join);
+    this._graphics.strokeJoin(join);
   }
   return this;
 };
@@ -11135,18 +5226,18 @@ p5.prototype.strokeJoin = function(join) {
  * </div>
  */
 p5.prototype.strokeWeight = function(w) {
-  this._renderer.strokeWeight(w);
+  this._graphics.strokeWeight(w);
   return this;
 };
 
 module.exports = p5;
 
-},{"./constants":47,"./core":48}],46:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17}],15:[function(require,module,exports){
 /**
  * @requires constants
  */
 
-var constants = _dereq_('./constants');
+var constants = require('./constants');
 
 module.exports = {
 
@@ -11177,7 +5268,7 @@ module.exports = {
 };
 
 
-},{"./constants":47}],47:[function(_dereq_,module,exports){
+},{"./constants":16}],16:[function(require,module,exports){
 /**
  * @module Constants
  * @submodule Constants
@@ -11380,7 +5471,7 @@ module.exports = {
 
 };
 
-},{}],48:[function(_dereq_,module,exports){
+},{}],17:[function(require,module,exports){
 /**
  * @module Structure
  * @submodule Structure
@@ -11390,10 +5481,10 @@ module.exports = {
 
 'use strict';
 
-_dereq_('./shim');
+require('./shim');
 
 // Core needs the PVariables object
-var constants = _dereq_('./constants');
+var constants = require('./constants');
 
 /**
  * This is the p5 instance constructor.
@@ -11527,13 +5618,12 @@ var p5 = function(sketch, node, sync) {
   //////////////////////////////////////////////
 
   this._setupDone = false;
-  // for handling hidpi
-  this._pixelDensity = Math.ceil(window.devicePixelRatio) || 1;
+  this.pixelDensity = window.devicePixelRatio || 1; // for handling hidpi
   this._userNode = node;
   this._curElement = null;
   this._elements = [];
-  this._requestAnimId = 0;
   this._preloadCount = 0;
+  this._updateInterval = 0;
   this._isGlobal = false;
   this._loop = true;
   this._styles = [];
@@ -11545,8 +5635,6 @@ var p5 = function(sketch, node, sync) {
     'mousemove': null,
     'mousedown': null,
     'mouseup': null,
-    'dragend': null,
-    'dragover': null,
     'click': null,
     'mouseover': null,
     'mouseout': null,
@@ -11562,9 +5650,10 @@ var p5 = function(sketch, node, sync) {
 
   if (window.DeviceOrientationEvent) {
     this._events.deviceorientation = null;
-  }
-  if (window.DeviceMotionEvent && !window._isNodeWebkit) {
+  } else if (window.DeviceMotionEvent) {
     this._events.devicemotion = null;
+  } else {
+    this._events.MozOrientation = null;
   }
 
   //FF doesn't recognize mousewheel as of FF3.x
@@ -11585,6 +5674,18 @@ var p5 = function(sketch, node, sync) {
       }
     }
 
+    // Setup loading screen
+    // Set loading scfeen into dom if not present
+    // Otherwise displays and removes user provided loading screen
+    this._loadingScreen = document.getElementById(this._loadingScreenId);
+    if(!this._loadingScreen){
+      this._loadingScreen = document.createElement('loadingDiv');
+      this._loadingScreen.innerHTML = 'loading...';
+      this._loadingScreen.style.position = 'absolute';
+      var node = this._userNode || document.body;
+      node.appendChild(this._loadingScreen);
+    }
+
     // Always create a default canvas.
     // Later on if the user calls createCanvas, this default one
     // will be replaced
@@ -11596,35 +5697,23 @@ var p5 = function(sketch, node, sync) {
     );
 
     var userPreload = this.preload || window.preload; // look for "preload"
+    var context = this._isGlobal ? window : this;
     if (userPreload) {
 
-      // Setup loading screen
-      // Set loading scfeen into dom if not present
-      // Otherwise displays and removes user provided loading screen
-      var loadingScreen = document.getElementById(this._loadingScreenId);
-      if(!loadingScreen){
-        loadingScreen = document.createElement('div');
-        loadingScreen.innerHTML = 'Loading...';
-        loadingScreen.style.position = 'absolute';
-        loadingScreen.id = this._loadingScreenId;
-        var node = this._userNode || document.body;
-        node.appendChild(loadingScreen);
-      }
-      // var methods = this._preloadMethods;
-      for (var method in this._preloadMethods){
-        // default to p5 if no object defined
-        this._preloadMethods[method] = this._preloadMethods[method] || p5;
-        var obj = this._preloadMethods[method];
-        //it's p5, check if it's global or instance
-        if (obj === p5.prototype || obj === p5){
-          obj = this._isGlobal ? window : this;
-        }
-        this._registeredPreloadMethods[method] = obj[method];
-        obj[method] = this._wrapPreload(obj, method);
-      }
+      var methods = this._preloadMethods;
+      Object.keys(methods).forEach(function(f) {
+        context[f] = function() {
+          var argsArray = Array.prototype.slice.call(arguments);
+          return context._preload(f, methods[f], argsArray);
+        };
+      });
 
       userPreload();
-      this._runIfPreloadsAreDone();
+      if (this._preloadCount === 0) {
+        this._setup();
+        this._runFrames();
+        this._draw();
+      }
     } else {
       this._setup();
       this._runFrames();
@@ -11632,40 +5721,20 @@ var p5 = function(sketch, node, sync) {
     }
   }.bind(this);
 
-  this._runIfPreloadsAreDone = function(){
-    var context = this._isGlobal ? window : this;
-    if (context._preloadCount === 0) {
-      var loadingScreen = document.getElementById(context._loadingScreenId);
-      if (loadingScreen) {
-        loadingScreen.parentNode.removeChild(loadingScreen);
-      }
-      context._setup();
-      context._runFrames();
-      context._draw();
-    }
-  };
-
-  this._decrementPreload = function(){
-    var context = this._isGlobal ? window : this;
-    context._setProperty('_preloadCount', context._preloadCount - 1);
-    context._runIfPreloadsAreDone();
-  };
-
-  this._wrapPreload = function(obj, fnName){
-    return function(){
-      //increment counter
-      this._incrementPreload();
-      //call original function
-      var args = Array.prototype.slice.call(arguments);
-      args.push(this._decrementPreload.bind(this));
-      return this._registeredPreloadMethods[fnName].apply(obj, args);
-    }.bind(this);
-  };
-
-  this._incrementPreload = function(){
+  this._preload = function (func, obj, args) {
     var context = this._isGlobal ? window : this;
     context._setProperty('_preloadCount', context._preloadCount + 1);
-  };
+    var preloadCallback = function (resp) {
+      context._setProperty('_preloadCount', context._preloadCount - 1);
+      if (context._preloadCount === 0) {
+        context._setup();
+        context._runFrames();
+        context._draw();
+      }
+    };
+    args.push(preloadCallback);
+    return window[obj].prototype[func].apply(context, args);
+  }.bind(this);
 
   this._setup = function() {
 
@@ -11673,7 +5742,8 @@ var p5 = function(sketch, node, sync) {
     var context = this._isGlobal ? window : this;
     if (typeof context.preload === 'function') {
       for (var f in this._preloadMethods) {
-        context[f] = this._preloadMethods[f][f];
+        var o = this._preloadMethods[f];
+        context[f] = window[o].prototype[f];
       }
     }
 
@@ -11697,6 +5767,9 @@ var p5 = function(sketch, node, sync) {
     }
     this._setupDone = true;
 
+    // Removes the loading screen if it's in the DOM
+    this._loadingScreen.parentNode.removeChild(this._loadingScreen);
+
   }.bind(this);
 
   this._draw = function () {
@@ -11717,19 +5790,17 @@ var p5 = function(sketch, node, sync) {
         time_since_last >= target_time_between_frames - epsilon) {
       this._setProperty('frameCount', this.frameCount + 1);
       this.redraw();
+      this._updatePAccelerations();
+      this._updatePMouseCoords();
+      this._updatePTouchCoords();
       this._frameRate = 1000.0/(now - this._lastFrameTime);
       this._lastFrameTime = now;
-    }
-
-    //mandatory update values(matrixs and stack) for 3d
-    if(this._renderer.isP3D){
-      this._renderer._update();
     }
 
     // get notified the next time the browser gives us
     // an opportunity to draw.
     if (this._loop) {
-      this._requestAnimId = window.requestAnimationFrame(this._draw);
+      window.requestAnimationFrame(this._draw);
     }
   }.bind(this);
 
@@ -11769,8 +5840,8 @@ var p5 = function(sketch, node, sync) {
 
       // stop draw
       this._loop = false;
-      if (this._requestAnimId) {
-        window.cancelAnimationFrame(this._requestAnimId);
+      if (this._updateInterval) {
+        clearTimeout(this._updateInterval);
       }
 
       // unregister events sketch-wide
@@ -11865,17 +5936,13 @@ var p5 = function(sketch, node, sync) {
     }
   }
 
-  var focusHandler = function() {
-    this._setProperty('focused', true);
-  }.bind(this);
-  var blurHandler = function() {
-    this._setProperty('focused', false);
-  }.bind(this);
-  window.addEventListener('focus', focusHandler);
-  window.addEventListener('blur', blurHandler);
-  this.registerMethod('remove', function() {
-    window.removeEventListener('focus', focusHandler);
-    window.removeEventListener('blur', blurHandler);
+  var self = this;
+  window.addEventListener('focus', function() {
+    self._setProperty('focused', true);
+  });
+
+  window.addEventListener('blur', function() {
+    self._setProperty('focused', false);
   });
 
   // TODO: ???
@@ -11895,23 +5962,21 @@ var p5 = function(sketch, node, sync) {
 // functions that cause preload to wait
 // more can be added by using registerPreloadMethod(func)
 p5.prototype._preloadMethods = {
-  loadJSON: p5.prototype,
-  loadImage: p5.prototype,
-  loadStrings: p5.prototype,
-  loadXML: p5.prototype,
-  loadShape: p5.prototype,
-  loadTable: p5.prototype,
-  loadFont: p5.prototype
+  loadJSON: 'p5',
+  loadImage: 'p5',
+  loadStrings: 'p5',
+  loadXML: 'p5',
+  loadShape: 'p5',
+  loadTable: 'p5',
+  loadFont: 'p5'
 };
 
 p5.prototype._registeredMethods = { pre: [], post: [], remove: [] };
 
-p5.prototype._registeredPreloadMethods = {};
-
-p5.prototype.registerPreloadMethod = function(fnString, obj) {
-  // obj = obj || p5.prototype;
-  if (!p5.prototype._preloadMethods.hasOwnProperty(fnString)) {
-    p5.prototype._preloadMethods[fnString] = obj;
+p5.prototype.registerPreloadMethod = function(f, o) {
+  o = o || 'p5';
+  if (!p5.prototype._preloadMethods.hasOwnProperty(f)) {
+    p5.prototype._preloadMethods[f] = o;
   }
 };
 
@@ -11924,7 +5989,7 @@ p5.prototype.registerMethod = function(name, m) {
 
 module.exports = p5;
 
-},{"./constants":47,"./shim":57}],49:[function(_dereq_,module,exports){
+},{"./constants":16,"./shim":26}],18:[function(require,module,exports){
 /**
  * @module Shape
  * @submodule Curves
@@ -11934,23 +5999,21 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
+var p5 = require('./core');
 
-_dereq_('./error_helpers');
+require('./error_helpers');
 
 var bezierDetail = 20;
 var curveDetail = 20;
+p5.prototype._curveTightness = 0;
 
 /**
- * Draws a cubic Bezier curve on the screen. These curves are defined by a
- * series of anchor and control points. The first two parameters specify
- * the first anchor point and the last two parameters specify the other
- * anchor point, which become the first and last points on the curve. The
- * middle parameters specify the two control points which define the shape
- * of the curve. Approximately speaking, control points "pull" the curve
- * towards them.<br /><br />Bezier curves were developed by French
- * automotive engineer Pierre Bezier, and are commonly used in computer
- * graphics to define gently sloping curves. See also curve().
+ * Draws a Bezier curve on the screen. These curves are defined by a series
+ * of anchor and control points. The first two parameters specify the first
+ * anchor point and the last two parameters specify the other anchor point.
+ * The middle parameters specify the control points which define the shape
+ * of the curve. Bezier curves were developed by French engineer Pierre
+ * Bezier.
  *
  * @method bezier
  * @param  {Number} x1 x-coordinate for the first anchor point
@@ -11975,21 +6038,17 @@ var curveDetail = 20;
  * </div>
  */
 p5.prototype.bezier = function(x1, y1, x2, y2, x3, y3, x4, y4) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   this._validateParameters(
     'bezier',
-    args,
+    arguments,
     [ 'Number', 'Number', 'Number', 'Number',
       'Number', 'Number', 'Number', 'Number' ]
   );
 
-  if (!this._renderer._doStroke) {
+  if (!this._doStroke) {
     return this;
   }
-  this._renderer.bezier(x1, y1, x2, y2, x3, y3, x4, y4);
+  this._graphics.bezier(x1, y1, x2, y2, x3, y3, x4, y4);
   return this;
 };
 
@@ -12015,10 +6074,11 @@ p5.prototype.bezierDetail = function(d) {
 };
 
 /**
- * Evaluates the Bezier at position t for points a, b, c, d.
- * The parameters a and d are the first and last points
+ * Calculate a point on the Bezier Curve
+ *
+ * Evaluates the Bezier at point t for points a, b, c, d.
+ * The parameter t varies between 0 and 1, a and d are points
  * on the curve, and b and c are the control points.
- * The final parameter t varies between 0 and 1.
  * This can be done once with the x coordinates and a second time
  * with the y coordinates to get the location of a bezier curve at t.
  *
@@ -12028,20 +6088,18 @@ p5.prototype.bezierDetail = function(d) {
  * @param {Number} c coordinate of second control point
  * @param {Number} d coordinate of second point on the curve
  * @param {Number} t value between 0 and 1
- * @return {Number} the value of the Bezier at position t
+ * @return {Number} the value of the Bezier at point t
  * @example
  * <div>
  * <code>
  * noFill();
- * x1 = 85, x2 = 10, x3 = 90, x4 = 15;
- * y1 = 20, y2 = 10, y3 = 90, y4 = 80;
- * bezier(x1, y1, x2, y2, x3, y3, x4, y4);
+ * bezier(85, 20, 10, 10, 90, 90, 15, 80);
  * fill(255);
  * steps = 10;
  * for (i = 0; i <= steps; i++) {
  *   t = i / steps;
- *   x = bezierPoint(x1, x2, x3, x4, t);
- *   y = bezierPoint(y1, y2, y3, y4, t);
+ *   x = bezierPoint(85, 10, 90, 15, t);
+ *   y = bezierPoint(20, 10, 90, 80, t);
  *   ellipse(x, y, 5, 5);
  * }
  * </code>
@@ -12056,10 +6114,11 @@ p5.prototype.bezierPoint = function(a, b, c, d, t) {
 };
 
 /**
- * Evaluates the tangent to the Bezier at position t for points a, b, c, d.
- * The parameters a and d are the first and last points
- * on the curve, and b and c are the control points.
- * The final parameter t varies between 0 and 1.
+ * Calculates the tangent of a point on a Bezier curve
+ *
+ * Evaluates the tangent at point t for points a, b, c, d.
+ * The parameter t varies between 0 and 1, a and d are points
+ * on the curve, and b and c are the control points
  *
  * @method bezierTangent
  * @param {Number} a coordinate of first point on the curve
@@ -12067,7 +6126,7 @@ p5.prototype.bezierPoint = function(a, b, c, d, t) {
  * @param {Number} c coordinate of second control point
  * @param {Number} d coordinate of second point on the curve
  * @param {Number} t value between 0 and 1
- * @return {Number} the tangent at position t
+ * @return {Number} the tangent at point t
  * @example
  * <div>
  * <code>
@@ -12127,12 +6186,11 @@ p5.prototype.bezierTangent = function(a, b, c, d, t) {
 };
 
 /**
- * Draws a curved line on the screen between two points, given as the
- * middle four parameters. The first two parameters are a control point, as
- * if the curve came from this point even though it's not drawn. The last
- * two parameters similarly describe the other control point. <br /><br />
- * Longer curves can be created by putting a series of curve() functions
- * together or using curveVertex(). An additional function called
+ * Draws a curved line on the screen. The first and second parameters specify
+ * the beginning control point and the last two parameters specify the ending
+ * control point. The middle parameters specify the start and stop of the
+ * curve. Longer curves can be created by putting a series of curve()
+ * functions together or using curveVertex(). An additional function called
  * curveTightness() provides control for the visual quality of the curve.
  * The curve() function is an implementation of Catmull-Rom splines.
  *
@@ -12158,37 +6216,19 @@ p5.prototype.bezierTangent = function(a, b, c, d, t) {
  * curve(73, 24, 73, 61, 15, 65, 15, 65);
  * </code>
  * </div>
- * <div>
- * <code>
- * // Define the curve points as JavaScript objects
- * p1 = {x: 5, y: 26}, p2 = {x: 73, y: 24}
- * p3 = {x: 73, y: 61}, p4 = {x: 15, y: 65}
- * noFill();
- * stroke(255, 102, 0);
- * curve(p1.x, p1.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)
- * stroke(0);
- * curve(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y)
- * stroke(255, 102, 0);
- * curve(p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, p4.x, p4.y)
- * </code>
- * </div>
  */
 p5.prototype.curve = function(x1, y1, x2, y2, x3, y3, x4, y4) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
   this._validateParameters(
     'curve',
-    args,
+    arguments,
     [ 'Number', 'Number', 'Number', 'Number',
       'Number', 'Number', 'Number', 'Number' ]
   );
 
-  if (!this._renderer._doStroke) {
+  if (!this._doStroke) {
     return;
   }
-  this._renderer.curve(x1, y1, x2, y2, x3, y3, x4, y4);
+  this._graphics.curve(x1, y1, x2, y2, x3, y3, x4, y4);
   return this;
 };
 
@@ -12252,11 +6292,13 @@ p5.prototype.curveDetail = function(d) {
  * </div>
  */
 p5.prototype.curveTightness = function (t) {
-  this._renderer._curveTightness = t;
+  this._setProperty('_curveTightness', t);
 };
 
 /**
- * Evaluates the curve at position t for points a, b, c, d.
+ * Calculate a point on the Curve
+ *
+ * Evaluates the Bezier at point t for points a, b, c, d.
  * The parameter t varies between 0 and 1, a and d are points
  * on the curve, and b and c are the control points.
  * This can be done once with the x coordinates and a second time
@@ -12268,7 +6310,7 @@ p5.prototype.curveTightness = function (t) {
  * @param {Number} c coordinate of second control point
  * @param {Number} d coordinate of second point on the curve
  * @param {Number} t value between 0 and 1
- * @return {Number} bezier value at position t
+ * @return {Number} bezier value at point t
  * @example
  * <div>
  * <code>
@@ -12290,7 +6332,7 @@ p5.prototype.curveTightness = function (t) {
  * </code>
  * </div>
  */
-p5.prototype.curvePoint = function(a, b, c, d, t) {
+p5.prototype.curvePoint = function(a, b,c, d, t) {
   var t3 = t*t*t,
     t2 = t*t,
     f1 = -0.5 * t3 + t2 - 0.5 * t,
@@ -12301,9 +6343,11 @@ p5.prototype.curvePoint = function(a, b, c, d, t) {
 };
 
 /**
- * Evaluates the tangent to the curve at position t for points a, b, c, d.
- * The parameter t varies between 0 and 1, a and d are points on the curve,
- * and b and c are the control points
+ * Calculates the tangent of a point on a curve
+ *
+ * Evaluates the tangent at point t for points a, b, c, d.
+ * The parameter t varies between 0 and 1, a and d are points
+ * on the curve, and b and c are the control points
  *
  * @method curveTangent
  * @param {Number} a coordinate of first point on the curve
@@ -12311,7 +6355,7 @@ p5.prototype.curvePoint = function(a, b, c, d, t) {
  * @param {Number} c coordinate of second control point
  * @param {Number} d coordinate of second point on the curve
  * @param {Number} t value between 0 and 1
- * @return {Number} the tangent at position t
+ * @return {Number} the tangent at point t
  * @example
  * <div>
  * <code>
@@ -12343,7 +6387,7 @@ p5.prototype.curveTangent = function(a, b,c, d, t) {
 
 module.exports = p5;
 
-},{"./core":48,"./error_helpers":51}],50:[function(_dereq_,module,exports){
+},{"./core":17,"./error_helpers":20}],19:[function(require,module,exports){
 /**
  * @module Environment
  * @submodule Environment
@@ -12354,8 +6398,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var C = _dereq_('./constants');
+var p5 = require('./core');
+var C = require('./constants');
 
 var standardCursors = [C.ARROW, C.CROSS, C.HAND, C.MOVE, C.TEXT, C.WAIT];
 
@@ -12369,7 +6413,8 @@ if (window.console && console.log) {
    * The print() function writes to the console area of your browser.
    * This function is often helpful for looking at the data a program is
    * producing. This function creates a new line of text for each call to
-   * the function. Individual elements can be
+   * the function. More than one parameter can be passed into the function by
+   * separating them with commas. Alternatively, individual elements can be
    * separated with quotes ("") and joined with the addition operator (+).
    *
    * While print() is similar to console.log(), it does not directly map to
@@ -12380,12 +6425,6 @@ if (window.console && console.log) {
    * @method print
    * @param {Any} contents any combination of Number, String, Object, Boolean,
    *                       Array to print
-   * @example
-   * <div><code class='norender'>
-   * var x = 10;
-   * print("The value of x is "+x);
-   * // prints "The value of x is 10"
-   * </code></div>
    */
   // Converts passed args into a string and then parses that string to
   // simulate synchronous behavior. This is a hack and is gross.
@@ -12662,7 +6701,7 @@ p5.prototype.windowHeight = window.innerHeight;
  * is resized. This is a good place to resize the canvas or do any other
  * adjustements to accomodate the new window size.
  *
- * @method windowResized
+ * @property windowResized
  * @example
  * <div class="norender"><code>
  * function setup() {
@@ -12720,7 +6759,7 @@ p5.prototype.height = 0;
  * be called on user input, for example, on mouse press like the example
  * below.
  *
- * @method fullScreen
+ * @method fullscreen
  * @param  {Boolean} [val] whether the sketch should be fullscreened or not
  * @return {Boolean} current fullscreen state
  * @example
@@ -12732,14 +6771,14 @@ p5.prototype.height = 0;
  * }
  * function mousePressed() {
  *   if (mouseX > 0 && mouseX < 100 && mouseY > 0 && mouseY < 100) {
- *     var fs = fullScreen();
- *     fullScreen(!fs);
+ *     var fs = fullscreen();
+ *     fullscreen(!fs);
  *   }
  * }
  * </code>
  * </div>
  */
-p5.prototype.fullScreen = function(val) {
+p5.prototype.fullscreen = function(val) {
   // no arguments, return fullscreen or not
   if (typeof val === 'undefined') {
     return document.fullscreenElement ||
@@ -12756,20 +6795,18 @@ p5.prototype.fullScreen = function(val) {
 };
 
 /**
- * Sets the pixel scaling for high pixel density displays. By default
- * pixel density is set to match display density, call pixelDensity(1)
- * to turn this off. Calling pixelDensity() with no arguments returns
- * the current pixel density of the sketch.
+ * Toggles pixel scaling for high pixel density displays. By default
+ * pixel scaling is on, call devicePixelScaling(false) to turn it off.
+ * This devicePixelScaling() function must be the first line of code
+ * inside setup().
  *
- *
- * @method pixelDensity
- * @param  {Number} [val] whether or how much the sketch should scale
- * @returns {Number} current pixel density of the sketch
+ * @method devicePixelScaling
+ * @param  {Boolean|Number} [val] whether or how much the sketch should scale
  * @example
  * <div>
  * <code>
  * function setup() {
- *   pixelDensity(1);
+ *   devicePixelScaling(false);
  *   createCanvas(100, 100);
  *   background(200);
  *   ellipse(width/2, height/2, 50, 50);
@@ -12779,7 +6816,7 @@ p5.prototype.fullScreen = function(val) {
  * <div>
  * <code>
  * function setup() {
- *   pixelDensity(3.0);
+ *   devicePixelScaling(3.0);
  *   createCanvas(100, 100);
  *   background(200);
  *   ellipse(width/2, height/2, 50, 50);
@@ -12787,35 +6824,18 @@ p5.prototype.fullScreen = function(val) {
  * </code>
  * </div>
  */
-p5.prototype.pixelDensity = function(val) {
-  if (typeof val === 'number') {
-    this._pixelDensity = val;
+p5.prototype.devicePixelScaling = function(val) {
+  if (val) {
+    if (typeof val === 'number') {
+      this.pixelDensity = val;
+    }
+    else {
+      this.pixelDensity = window.devicePixelRatio || 1;
+    }
   } else {
-    return this._pixelDensity;
+    this.pixelDensity = 1;
   }
   this.resizeCanvas(this.width, this.height, true);
-};
-
-/**
- * Returns the pixel density of the current display the sketch is running on.
- *
- * @method displayDensity
- * @returns {Number} current pixel density of the display
- * @example
- * <div>
- * <code>
- * function setup() {
- *   var density = displayDensity();
- *   pixelDensity(density);
- *   createCanvas(100, 100);
- *   background(200);
- *   ellipse(width/2, height/2, 50, 50);
- * }
- * </code>
- * </div>
- */
-p5.prototype.displayDensity = function() {
-  return window.devicePixelRatio;
 };
 
 function launchFullscreen(element) {
@@ -12927,7 +6947,7 @@ p5.prototype.getURLParams = function() {
 
 module.exports = p5;
 
-},{"./constants":47,"./core":48}],51:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17}],20:[function(require,module,exports){
 /**
  * @for p5
  * @requires core
@@ -12935,8 +6955,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var doFriendlyWelcome = false; // TEMP until we get it all working LM
+var p5 = require('./core');
+var doFriendlyWelcome = true;
 
 // -- Borrowed from jQuery 1.11.3 --
 var class2type = {};
@@ -13013,30 +7033,27 @@ function report(message, func, color) {
   } else if (getType(color) === 'number') { // Type to color
     color = typeColors[color];
   }
-  // LM TEMP commenting this out until we get the whole system working
-  // if (func.substring(0,4) === 'load'){
-  //   console.log(
-  //     '%c> p5.js says: '+message+'%c'+
-  //     '[https://github.com/processing/p5.js/wiki/Local-server]',
-  //     'background-color:' + color + ';color:#FFF;',
-  //     'background-color:transparent;color:' + color +';',
-  //     'background-color:' + color + ';color:#FFF;',
-  //     'background-color:transparent;color:' + color +';'
-  //   );
-  // }
-  // else{
-  //   console.log(
-  //     '%c> p5.js says: '+message+'%c [http://p5js.org/reference/#p5/'+func+
-  //     ']', 'background-color:' + color + ';color:#FFF;',
-  //     'background-color:transparent;color:' + color +';'
-  //   );
-  // }
+  if (func.substring(0,4) === 'load'){
+    console.log(
+      '%c> p5.js says: '+message+'%c'+
+      '[https://github.com/processing/p5.js/wiki/Local-server]',
+      'background-color:' + color + ';color:#FFF;',
+      'background-color:transparent;color:' + color +';',
+      'background-color:' + color + ';color:#FFF;',
+      'background-color:transparent;color:' + color +';'
+    );
+  }
+  else{
+    console.log(
+      '%c> p5.js says: '+message+'%c [http://p5js.org/reference/#p5/'+func+
+      ']', 'background-color:' + color + ';color:#FFF;',
+      'background-color:transparent;color:' + color +';'
+    );
+  }
 }
 
 /**
  * Validate all the parameters of a function for number and type
- * NOTE THIS FUNCTION IS TEMPORARILY DISABLED UNTIL FURTHER WORK
- * AND UPDATES ARE IMPLEMENTED. -LMCCART
  *
  * @param  {String} func  name of function we're checking
  * @param  {Array}  args  pass of the JS default arguments array
@@ -13052,9 +7069,12 @@ p5.prototype._validateParameters = function(func, args, types) {
   if (!isArray(types[0])) {
     types = [types];
   }
-  // Check number of parameters
-  // Example: "You wrote ellipse(X,X,X). ellipse was expecting 4
-  //          parameters. Try ellipse(X,X,X,X)."
+  /**
+   * Check number of parameters
+   *
+   * Example: "You wrote ellipse(X,X,X). ellipse was expecting 4
+   *           parameters. Try ellipse(X,X,X,X)."
+   */
   var diff = Math.abs(args.length-types[0].length);
   var message, tindex = 0;
   for (var i=1, len=types.length; i<len; i++) {
@@ -13069,13 +7089,13 @@ p5.prototype._validateParameters = function(func, args, types) {
     message = 'You wrote ' + func + '(';
     // Concat an appropriate number of placeholders for call
     if (args.length > 0) {
-      message += symbol + Array(args.length).join(',' + symbol);
+      message += symbol + (','+symbol).repeat(args.length-1);
     }
     message += '). ' + func + ' was expecting ' + types[tindex].length +
       ' parameters. Try ' + func + '(';
     // Concat an appropriate number of placeholders for definition
     if (types[tindex].length > 0) {
-      message += symbol + Array(types[tindex].length).join(',' + symbol);
+      message += symbol + (','+symbol).repeat(types[tindex].length-1);
     }
     message += ').';
     // If multiple definitions
@@ -13085,10 +7105,13 @@ p5.prototype._validateParameters = function(func, args, types) {
     }
     report(message, func, PARAM_COUNT);
   }
-  // Type checking
-  // Example: "It looks like ellipse received an empty variable in spot #2."
-  // Example: "ellipse was expecting a number for parameter #1,
-  //           received "foo" instead."
+  /**
+   * Type checking
+   *
+   * Example: "It looks like ellipse received an empty variable in spot #2."
+   * Example: "ellipse was expecting a number for parameter #1,
+   *           received "foo" instead."
+   */
   for (var format=0; format<types.length; format++) {
     for (var p=0; p < types[format].length && p < args.length; p++) {
       var defType = types[format][p];
@@ -13115,14 +7138,6 @@ p5.prototype._validateParameters = function(func, args, types) {
     }
   }
 };
-/*
- * NOTE THIS FUNCTION IS TEMPORARILY DISABLED UNTIL FURTHER WORK
- * AND UPDATES ARE IMPLEMENTED. -LMCCART
- */
-p5.prototype._validateParameters = function() {
-  return true;
-};
-
 var errorCases = {
   '0': {
     fileType: 'image',
@@ -13197,14 +7212,14 @@ function friendlyWelcome() {
 
 module.exports = p5;
 
-},{"./core":48}],52:[function(_dereq_,module,exports){
+},{"./core":17}],21:[function(require,module,exports){
 /**
  * @module DOM
  * @submodule DOM
  * @for p5.Element
  */
 
-var p5 = _dereq_('./core');
+var p5 = require('./core');
 
 /**
  * Base class for all elements added to a sketch, including canvas,
@@ -13237,7 +7252,7 @@ p5.Element = function(elt, pInst) {
  *
  * Attaches the element to the parent specified. A way of setting
  * the container for the element. Accepts either a string ID, DOM
- * node, or p5.Element. If no arguments given, parent node is returned.
+ * node, or p5.Element.
  *
  * @method parent
  * @param  {String|Object} parent the ID, DOM node, or p5.Element
@@ -13269,20 +7284,13 @@ p5.Element = function(elt, pInst) {
  * </code></div>
  */
 p5.Element.prototype.parent = function(p) {
-  if (arguments.length === 0){
-    return this.elt.parentNode;
-  } else {
-    if (typeof p === 'string') {
-      if (p[0] === '#') {
-        p = p.substring(1);
-      }
-      p = document.getElementById(p);
-    } else if (p instanceof p5.Element) {
-      p = p.elt;
-    }
-    p.appendChild(this.elt);
-    return this;
+  if (typeof p === 'string') {
+    p = document.getElementById(p);
+  } else if (p instanceof p5.Element) {
+    p = p.elt;
   }
+  p.appendChild(this.elt);
+  return this;
 };
 
 /**
@@ -13307,7 +7315,7 @@ p5.Element.prototype.id = function(id) {
  * @return {p5.Element}
  */
 p5.Element.prototype.class = function(c) {
-  this.elt.className = c;
+  this.elt.className += ' '+c;
   return this;
 };
 
@@ -13435,38 +7443,6 @@ p5.Element.prototype.mouseMoved = function (fxn) {
  */
 p5.Element.prototype.mouseOver = function (fxn) {
   attachListener('mouseover', fxn, this);
-  return this;
-};
-
-
-/**
- * The .changed() function is called when the value of an
- * element is changed.
- * This can be used to attach an element specific event listener.
- *
- * @method changed
- * @param  {Function} fxn function to be fired when the value of an
- * element changes.
- * @return {p5.Element}
- */
-p5.Element.prototype.changed = function (fxn) {
-  attachListener('change', fxn, this);
-  return this;
-};
-
-/**
- * The .input() function is called when any user input is
- * detected with an element. The input event is often used
- * to detect keystrokes in a input element, or changes on a
- * slider element. This can be used to attach an element specific
- * event listener.
- *
- * @method input
- * @param  {Function} fxn function to be fired on user input.
- * @return {p5.Element}
- */
-p5.Element.prototype.input = function (fxn) {
-  attachListener('input', fxn, this);
   return this;
 };
 
@@ -13701,9 +7677,9 @@ p5.Element.prototype.drop = function (callback, fxn) {
         reader.onload = makeLoader(f);
 
 
-        // Text or data?
+        // Text of data?
         // This should likely be improved
-        if (f.type.indexOf('text') > -1) {
+        if (f.type === 'text') {
           reader.readAsText(f);
         } else {
           reader.readAsDataURL(f);
@@ -13740,15 +7716,15 @@ p5.Element.prototype._setProperty = function (prop, value) {
 
 module.exports = p5.Element;
 
-},{"./core":48}],53:[function(_dereq_,module,exports){
+},{"./core":17}],22:[function(require,module,exports){
 /**
  * @module Rendering
  * @submodule Rendering
  * @for p5
  */
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
+var p5 = require('./core');
+var constants = require('./constants');
 
 /**
  * Thin wrapper around a renderer, to be used for creating a
@@ -13776,16 +7752,16 @@ p5.Graphics = function(w, h, renderer, pInst) {
   this._styles = [];
   this.width = w;
   this.height = h;
-  this._pixelDensity = pInst._pixelDensity;
+  this.pixelDensity = pInst.pixelDensity;
 
   if (r === constants.WEBGL) {
-    this._renderer = new p5.Renderer3D(c, pInst, false);
+    this._graphics = new p5.Renderer3D(c, this, false);
   } else {
-    this._renderer = new p5.Renderer2D(c, pInst, false);
+    this._graphics = new p5.Renderer2D(c, this, false);
   }
 
-  this._renderer.resize(w, h);
-  this._renderer._applyDefaults();
+  this._graphics.resize(w, h);
+  this._graphics._applyDefaults();
 
   pInst._elements.push(this);
 
@@ -13807,15 +7783,14 @@ p5.Graphics.prototype = Object.create(p5.Element.prototype);
 
 module.exports = p5.Graphics;
 
-},{"./constants":47,"./core":48}],54:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17}],23:[function(require,module,exports){
 /**
  * @module Rendering
  * @submodule Rendering
  * @for p5
  */
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('../core/constants');
+var p5 = require('./core');
 
 /**
  * Main graphics and rendering context, as well as the base API
@@ -13844,39 +7819,9 @@ p5.Renderer = function(elt, pInst, isMainCanvas) {
     this.canvas.style.display = 'none';
     this._styles = []; // non-main elt styles stored in p5.Renderer
   }
-
-
-  this._textSize = 12;
-  this._textLeading = 15;
-  this._textFont = 'sans-serif';
-  this._textStyle = constants.NORMAL;
-  this._textAscent = null;
-  this._textDescent = null;
-
-
-  this._rectMode = constants.CORNER;
-  this._ellipseMode = constants.CENTER;
-  this._curveTightness = 0;
-  this._imageMode = constants.CORNER;
-
-  this._tint = null;
-  this._doStroke = true;
-  this._doFill = true;
-  this._strokeSet = false;
-  this._fillSet = false;
-  this._colorMode = constants.RGB;
-  this._colorMaxes = {
-    rgb: [255, 255, 255, 255],
-    hsb: [360, 100, 100, 1],
-    hsl: [360, 100, 100, 1]
-  };
-
 };
 
 p5.Renderer.prototype = Object.create(p5.Element.prototype);
-
-
-
 
 /**
  * Resize our canvas element.
@@ -13884,8 +7829,8 @@ p5.Renderer.prototype = Object.create(p5.Element.prototype);
 p5.Renderer.prototype.resize = function(w, h) {
   this.width = w;
   this.height = h;
-  this.elt.width = w * this._pInst._pixelDensity;
-  this.elt.height = h * this._pInst._pixelDensity;
+  this.elt.width = w * this._pInst.pixelDensity;
+  this.elt.height = h * this._pInst.pixelDensity;
   this.elt.style.width = w +'px';
   this.elt.style.height = h + 'px';
   if (this._isMainCanvas) {
@@ -13894,145 +7839,16 @@ p5.Renderer.prototype.resize = function(w, h) {
   }
 };
 
-p5.Renderer.prototype.textLeading = function(l) {
-
-  if (arguments.length && arguments[0]) {
-
-    this._setProperty('_textLeading', l);
-    return this;
-  }
-
-  return this._textLeading;
-};
-
-p5.Renderer.prototype.textSize = function(s) {
-
-  if (arguments.length && arguments[0]) {
-
-    this._setProperty('_textSize', s);
-    this._setProperty('_textLeading', s * constants._DEFAULT_LEADMULT);
-    return this._applyTextProperties();
-  }
-
-  return this._textSize;
-};
-
-p5.Renderer.prototype.textStyle = function(s) {
-
-  if (arguments.length && arguments[0]) {
-
-    if (s === constants.NORMAL ||
-      s === constants.ITALIC ||
-      s === constants.BOLD) {
-      this._setProperty('_textStyle', s);
-    }
-
-    return this._applyTextProperties();
-  }
-
-  return this._textStyle;
-};
-
-p5.Renderer.prototype.textAscent = function() {
-  if (this._textAscent === null) {
-    this._updateTextMetrics();
-  }
-  return this._textAscent;
-};
-
-p5.Renderer.prototype.textDescent = function() {
-
-  if (this._textDescent === null) {
-    this._updateTextMetrics();
-  }
-  return this._textDescent;
-};
-
-/**
- * Helper fxn to check font type (system or otf)
- */
-p5.Renderer.prototype._isOpenType = function(f) {
-
-  f = f || this._textFont;
-  return (typeof f === 'object' && f.font && f.font.supported);
-};
-
-p5.Renderer.prototype._updateTextMetrics = function() {
-
-  if (this._isOpenType()) {
-
-    this._setProperty('_textAscent', this._textFont._textAscent());
-    this._setProperty('_textDescent', this._textFont._textDescent());
-    return this;
-  }
-
-  // Adapted from http://stackoverflow.com/a/25355178
-  var text = document.createElement('span');
-  text.style.fontFamily = this._textFont;
-  text.style.fontSize = this._textSize + 'px';
-  text.innerHTML = 'ABCjgq|';
-
-  var block = document.createElement('div');
-  block.style.display = 'inline-block';
-  block.style.width = '1px';
-  block.style.height = '0px';
-
-  var container = document.createElement('div');
-  container.appendChild(text);
-  container.appendChild(block);
-
-  container.style.height = '0px';
-  container.style.overflow = 'hidden';
-  document.body.appendChild(container);
-
-  block.style.verticalAlign = 'baseline';
-  var blockOffset = calculateOffset(block);
-  var textOffset = calculateOffset(text);
-  var ascent = blockOffset[1] - textOffset[1];
-
-  block.style.verticalAlign = 'bottom';
-  blockOffset = calculateOffset(block);
-  textOffset = calculateOffset(text);
-  var height = blockOffset[1] - textOffset[1];
-  var descent = height - ascent;
-
-  document.body.removeChild(container);
-
-  this._setProperty('_textAscent', ascent);
-  this._setProperty('_textDescent', descent);
-
-  return this;
-};
-
-/**
- * Helper fxn to measure ascent and descent.
- * Adapted from http://stackoverflow.com/a/25355178
- */
-function calculateOffset(object) {
-  var currentLeft = 0,
-    currentTop = 0;
-  if (object.offsetParent) {
-    do {
-      currentLeft += object.offsetLeft;
-      currentTop += object.offsetTop;
-    } while (object = object.offsetParent);
-  } else {
-    currentLeft += object.offsetLeft;
-    currentTop += object.offsetTop;
-  }
-  return [currentLeft, currentTop];
-}
-
 module.exports = p5.Renderer;
 
-},{"../core/constants":47,"./core":48}],55:[function(_dereq_,module,exports){
+},{"./core":17}],24:[function(require,module,exports){
 
-var p5 = _dereq_('./core');
-var canvas = _dereq_('./canvas');
-var constants = _dereq_('./constants');
-var filters = _dereq_('../image/filters');
+var p5 = require('./core');
+var canvas = require('./canvas');
+var constants = require('./constants');
+var filters = require('../image/filters');
 
-_dereq_('./p5.Renderer');
+require('./p5.Renderer');
 
 /**
  * 2D graphics renderer class.  Can also be used as an off-screen
@@ -14085,8 +7901,8 @@ p5.Renderer2D.prototype._applyDefaults = function() {
 
 p5.Renderer2D.prototype.resize = function(w,h) {
   p5.Renderer.prototype.resize.call(this, w,h);
-  this.drawingContext.scale(this._pInst._pixelDensity,
-                            this._pInst._pixelDensity);
+  this.drawingContext.scale(this._pInst.pixelDensity,
+                            this._pInst.pixelDensity);
 };
 
 //////////////////////////////////////////////
@@ -14096,8 +7912,8 @@ p5.Renderer2D.prototype.resize = function(w,h) {
 p5.Renderer2D.prototype.background = function() {
   this.drawingContext.save();
   this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
-  this.drawingContext.scale(this._pInst._pixelDensity,
-                            this._pInst._pixelDensity);
+  this.drawingContext.scale(this._pInst.pixelDensity,
+                            this._pInst.pixelDensity);
 
   if (arguments[0] instanceof p5.Image) {
     this._pInst.image(arguments[0], 0, 0, this.width, this.height);
@@ -14135,16 +7951,14 @@ p5.Renderer2D.prototype.stroke = function() {
 // IMAGE | Loading & Displaying
 //////////////////////////////////////////////
 
-p5.Renderer2D.prototype.image =
-  function (img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+p5.Renderer2D.prototype.image = function (img, x, y, w, h) {
   var frame = img.canvas || img.elt;
   try {
-    if (this._tint && img.canvas) {
-      this.drawingContext.drawImage(this._getTintedImageCanvas(img), sx, sy,
-        sWidth, sHeight, dx, dy, dWidth, dHeight);
+    if (this._pInst._tint && img.canvas) {
+      this.drawingContext.drawImage(this._getTintedImageCanvas(img),
+        x, y, w, h);
     } else {
-      this.drawingContext.drawImage(frame, sx, sy, sWidth, sHeight, dx, dy,
-        dWidth, dHeight);
+      this.drawingContext.drawImage(frame, x, y, w, h);
     }
   } catch (e) {
     if (e.name !== 'NS_ERROR_NOT_AVAILABLE') {
@@ -14169,10 +7983,10 @@ p5.Renderer2D.prototype._getTintedImageCanvas = function (img) {
     var g = pixels[i + 1];
     var b = pixels[i + 2];
     var a = pixels[i + 3];
-    newPixels[i] = r * this._tint[0] / 255;
-    newPixels[i + 1] = g * this._tint[1] / 255;
-    newPixels[i + 2] = b * this._tint[2] / 255;
-    newPixels[i + 3] = a * this._tint[3] / 255;
+    newPixels[i] = r * this._pInst._tint[0] / 255;
+    newPixels[i + 1] = g * this._pInst._tint[1] / 255;
+    newPixels[i + 2] = b * this._pInst._tint[2] / 255;
+    newPixels[i + 3] = a * this._pInst._tint[3] / 255;
   }
   tmpCtx.putImageData(id, 0, 0);
   return tmpCanvas;
@@ -14248,32 +8062,30 @@ p5.Renderer2D.prototype.get = function(x, y, w, h) {
     h = 1;
   }
 
-  // if the section does not overlap the canvas
-  if(x + w < 0 || y + h < 0 || x > this.width || y > this.height){
+  if(x > this.width || y > this.height || x < 0 || y < 0){
     return [0, 0, 0, 255];
   }
 
-  var ctx = this._pInst || this;
-
-  var pd = ctx._pixelDensity;
-
-  this.loadPixels.call(ctx);
+  var pd = this.pixelDensity || this._pInst.pixelDensity;
 
   if (w === 1 && h === 1){
 
-    return [
-      ctx.pixels[pd*4*(y*this.width+x)],
-      ctx.pixels[pd*(4*(y*this.width+x)+1)],
-      ctx.pixels[pd*(4*(y*this.width+x)+2)],
-      ctx.pixels[pd*(4*(y*this.width+x)+3)]
-    ];
+    var imageData = this.drawingContext.getImageData(x * pd, y * pd, w, h);
+    var data = imageData.data;
+    var pixels = [];
+
+    for (var i = 0; i < data.length; i += 4) {
+      pixels.push(data[i], data[i+1], data[i+2], data[i+3]);
+    }
+
+    return pixels;
   } else {
     var sx = x * pd;
     var sy = y * pd;
     //auto constrain the width and height to
     //dimensions of the source image
-    var dw = Math.min(w, ctx.width);
-    var dh = Math.min(h, ctx.height);
+    var dw = Math.min(w, this.width);
+    var dh = Math.min(h, this.height);
     var sw = dw * pd;
     var sh = dh * pd;
 
@@ -14286,12 +8098,10 @@ p5.Renderer2D.prototype.get = function(x, y, w, h) {
 };
 
 p5.Renderer2D.prototype.loadPixels = function () {
-  var pd = this._pixelDensity || this._pInst._pixelDensity;
+  var pd = this.pixelDensity || this._pInst.pixelDensity;
   var w = this.width * pd;
   var h = this.height * pd;
   var imageData = this.drawingContext.getImageData(0, 0, w, h);
-  // @todo this should actually set pixels per object, so diff buffers can
-  // have diff pixel arrays.
   if (this._pInst) {
     this._pInst._setProperty('imageData', imageData);
     this._pInst._setProperty('pixels', imageData.data);
@@ -14302,19 +8112,19 @@ p5.Renderer2D.prototype.loadPixels = function () {
 };
 
 p5.Renderer2D.prototype.set = function (x, y, imgOrCol) {
+  var pd = this.pixelDensity || this._pInst.pixelDensity;
   if (imgOrCol instanceof p5.Image) {
     this.drawingContext.save();
     this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
-    this.drawingContext.scale(this._pInst._pixelDensity,
-      this._pInst._pixelDensity);
+    this.drawingContext.scale(pd);
     this.drawingContext.drawImage(imgOrCol.canvas, x, y);
     this.loadPixels.call(this._pInst);
     this.drawingContext.restore();
   } else {
     var ctx = this._pInst || this;
     var r = 0, g = 0, b = 0, a = 0;
-    var idx = 4*((y * ctx._pixelDensity) *
-      (this.width * ctx._pixelDensity) + (x * ctx._pixelDensity));
+    var idx = 4*((y * ctx.pixelDensity) *
+      (this.width * ctx.pixelDensity) + (x * ctx.pixelDensity));
     if (!ctx.imageData) {
       ctx.loadPixels.call(ctx);
     }
@@ -14340,19 +8150,19 @@ p5.Renderer2D.prototype.set = function (x, y, imgOrCol) {
       }
     } else if (imgOrCol instanceof p5.Color) {
       if (idx < ctx.pixels.length) {
-        r = imgOrCol.levels[0];
-        g = imgOrCol.levels[1];
-        b = imgOrCol.levels[2];
-        a = imgOrCol.levels[3];
+        r = imgOrCol.rgba[0];
+        g = imgOrCol.rgba[1];
+        b = imgOrCol.rgba[2];
+        a = imgOrCol.rgba[3];
         //this.updatePixels.call(this);
       }
     }
     // loop over pixelDensity * pixelDensity
-    for (var i = 0; i < ctx._pixelDensity; i++) {
-      for (var j = 0; j < ctx._pixelDensity; j++) {
+    for (var i = 0; i < ctx.pixelDensity; i++) {
+      for (var j = 0; j < ctx.pixelDensity; j++) {
         // loop over
-        idx = 4*((y * ctx._pixelDensity + j) * this.width *
-          ctx._pixelDensity + (x * ctx._pixelDensity + i));
+        idx = 4*((y * ctx.pixelDensity + j) * this.width *
+          ctx.pixelDensity + (x * ctx.pixelDensity + i));
         ctx.pixels[idx] = r;
         ctx.pixels[idx+1] = g;
         ctx.pixels[idx+2] = b;
@@ -14363,7 +8173,7 @@ p5.Renderer2D.prototype.set = function (x, y, imgOrCol) {
 };
 
 p5.Renderer2D.prototype.updatePixels = function (x, y, w, h) {
-  var pd = this._pixelDensity || this._pInst._pixelDensity;
+  var pd = this.pixelDensity || this._pInst.pixelDensity;
   if (x === undefined &&
       y === undefined &&
       w === undefined &&
@@ -14423,7 +8233,7 @@ p5.Renderer2D.prototype._acuteArcToBezier =
 p5.Renderer2D.prototype.arc =
   function(x, y, w, h, start, stop, mode) {
   var ctx = this.drawingContext;
-  var vals = canvas.arcModeAdjust(x, y, w, h, this._ellipseMode);
+  var vals = canvas.arcModeAdjust(x, y, w, h, this._pInst._ellipseMode);
   var rx = vals.w / 2.0;
   var ry = vals.h / 2.0;
   var epsilon = 0.00001;  // Smallest visible angle on displays up to 4K.
@@ -14438,7 +8248,7 @@ p5.Renderer2D.prototype.arc =
   }
 
   // Fill curves
-  if (this._doFill) {
+  if (this._pInst._doFill) {
     ctx.beginPath();
     curves.forEach(function (curve, index) {
       if (index === 0) {
@@ -14456,7 +8266,7 @@ p5.Renderer2D.prototype.arc =
   }
 
   // Stroke curves
-  if (this._doStroke) {
+  if (this._pInst._doStroke) {
     ctx.beginPath();
     curves.forEach(function (curve, index) {
       if (index === 0) {
@@ -14479,7 +8289,7 @@ p5.Renderer2D.prototype.arc =
 
 p5.Renderer2D.prototype.ellipse = function(x, y, w, h) {
   var ctx = this.drawingContext;
-  var doFill = this._doFill, doStroke = this._doStroke;
+  var doFill = this._pInst._doFill, doStroke = this._pInst._doStroke;
   if (doFill && !doStroke) {
     if(ctx.fillStyle === styleEmpty) {
       return this;
@@ -14489,7 +8299,7 @@ p5.Renderer2D.prototype.ellipse = function(x, y, w, h) {
       return this;
     }
   }
-  var vals = canvas.modeAdjust(x, y, w, h, this._ellipseMode);
+  var vals = canvas.modeAdjust(x, y, w, h, this._pInst._ellipseMode);
   var kappa = 0.5522847498,
     ox = (vals.w / 2) * kappa, // control point offset horizontal
     oy = (vals.h / 2) * kappa, // control point offset vertical
@@ -14514,7 +8324,7 @@ p5.Renderer2D.prototype.ellipse = function(x, y, w, h) {
 
 p5.Renderer2D.prototype.line = function(x1, y1, x2, y2) {
   var ctx = this.drawingContext;
-  if (!this._doStroke) {
+  if (!this._pInst._doStroke) {
     return this;
   } else if(ctx.strokeStyle === styleEmpty){
     return this;
@@ -14537,7 +8347,7 @@ p5.Renderer2D.prototype.point = function(x, y) {
   var ctx = this.drawingContext;
   var s = ctx.strokeStyle;
   var f = ctx.fillStyle;
-  if (!this._doStroke) {
+  if (!this._pInst._doStroke) {
     return this;
   } else if(ctx.strokeStyle === styleEmpty){
     return this;
@@ -14565,7 +8375,7 @@ p5.Renderer2D.prototype.point = function(x, y) {
 p5.Renderer2D.prototype.quad =
   function(x1, y1, x2, y2, x3, y3, x4, y4) {
   var ctx = this.drawingContext;
-  var doFill = this._doFill, doStroke = this._doStroke;
+  var doFill = this._pInst._doFill, doStroke = this._pInst._doStroke;
   if (doFill && !doStroke) {
     if(ctx.fillStyle === styleEmpty) {
       return this;
@@ -14592,7 +8402,7 @@ p5.Renderer2D.prototype.quad =
 
 p5.Renderer2D.prototype.rect = function(x, y, w, h, tl, tr, br, bl) {
   var ctx = this.drawingContext;
-  var doFill = this._doFill, doStroke = this._doStroke;
+  var doFill = this._pInst._doFill, doStroke = this._pInst._doStroke;
   if (doFill && !doStroke) {
     if(ctx.fillStyle === styleEmpty) {
       return this;
@@ -14602,9 +8412,9 @@ p5.Renderer2D.prototype.rect = function(x, y, w, h, tl, tr, br, bl) {
       return this;
     }
   }
-  var vals = canvas.modeAdjust(x, y, w, h, this._rectMode);
+  var vals = canvas.modeAdjust(x, y, w, h, this._pInst._rectMode);
   // Translate the line by (0.5, 0.5) to draw a crisp rectangle border
-  if (this._doStroke && ctx.lineWidth % 2 === 1) {
+  if (this._pInst._doStroke && ctx.lineWidth % 2 === 1) {
     ctx.translate(0.5, 0.5);
   }
   ctx.beginPath();
@@ -14646,13 +8456,13 @@ p5.Renderer2D.prototype.rect = function(x, y, w, h, tl, tr, br, bl) {
     ctx.arcTo(_x, _y, _x + _w, _y, tl);
     ctx.closePath();
   }
-  if (this._doFill) {
+  if (this._pInst._doFill) {
     ctx.fill();
   }
-  if (this._doStroke) {
+  if (this._pInst._doStroke) {
     ctx.stroke();
   }
-  if (this._doStroke && ctx.lineWidth % 2 === 1) {
+  if (this._pInst._doStroke && ctx.lineWidth % 2 === 1) {
     ctx.translate(-0.5, -0.5);
   }
   return this;
@@ -14660,7 +8470,7 @@ p5.Renderer2D.prototype.rect = function(x, y, w, h, tl, tr, br, bl) {
 
 p5.Renderer2D.prototype.triangle = function(x1, y1, x2, y2, x3, y3) {
   var ctx = this.drawingContext;
-  var doFill = this._doFill, doStroke = this._doStroke;
+  var doFill = this._pInst._doFill, doStroke = this._pInst._doStroke;
   if (doFill && !doStroke) {
     if(ctx.fillStyle === styleEmpty) {
       return this;
@@ -14689,7 +8499,7 @@ function (mode, vertices, isCurve, isBezier,
   if (vertices.length === 0) {
     return this;
   }
-  if (!this._doStroke && !this._doFill) {
+  if (!this._pInst._doStroke && !this._pInst._doFill) {
     return this;
   }
   var closeShape = mode === constants.CLOSE;
@@ -14701,7 +8511,7 @@ function (mode, vertices, isCurve, isBezier,
   var numVerts = vertices.length;
   if (isCurve && (shapeKind === constants.POLYGON || shapeKind === null)) {
     if (numVerts > 3) {
-      var b = [], s = 1 - this._curveTightness;
+      var b = [], s = 1 - this._pInst._curveTightness;
       this.drawingContext.beginPath();
       this.drawingContext.moveTo(vertices[1][0], vertices[1][1]);
       for (i = 1; i + 2 < numVerts; i++) {
@@ -14766,7 +8576,7 @@ function (mode, vertices, isCurve, isBezier,
     if (shapeKind === constants.POINTS) {
       for (i = 0; i < numVerts; i++) {
         v = vertices[i];
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(v[6]);
         }
         this._pInst.point(v[0], v[1]);
@@ -14774,7 +8584,7 @@ function (mode, vertices, isCurve, isBezier,
     } else if (shapeKind === constants.LINES) {
       for (i = 0; i + 1 < numVerts; i += 2) {
         v = vertices[i];
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(vertices[i + 1][6]);
         }
         this._pInst.line(v[0], v[1], vertices[i + 1][0], vertices[i + 1][1]);
@@ -14787,11 +8597,11 @@ function (mode, vertices, isCurve, isBezier,
         this.drawingContext.lineTo(vertices[i + 1][0], vertices[i + 1][1]);
         this.drawingContext.lineTo(vertices[i + 2][0], vertices[i + 2][1]);
         this.drawingContext.lineTo(v[0], v[1]);
-        if (this._doFill) {
+        if (this._pInst._doFill) {
           this._pInst.fill(vertices[i + 2][5]);
           this.drawingContext.fill();
         }
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(vertices[i + 2][6]);
           this.drawingContext.stroke();
         }
@@ -14803,18 +8613,18 @@ function (mode, vertices, isCurve, isBezier,
         this.drawingContext.beginPath();
         this.drawingContext.moveTo(vertices[i + 1][0], vertices[i + 1][1]);
         this.drawingContext.lineTo(v[0], v[1]);
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(vertices[i + 1][6]);
         }
-        if (this._doFill) {
+        if (this._pInst._doFill) {
           this._pInst.fill(vertices[i + 1][5]);
         }
         if (i + 2 < numVerts) {
           this.drawingContext.lineTo(vertices[i + 2][0], vertices[i + 2][1]);
-          if (this._doStroke) {
+          if (this._pInst._doStroke) {
             this._pInst.stroke(vertices[i + 2][6]);
           }
-          if (this._doFill) {
+          if (this._pInst._doFill) {
             this._pInst.fill(vertices[i + 2][5]);
           }
         }
@@ -14826,10 +8636,10 @@ function (mode, vertices, isCurve, isBezier,
         this.drawingContext.moveTo(vertices[0][0], vertices[0][1]);
         this.drawingContext.lineTo(vertices[1][0], vertices[1][1]);
         this.drawingContext.lineTo(vertices[2][0], vertices[2][1]);
-        if (this._doFill) {
+        if (this._pInst._doFill) {
           this._pInst.fill(vertices[2][5]);
         }
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(vertices[2][6]);
         }
         this._doFillStrokeClose();
@@ -14839,10 +8649,10 @@ function (mode, vertices, isCurve, isBezier,
           this.drawingContext.moveTo(vertices[0][0], vertices[0][1]);
           this.drawingContext.lineTo(vertices[i - 1][0], vertices[i - 1][1]);
           this.drawingContext.lineTo(v[0], v[1]);
-          if (this._doFill) {
+          if (this._pInst._doFill) {
             this._pInst.fill(v[5]);
           }
-          if (this._doStroke) {
+          if (this._pInst._doStroke) {
             this._pInst.stroke(v[6]);
           }
           this._doFillStrokeClose();
@@ -14857,10 +8667,10 @@ function (mode, vertices, isCurve, isBezier,
           this.drawingContext.lineTo(vertices[i + j][0], vertices[i + j][1]);
         }
         this.drawingContext.lineTo(v[0], v[1]);
-        if (this._doFill) {
+        if (this._pInst._doFill) {
           this._pInst.fill(vertices[i + 3][5]);
         }
-        if (this._doStroke) {
+        if (this._pInst._doStroke) {
           this._pInst.stroke(vertices[i + 3][6]);
         }
         this._doFillStrokeClose();
@@ -14875,10 +8685,10 @@ function (mode, vertices, isCurve, isBezier,
             this.drawingContext.lineTo(v[0], v[1]);
             this.drawingContext.lineTo(vertices[i + 1][0], vertices[i+1][1]);
             this.drawingContext.lineTo(vertices[i + 3][0], vertices[i+3][1]);
-            if (this._doFill) {
+            if (this._pInst._doFill) {
               this._pInst.fill(vertices[i + 3][5]);
             }
-            if (this._doStroke) {
+            if (this._pInst._doStroke) {
               this._pInst.stroke(vertices[i + 3][6]);
             }
           } else {
@@ -15011,10 +8821,10 @@ p5.Renderer2D.prototype.curve = function (x1, y1, x2, y2, x3, y3, x4, y4) {
 //////////////////////////////////////////////
 
 p5.Renderer2D.prototype._doFillStrokeClose = function () {
-  if (this._doFill) {
+  if (this._pInst._doFill) {
     this.drawingContext.fill();
   }
-  if (this._doStroke) {
+  if (this._pInst._doStroke) {
     this.drawingContext.stroke();
   }
   this.drawingContext.closePath();
@@ -15031,8 +8841,8 @@ function(n00, n01, n02, n10, n11, n12) {
 
 p5.Renderer2D.prototype.resetMatrix = function() {
   this.drawingContext.setTransform(1, 0, 0, 1, 0, 0);
-  this.drawingContext.scale(this._pInst._pixelDensity,
-                            this._pInst._pixelDensity);
+  this.drawingContext.scale(this._pInst.pixelDensity,
+                            this._pInst.pixelDensity);
   return this;
 };
 
@@ -15040,8 +8850,17 @@ p5.Renderer2D.prototype.rotate = function(r) {
   this.drawingContext.rotate(r);
 };
 
-p5.Renderer2D.prototype.scale = function(x,y) {
+p5.Renderer2D.prototype.scale = function() {
+  var x = 1.0,
+    y = 1.0;
+  if (arguments.length === 1) {
+    x = y = arguments[0];
+  } else {
+    x = arguments[0];
+    y = arguments[1];
+  }
   this.drawingContext.scale(x, y);
+
   return this;
 };
 
@@ -15074,14 +8893,14 @@ p5.Renderer2D.prototype.translate = function(x, y) {
 p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
 
   var p = this._pInst, cars, n, ii, jj, line, testLine,
-    testWidth, words, totalHeight, baselineHacked,
-    finalMaxHeight = Number.MAX_VALUE;
+    testWidth, words, totalHeight, baselineHacked;
 
   // baselineHacked: (HACK)
-  // A temporary fix to conform to Processing's implementation
-  // of BASELINE vertical alignment in a bounding box
+  // This is an ugly temporary fix to conform to
+  // Processing's vertical alignment implementation
+  // for BASELINE vetical alignment in a boundings box
 
-  if (!(this._doFill || this._doStroke)) {
+  if (!(p._doFill || p._doStroke)) {
     return;
   }
 
@@ -15110,7 +8929,7 @@ p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
       }
     }
 
-    if (this._rectMode === constants.CENTER) {
+    if (this._pInst._rectMode === constants.CENTER ){
 
       x -= maxWidth / 2;
       y -= maxHeight / 2;
@@ -15140,9 +8959,6 @@ p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
         this.drawingContext.textBaseline = constants.TOP;
         break;
       }
-
-      // remember the max-allowed y-position for any line (fix to #928)
-      finalMaxHeight = (y + maxHeight) - p.textAscent();
     }
 
     for (ii = 0; ii < cars.length; ii++) {
@@ -15153,7 +8969,7 @@ p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
         testLine = line + words[n] + ' ';
         testWidth = this.textWidth(testLine);
         if (testWidth > maxWidth && line.length > 0) {
-          this._renderText(p, line, x, y, finalMaxHeight);
+          this._renderText(p, line, x, y);
           line = words[n] + ' ';
           y += p.textLeading();
         } else {
@@ -15161,14 +8977,14 @@ p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
         }
       }
 
-      this._renderText(p, line, x, y, finalMaxHeight);
+      this._renderText(p, line, x, y);
       y += p.textLeading();
     }
   }
   else {
     for (jj = 0; jj < cars.length; jj++) {
 
-      this._renderText(p, cars[jj], x, y, finalMaxHeight);
+      this._renderText(p, cars[jj], x, y);
       y += p.textLeading();
     }
   }
@@ -15176,30 +8992,25 @@ p5.Renderer2D.prototype.text = function (str, x, y, maxWidth, maxHeight) {
   if (baselineHacked) {
     this.drawingContext.textBaseline = constants.BASELINE;
   }
-
   return p;
 };
 
-p5.Renderer2D.prototype._renderText = function(p, line, x, y, maxY) {
-
-  if (y >= maxY) {
-    return; // don't render lines beyond our maxY position
-  }
+p5.Renderer2D.prototype._renderText = function(p, line, x, y) {
 
   p.push(); // fix to #803
 
-  if (!this._isOpenType()) {  // a system/browser font
+  if (!p._isOpenType()) {  // a system/browser font
 
     // no stroke unless specified by user
-    if (this._doStroke && this._strokeSet) {
+    if (p._doStroke && p._strokeSet) {
 
       this.drawingContext.strokeText(line, x, y);
     }
 
-    if (this._doFill) {
+    if (p._doFill) {
 
       // if fill hasn't been set by user, use default text fill
-      this.drawingContext.fillStyle =  this._fillSet ?
+      this.drawingContext.fillStyle =  p._fillSet ?
         this.drawingContext.fillStyle : constants._DEFAULT_TEXT_FILL;
 
       this.drawingContext.fillText(line, x, y);
@@ -15207,7 +9018,7 @@ p5.Renderer2D.prototype._renderText = function(p, line, x, y, maxY) {
   }
   else { // an opentype font, let it handle the rendering
 
-    this._textFont._renderPath(line, x, y);
+    p._textFont._renderPath(line, x, y);
   }
 
   p.pop();
@@ -15217,9 +9028,9 @@ p5.Renderer2D.prototype._renderText = function(p, line, x, y, maxY) {
 
 p5.Renderer2D.prototype.textWidth = function(s) {
 
-  if (this._isOpenType()) {
+  if (this._pInst._isOpenType()) {
 
-    return this._textFont._textWidth(s);
+    return this._pInst._textFont._textWidth(s);
   }
 
   return this.drawingContext.measureText(s).width;
@@ -15271,19 +9082,18 @@ p5.Renderer2D.prototype._applyTextProperties = function() {
 
   var font, p = this._pInst;
 
-  this._setProperty('_textAscent', null);
-  this._setProperty('_textDescent', null);
+  p._setProperty('_textAscent', null);
+  p._setProperty('_textDescent', null);
 
-  font = this._textFont;
+  font = p._textFont;
 
-  if (this._isOpenType()) {
+  if (p._isOpenType()) {
 
-    font = this._textFont.font.familyName;
-    this._setProperty('_textStyle', this._textFont.font.styleName);
+    font = p._textFont.font.familyName;
+    p._setProperty('_textStyle', p._textFont.font.styleName);
   }
 
-  this.drawingContext.font = this._textStyle + ' ' +
-  this._textSize + 'px ' + font;
+  this.drawingContext.font = p._textStyle + ' ' + p._textSize + 'px ' + font;
 
   return p;
 };
@@ -15303,19 +9113,18 @@ p5.Renderer2D.prototype.pop = function() {
 
 module.exports = p5.Renderer2D;
 
-},{"../image/filters":65,"./canvas":46,"./constants":47,"./core":48,"./p5.Renderer":54}],56:[function(_dereq_,module,exports){
+},{"../image/filters":34,"./canvas":15,"./constants":16,"./core":17,"./p5.Renderer":23}],25:[function(require,module,exports){
 /**
  * @module Rendering
  * @submodule Rendering
  * @for p5
  */
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
-_dereq_('./p5.Graphics');
-_dereq_('./p5.Renderer2D');
-_dereq_('../3d/p5.Renderer3D');
-var defaultId = 'defaultCanvas0'; // this gets set again in createCanvas
+var p5 = require('./core');
+var constants = require('./constants');
+require('./p5.Graphics');
+require('./p5.Renderer2D');
+require('../3d/p5.Renderer3D');
 
 /**
  * Creates a canvas element in the document, and sets the dimensions of it
@@ -15357,22 +9166,17 @@ p5.prototype.createCanvas = function(w, h, renderer) {
   }
 
   if(r === constants.WEBGL){
-    c = document.getElementById(defaultId);
+    c = document.getElementById('defaultCanvas');
     if(c){ //if defaultCanvas already exists
       c.parentNode.removeChild(c); //replace the existing defaultCanvas
     }
     c = document.createElement('canvas');
-    c.id = defaultId;
+    c.id = 'defaultCanvas';
   }
   else {
     if (isDefault) {
       c = document.createElement('canvas');
-      var i = 0;
-      while (document.getElementById('defaultCanvas'+i)) {
-        i++;
-      }
-      defaultId = 'defaultCanvas'+i;
-      c.id = defaultId;
+      c.id = 'defaultCanvas';
     } else { // resize the default canvas if new one is created
       c = this.canvas;
     }
@@ -15395,22 +9199,19 @@ p5.prototype.createCanvas = function(w, h, renderer) {
   // Init our graphics renderer
   //webgl mode
   if (r === constants.WEBGL) {
-    this._setProperty('_renderer', new p5.Renderer3D(c, this, true));
+    this._setProperty('_graphics', new p5.Renderer3D(c, this, true));
     this._isdefaultGraphics = true;
   }
   //P2D mode
   else {
     if (!this._isdefaultGraphics) {
-      this._setProperty('_renderer', new p5.Renderer2D(c, this, true));
+      this._setProperty('_graphics', new p5.Renderer2D(c, this, true));
       this._isdefaultGraphics = true;
     }
   }
-  this._renderer.resize(w, h);
-  this._renderer._applyDefaults();
-  if (isDefault) { // only push once
-    this._elements.push(this._renderer);
-  }
-  return this._renderer;
+  this._graphics.resize(w, h);
+  this._graphics._applyDefaults();
+  return this._graphics;
 };
 
 /**
@@ -15435,9 +9236,9 @@ p5.prototype.createCanvas = function(w, h, renderer) {
  * </code></div>
  */
 p5.prototype.resizeCanvas = function (w, h, noRedraw) {
-  if (this._renderer) {
-    this._renderer.resize(w, h);
-    this._renderer._applyDefaults();
+  if (this._graphics) {
+    this._graphics.resize(w, h);
+    this._graphics._applyDefaults();
     if (!noRedraw) {
       this.redraw();
     }
@@ -15565,7 +9366,7 @@ p5.prototype.blendMode = function(mode) {
     mode === constants.SOFT_LIGHT || mode === constants.DODGE ||
     mode === constants.BURN || mode === constants.ADD ||
     mode === constants.NORMAL) {
-    this._renderer.blendMode(mode);
+    this._graphics.blendMode(mode);
   } else {
     throw new Error('Mode '+mode+' not recognized.');
   }
@@ -15573,7 +9374,7 @@ p5.prototype.blendMode = function(mode) {
 
 module.exports = p5;
 
-},{"../3d/p5.Renderer3D":36,"./constants":47,"./core":48,"./p5.Graphics":53,"./p5.Renderer2D":55}],57:[function(_dereq_,module,exports){
+},{"../3d/p5.Renderer3D":6,"./constants":16,"./core":17,"./p5.Graphics":22,"./p5.Renderer2D":24}],26:[function(require,module,exports){
 
 // requestAnim shim layer by Paul Irish
 window.requestAnimationFrame = (function(){
@@ -15653,7 +9454,7 @@ window.performance.now = (function(){
 }());
 
 
-},{}],58:[function(_dereq_,module,exports){
+},{}],27:[function(require,module,exports){
 /**
  * @module Structure
  * @submodule Structure
@@ -15663,7 +9464,7 @@ window.performance.now = (function(){
 
 'use strict';
 
-var p5 = _dereq_('./core');
+var p5 = require('./core');
 
 p5.prototype.exit = function() {
   throw 'exit() not implemented, see remove()';
@@ -15816,19 +9617,19 @@ p5.prototype.loop = function() {
  * </div>
  */
 p5.prototype.push = function () {
-  this._renderer.push();
+  this._graphics.push();
   this._styles.push({
-    _doStroke: this._renderer._doStroke,
-    _doFill: this._renderer._doFill,
-    _tint: this._renderer._tint,
-    _imageMode: this._renderer._imageMode,
-    _rectMode: this._renderer._rectMode,
-    _ellipseMode: this._renderer._ellipseMode,
-    _colorMode: this._renderer._colorMode,
-    _textFont: this._renderer._textFont,
-    _textLeading: this._renderer._textLeading,
-    _textSize: this._renderer._textSize,
-    _textStyle: this._renderer._textStyle
+    doStroke: this._doStroke,
+    doFill: this._doFill,
+    tint: this._tint,
+    imageMode: this._imageMode,
+    rectMode: this._rectMode,
+    ellipseMode: this._ellipseMode,
+    colorMode: this._colorMode,
+    textFont: this.textFont,
+    textLeading: this.textLeading,
+    textSize: this.textSize,
+    textStyle: this.textStyle
   });
 };
 
@@ -15884,11 +9685,19 @@ p5.prototype.push = function () {
  * </div>
  */
 p5.prototype.pop = function () {
-  this._renderer.pop();
+  this._graphics.pop();
   var lastS = this._styles.pop();
-  for(var prop in lastS){
-    this._renderer[prop] = lastS[prop];
-  }
+  this._doStroke = lastS.doStroke;
+  this._doFill = lastS.doFill;
+  this._tint = lastS.tint;
+  this._imageMode = lastS.imageMode;
+  this._rectMode = lastS.rectMode;
+  this._ellipseMode = lastS.ellipseMode;
+  this._colorMode = lastS.colorMode;
+  this.textFont = lastS.textFont;
+  this.textLeading = lastS.textLeading;
+  this.textSize = lastS.textSize;
+  this.textStyle = lastS.textStyle;
 };
 
 p5.prototype.pushStyle = function() {
@@ -15940,30 +9749,27 @@ p5.prototype.redraw = function () {
   if (typeof userDraw === 'function') {
     this.push();
     if (typeof userSetup === 'undefined') {
-      this.scale(this._pixelDensity, this._pixelDensity);
+      this.scale(this.pixelDensity, this.pixelDensity);
     }
-    var self = this;
     this._registeredMethods.pre.forEach(function (f) {
-      f.call(self);
+      f.call(this);
     });
-    this.pop();
     userDraw();
     this._registeredMethods.post.forEach(function (f) {
-      f.call(self);
+      f.call(this);
     });
+    this.pop();
   }
 };
 
 p5.prototype.size = function() {
-  var s = 'size() is not a valid p5 function, to set the size of the ';
-  s += 'drawing canvas, please use createCanvas() instead';
-  throw s;
+  throw 'size() not implemented, see createCanvas()';
 };
 
 
 module.exports = p5;
 
-},{"./core":48}],59:[function(_dereq_,module,exports){
+},{"./core":17}],28:[function(require,module,exports){
 /**
  * @module Transform
  * @submodule Transform
@@ -15975,8 +9781,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
+var p5 = require('./core');
+var constants = require('./constants');
 
 /**
  * Multiplies the current matrix by the one specified through the parameters.
@@ -15999,7 +9805,7 @@ var constants = _dereq_('./constants');
  * </div>
  */
 p5.prototype.applyMatrix = function(n00, n01, n02, n10, n11, n12) {
-  this._renderer.applyMatrix(n00, n01, n02, n10, n11, n12);
+  this._graphics.applyMatrix(n00, n01, n02, n10, n11, n12);
   return this;
 };
 
@@ -16028,7 +9834,7 @@ p5.prototype.pushMatrix = function() {
  * </div>
  */
 p5.prototype.resetMatrix = function() {
-  this._renderer.resetMatrix();
+  this._graphics.resetMatrix();
   return this;
 };
 
@@ -16061,18 +9867,11 @@ p5.prototype.resetMatrix = function() {
  * </code>
  * </div>
  */
-p5.prototype.rotate = function() {
-  var r = arguments[0];
+p5.prototype.rotate = function(r) {
   if (this._angleMode === constants.DEGREES) {
     r = this.radians(r);
   }
-  //in webgl mode
-  if(arguments.length > 1){
-    this._renderer.rotate(r, arguments[1]);
-  }
-  else {
-    this._renderer.rotate(r);
-  }
+  this._graphics.rotate(r);
   return this;
 };
 
@@ -16082,21 +9881,10 @@ p5.prototype.rotate = function() {
  * @return {[type]}     [description]
  */
 p5.prototype.rotateX = function(rad) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  if (this._renderer.isP3D) {
-    this._validateParameters(
-      'rotateX',
-      args,
-      [
-        ['Number']
-      ]
-    );
-    this._renderer.rotateX(rad);
+  if (this._graphics.isP3D) {
+    this._graphics.rotateX(rad);
   } else {
-    throw 'not supported in p2d. Please use webgl mode';
+    throw 'not yet implemented.';
   }
   return this;
 };
@@ -16107,21 +9895,10 @@ p5.prototype.rotateX = function(rad) {
  * @return {[type]}     [description]
  */
 p5.prototype.rotateY = function(rad) {
-  if (this._renderer.isP3D) {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; ++i) {
-      args[i] = arguments[i];
-    }
-    this._validateParameters(
-      'rotateY',
-      args,
-      [
-        ['Number']
-      ]
-    );
-    this._renderer.rotateY(rad);
+  if (this._graphics.isP3D) {
+    this._graphics.rotateY(rad);
   } else {
-    throw 'not supported in p2d. Please use webgl mode';
+    throw 'not yet implemented.';
   }
   return this;
 };
@@ -16132,19 +9909,8 @@ p5.prototype.rotateY = function(rad) {
  * @return {[type]}     [description]
  */
 p5.prototype.rotateZ = function(rad) {
-  if (this._renderer.isP3D) {
-    var args = new Array(arguments.length);
-    for (var i = 0; i < args.length; ++i) {
-      args[i] = arguments[i];
-    }
-    this._validateParameters(
-      'rotateZ',
-      args,
-      [
-        ['Number']
-      ]
-    );
-    this._renderer.rotateZ(rad);
+  if (this._graphics.isP3D) {
+    this._graphics.rotateZ(rad);
   } else {
     throw 'not supported in p2d. Please use webgl mode';
   }
@@ -16168,12 +9934,10 @@ p5.prototype.rotateZ = function(rad) {
  * can be further controlled with push() and pop().
  *
  * @method scale
- * @param  {Number | p5.Vector | Array} s
- *                      percent to scale the object, or percentage to
+ * @param  {Number} s   percentage to scale the object, or percentage to
  *                      scale the object in the x-axis if multiple arguments
  *                      are given
- * @param  {Number} [y] percent to scale the object in the y-axis
- * @param  {Number} [z] percent to scale the object in the z-axis (webgl only)
+ * @param  {Number} [y] percentage to scale the object in the y-axis
  * @return {p5}         the p5 object
  * @example
  * <div>
@@ -16193,37 +9957,10 @@ p5.prototype.rotateZ = function(rad) {
  * </div>
  */
 p5.prototype.scale = function() {
-  var x,y,z;
-  var args = new Array(arguments.length);
-  for(var i = 0; i < args.length; i++) {
-    args[i] = arguments[i];
-  }
-  if(args[0] instanceof p5.Vector){
-    x = args[0].x;
-    y = args[0].y;
-    z = args[0].z;
-  }
-  else if(args[0] instanceof Array){
-    x = args[0][0];
-    y = args[0][1];
-    z = args[0][2] || 1;
-  }
-  else {
-    if(args.length === 1){
-      x = y = z = args[0];
-    }
-    else {
-      x = args[0];
-      y = args[1];
-      z = args[2] || 1;
-    }
-  }
-
-  if(this._renderer.isP3D){
-    this._renderer.scale.call(this._renderer, x,y,z);
-  }
-  else {
-    this._renderer.scale.call(this._renderer, x,y);
+  if (this._graphics.isP3D) {
+    this._graphics.scale(arguments[0], arguments[1], arguments[2]);
+  } else {
+    this._graphics.scale.apply(this._graphics, arguments);
   }
   return this;
 };
@@ -16261,7 +9998,7 @@ p5.prototype.shearX = function(angle) {
   if (this._angleMode === constants.DEGREES) {
     angle = this.radians(angle);
   }
-  this._renderer.shearX(angle);
+  this._graphics.shearX(angle);
   return this;
 };
 
@@ -16298,7 +10035,7 @@ p5.prototype.shearY = function(angle) {
   if (this._angleMode === constants.DEGREES) {
     angle = this.radians(angle);
   }
-  this._renderer.shearY(angle);
+  this._graphics.shearY(angle);
   return this;
 };
 
@@ -16337,38 +10074,17 @@ p5.prototype.shearY = function(angle) {
  * </div>
  */
 p5.prototype.translate = function(x, y, z) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-
-  if (this._renderer.isP3D) {
-    this._validateParameters(
-      'translate',
-      args,
-      [
-        //p3d
-        ['Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.translate(x, y, z);
+  if (this._graphics.isP3D) {
+    this._graphics.translate(x, y, z);
   } else {
-    this._validateParameters(
-      'translate',
-      args,
-      [
-        //p2d
-        ['Number', 'Number']
-      ]
-    );
-    this._renderer.translate(x, y);
+    this._graphics.translate(x, y);
   }
   return this;
 };
 
 module.exports = p5;
 
-},{"./constants":47,"./core":48}],60:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17}],29:[function(require,module,exports){
 /**
  * @module Shape
  * @submodule Vertex
@@ -16379,8 +10095,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('./core');
-var constants = _dereq_('./constants');
+var p5 = require('./core');
+var constants = require('./constants');
 var shapeKind = null;
 var vertices = [];
 var contourVertices = [];
@@ -16608,12 +10324,8 @@ p5.prototype.beginShape = function(kind) {
   } else {
     shapeKind = null;
   }
-  if(this._renderer.isP3D){
-    this._renderer.beginShape(kind);
-  } else {
-    vertices = [];
-    contourVertices = [];
-  }
+  vertices = [];
+  contourVertices = [];
   return this;
 };
 
@@ -16793,34 +10505,30 @@ p5.prototype.endContour = function() {
  * </div>
  */
 p5.prototype.endShape = function(mode) {
-  if(this._renderer.isP3D){
-    this._renderer.endShape();
-  }else{
-    if (vertices.length === 0) { return this; }
-    if (!this._renderer._doStroke && !this._renderer._doFill) { return this; }
+  if (vertices.length === 0) { return this; }
+  if (!this._doStroke && !this._doFill) { return this; }
 
-    var closeShape = mode === constants.CLOSE;
+  var closeShape = mode === constants.CLOSE;
 
-    // if the shape is closed, the first element is also the last element
-    if (closeShape && !isContour) {
-      vertices.push(vertices[0]);
-    }
+  // if the shape is closed, the first element is also the last element
+  if (closeShape && !isContour) {
+    vertices.push(vertices[0]);
+  }
 
-    this._renderer.endShape(mode, vertices, isCurve, isBezier,
-      isQuadratic, isContour, shapeKind);
+  this._graphics.endShape(mode, vertices, isCurve, isBezier,
+    isQuadratic, isContour, shapeKind);
 
-    // Reset some settings
-    isCurve = false;
-    isBezier = false;
-    isQuadratic = false;
-    isContour = false;
+  // Reset some settings
+  isCurve = false;
+  isBezier = false;
+  isQuadratic = false;
+  isContour = false;
 
-    // If the shape is closed, the first element was added as last element.
-    // We must remove it again to prevent the list of vertices from growing
-    // over successive calls to endShape(CLOSE)
-    if (closeShape) {
-      vertices.pop();
-    }
+  // If the shape is closed, the first element was added as last element.
+  // We must remove it again to prevent the list of vertices from growing
+  // over successive calls to endShape(CLOSE)
+  if (closeShape) {
+    vertices.pop();
   }
   return this;
 };
@@ -16920,57 +10628,33 @@ p5.prototype.quadraticVertex = function(cx, cy, x3, y3) {
  * </div>
  */
 p5.prototype.vertex = function(x, y, moveTo) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  if(this._renderer.isP3D){
-    this._validateParameters(
-      'vertex',
-      args,
-      [
-        ['Number', 'Number', 'Number']
-      ]
-    );
-    this._renderer.vertex
-    (arguments[0], arguments[1], arguments[2]);
-  }else{
-    this._validateParameters(
-      'vertex',
-      args,
-      [
-        ['Number', 'Number'],
-        ['Number', 'Number', 'Number']
-      ]
-    );
-    var vert = [];
-    vert.isVert = true;
-    vert[0] = x;
-    vert[1] = y;
-    vert[2] = 0;
-    vert[3] = 0;
-    vert[4] = 0;
-    vert[5] = this._renderer._getFill();
-    vert[6] = this._renderer._getStroke();
+  var vert = [];
+  vert.isVert = true;
+  vert[0] = x;
+  vert[1] = y;
+  vert[2] = 0;
+  vert[3] = 0;
+  vert[4] = 0;
+  vert[5] = this._graphics._getFill();
+  vert[6] = this._graphics._getStroke();
 
-    if (moveTo) {
-      vert.moveTo = moveTo;
+  if (moveTo) {
+    vert.moveTo = moveTo;
+  }
+  if (isContour) {
+    if (contourVertices.length === 0) {
+      vert.moveTo = true;
     }
-    if (isContour) {
-      if (contourVertices.length === 0) {
-        vert.moveTo = true;
-      }
-      contourVertices.push(vert);
-    } else {
-      vertices.push(vert);
-    }
+    contourVertices.push(vert);
+  } else {
+    vertices.push(vert);
   }
   return this;
 };
 
 module.exports = p5;
 
-},{"./constants":47,"./core":48}],61:[function(_dereq_,module,exports){
+},{"./constants":16,"./core":17}],30:[function(require,module,exports){
 /**
  * @module Events
  * @submodule Acceleration
@@ -16980,7 +10664,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * The system variable deviceOrientation always contains the orientation of
@@ -17053,173 +10737,11 @@ p5.prototype._updatePAccelerations = function(){
   this._setProperty('pAccelerationZ', this.accelerationZ);
 };
 
-/**
- * The system variable rotationX always contains the rotation of the
- * device along the x axis. Value is represented as 0 to +/-180 degrees.
- *
- * @property rotationX
- */
-p5.prototype.rotationX = 0;
-
-/**
- * The system variable rotationY always contains the rotation of the
- * device along the y axis. Value is represented as 0 to +/-180 degrees.
- *
- * @property rotationY
- */
-p5.prototype.rotationY = 0;
-
-/**
- * The system variable rotationZ always contains the rotation of the
- * device along the z axis. Value is represented as 0 to 359 degrees.
- * <br><br>
- * Unlike rotationX and rotationY, this variable is available for devices
- * with a built-in compass only.
- *
- * @property rotationZ
- */
-p5.prototype.rotationZ = 0;
-
-/**
- * The system variable pRotationX always contains the rotation of the
- * device along the x axis in the frame previous to the current frame. Value
- * is represented as 0 to +/-180 degrees.
- * <br><br>
- * pRotationX can also be used with rotationX to determine the rotate
- * direction of the device along the X-axis.
- * @example
- * <div class='norender'>
- * <code>
- * // A simple if statement looking at whether
- * // rotationX - pRotationX < 0 is true or not will be
- * // sufficient for determining the rotate direction
- * // in most cases.
- *
- * // Some extra logic is needed to account for cases where
- * // the angles wrap around.
- * var rotateDirection = 'clockwise';
- *
- * // Simple range conversion to make things simpler.
- * // This is not absolutely neccessary but the logic
- * // will be different in that case.
- *
- * var rX = rotationX + 180;
- * var pRX = pRotationX + 180;
- *
- * if ((rX - pRX > 0 && rX - pRX < 270)|| rX - pRX < -270){
- *   rotateDirection = 'clockwise';
- * } else if (rX - pRX < 0 || rX - pRX > 270){
- *   rotateDirection = 'counter-clockwise';
- * }
- * </code>
- * </div>
- *
- * @property pRotationX
- */
-p5.prototype.pRotationX = 0;
-
-/**
- * The system variable pRotationY always contains the rotation of the
- * device along the y axis in the frame previous to the current frame. Value
- * is represented as 0 to +/-180 degrees.
- * <br><br>
- * pRotationY can also be used with rotationY to determine the rotate
- * direction of the device along the Y-axis.
- * @example
- * <div class='norender'>
- * <code>
- * // A simple if statement looking at whether
- * // rotationY - pRotationY < 0 is true or not will be
- * // sufficient for determining the rotate direction
- * // in most cases.
- *
- * // Some extra logic is needed to account for cases where
- * // the angles wrap around.
- * var rotateDirection = 'clockwise';
- *
- * // Simple range conversion to make things simpler.
- * // This is not absolutely neccessary but the logic
- * // will be different in that case.
- *
- * var rY = rotationY + 180;
- * var pRY = pRotationY + 180;
- *
- * if ((rY - pRY > 0 && rY - pRY < 270)|| rY - pRY < -270){
- *   rotateDirection = 'clockwise';
- * } else if (rY - pRY < 0 || rY - pRY > 270){
- *   rotateDirection = 'counter-clockwise';
- * }
- * </code>
- * </div>
- *
- * @property pRotationY
- */
-p5.prototype.pRotationY = 0;
-
-/**
- * The system variable pRotationZ always contains the rotation of the
- * device along the z axis in the frame previous to the current frame. Value
- * is represented as 0 to 359 degrees.
- * <br><br>
- * pRotationZ can also be used with rotationZ to determine the rotate
- * direction of the device along the Z-axis.
- * @example
- * <div class='norender'>
- * <code>
- * // A simple if statement looking at whether
- * // rotationZ - pRotationZ < 0 is true or not will be
- * // sufficient for determining the rotate direction
- * // in most cases.
- *
- * // Some extra logic is needed to account for cases where
- * // the angles wrap around.
- * var rotateDirection = 'clockwise';
- *
- * if ((rotationZ - pRotationZ > 0 &&
- *   rotationZ - pRotationZ < 270)||
- *   rotationZ - pRotationZ < -270){
- *
- *   rotateDirection = 'clockwise';
- *
- * } else if (rotationZ - pRotationZ < 0 ||
- *   rotationZ - pRotationZ > 270){
- *
- *   rotateDirection = 'counter-clockwise';
- *
- * }
- * </code>
- * </div>
- *
- * @property pRotationZ
- */
-p5.prototype.pRotationZ = 0;
-
-var startAngleX = 0;
-var startAngleY = 0;
-var startAngleZ = 0;
-
-var rotateDirectionX = 'clockwise';
-var rotateDirectionY = 'clockwise';
-var rotateDirectionZ = 'clockwise';
-
-var pRotateDirectionX;
-var pRotateDirectionY;
-var pRotateDirectionZ;
-
-p5.prototype._updatePRotations = function(){
-  this._setProperty('pRotationX', this.rotationX);
-  this._setProperty('pRotationY', this.rotationY);
-  this._setProperty('pRotationZ', this.rotationZ);
-};
-
-p5.prototype.turnAxis = undefined;
-
 var move_threshold = 0.5;
-var shake_threshold = 30;
 
 /**
  * The setMoveThreshold() function is used to set the movement threshold for
- * the deviceMoved() function. The default threshold is set to 0.5.
+ * the deviceMoved() function.
  *
  * @method setMoveThreshold
  * @param {number} value The threshold value
@@ -17230,23 +10752,12 @@ p5.prototype.setMoveThreshold = function(val){
   }
 };
 
-/**
- * The setShakeThreshold() function is used to set the movement threshold for
- * the deviceShaken() function. The default threshold is set to 30.
- *
- * @method setShakeThreshold
- * @param {number} value The threshold value
- */
-p5.prototype.setShakeThreshold = function(val){
-  if(typeof val === 'number'){
-    shake_threshold = val;
-  }
-};
+var old_max_axis = '';
+var new_max_axis = '';
 
 /**
- * The deviceMoved() function is called when the device is moved by more than
- * the threshold value along X, Y or Z axis. The default threshold is set to
- * 0.5.
+ * The deviceMoved() function is called when the devices orientation changes
+ * by more than the threshold value.
  * @method deviceMoved
  * @example
  * <div>
@@ -17272,12 +10783,7 @@ p5.prototype.setShakeThreshold = function(val){
 
 /**
  * The deviceTurned() function is called when the device rotates by
- * more than 90 degrees continuously.
- * <br><br>
- * The axis that triggers the deviceTurned() method is stored in the turnAxis
- * variable. The deviceTurned() method can be locked to trigger on any axis:
- * X, Y or Z by comparing the turnAxis variable to 'X', 'Y' or 'Z'.
- *
+ * more than 90 degrees.
  * @method deviceTurned
  * @example
  * <div>
@@ -17292,55 +10798,6 @@ p5.prototype.setShakeThreshold = function(val){
  *   rect(25, 25, 50, 50);
  * }
  * function deviceTurned() {
- *   if (value == 0){
- *     value = 255
- *   } else if (value == 255) {
- *     value = 0;
- *   }
- * }
- * </code>
- * </div>
- * <div>
- * <code>
- * // Run this example on a mobile device
- * // Rotate the device by 90 degrees in the
- * // X-axis to change the value.
- *
- * var value = 0;
- * function draw() {
- *   fill(value);
- *   rect(25, 25, 50, 50);
- * }
- * function deviceTurned() {
- *   if (turnAxis == 'X'){
- *     if (value == 0){
- *       value = 255
- *     } else if (value == 255) {
- *       value = 0;
- *     }
- *   }
- * }
- * </code>
- * </div>
- */
-
-/**
- * The deviceShaken() function is called when the device total acceleration
- * changes of accelerationX and accelerationY values is more than
- * the threshold value. The default threshold is set to 30.
- * @method deviceShaken
- * @example
- * <div>
- * <code>
- * // Run this example on a mobile device
- * // Shake the device to change the value.
- *
- * var value = 0;
- * function draw() {
- *   fill(value);
- *   rect(25, 25, 50, 50);
- * }
- * function deviceShaken() {
  *   value = value + 5;
  *   if (value > 255) {
  *     value = 0;
@@ -17349,19 +10806,22 @@ p5.prototype.setShakeThreshold = function(val){
  * </code>
  * </div>
  */
-
 p5.prototype._ondeviceorientation = function (e) {
-  this._updatePRotations();
-  this._setProperty('rotationX', e.beta);
-  this._setProperty('rotationY', e.gamma);
-  this._setProperty('rotationZ', e.alpha);
+  this._setProperty('accelerationX', e.beta);
+  this._setProperty('accelerationY', e.gamma);
+  this._setProperty('accelerationZ', e.alpha);
   this._handleMotion();
 };
 p5.prototype._ondevicemotion = function (e) {
-  this._updatePAccelerations();
   this._setProperty('accelerationX', e.acceleration.x * 2);
   this._setProperty('accelerationY', e.acceleration.y * 2);
   this._setProperty('accelerationZ', e.acceleration.z * 2);
+  this._handleMotion();
+};
+p5.prototype._onMozOrientation = function (e) {
+  this._setProperty('accelerationX', e.x);
+  this._setProperty('accelerationY', e.y);
+  this._setProperty('accelerationZ', e.z);
   this._handleMotion();
 };
 p5.prototype._handleMotion = function() {
@@ -17382,90 +10842,30 @@ p5.prototype._handleMotion = function() {
   }
   var deviceTurned = this.deviceTurned || window.deviceTurned;
   if (typeof deviceTurned === 'function') {
-    // The angles given by rotationX etc is from range -180 to 180.
-    // The following will convert them to 0 to 360 for ease of calculation
-    // of cases when the angles wrapped around.
-    // _startAngleX will be converted back at the end and updated.
-    var wRX = this.rotationX + 180;
-    var wPRX = this.pRotationX + 180;
-    var wSAX = startAngleX + 180;
-    if ((wRX - wPRX > 0 && wRX - wPRX < 270)|| wRX - wPRX < -270){
-      rotateDirectionX = 'clockwise';
-    } else if (wRX - wPRX < 0 || wRX - wPRX > 270){
-      rotateDirectionX = 'counter-clockwise';
+    var max_val = 0;
+    if (Math.abs(this.accelerationX) > max_val) {
+      max_val = this.accelerationX;
+      new_max_axis = 'x';
     }
-    if (rotateDirectionX !== pRotateDirectionX){
-      wSAX = wRX;
+    if (Math.abs(this.accelerationY) > max_val) {
+      max_val = this.accelerationY;
+      new_max_axis = 'y';
     }
-    if (Math.abs(wRX - wSAX) > 90 && Math.abs(wRX - wSAX) < 270){
-      wSAX = wRX;
-      this._setProperty('turnAxis', 'X');
-      deviceTurned();
+    if (Math.abs(this.accelerationZ) > max_val) {
+      new_max_axis = 'z';
     }
-    pRotateDirectionX = rotateDirectionX;
-    startAngleX = wSAX - 180;
+    if (old_max_axis !== '' && old_max_axis !== new_max_axis) {
+      deviceTurned(new_max_axis);
 
-    // Y-axis is identical to X-axis except for changing some names.
-    var wRY = this.rotationY + 180;
-    var wPRY = this.pRotationY + 180;
-    var wSAY = startAngleY + 180;
-    if ((wRY - wPRY > 0 && wRY - wPRY < 270)|| wRY - wPRY < -270){
-      rotateDirectionY = 'clockwise';
-    } else if (wRY - wPRY < 0 || wRY - this.pRotationY > 270){
-      rotateDirectionY = 'counter-clockwise';
     }
-    if (rotateDirectionY !== pRotateDirectionY){
-      wSAY = wRY;
-    }
-    if (Math.abs(wRY - wSAY) > 90 && Math.abs(wRY - wSAY) < 270){
-      wSAY = wRY;
-      this._setProperty('turnAxis', 'Y');
-      deviceTurned();
-    }
-    pRotateDirectionY = rotateDirectionY;
-    startAngleY = wSAY - 180;
-
-    // Z-axis is already in the range 0 to 360
-    // so no conversion is needed.
-    if ((this.rotationZ - this.pRotationZ > 0 &&
-      this.rotationZ - this.pRotationZ < 270)||
-      this.rotationZ - this.pRotationZ < -270){
-      rotateDirectionZ = 'clockwise';
-    } else if (this.rotationZ - this.pRotationZ < 0 ||
-      this.rotationZ - this.pRotationZ > 270){
-      rotateDirectionZ = 'counter-clockwise';
-    }
-    if (rotateDirectionZ !== pRotateDirectionZ){
-      startAngleZ = this.rotationZ;
-    }
-    if (Math.abs(this.rotationZ - startAngleZ) > 90 &&
-      Math.abs(this.rotationZ - startAngleZ) < 270){
-      startAngleZ = this.rotationZ;
-      this._setProperty('turnAxis', 'Z');
-      deviceTurned();
-    }
-    pRotateDirectionZ = rotateDirectionZ;
-    this._setProperty('turnAxis', undefined);
-  }
-  var deviceShaken = this.deviceShaken || window.deviceShaken;
-  if (typeof deviceShaken === 'function') {
-    var accelerationChangeX;
-    var accelerationChangeY;
-    // Add accelerationChangeZ if acceleration change on Z is needed
-    if (this.pAccelerationX !== null) {
-      accelerationChangeX = Math.abs(this.accelerationX - this.pAccelerationX);
-      accelerationChangeY = Math.abs(this.accelerationY - this.pAccelerationY);
-    }
-    if (accelerationChangeX + accelerationChangeY > shake_threshold) {
-      deviceShaken();
-    }
+    old_max_axis = new_max_axis;
   }
 };
 
 
 module.exports = p5;
 
-},{"../core/core":48}],62:[function(_dereq_,module,exports){
+},{"../core/core":17}],31:[function(require,module,exports){
 /**
  * @module Events
  * @submodule Keyboard
@@ -17475,7 +10875,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * Holds the key codes of currently pressed keys.
@@ -17608,14 +11008,7 @@ p5.prototype.keyCode = 0;
  *   } else if (keyCode === RIGHT_ARROW) {
  *     value = 0;
  *   }
- * }
- * </code>
- * </div>
- * <div class="norender">
- * <code>
- * function keyPressed(){
- *   // Do something
- *   return false; // prevent any default behaviour
+ *   return false; // prevent any default behavior
  * }
  * </code>
  * </div>
@@ -17783,7 +11176,7 @@ p5.prototype.keyIsDown = function(code) {
 
 module.exports = p5;
 
-},{"../core/core":48}],63:[function(_dereq_,module,exports){
+},{"../core/core":17}],32:[function(require,module,exports){
 /**
  * @module Events
  * @submodule Mouse
@@ -17795,8 +11188,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
 
 /**
  * The system variable mouseX always contains the current horizontal
@@ -18090,12 +11483,10 @@ p5.prototype._updateMouseCoords = function(e) {
   if(e.type === 'touchstart' ||
      e.type === 'touchmove' ||
      e.type === 'touchend') {
-    this._updatePTouchCoords();
     this._setProperty('mouseX', this.touchX);
     this._setProperty('mouseY', this.touchY);
   } else {
     if(this._curElement !== null) {
-      this._updatePMouseCoords();
       var mousePos = getMousePos(this._curElement.elt, e);
       this._setProperty('mouseX', mousePos.x);
       this._setProperty('mouseY', mousePos.y);
@@ -18105,7 +11496,7 @@ p5.prototype._updateMouseCoords = function(e) {
   this._setProperty('winMouseY', e.pageY);
 };
 
-p5.prototype._updatePMouseCoords = function() {
+p5.prototype._updatePMouseCoords = function(e) {
   this._setProperty('pmouseX', this.mouseX);
   this._setProperty('pmouseY', this.mouseY);
   this._setProperty('pwinMouseX', this.winMouseX);
@@ -18364,9 +11755,6 @@ p5.prototype._onmouseup = function(e) {
   }
 };
 
-p5.prototype._ondragend = p5.prototype._onmouseup;
-p5.prototype._ondragover = p5.prototype._onmousemove;
-
 /**
  * The mouseClicked() function is called once after a mouse button has been
  * pressed and then released.<br><br>
@@ -18472,7 +11860,7 @@ p5.prototype._onmousewheel = p5.prototype._onDOMMouseScroll = function(e) {
 
 module.exports = p5;
 
-},{"../core/constants":47,"../core/core":48}],64:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17}],33:[function(require,module,exports){
 /**
  * @module Events
  * @submodule Touch
@@ -18482,7 +11870,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * The system variable touchX always contains the horizontal position of
@@ -18524,9 +11912,8 @@ p5.prototype.ptouchY = 0;
 
 /**
  * The system variable touches[] contains an array of the positions of all
- * current touch points, relative to (0, 0) of the canvas, and IDs identifying a
- * unique touch as it moves. Each element in the array is an object with x, y,
- * and id properties.
+ * current touch points, relative to (0, 0) of the canvas. Each element in
+ * the array is an object with x and y properties.
  *
  * @property touches[]
  */
@@ -18544,18 +11931,17 @@ p5.prototype._updateTouchCoords = function(e) {
   if(e.type === 'mousedown' ||
      e.type === 'mousemove' ||
      e.type === 'mouseup'){
-    this._updatePMouseCoords();
     this._setProperty('touchX', this.mouseX);
     this._setProperty('touchY', this.mouseY);
   } else {
-    this._updatePTouchCoords();
-    var touchInfo = getTouchInfo(this._curElement.elt, e, 0);
-    this._setProperty('touchX', touchInfo.x);
-    this._setProperty('touchY', touchInfo.y);
+    var touchPos = getTouchPos(this._curElement.elt, e, 0);
+    this._setProperty('touchX', touchPos.x);
+    this._setProperty('touchY', touchPos.y);
 
     var touches = [];
     for(var i = 0; i < e.touches.length; i++){
-      touches[i] = getTouchInfo(this._curElement.elt, e, i);
+      var pos = getTouchPos(this._curElement.elt, e, i);
+      touches[i] = {x: pos.x, y: pos.y};
     }
     this._setProperty('touches', touches);
   }
@@ -18566,14 +11952,13 @@ p5.prototype._updatePTouchCoords = function() {
   this._setProperty('ptouchY', this.touchY);
 };
 
-function getTouchInfo(canvas, e, i) {
+function getTouchPos(canvas, e, i) {
   i = i || 0;
   var rect = canvas.getBoundingClientRect();
   var touch = e.touches[i] || e.changedTouches[i];
-  return {
+  return  {
     x: touch.clientX - rect.left,
-    y: touch.clientY - rect.top,
-    id: touch.identifier
+    y: touch.clientY - rect.top
   };
 }
 
@@ -18754,7 +12139,7 @@ p5.prototype._ontouchend = function(e) {
 
 module.exports = p5;
 
-},{"../core/core":48}],65:[function(_dereq_,module,exports){
+},{"../core/core":17}],34:[function(require,module,exports){
 /*global ImageData:false */
 
 /**
@@ -19357,7 +12742,7 @@ Filters.blur = function(canvas, radius){
 
 module.exports = Filters;
 
-},{}],66:[function(_dereq_,module,exports){
+},{}],35:[function(require,module,exports){
 /**
  * @module Image
  * @submodule Image
@@ -19372,7 +12757,8 @@ module.exports = Filters;
 'use strict';
 
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
 
 /* global frames:true */// This is not global, but JSHint is not aware that
 // this module is implicitly enclosed with Browserify: this overrides the
@@ -19380,6 +12766,8 @@ var p5 = _dereq_('../core/core');
 // of saved animation frames.
 var frames = [];
 
+p5.prototype._imageMode = constants.CORNER;
+p5.prototype._tint = null;
 
 /**
  * Creates a new p5.Image (the datatype for storing images). This provides a
@@ -19659,7 +13047,7 @@ p5.prototype._makeFrame = function(filename, extension, _cnv) {
 
 module.exports = p5;
 
-},{"../core/core":48}],67:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17}],36:[function(require,module,exports){
 /**
  * @module Image
  * @submodule Loading & Displaying
@@ -19669,25 +13057,20 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var Filters = _dereq_('./filters');
-var canvas = _dereq_('../core/canvas');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var Filters = require('./filters');
+var canvas = require('../core/canvas');
+var constants = require('../core/constants');
 
-_dereq_('../core/error_helpers');
+require('../core/error_helpers');
 
 /**
  * Loads an image from a path and creates a p5.Image from it.
- * <br><br>
+ *
  * The image may not be immediately available for rendering
  * If you want to ensure that the image is ready before doing
- * anything with it, place the loadImage() call in preload().
- * You may also supply a callback function to handle the image when it's ready.
- * <br><br>
- * The path to the image should be relative to the HTML file
- * that links in your sketch. Loading an from a URL or other
- * remote location may be blocked due to your browser's built-in
- * security.
+ * anything with it you can do perform those operations in the
+ * callback, or place the loadImage() call in preload().
  *
  * @method loadImage
  * @param  {String} path Path of the image to be loaded
@@ -19723,27 +13106,21 @@ _dereq_('../core/error_helpers');
 p5.prototype.loadImage = function(path, successCallback, failureCallback) {
   var img = new Image();
   var pImg = new p5.Image(1, 1, this);
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
 
   img.onload = function() {
     pImg.width = pImg.canvas.width = img.width;
     pImg.height = pImg.canvas.height = img.height;
 
     // Draw the image into the backing canvas of the p5.Image
-    pImg.drawingContext.drawImage(img, 0, 0);
+    pImg.canvas.getContext('2d').drawImage(img, 0, 0);
 
     if (typeof successCallback === 'function') {
       successCallback(pImg);
     }
-    if (decrementPreload && (successCallback !== decrementPreload)) {
-      decrementPreload();
-    }
   };
   img.onerror = function(e) {
     p5._friendlyFileLoadError(0,img.src);
-    // don't get failure callback mixed up with decrementPreload
-    if ((typeof failureCallback === 'function') &&
-      (failureCallback !== decrementPreload)) {
+    if (typeof failureCallback === 'function') {
       failureCallback(e);
     }
   };
@@ -19764,50 +13141,14 @@ p5.prototype.loadImage = function(path, successCallback, failureCallback) {
 };
 
 /**
- * Validates clipping params. Per drawImage spec sWidth and sHight cannot be
- * negative or greater than image intrinsic width and height
- * @private
- * @param {Number} sVal
- * @param {Number} iVal
- * @returns {Number}
- * @private
- */
-function _sAssign(sVal, iVal) {
-  if (sVal > 0 && sVal < iVal) {
-    return sVal;
-  }
-  else {
-    return iVal;
-  }
-}
-
-/**
  * Draw an image to the main canvas of the p5js sketch
  *
  * @method image
- * @param  {p5.Image} img    the image to display
- * @param  {Number}   [sx=0]   The X coordinate of the top left corner of the
- *                             sub-rectangle of the source image to draw into
- *                             the destination canvas.
- * @param  {Number}   [sy=0]   The Y coordinate of the top left corner of the
- *                             sub-rectangle of the source image to draw into
- *                             the destination canvas.
- * @param {Number} [sWidth=img.width] The width of the sub-rectangle of the
- *                                    source image to draw into the destination
- *                                    canvas.
- * @param {Number} [sHeight=img.height] The height of the sub-rectangle of the
- *                                      source image to draw into the
- *                                      destination context.
- * @param  {Number}   [dx=0]    The X coordinate in the destination canvas at
- *                              which to place the top-left corner of the
- *                              source image.
- * @param  {Number}   [dy=0]    The Y coordinate in the destination canvas at
- *                              which to place the top-left corner of the
- *                              source image.
- * @param  {Number}   [dWidth]  The width to draw the image in the destination
- *                              canvas. This allows scaling of the drawn image.
- * @param  {Number}   [dHeight] The height to draw the image in the destination
- *                              canvas. This allows scaling of the drawn image.
+ * @param  {p5.Image} image    the image to display
+ * @param  {Number}   [x=0]    x-coordinate of the image
+ * @param  {Number}   [y=0]    y-coordinate of the image
+ * @param  {Number}   [width]  width to display the image
+ * @param  {Number}   [height] height to display the image
  * @example
  * <div>
  * <code>
@@ -19817,8 +13158,6 @@ function _sAssign(sVal, iVal) {
  * }
  * function setup() {
  *   image(img, 0, 0);
- *   image(img, 0, 0, 100, 100);
- *   image(img, 0, 0, 100, 100, 0, 0, 100, 100);
  * }
  * </code>
  * </div>
@@ -19833,61 +13172,25 @@ function _sAssign(sVal, iVal) {
  * </code>
  * </div>
  */
-p5.prototype.image =
-  function(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+p5.prototype.image = function(img, x, y, width, height) {
   // Temporarily disabling until options for p5.Graphics are added.
-  // var args = new Array(arguments.length);
-  // for (var i = 0; i < args.length; ++i) {
-  //   args[i] = arguments[i];
-  // }
   // this._validateParameters(
   //   'image',
-  //   args,
+  //   arguments,
   //   [
   //     ['p5.Image', 'Number', 'Number'],
   //     ['p5.Image', 'Number', 'Number', 'Number', 'Number']
   //   ]
   // );
 
-  // set defaults per spec: https://goo.gl/3ykfOq
-  if (arguments.length <= 5) {
-    dx = sx || 0;
-    dy = sy || 0;
-    sx = 0;
-    sy = 0;
-    if (img.elt && img.elt.videoWidth && !img.canvas) { // video no canvas
-      var actualW = img.elt.videoWidth;
-      var actualH = img.elt.videoHeight;
-      dWidth = sWidth || img.width;
-      dHeight = sHeight || img.width*actualH/actualW;
-      sWidth = actualW;
-      sHeight = actualH;
-    } else {
-      dWidth = sWidth || img.width;
-      dHeight = sHeight || img.height;
-      sWidth = img.width;
-      sHeight = img.height;
-    }
-  } else if (arguments.length === 9) {
-    sx = sx || 0;
-    sy = sy || 0;
-    sWidth = _sAssign(sWidth, img.width);
-    sHeight = _sAssign(sHeight, img.height);
-
-    dx = dx || 0;
-    dy = dy || 0;
-    dWidth = dWidth || img.width;
-    dHeight = dHeight || img.height;
-  } else {
-    throw 'Wrong number of arguments to image()';
-  }
-
-  var vals = canvas.modeAdjust(dx, dy, dWidth, dHeight,
-    this._renderer._imageMode);
-
+  // set defaults
+  x = x || 0;
+  y = y || 0;
+  width = width || img.width;
+  height = height || img.height;
+  var vals = canvas.modeAdjust(x, y, width, height, this._imageMode);
   // tint the image if there is a tint
-  this._renderer.image(img, sx, sy, sWidth, sHeight, vals.x, vals.y, vals.w,
-    vals.h);
+  this._graphics.image(img, vals.x, vals.y, vals.w, vals.h);
 };
 
 /**
@@ -19956,7 +13259,7 @@ p5.prototype.image =
  */
 p5.prototype.tint = function () {
   var c = this.color.apply(this, arguments);
-  this._renderer._tint = c.levels;
+  this._tint = c.rgba;
 };
 
 /**
@@ -19981,7 +13284,7 @@ p5.prototype.tint = function () {
  * </div>
  */
 p5.prototype.noTint = function() {
-  this._renderer._tint = null;
+  this._tint = null;
 };
 
 /**
@@ -20010,10 +13313,10 @@ p5.prototype._getTintedImageCanvas = function(img) {
     var b = pixels[i+2];
     var a = pixels[i+3];
 
-    newPixels[i] = r*this._renderer._tint[0]/255;
-    newPixels[i+1] = g*this._renderer._tint[1]/255;
-    newPixels[i+2] = b*this._renderer._tint[2]/255;
-    newPixels[i+3] = a*this._renderer._tint[3]/255;
+    newPixels[i] = r*this._tint[0]/255;
+    newPixels[i+1] = g*this._tint[1]/255;
+    newPixels[i+2] = b*this._tint[2]/255;
+    newPixels[i+3] = a*this._tint[3]/255;
   }
 
   tmpCtx.putImageData(id, 0, 0);
@@ -20082,14 +13385,14 @@ p5.prototype.imageMode = function(m) {
   if (m === constants.CORNER ||
     m === constants.CORNERS ||
     m === constants.CENTER) {
-    this._renderer._imageMode = m;
+    this._imageMode = m;
   }
 };
 
 
 module.exports = p5;
 
-},{"../core/canvas":46,"../core/constants":47,"../core/core":48,"../core/error_helpers":51,"./filters":65}],68:[function(_dereq_,module,exports){
+},{"../core/canvas":15,"../core/constants":16,"../core/core":17,"../core/error_helpers":20,"./filters":34}],37:[function(require,module,exports){
 /**
  * @module Image
  * @submodule Image
@@ -20105,8 +13408,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var Filters = _dereq_('./filters');
+var p5 = require('../core/core');
+var Filters = require('./filters');
 
 /*
  * Class methods
@@ -20146,9 +13449,7 @@ p5.Image = function(width, height){
   this.canvas.width = this.width;
   this.canvas.height = this.height;
   this.drawingContext = this.canvas.getContext('2d');
-  this._pixelDensity = 1;
-  //used for webgl texturing only
-  this.isTexture = false;
+  this.pixelDensity = 1;
   /**
    * Array containing the values for all the pixels in the display window.
    * These values are numbers. This array is the size (include an appropriate
@@ -20174,7 +13475,6 @@ p5.Image = function(width, height){
    *     pixels[idx+3] = a;
    *   }
    * }
-   * </pre></code>
    * <br><br>
    * Before accessing this array, the data must loaded with the loadPixels()
    * function. After the array data has been modified, the updatePixels()
@@ -20415,7 +13715,7 @@ p5.Image.prototype.mask = function(p5Image) {
 
   var scaleFactor = 1;
   if (p5Image instanceof p5.Renderer) {
-    scaleFactor = p5Image._pInst._pixelDensity;
+    scaleFactor = p5Image._pInst.pixelDensity;
   }
 
   var copyArgs = [
@@ -20517,20 +13817,9 @@ p5.Image.prototype.save = function(filename, extension) {
   p5.prototype.downloadFile(imageData, filename, extension);
 };
 
-/**
- * creates a gl texture
- * used in WEBGL mode only
- * @param  {[type]} tex [description]
- * @return {[type]}     [description]
- */
-p5.Image.prototype.createTexture = function(tex){
-  //this.texture = tex;
-  return this;
-};
-
 module.exports = p5.Image;
 
-},{"../core/core":48,"./filters":65}],69:[function(_dereq_,module,exports){
+},{"../core/core":17,"./filters":34}],38:[function(require,module,exports){
 /**
  * @module Image
  * @submodule Pixels
@@ -20540,9 +13829,9 @@ module.exports = p5.Image;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var Filters = _dereq_('./filters');
-_dereq_('../color/p5.Color');
+var p5 = require('../core/core');
+var Filters = require('./filters');
+require('../color/p5.Color');
 
 /**
  * <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference
@@ -20675,7 +13964,7 @@ p5.prototype.pixels = [];
  * </code></div>
  */
 p5.prototype.blend = function() {
-  this._renderer.blend.apply(this._renderer, arguments);
+  this._graphics.blend.apply(this._graphics, arguments);
 };
 
 /**
@@ -20706,8 +13995,9 @@ p5.prototype.blend = function() {
  * }
  *
  * function setup() {
- *   background(img);
- *   copy(img, 7, 22, 10, 10, 35, 25, 50, 50);
+ *   background(img0);
+ *   image(img1, 0, 0);
+ *   copy(7, 22, 10, 10, 35, 25, 50, 50);
  *   stroke(255);
  *   noFill();
  *   // Rectangle shows area being copied
@@ -20765,9 +14055,9 @@ p5.prototype.copy = function () {
  * Increases the light areas. No parameter is used.
  *
  * @method filter
- * @param  {String} filterType
- * @param  {Number} filterParam an optional parameter unique
- *  to each filter, see above
+ * @param  {String}    kind
+ *
+ * @param  {Number|undefined} param
  *
  *
  * @example
@@ -20939,7 +14229,7 @@ p5.prototype.filter = function(operation, value) {
  * </div>
  */
 p5.prototype.get = function(x, y, w, h){
-  return this._renderer.get(x, y, w, h);
+  return this._graphics.get(x, y, w, h);
 };
 
 /**
@@ -20970,14 +14260,14 @@ p5.prototype.get = function(x, y, w, h){
  * </div>
  */
 p5.prototype.loadPixels = function() {
-  this._renderer.loadPixels();
+  this._graphics.loadPixels();
 };
 
 /**
  * <p>Changes the color of any pixel, or writes an image directly to the
  * display window.</p>
  * <p>The x and y parameters specify the pixel to change and the c parameter
- * specifies the color value. This can be a p5.Color object, or [R, G, B, A]
+ * specifies the color value. This can be a p5.COlor object, or [R, G, B, A]
  * pixel array. It can also be a single grayscale value.
  * When setting an image, the x and y parameters define the coordinates for
  * the upper-left corner of the image, regardless of the current imageMode().
@@ -21039,7 +14329,7 @@ p5.prototype.loadPixels = function() {
  * </div>
  */
 p5.prototype.set = function (x, y, imgOrCol) {
-  this._renderer.set(x, y, imgOrCol);
+  this._graphics.set(x, y, imgOrCol);
 };
 /**
  * Updates the display window with the data in the pixels[] array.
@@ -21077,12 +14367,14 @@ p5.prototype.set = function (x, y, imgOrCol) {
  * </div>
  */
 p5.prototype.updatePixels = function (x, y, w, h) {
-  this._renderer.updatePixels(x, y, w, h);
+  this._graphics.updatePixels(x, y, w, h);
 };
 
 module.exports = p5;
 
-},{"../color/p5.Color":42,"../core/core":48,"./filters":65}],70:[function(_dereq_,module,exports){
+},{"../color/p5.Color":11,"../core/core":17,"./filters":34}],39:[function(require,module,exports){
+/* global opentype:false */
+
 /**
  * @module IO
  * @submodule Input
@@ -21093,40 +14385,16 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var reqwest = _dereq_('reqwest');
-var opentype = _dereq_('opentype.js');
-_dereq_('../core/error_helpers');
+var p5 = require('../core/core');
+var reqwest = require('reqwest');
+require('../core/error_helpers');
 
-/**
- * Checks if we are in preload and returns the last arg which will be the
- * _decrementPreload function if called from a loadX() function.  Should
- * only be used in loadX() functions.
- * @private
- */
-p5._getDecrementPreload = function() {
-  var decrementPreload = arguments[arguments.length - 1];
-
-  // when in preload decrementPreload will always be the last arg as it is set
-  // with args.push() before invocation in _wrapPreload
-  if ((window.preload || (this && this.preload)) &&
-    typeof decrementPreload === 'function') {
-    return decrementPreload;
-  } else {
-    return null;
-  }
-};
 
 /**
  * Loads an opentype font file (.otf, .ttf) from a file or a URL,
  * and returns a PFont Object. This method is asynchronous,
  * meaning it may not finish before the next line in your sketch
  * is executed.
- * <br><br>
- * The path to the font should be relative to the HTML file
- * that links in your sketch. Loading an from a URL or other
- * remote location may be blocked due to your browser's built-in
- * security.
  *
  * @method loadFont
  * @param  {String}        path       name of the file or url to load
@@ -21136,8 +14404,8 @@ p5._getDecrementPreload = function() {
  * @return {Object}                   p5.Font object
  * @example
  *
- * <p>Calling loadFont() inside preload() guarantees that the load
- * operation will have completed before setup() and draw() are called.</p>
+ * <p>Calling loadFont() inside preload() guarantees to complete the
+ * operation before setup() and draw() are called.</p>
  *
  * <div><code>
  * var myFont;
@@ -21153,7 +14421,7 @@ p5._getDecrementPreload = function() {
  * }
  * </code></div>
  *
- * <p>Outside of preload(), you may supply a callback function to handle the
+ * <p>Outside preload(), you may supply a callback function to handle the
  * object:</p>
  *
  * <div><code>
@@ -21166,62 +14434,27 @@ p5._getDecrementPreload = function() {
  *   textFont(font, 36);
  *   text('p5*js', 10, 50);
  * }
- *
+ * function draw(){
+ * }
  * </code></div>
  *
- * <p>You can also use the string name of the font to style other HTML
- * elements.</p>
- *
- * <div><code>
- * var myFont;
- *
- * function preload() {
- *   myFont = loadFont('assets/Avenir.otf');
- * }
- *
- * function setup() {
- *   var myDiv = createDiv('hello there');
- *   myDiv.style('font-family', 'Avenir');
- * }
-* </code></div>
  */
-p5.prototype.loadFont = function(path, onSuccess, onError) {
+
+
+
+
+p5.prototype.loadFont = function(path, callback) {
 
   var p5Font = new p5.Font(this);
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
 
   opentype.load(path, function(err, font) {
-
     if (err) {
-
-      if ((typeof onError !== 'undefined') && (onError !== decrementPreload)) {
-        return onError(err);
-      }
-      throw err;
+      throw Error(err);
     }
-
     p5Font.font = font;
-
-    if (typeof onSuccess !== 'undefined') {
-      onSuccess(p5Font);
+    if (typeof callback !== 'undefined') {
+      callback(p5Font);
     }
-    if (decrementPreload && (onSuccess !== decrementPreload)) {
-      decrementPreload();
-    }
-    /*jshint multistr: true */
-    var exp =/\/[a-zA-Z]*((.ttf)|(.otf)|(.woff)|(.woff2))$/i;
-    if(!exp) {
-      return p5Font;
-    }
-    var i = (exp).exec( path ).index + 1;
-    var fontName = path.substring(i);
-    fontName = fontName.match(/[A-Za-z]*/);
-    var fontFamily = fontName[0];
-    var newStyle = document.createElement('style');
-    newStyle.appendChild(document.createTextNode('\n@font-face {\
-      \nfont-family: '+fontFamily+';\nsrc: url('+path+');\n}\n'));
-    document.head.appendChild(newStyle);
-
   });
 
   return p5Font;
@@ -21252,11 +14485,9 @@ p5.prototype.loadBytes = function() {
  * @method loadJSON
  * @param  {String}        path       name of the file or url to load
  * @param  {Function}      [callback] function to be executed after
- *                                    loadJSON() completes, data is passed
- *                                    in as first argument
- * @param  {Function}      [errorCallback] function to be executed if
- *                                    there is an error, response is passed
- *                                    in as first argument
+ *                                    loadJSON()
+ *                                    completes, Array is passed in as first
+ *                                    argument
  * @param  {String}        [datatype] "json" or "jsonp"
  * @return {Object|Array}             JSON data
  * @example
@@ -21267,8 +14498,7 @@ p5.prototype.loadBytes = function() {
  * <div><code>
  * var weather;
  * function preload() {
- *   var url = 'http://api.openweathermap.org/data/2.5/weather?q=London,UK'+
- *    '&APPID=7bbbb47522848e8b9c26ba35c226c734';
+ *   var url = 'http://api.openweathermap.org/data/2.5/weather?q=London,UK';
  *   weather = loadJSON(url);
  * }
  *
@@ -21285,14 +14515,13 @@ p5.prototype.loadBytes = function() {
  * }
  * </code></div>
  *
- *
- * <p>Outside of preload(), you may supply a callback function to handle the
+ * <p>Outside preload(), you may supply a callback function to handle the
  * object:</p>
+
  * <div><code>
  * function setup() {
  *   noLoop();
- *   var url = 'http://api.openweathermap.org/data/2.5/weather?q=NewYork'+
- *    '&APPID=7bbbb47522848e8b9c26ba35c226c734';
+ *   var url = 'http://api.openweathermap.org/data/2.5/weather?q=NewYork,USA';
  *   loadJSON(url, drawWeather);
  * }
  *
@@ -21312,50 +14541,26 @@ p5.prototype.loadBytes = function() {
 p5.prototype.loadJSON = function() {
   var path = arguments[0];
   var callback = arguments[1];
-  var errorCallback;
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
-
   var ret = []; // array needed for preload
   // assume jsonp for URLs
   var t = 'json'; //= path.indexOf('http') === -1 ? 'json' : 'jsonp';
 
   // check for explicit data type argument
-  for (var i=2; i<arguments.length; i++) {
-    var arg = arguments[i];
-    if (typeof arg === 'string'){
-      if (arg === 'jsonp' || arg === 'json') {
-        t = arg;
-      }
-    } else if (typeof arg === 'function') {
-      errorCallback = arg;
+  if (typeof arguments[2] === 'string'){
+    if (arguments[2] === 'jsonp' || arguments[2] === 'json') {
+      t = arguments[2];
     }
   }
 
-  reqwest({
-    url: path,
-    type: t,
-    crossOrigin: true,
-    error: function (resp) {
-      // pass to error callback if defined
-      if (errorCallback) {
-        errorCallback(resp);
-      } else { // otherwise log error msg
-        console.log(resp.statusText);
-      }
-    },
-    success: function(resp) {
+  reqwest({url: path, type: t, crossOrigin: true})
+    .then(function(resp) {
       for (var k in resp) {
         ret[k] = resp[k];
       }
       if (typeof callback !== 'undefined') {
         callback(resp);
       }
-      if (decrementPreload && (callback !== decrementPreload)) {
-        decrementPreload();
-      }
-    }
-  });
-
+    });
   return ret;
 };
 
@@ -21377,9 +14582,6 @@ p5.prototype.loadJSON = function() {
  * @param  {Function} [callback] function to be executed after loadStrings()
  *                               completes, Array is passed in as first
  *                               argument
- * @param  {Function} [errorCallback] function to be executed if
- *                               there is an error, response is passed
- *                               in as first argument
  * @return {Array}               Array of Strings
  * @example
  *
@@ -21399,7 +14601,7 @@ p5.prototype.loadJSON = function() {
  * }
  * </code></div>
  *
- * <p>Outside of preload(), you may supply a callback function to handle the
+ * <p>Outside preload(), you may supply a callback function to handle the
  * object:</p>
  *
  * <div><code>
@@ -21414,41 +14616,22 @@ p5.prototype.loadJSON = function() {
  * }
  * </code></div>
  */
-p5.prototype.loadStrings = function (path, callback, errorCallback) {
+p5.prototype.loadStrings = function (path, callback) {
   var ret = [];
   var req = new XMLHttpRequest();
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
-
-  req.addEventListener('error', function (resp) {
-    if (errorCallback) {
-      errorCallback(resp);
-    } else {
-      console.log(resp.responseText);
-    }
-  });
-
   req.open('GET', path, true);
   req.onreadystatechange = function () {
-    if (req.readyState === 4) {
-      if (req.status === 200) {
-        var arr = req.responseText.match(/[^\r\n]+/g);
-        for (var k in arr) {
-          ret[k] = arr[k];
-        }
-        if (typeof callback !== 'undefined') {
-          callback(ret);
-        }
-        if (decrementPreload && (callback !== decrementPreload)) {
-          decrementPreload();
-        }
-      } else {
-        if (errorCallback) {
-          errorCallback(req);
-        } else {
-          console.log(req.statusText);
-        }
-        //p5._friendlyFileLoadError(3, path);
+    if (req.readyState === 4 && (req.status === 200 )) {
+      var arr = req.responseText.match(/[^\r\n]+/g);
+      for (var k in arr) {
+        ret[k] = arr[k];
       }
+      if (typeof callback !== 'undefined') {
+        callback(ret);
+      }
+    }
+    else{
+      p5._friendlyFileLoadError(3,path);
     }
   };
   req.send(null);
@@ -21484,8 +14667,7 @@ p5.prototype.loadStrings = function (path, callback, errorCallback) {
  * <p>This method is asynchronous, meaning it may not finish before the next
  * line in your sketch is executed. Calling loadTable() inside preload()
  * guarantees to complete the operation before setup() and draw() are called.
- * <p>Outside of preload(), you may supply a callback function to handle the
- * object:</p>
+ * Outside preload(), you may supply a callback function to handle the object.
  * </p>
  *
  * @method loadTable
@@ -21541,11 +14723,8 @@ p5.prototype.loadTable = function (path) {
   var header = false;
   var sep = ',';
   var separatorSet = false;
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
-
   for (var i = 1; i < arguments.length; i++) {
-    if ((typeof(arguments[i]) === 'function') &&
-      (arguments[i] !== decrementPreload)) {
+    if (typeof(arguments[i]) === 'function' ){
       callback = arguments[i];
     }
     else if (typeof(arguments[i]) === 'string') {
@@ -21710,15 +14889,10 @@ p5.prototype.loadTable = function (path) {
       if (callback !== null) {
         callback(t);
       }
-      if (decrementPreload && (callback !== decrementPreload)) {
-        decrementPreload();
-      }
     })
     .fail(function(err,msg){
       p5._friendlyFileLoadError(2,path);
-      // don't get error callback mixed up with decrementPreload
-      if ((typeof callback !== 'undefined') &&
-        (callback !== decrementPreload)) {
+      if (typeof callback !== 'undefined') {
         callback(false);
       }
     });
@@ -21756,48 +14930,32 @@ function makeObject(row, headers) {
  * This method is asynchronous, meaning it may not finish before the next
  * line in your sketch is executed. Calling loadXML() inside preload()
  * guarantees to complete the operation before setup() and draw() are called.
- *
- * <p>Outside of preload(), you may supply a callback function to handle the
- * object:</p>
+ * Outside preload(), you may supply a callback function to handle the object.
  *
  * @method loadXML
  * @param  {String}   filename   name of the file or URL to load
  * @param  {Function} [callback] function to be executed after loadXML()
  *                               completes, XML object is passed in as
  *                               first argument
- * @param  {Function} [errorCallback] function to be executed if
- *                               there is an error, response is passed
- *                               in as first argument
  * @return {Object}              XML object containing data
  */
-p5.prototype.loadXML = function(path, callback, errorCallback) {
+p5.prototype.loadXML = function(path, callback) {
   var ret = document.implementation.createDocument(null, null);
-  var decrementPreload = p5._getDecrementPreload.apply(this, arguments);
-
   reqwest({
     url: path,
     type: 'xml',
     crossOrigin: true,
-    error: function(resp){
-      // pass to error callback if defined
-      if (errorCallback) {
-        errorCallback(resp);
-      } else { // otherwise log error msg
-        console.log(resp.statusText);
-      }
-      //p5._friendlyFileLoadError(1,path);
+    error: function(err){
+      p5._friendlyFileLoadError(1,path);
     }
   })
-  .then(function(resp){
-    var x = resp.documentElement;
-    ret.appendChild(x);
-    if (typeof callback !== 'undefined') {
-      callback(ret);
-    }
-    if (decrementPreload && (callback !== decrementPreload)) {
-      decrementPreload();
-    }
-  });
+    .then(function(resp){
+      var x = resp.documentElement;
+      ret.appendChild(x);
+      if (typeof callback !== 'undefined') {
+        callback(resp);
+      }
+    });
   return ret;
 };
 
@@ -21836,9 +14994,6 @@ p5.prototype.selectInput = function() {
  * @param  {Function}      [callback] function to be executed after
  *                                    httpGet() completes, data is passed in
  *                                    as first argument
- * @param  {Function}      [errorCallback] function to be executed if
- *                                    there is an error, response is passed
- *                                    in as first argument
  */
 p5.prototype.httpGet = function () {
   var args = Array.prototype.slice.call(arguments);
@@ -21858,9 +15013,6 @@ p5.prototype.httpGet = function () {
  * @param  {Function}      [callback] function to be executed after
  *                                    httpGet() completes, data is passed in
  *                                    as first argument
- * @param  {Function}      [errorCallback] function to be executed if
- *                                    there is an error, response is passed
- *                                    in as first argument
  */
 p5.prototype.httpPost = function () {
   var args = Array.prototype.slice.call(arguments);
@@ -21870,11 +15022,7 @@ p5.prototype.httpPost = function () {
 
 /**
  * Method for executing an HTTP request. If data type is not specified,
- * p5 will try to guess based on the URL, defaulting to text.<br><br>
- * You may also pass a single object specifying all parameters for the
- * request following the examples inside the reqwest() calls here:
- * <a href='https://github.com/ded/reqwest#api'
- * >https://github.com/ded/reqwest#api</a>
+ * p5 will try to guess based on the URL, defaulting to text.
  *
  * @method httpDo
  * @param  {String}        path       name of the file or url to load
@@ -21885,75 +15033,56 @@ p5.prototype.httpPost = function () {
  * @param  {Function}      [callback] function to be executed after
  *                                    httpGet() completes, data is passed in
  *                                    as first argument
- * @param  {Function}      [errorCallback] function to be executed if
- *                                    there is an error, response is passed
- *                                    in as first argument
  */
 p5.prototype.httpDo = function() {
-  if (typeof arguments[0] === 'object') {
-    reqwest(arguments[0]);
-  } else {
-    var method = 'GET';
-    var path = arguments[0];
-    var data = {};
-    var type = '';
-    var callback;
-    var errorCallback;
+  var method = 'GET';
+  var path = arguments[0];
+  var data = {};
+  var type = '';
+  var callback;
 
-    for (var i=1; i<arguments.length; i++) {
-      var a = arguments[i];
-      if (typeof a === 'string') {
-        if (a === 'GET' || a === 'POST' || a === 'PUT') {
-          method = a;
-        } else {
-          type = a;
-        }
-      } else if (typeof a === 'object') {
-        data = a;
-      } else if (typeof a === 'function') {
-        if (!callback) {
-          callback = a;
-        } else {
-          errorCallback = a;
-        }
-      }
-    }
-
-    // do some sort of smart type checking
-    if (type === '') {
-      if (path.indexOf('json') !== -1) {
-        type = 'json';
-      } else if (path.indexOf('xml') !== -1) {
-        type = 'xml';
+  for (var i=1; i<arguments.length; i++) {
+    var a = arguments[i];
+    if (typeof a === 'string') {
+      if (a === 'GET' || a === 'POST' || a === 'PUT') {
+        method = a;
       } else {
-        type = 'text';
+        type = a;
+      }
+    } else if (typeof a === 'object') {
+      data = a;
+    } else if (typeof a === 'function') {
+      callback = a;
+    }
+  }
+
+  // do some sort of smart type checking
+  if (type === '') {
+    if (path.indexOf('json') !== -1) {
+      type = 'json';
+    } else if (path.indexOf('xml') !== -1) {
+      type = 'xml';
+    } else {
+      type = 'text';
+    }
+  }
+
+  reqwest({
+    url: path,
+    method: method,
+    data: data,
+    type: type,
+    crossOrigin: true,
+    success: function (resp) {
+      if (typeof callback !== 'undefined') {
+        if (type === 'text') {
+          callback(resp.response);
+        } else {
+          callback(resp);
+        }
       }
     }
-
-    reqwest({
-      url: path,
-      method: method,
-      data: data,
-      type: type,
-      crossOrigin: true,
-      success: function(resp) {
-        if (typeof callback !== 'undefined') {
-          if (type === 'text') {
-            callback(resp.response);
-          } else {
-            callback(resp);
-          }
-        }
-      },
-      error: function(resp) {
-        if (errorCallback) {
-          errorCallback(resp);
-        } else {
-          console.log(resp.statusText);
-        }
-      }
-    });
-  }
+  });
 };
 
 
@@ -22128,8 +15257,7 @@ p5.prototype.save = function(object, _filename, _options) {
   // otherwise, parse the arguments
 
   // if first param is a p5Graphics, then saveCanvas
-  else if (args[0] instanceof p5.Renderer ||
-    args[0] instanceof p5.Graphics) {
+  else if (args[0] instanceof p5.Renderer) {
     p5.prototype.saveCanvas(args[0].elt, args[1], args[2]);
     return;
   }
@@ -22255,7 +15383,7 @@ p5.prototype.saveStream = function() {
 p5.prototype.saveStrings = function(list, filename, extension) {
   var ext = extension || 'txt';
   var pWriter = this.createWriter(filename, ext);
-  for (var i = 0; i < list.length; i++) {
+  for (var i in list) {
     if (i < list.length - 1) {
       pWriter.println(list[i]);
     } else {
@@ -22521,7 +15649,7 @@ function destroyClickedElement(event) {
 
 module.exports = p5;
 
-},{"../core/core":48,"../core/error_helpers":51,"opentype.js":8,"reqwest":27}],71:[function(_dereq_,module,exports){
+},{"../core/core":17,"../core/error_helpers":20,"reqwest":1}],40:[function(require,module,exports){
 /**
  * @module IO
  * @submodule Table
@@ -22530,7 +15658,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 
 /**
@@ -23361,7 +16489,7 @@ p5.Table.prototype.set = function(row, column, value) {
 	* </div>
  */
 p5.Table.prototype.setNum = function(row, column, value){
-  this.rows[row].setNum(column, value);
+  this.rows[row].set(column, value);
 };
 
 
@@ -23377,7 +16505,7 @@ p5.Table.prototype.setNum = function(row, column, value){
  * @param {String} value  value to assign
  */
 p5.Table.prototype.setString = function(row, column, value){
-  this.rows[row].setString(column, value);
+  this.rows[row].set(column, value);
 };
 
 /**
@@ -23585,7 +16713,7 @@ p5.Table.prototype.getArray = function () {
 
 module.exports = p5.Table;
 
-},{"../core/core":48}],72:[function(_dereq_,module,exports){
+},{"../core/core":17}],41:[function(require,module,exports){
 /**
  * @module IO
  * @submodule Table
@@ -23594,7 +16722,7 @@ module.exports = p5.Table;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  *  A TableRow object represents a single row of data values,
@@ -23755,7 +16883,7 @@ p5.TableRow.prototype.getString = function(column) {
 
 module.exports = p5.TableRow;
 
-},{"../core/core":48}],73:[function(_dereq_,module,exports){
+},{"../core/core":17}],42:[function(require,module,exports){
 /**
  * @module Math
  * @submodule Calculation
@@ -23765,7 +16893,7 @@ module.exports = p5.TableRow;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * Calculates the absolute value (magnitude) of a number. Maps to Math.abs().
@@ -23783,7 +16911,7 @@ var p5 = _dereq_('../core/core');
  *   print(x); // -3
  *   print(y); // 3
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.abs = Math.abs;
 
@@ -23819,7 +16947,7 @@ p5.prototype.abs = Math.abs;
  *   text(nfc(ax, 2,2), ax, ay - 5);
  *   text(nfc(bx,1,1), bx, by - 5);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.ceil = Math.ceil;
 
@@ -23857,7 +16985,7 @@ p5.prototype.ceil = Math.ceil;
  *   fill(0);
  *   ellipse(xc, 66, 9,9); // Constrained
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.constrain = function(n, low, high) {
   return Math.max(Math.min(n, high), low);
@@ -23869,10 +16997,8 @@ p5.prototype.constrain = function(n, low, high) {
  * @method dist
  * @param  {Number} x1 x-coordinate of the first point
  * @param  {Number} y1 y-coordinate of the first point
- * @param  {Number} [z1] z-coordinate of the first point
  * @param  {Number} x2 x-coordinate of the second point
  * @param  {Number} y2 y-coordinate of the second point
- * @param  {Number} [z2] z-coordinate of the second point
  * @return {Number}    distance between the two points
  * @example
  * <div><code>
@@ -23903,15 +17029,10 @@ p5.prototype.constrain = function(n, low, high) {
  *   pop();
  *   // Fancy!
  * }
- * </code></div>
+ * </div></code>
  */
-p5.prototype.dist = function(x1, y1, z1, x2, y2, z2) {
-  if (arguments.length === 4) {
-    // In the case of 2d: z1 means x2 and x2 means y2
-    return Math.sqrt( (z1-x1)*(z1-x1) + (x2-y1)*(x2-y1) );
-  } else if (arguments.length === 6) {
-    return Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1) );
-  }
+p5.prototype.dist = function(x1, y1, x2, y2) {
+  return Math.sqrt( (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
 };
 
 /**
@@ -23956,7 +17077,7 @@ p5.prototype.dist = function(x1, y1, z1, x2, y2, z2) {
  *   line(0, 0, 0, height);
  *   line(0, height-1, width, height-1);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.exp = Math.exp;
 
@@ -23991,7 +17112,7 @@ p5.prototype.exp = Math.exp;
  *   text(nfc(ax, 2,2), ax, ay - 5);
  *   text(nfc(bx,1,1), bx, by - 5);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.floor = Math.floor;
 
@@ -24022,14 +17143,14 @@ p5.prototype.floor = Math.floor;
  *   strokeWeight(5);
  *   stroke(0); // Draw the original points in black
  *   point(a, y);
- *   point(b, y);
+ *   int(b, y);
  *
  *   stroke(100); // Draw the lerp points in gray
  *   point(c, y);
  *   point(d, y);
  *   point(e, y);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.lerp = function(start, stop, amt) {
   return amt*(stop-start)+start;
@@ -24071,7 +17192,7 @@ p5.prototype.lerp = function(start, stop, amt) {
  *   noFill();
  *   stroke(0);
  *   beginShape();
- *   for(var x=0; x < width; x++) {
+ *   for(var x=0; x<width; x++) {
  *     xValue = map(x, 0, width, 0, maxX);
  *     yValue = log(xValue);
  *     y = map(yValue, -maxY, maxY, height, 0);
@@ -24081,7 +17202,7 @@ p5.prototype.lerp = function(start, stop, amt) {
  *   line(0,0,0,height);
  *   line(0,height/2,width, height/2);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.log = Math.log;
 
@@ -24113,7 +17234,7 @@ p5.prototype.log = Math.log;
  *   line(0, 0, x2, y2);
  *   print(mag(x2, y2));  // Prints "106.30146"
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.mag = function(x, y) {
   return Math.sqrt(x*x+y*y);
@@ -24153,7 +17274,7 @@ p5.prototype.mag = function(x, y) {
  *       var x2 = map(mouseX, 0, width, 0, 200);
  *       ellipse(x2, 125, 50, 50);
  *     }
- *   </code></div>
+ *   </div></code>
  */
 p5.prototype.map = function(n, start1, stop1, start2, stop2) {
   return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
@@ -24188,7 +17309,7 @@ p5.prototype.map = function(n, start1, stop1, start2, stop2) {
  *   textSize(32);
  *   text(max(numArray), maxX, maxY);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.max = function() {
   if (arguments[0] instanceof Array) {
@@ -24227,7 +17348,7 @@ p5.prototype.max = function() {
  *   textSize(32);
  *   text(min(numArray), maxX, maxY);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.min = function() {
   if (arguments[0] instanceof Array) {
@@ -24279,7 +17400,7 @@ p5.prototype.min = function() {
  *   normalX = 20;
  *   text(normalized, normalX, normalY);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.norm = function(n, start, stop) {
   return this.map(n, start, stop, 0, 1);
@@ -24311,7 +17432,7 @@ p5.prototype.norm = function(n, start, stop) {
  *
  *   ellipse(eLoc*8, eLoc*8, pow(eSize, 4), pow(eSize, 4));
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.pow = Math.pow;
 
@@ -24346,7 +17467,7 @@ p5.prototype.pow = Math.pow;
  *   text(nfc(ax, 2,2), ax, ay - 5);
  *   text(nfc(bx,1,1), bx, by - 5);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.round = Math.round;
 
@@ -24386,7 +17507,7 @@ p5.prototype.round = Math.round;
  *   text("x = " + x1, 0, y1 + spacing);
  *   text("sqrt(x) = " + x2, 0, y2 + spacing);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.sq = function(n) { return n*n; };
 
@@ -24428,13 +17549,13 @@ p5.prototype.sq = function(n) { return n*n; };
  *   text("x = " + x1, 0, y1 + spacing);
  *   text("sqrt(x) = " + x2, 0, y2 + spacing);
  * }
- * </code></div>
+ * </div></code>
  */
 p5.prototype.sqrt = Math.sqrt;
 
 module.exports = p5;
 
-},{"../core/core":48}],74:[function(_dereq_,module,exports){
+},{"../core/core":17}],43:[function(require,module,exports){
 /**
  * @module Math
  * @submodule Math
@@ -24444,7 +17565,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 
 /**
@@ -24468,7 +17589,7 @@ p5.prototype.createVector = function (x, y, z) {
 
 module.exports = p5;
 
-},{"../core/core":48}],75:[function(_dereq_,module,exports){
+},{"../core/core":17}],44:[function(require,module,exports){
 //////////////////////////////////////////////////////////////
 
 // http://mrl.nyu.edu/~perlin/noise/
@@ -24491,7 +17612,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 var PERLIN_YWRAPB = 4;
 var PERLIN_YWRAP = 1<<PERLIN_YWRAPB;
@@ -24502,11 +17623,23 @@ var PERLIN_SIZE = 4095;
 var perlin_octaves = 4; // default to medium smooth
 var perlin_amp_falloff = 0.5; // 50% reduction/octave
 
-var scaled_cosine = function(i) {
-  return 0.5*(1.0-Math.cos(i*Math.PI));
-};
+// [toxi 031112]
+// Maybe we should have a lookup table for speed
 
-var perlin; // will be initialized lazily by noise() or noiseSeed()
+var SINCOS_PRECISION = 0.5;
+var SINCOS_LENGTH = Math.floor(360 / SINCOS_PRECISION);
+var sinLUT = new Array(SINCOS_LENGTH);
+var cosLUT = new Array(SINCOS_LENGTH);
+var DEG_TO_RAD = Math.PI/180.0;
+for (var i = 0; i < SINCOS_LENGTH; i++) {
+  sinLUT[i] = Math.sin(i * DEG_TO_RAD * SINCOS_PRECISION);
+  cosLUT[i] = Math.cos(i * DEG_TO_RAD * SINCOS_PRECISION);
+}
+
+var perlin_PI = SINCOS_LENGTH;
+perlin_PI >>= 1;
+
+var perlin;
 
 
 /**
@@ -24518,23 +17651,23 @@ var perlin; // will be initialized lazily by noise() or noiseSeed()
  * shapes, terrains etc.<br /><br /> The main difference to the
  * <b>random()</b> function is that Perlin noise is defined in an infinite
  * n-dimensional space where each pair of coordinates corresponds to a
- * fixed semi-random value (fixed only for the lifespan of the program; see
- * the noiseSeed() function). p5.js can compute 1D, 2D and 3D noise,
- * depending on the number of coordinates given. The resulting value will
- * always be between 0.0 and 1.0. The noise value can be animated by moving
- * through the noise space as demonstrated in the example above. The 2nd
- * and 3rd dimension can also be interpreted as time.<br /><br />The actual
- * noise is structured similar to an audio signal, in respect to the
- * function's use of frequencies. Similar to the concept of harmonics in
- * physics, perlin noise is computed over several octaves which are added
- * together for the final result. <br /><br />Another way to adjust the
- * character of the resulting sequence is the scale of the input
- * coordinates. As the function works within an infinite space the value of
- * the coordinates doesn't matter as such, only the distance between
- * successive coordinates does (eg. when using <b>noise()</b> within a
- * loop). As a general rule the smaller the difference between coordinates,
- * the smoother the resulting noise sequence will be. Steps of 0.005-0.03
- * work best for most applications, but this will differ depending on use.
+ * fixed semi-random value (fixed only for the lifespan of the program).
+ * The resulting value will always be between 0.0 and 1.0. p5.js can
+ * compute 1D, 2D and 3D noise, depending on the number of coordinates
+ * given. The noise value can be animated by moving through the noise space
+ * as demonstrated in the example above. The 2nd and 3rd dimension can also
+ * be interpreted as time.<br /><br />The actual noise is structured
+ * similar to an audio signal, in respect to the function's use of
+ * frequencies. Similar to the concept of harmonics in physics, perlin
+ * noise is computed over several octaves which are added together for the
+ * final result. <br /><br />Another way to adjust the character of the
+ * resulting sequence is the scale of the input coordinates. As the
+ * function works within an infinite space the value of the coordinates
+ * doesn't matter as such, only the distance between successive coordinates
+ * does (eg. when using <b>noise()</b> within a loop). As a general rule
+ * the smaller the difference between coordinates, the smoother the
+ * resulting noise sequence will be. Steps of 0.005-0.03 work best for most
+ * applications, but this will differ depending on use.
  *
  *
  * @method noise
@@ -24570,10 +17703,16 @@ var perlin; // will be initialized lazily by noise() or noiseSeed()
  * </div>
  */
 p5.prototype.noise = function(x,y,z) {
+  // is this legit?
   y = y || 0;
   z = z || 0;
 
   if (perlin == null) {
+    // need to deal with seeding?
+    //if (perlinRandom == null) {
+    //  perlinRandom = new Random();
+    //}
+
     perlin = new Array(PERLIN_SIZE + 1);
     for (var i = 0; i < PERLIN_SIZE + 1; i++) {
       perlin[i] = Math.random();
@@ -24595,11 +17734,17 @@ p5.prototype.noise = function(x,y,z) {
 
   var n1,n2,n3;
 
+  // Is this right do just have this here?
+  var noise_fsc = function(i) {
+    // using cosine lookup table
+    return 0.5*(1.0-cosLUT[Math.floor(i*perlin_PI)%SINCOS_LENGTH]);
+  };
+
   for (var o=0; o<perlin_octaves; o++) {
     var of=xi+(yi<<PERLIN_YWRAPB)+(zi<<PERLIN_ZWRAPB);
 
-    rxf = scaled_cosine(xf);
-    ryf = scaled_cosine(yf);
+    rxf= noise_fsc(xf);
+    ryf= noise_fsc(yf);
 
     n1  = perlin[of&PERLIN_SIZE];
     n1 += rxf*(perlin[(of+1)&PERLIN_SIZE]-n1);
@@ -24614,7 +17759,7 @@ p5.prototype.noise = function(x,y,z) {
     n3 += rxf*(perlin[(of+PERLIN_YWRAP+1)&PERLIN_SIZE]-n3);
     n2 += ryf*(n3-n2);
 
-    n1 += scaled_cosine(zf)*(n2-n1);
+    n1 += noise_fsc(zf)*(n2-n1);
 
     r += n1*ampl;
     ampl *= perlin_amp_falloff;
@@ -24632,6 +17777,12 @@ p5.prototype.noise = function(x,y,z) {
   return r;
 };
 
+
+
+// [toxi 040903]
+// make perlin noise quality user controlled to allow
+// for different levels of detail. lower values will produce
+// smoother results as higher octaves are suppressed
 
 /**
  *
@@ -24755,7 +17906,7 @@ p5.prototype.noiseSeed = function(seed) {
 
 module.exports = p5;
 
-},{"../core/core":48}],76:[function(_dereq_,module,exports){
+},{"../core/core":17}],45:[function(require,module,exports){
 /**
  * @module Math
  * @submodule Math
@@ -24764,9 +17915,9 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var polarGeometry = _dereq_('./polargeometry');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var polarGeometry = require('./polargeometry');
+var constants = require('../core/constants');
 
 /**
  * A class to describe a two or three dimensional vector, specifically
@@ -25793,7 +18944,7 @@ p5.Vector.angleBetween = function (v1, v2) {
 
 module.exports = p5.Vector;
 
-},{"../core/constants":47,"../core/core":48,"./polargeometry":77}],77:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17,"./polargeometry":46}],46:[function(require,module,exports){
 
 module.exports = {
 
@@ -25807,7 +18958,7 @@ module.exports = {
 
 };
 
-},{}],78:[function(_dereq_,module,exports){
+},{}],47:[function(require,module,exports){
 /**
  * @module Math
  * @submodule Random
@@ -25817,7 +18968,7 @@ module.exports = {
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 var seeded = false;
 
@@ -26022,7 +19173,7 @@ p5.prototype.randomGaussian = function(mean, sd)  {
 
 module.exports = p5;
 
-},{"../core/core":48}],79:[function(_dereq_,module,exports){
+},{"../core/core":17}],48:[function(require,module,exports){
 /**
  * @module Math
  * @submodule Trigonometry
@@ -26034,9 +19185,9 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var polarGeometry = _dereq_('./polargeometry');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var polarGeometry = require('./polargeometry');
+var constants = require('../core/constants');
 
 p5.prototype._angleMode = constants.RADIANS;
 
@@ -26360,7 +19511,7 @@ p5.prototype.angleMode = function(mode) {
 
 module.exports = p5;
 
-},{"../core/constants":47,"../core/core":48,"./polargeometry":77}],80:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17,"./polargeometry":46}],49:[function(require,module,exports){
 /**
  * @module Typography
  * @submodule Attributes
@@ -26371,17 +19522,25 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
+
+p5.prototype._textSize = 12;
+p5.prototype._textLeading = 15;
+p5.prototype._textFont = 'sans-serif';
+p5.prototype._textStyle = constants.NORMAL;
+p5.prototype._textAscent = null;
+p5.prototype._textDescent = null;
 
 /**
  * Sets the current alignment for drawing text. The parameters LEFT, CENTER,
- * and RIGHT set the alignment of text in relation to the values for
- * the x and y parameters of the text() function.
+ * and RIGHT set the display characteristics of the letters in relation to
+ * the values for the x and y parameters of the text() function.
  *
  * @method textAlign
- * @param {Number/Constant} horizAlign horizontal alignment, either LEFT,
+ * @param {Number/Constant} h horizontal alignment, either LEFT,
  *                            CENTER, or RIGHT
- * @param {Number/Constant} vertAlign vertical alignment, either TOP,
+ * @param {Number/Constant} v vertical alignment, either TOP,
  *                            BOTTOM, CENTER, or BASELINE
  * @return {Number}
  * @example
@@ -26397,16 +19556,17 @@ var p5 = _dereq_('../core/core');
  * </code>
  * </div>
  */
-p5.prototype.textAlign = function(horizAlign, vertAlign) {
-  return this._renderer.textAlign.apply(this._renderer, arguments);
+p5.prototype.textAlign = function(h, v) {
+
+  return this._graphics.textAlign(h,v);
 };
 
 /**
- * Sets/gets the spacing, in pixels, between lines of text. This
+ * Sets/gets the spacing between lines of text in units of pixels. This
  * setting will be used in all subsequent calls to the text() function.
  *
  * @method textLeading
- * @param {Number} leading the size in pixels for spacing between lines
+ * @param {Number} l the size in pixels for spacing between lines
  * @return {Object|Number}
  * @example
  * <div>
@@ -26414,6 +19574,7 @@ p5.prototype.textAlign = function(horizAlign, vertAlign) {
  * // Text to display. The "\n" is a "new line" character
  * lines = "L1\nL2\nL3";
  * textSize(12);
+ * fill(0);  // Set fill to black
  *
  * textLeading(10);  // Set leading to 10
  * text(lines, 10, 25);
@@ -26426,16 +19587,23 @@ p5.prototype.textAlign = function(horizAlign, vertAlign) {
  * </code>
  * </div>
  */
-p5.prototype.textLeading = function(theLeading) {
-  return this._renderer.textLeading.apply(this._renderer, arguments);
+p5.prototype.textLeading = function(l) {
+
+  if (arguments.length) {
+
+    this._setProperty('_textLeading', l);
+    return this;
+  }
+
+  return this._textLeading;
 };
 
 /**
  * Sets/gets the current font size. This size will be used in all subsequent
- * calls to the text() function. Font size is measured in pixels.
+ * calls to the text() function. Font size is measured in units of pixels.
  *
  * @method textSize
- * @param {Number} theSize the size of the letters in units of pixels
+ * @param {Number} s the size of the letters in units of pixels
  * @return {Object|Number}
  * @example
  * <div>
@@ -26449,22 +19617,32 @@ p5.prototype.textLeading = function(theLeading) {
  * </code>
  * </div>
  */
-p5.prototype.textSize = function(theSize) {
-  return this._renderer.textSize.apply(this._renderer, arguments);
+p5.prototype.textSize = function(s) {
+
+  if (arguments.length) {
+
+    this._setProperty('_textSize', s);
+    this._setProperty('_textLeading', s * constants._DEFAULT_LEADMULT);
+    return this._graphics._applyTextProperties();
+  }
+
+  return this._textSize;
 };
 
 /**
- * Sets/gets the style of the text for system fonts to NORMAL, ITALIC, or BOLD.
- * Note: this may be is overridden by CSS styling. For non-system fonts
- * (opentype, truetype, etc.) please load styled fonts instead.
+ * Sets/gets the style of the text to NORMAL, ITALIC, or BOLD. Note this is
+ * overridden by CSS styling.
+ * (Style only apply to system font, for custom fonts, please load styled
+ * fonts instead.)
  *
  * @method textStyle
- * @param {Number/Constant} theStyle styling for text, either NORMAL,
+ * @param {Number/Constant} s styling for text, either NORMAL,
  *                            ITALIC, or BOLD
  * @return {Object|String}
  * @example
  * <div>
  * <code>
+ * fill(0);
  * strokeWeight(0);
  * textSize(12);
  * textStyle(NORMAL);
@@ -26476,42 +19654,52 @@ p5.prototype.textSize = function(theSize) {
  * </code>
  * </div>
  */
-p5.prototype.textStyle = function(theStyle) {
-  return this._renderer.textStyle.apply(this._renderer, arguments);
+p5.prototype.textStyle = function(s) {
+
+  if (arguments.length) {
+
+    if (s === constants.NORMAL ||
+      s === constants.ITALIC ||
+      s === constants.BOLD) {
+      this._setProperty('_textStyle', s);
+    }
+
+    return this._graphics._applyTextProperties();
+  }
+
+  return this._textStyle;
 };
 
 /**
  * Calculates and returns the width of any character or text string.
  *
  * @method textWidth
- * @param {String} theText the String of characters to measure
+ * @param {String} s the String of characters to measure
  * @return {Number}
  * @example
  * <div>
  * <code>
  * textSize(28);
  *
- * var aChar = 'P';
- * var cWidth = textWidth(aChar);
- * text(aChar, 0, 40);
- * line(cWidth, 0, cWidth, 50);
+ * var c = 'P';
+ * var cw = textWidth(c);
+ * text(c, 0, 40);
+ * line(cw, 0, cw, 50);
  *
- * var aString = "p5.js";
- * var sWidth = textWidth(aString);
- * text(aString, 0, 85);
- * line(sWidth, 50, sWidth, 100);
+ * var s = "p5.js";
+ * var sw = textWidth(s);
+ * text(s, 0, 85);
+ * line(sw, 50, sw, 100);
  * </code>
  * </div>
  */
-p5.prototype.textWidth = function(theText) {
-  return this._renderer.textWidth.apply(this._renderer, arguments);
+p5.prototype.textWidth = function(s) {
+
+  return this._graphics.textWidth(s);
 };
 
 /**
- * Returns the ascent of the current font at its current size. The ascent
- * represents the distance, in pixels, of the tallest character above
- * the baseline.
- *
+ * Returns ascent of the current font at its current size.
  * @return {Number}
  * @example
  * <div>
@@ -26520,26 +19708,59 @@ p5.prototype.textWidth = function(theText) {
  * var scalar = 0.8; // Different for each font
  *
  * textSize(32);  // Set initial text size
- * var asc = textAscent() * scalar;  // Calc ascent
- * line(0, base - asc, width, base - asc);
+ * var a = textAscent() * scalar;  // Calc ascent
+ * line(0, base-a, width, base-a);
  * text("dp", 0, base);  // Draw text on baseline
  *
  * textSize(64);  // Increase text size
- * asc = textAscent() * scalar;  // Recalc ascent
- * line(40, base - asc, width, base - asc);
+ * a = textAscent() * scalar;  // Recalc ascent
+ * line(40, base-a, width, base-a);
  * text("dp", 40, base);  // Draw text on baseline
  * </code>
  * </div>
  */
 p5.prototype.textAscent = function() {
-  return this._renderer.textAscent();
+  if (this._textAscent === null) {
+    this._updateTextMetrics();
+  }
+  return this._textAscent;
 };
 
+/*p5.prototype.fontMetrics = function(font, text, x, y, fontSize) {
+
+  var xMins = [], yMins = [], xMaxs= [], yMaxs = [], p5 = this;
+  //font = font || this._textFont;
+  fontSize = fontSize || p5._textSize;
+
+  font.forEachGlyph(text, x, y, fontSize,
+    {}, function(glyph, gX, gY, gFontSize) {
+
+      var gm = glyph.getMetrics();
+
+      gX = gX !== undefined ? gX : 0;
+      gY = gY !== undefined ? gY : 0;
+      fontSize = fontSize !== undefined ? fontSize : 24;
+
+      var scale = 1 / font.unitsPerEm * fontSize;
+
+      p5.noFill();
+      p5.rectMode(p5.CORNERS);
+      p5.rect(gX + (gm.xMin * scale), gY + (-gm.yMin * scale),
+              gX + (gm.xMax * scale), gY + (-gm.yMax * scale));
+
+      p5.rectMode(p5.CORNER);
+  });
+
+  return { // metrics
+      xMin: Math.min.apply(null, xMins),
+      yMin: Math.min.apply(null, yMins),
+      xMax: Math.max.apply(null, xMaxs),
+      yMax: Math.max.apply(null, yMaxs)
+  };
+};*/
+
 /**
- * Returns the descent of the current font at its current size. The descent
- * represents the distance, in pixels, of the character with the longest
- * descender below the baseline.
- *
+ * Returns descent of the current font at its current size.
  * @return {Number}
  * @example
  * <div>
@@ -26548,31 +19769,106 @@ p5.prototype.textAscent = function() {
  * var scalar = 0.8; // Different for each font
  *
  * textSize(32);  // Set initial text size
- * var desc = textDescent() * scalar;  // Calc ascent
- * line(0, base+desc, width, base+desc);
+ * var a = textDescent() * scalar;  // Calc ascent
+ * line(0, base+a, width, base+a);
  * text("dp", 0, base);  // Draw text on baseline
  *
  * textSize(64);  // Increase text size
- * desc = textDescent() * scalar;  // Recalc ascent
- * line(40, base + desc, width, base + desc);
+ * a = textDescent() * scalar;  // Recalc ascent
+ * line(40, base+a, width, base+a);
  * text("dp", 40, base);  // Draw text on baseline
  * </code>
  * </div>
  */
 p5.prototype.textDescent = function() {
-  return this._renderer.textDescent();
+
+  if (this._textDescent === null) {
+    this._updateTextMetrics();
+  }
+  return this._textDescent;
 };
 
 /**
- * Helper function to measure ascent and descent.
+ * Helper fxn to check font type (system or otf)
+ */
+p5.prototype._isOpenType = function(f) {
+
+  f = f || this._textFont;
+  return (typeof f === 'object' && f.font && f.font.supported);
+};
+
+/**
+ * Helper fxn to measure ascent and descent.
  */
 p5.prototype._updateTextMetrics = function() {
-  return this._renderer._updateTextMetrics();
+
+  if (this._isOpenType()) {
+
+    this._setProperty('_textAscent', this._textFont._textAscent());
+    this._setProperty('_textDescent', this._textFont._textDescent());
+    return this;
+  }
+
+  // Adapted from http://stackoverflow.com/a/25355178
+  var text = document.createElement('span');
+  text.style.fontFamily = this._textFont;
+  text.style.fontSize = this._textSize + 'px';
+  text.innerHTML = 'ABCjgq|';
+
+  var block = document.createElement('div');
+  block.style.display = 'inline-block';
+  block.style.width = '1px';
+  block.style.height = '0px';
+
+  var container = document.createElement('div');
+  container.appendChild(text);
+  container.appendChild(block);
+
+  container.style.height = '0px';
+  container.style.overflow = 'hidden';
+  document.body.appendChild(container);
+
+  block.style.verticalAlign = 'baseline';
+  var blockOffset = this._calculateOffset(block);
+  var textOffset = this._calculateOffset(text);
+  var ascent = blockOffset[1] - textOffset[1];
+
+  block.style.verticalAlign = 'bottom';
+  blockOffset = this._calculateOffset(block);
+  textOffset = this._calculateOffset(text);
+  var height = blockOffset[1] - textOffset[1];
+  var descent = height - ascent;
+
+  document.body.removeChild(container);
+
+  this._setProperty('_textAscent', ascent);
+  this._setProperty('_textDescent', descent);
+
+  return this;
+};
+
+/**
+ * Helper fxn to measure ascent and descent.
+ * Adapted from http://stackoverflow.com/a/25355178
+ */
+p5.prototype._calculateOffset = function(object) {
+  var currentLeft = 0,
+    currentTop = 0;
+  if (object.offsetParent) {
+    do {
+      currentLeft += object.offsetLeft;
+      currentTop += object.offsetTop;
+    } while (object = object.offsetParent);
+  } else {
+    currentLeft += object.offsetLeft;
+    currentTop += object.offsetTop;
+  }
+  return [currentLeft, currentTop];
 };
 
 module.exports = p5;
 
-},{"../core/core":48}],81:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17}],50:[function(require,module,exports){
 /**
  * @module Typography
  * @submodule Loading & Displaying
@@ -26582,10 +19878,10 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
 
-_dereq_('../core/error_helpers');
+require('../core/error_helpers');
 
 
 /**
@@ -26635,21 +19931,18 @@ _dereq_('../core/error_helpers');
  * </div>
  */
 p5.prototype.text = function(str, x, y, maxWidth, maxHeight) {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
+
   this._validateParameters(
     'text',
-    args,
+    arguments,
     [
       ['*', 'Number', 'Number'],
       ['*', 'Number', 'Number', 'Number', 'Number']
     ]
   );
 
-  return (!(this._renderer._doFill || this._renderer._doStroke)) ? this :
-    this._renderer.text.apply(this._renderer, arguments);
+  return (!(this._doFill || this._doStroke)) ? this :
+    this._graphics.text.apply(this._graphics, arguments);
 };
 
 /**
@@ -26700,16 +19993,16 @@ p5.prototype.textFont = function(theFont, theSize) {
       throw Error('null font passed to textFont');
     }
 
-    this._renderer._setProperty('_textFont', theFont);
+    this._setProperty('_textFont', theFont);
 
     if (theSize) {
 
-      this._renderer._setProperty('_textSize', theSize);
-      this._renderer._setProperty('_textLeading',
+      this._setProperty('_textSize', theSize);
+      this._setProperty('_textLeading',
         theSize * constants._DEFAULT_LEADMULT);
     }
 
-    return this._renderer._applyTextProperties();
+    return this._graphics._applyTextProperties();
   }
 
   return this;
@@ -26717,7 +20010,7 @@ p5.prototype.textFont = function(theFont, theSize) {
 
 module.exports = p5;
 
-},{"../core/constants":47,"../core/core":48,"../core/error_helpers":51}],82:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17,"../core/error_helpers":20}],51:[function(require,module,exports){
 /**
  * This module defines the p5.Font class and functions for
  * drawing text to the display canvas.
@@ -26729,8 +20022,8 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
-var constants = _dereq_('../core/constants');
+var p5 = require('../core/core');
+var constants = require('../core/constants');
 
 /*
  * TODO:
@@ -26815,7 +20108,7 @@ p5.Font.prototype.textBounds = function(str, x, y, fontSize, options) {
 
   x = x !== undefined ? x : 0;
   y = y !== undefined ? y : 0;
-  fontSize = fontSize || this.parent._renderer._textSize;
+  fontSize = fontSize || this.parent._textSize;
 
   var result = this.cache[cacheKey('textBounds', str, x, y, fontSize)];
   if (!result) {
@@ -26829,15 +20122,15 @@ p5.Font.prototype.textBounds = function(str, x, y, fontSize, options) {
         xCoords.push(gX);
         yCoords.push(gY);
 
-        var gm = glyph.getMetrics();
-
         if (glyph.name !== 'space') {
+
+          var gm = glyph.getMetrics();
 
           xCoords.push(gX + (gm.xMax * scale));
           yCoords.push(gY + (-gm.yMin * scale));
           yCoords.push(gY + (-gm.yMax * scale));
 
-        } else { // NOTE: deals with broken metrics for spaces in opentype.js
+        } else {
 
           xCoords.push(gX + self.font.charToGlyph(' ').advanceWidth *
             self._scale(fontSize));
@@ -26893,10 +20186,10 @@ p5.Font.prototype._getGlyphs = function(str) {
 p5.Font.prototype._getPath = function(line, x, y, options) {
 
   var p = this.parent,
-    ctx = p._renderer.drawingContext,
+    ctx = p._graphics.drawingContext,
     pos = this._handleAlignment(p, ctx, line, x, y);
 
-  return this.font.getPath(line, pos.x, pos.y, p._renderer._textSize, options);
+  return this.font.getPath(line, pos.x, pos.y, p._textSize, options);
 };
 
 /*
@@ -27005,7 +20298,8 @@ p5.Font.prototype._getSVG = function(line, x, y, options) {
 p5.Font.prototype._renderPath = function(line, x, y, options) {
 
   // /console.log('_renderPath', typeof line);
-  var pdata, pg = this.parent._renderer,
+  var pdata, p = this.parent,
+    pg = p._graphics,
     ctx = pg.drawingContext;
 
   if (typeof line === 'object' && line.commands) {
@@ -27014,7 +20308,7 @@ p5.Font.prototype._renderPath = function(line, x, y, options) {
   } else {
 
     //pos = handleAlignment(p, ctx, line, x, y);
-    pdata = this._getPath(line, x, y, pg._textSize, options).commands;
+    pdata = this._getPath(line, x, y, p._textSize, options).commands;
   }
 
   ctx.beginPath();
@@ -27035,15 +20329,15 @@ p5.Font.prototype._renderPath = function(line, x, y, options) {
   }
 
   // only draw stroke if manually set by user
-  if (pg._doStroke && pg._strokeSet) {
+  if (p._doStroke && p._strokeSet) {
 
     ctx.stroke();
   }
 
-  if (pg._doFill) {
+  if (p._doFill) {
 
     // if fill hasn't been set by user, use default-text-fill
-    ctx.fillStyle = pg._fillSet ? ctx.fillStyle : constants._DEFAULT_TEXT_FILL;
+    ctx.fillStyle = p._fillSet ? ctx.fillStyle : constants._DEFAULT_TEXT_FILL;
     ctx.fill();
   }
 
@@ -27073,8 +20367,7 @@ p5.Font.prototype._textDescent = function(fontSize) {
 
 p5.Font.prototype._scale = function(fontSize) {
 
-  return (1 / this.font.unitsPerEm) * (fontSize ||
-    this.parent._renderer._textSize);
+  return (1 / this.font.unitsPerEm) * (fontSize || this.parent._textSize);
 };
 
 p5.Font.prototype._handleAlignment = function(p, ctx, line, x, y) {
@@ -27102,12 +20395,9 @@ p5.Font.prototype._handleAlignment = function(p, ctx, line, x, y) {
 };
 
 function cacheKey() {
-  var args = new Array(arguments.length);
-  for (var i = 0; i < args.length; ++i) {
-    args[i] = arguments[i];
-  }
-  i = args.length;
-  var hash = '';
+  var args = Array.prototype.slice.call(arguments),
+    i = args.length,
+    hash = '';
 
   while (i--) {
     hash += (args[i] === Object(args[i])) ?
@@ -27118,7 +20408,7 @@ function cacheKey() {
 
 module.exports = p5.Font;
 
-},{"../core/constants":47,"../core/core":48}],83:[function(_dereq_,module,exports){
+},{"../core/constants":16,"../core/core":17}],52:[function(require,module,exports){
 /**
  * @module Data
  * @submodule Array Functions
@@ -27128,7 +20418,7 @@ module.exports = p5.Font;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * Adds a value to the end of an array. Extends the length of
@@ -27466,7 +20756,7 @@ p5.prototype.subset = function(list, start, count) {
 
 module.exports = p5;
 
-},{"../core/core":48}],84:[function(_dereq_,module,exports){
+},{"../core/core":17}],53:[function(require,module,exports){
 /**
  * @module Data
  * @submodule Conversion
@@ -27476,7 +20766,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * Converts a string to its floating point representation. The contents of a
@@ -27727,7 +21017,7 @@ p5.prototype.unhex = function(n) {
 
 module.exports = p5;
 
-},{"../core/core":48}],85:[function(_dereq_,module,exports){
+},{"../core/core":17}],54:[function(require,module,exports){
 /**
  * @module Data
  * @submodule String Functions
@@ -27737,7 +21027,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 //return p5; //LM is this a mistake?
 
@@ -28179,28 +21469,7 @@ p5.prototype.split = function(str, delim) {
  * </code>
  */
 p5.prototype.splitTokens = function() {
-  var d,sqo,sqc,str;
-  str = arguments[1];
-  if (arguments.length > 1) {
-    sqc = /\]/g.exec(str);
-    sqo = /\[/g.exec(str);
-    if ( sqo && sqc ) {
-      str = str.slice(0, sqc.index) + str.slice(sqc.index+1);
-      sqo = /\[/g.exec(str);
-      str = str.slice(0, sqo.index) + str.slice(sqo.index+1);
-      d = new RegExp('[\\['+str+'\\]]','g');
-    } else if ( sqc ) {
-      str = str.slice(0, sqc.index) + str.slice(sqc.index+1);
-      d = new RegExp('[' + str + '\\]]', 'g');
-    } else if(sqo) {
-      str = str.slice(0, sqo.index) + str.slice(sqo.index+1);
-      d = new RegExp('[' + str + '\\[]', 'g');
-    } else {
-      d = new RegExp('[' + str + ']', 'g');
-    }
-  } else {
-    d = /\s/g;
-  }
+  var d = (arguments.length > 0) ? arguments[1] : /\s/g;
   return arguments[0].split(d).filter(function(n){return n;});
 };
 
@@ -28230,7 +21499,7 @@ p5.prototype.trim = function(str) {
 
 module.exports = p5;
 
-},{"../core/core":48}],86:[function(_dereq_,module,exports){
+},{"../core/core":17}],55:[function(require,module,exports){
 /**
  * @module Input
  * @submodule Time & Date
@@ -28240,7 +21509,7 @@ module.exports = p5;
 
 'use strict';
 
-var p5 = _dereq_('../core/core');
+var p5 = require('../core/core');
 
 /**
  * p5.js communicates with the clock on your computer. The day() function
@@ -28371,5 +21640,101 @@ p5.prototype.year = function() {
 
 module.exports = p5;
 
-},{"../core/core":48}]},{},[39])(39)
+},{"../core/core":17}]},{},[8])(8)
+});
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.opentype = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+"use strict";exports.argument=function(r,t){if(!r)throw new Error(t)},exports.assert=exports.argument;
+
+
+},{}],2:[function(require,module,exports){
+"use strict";function line(e,i,n,o,t){e.beginPath(),e.moveTo(i,n),e.lineTo(o,t),e.stroke()}exports.line=line;
+
+
+},{}],3:[function(require,module,exports){
+"use strict";function DefaultEncoding(e){this.font=e}function CmapEncoding(e){this.cmap=e}function CffEncoding(e,l){this.encoding=e,this.charset=l}function GlyphNames(e){var l;switch(e.version){case 1:this.names=exports.standardNames.slice();break;case 2:for(this.names=new Array(e.numberOfGlyphs),l=0;l<e.numberOfGlyphs;l++)this.names[l]=e.glyphNameIndex[l]<exports.standardNames.length?exports.standardNames[e.glyphNameIndex[l]]:e.names[e.glyphNameIndex[l]-exports.standardNames.length];break;case 2.5:for(this.names=new Array(e.numberOfGlyphs),l=0;l<e.numberOfGlyphs;l++)this.names[l]=exports.standardNames[l+e.glyphNameIndex[l]];break;case 3:this.names=[]}}function addGlyphNames(e){for(var l,r=e.tables.cmap.glyphIndexMap,a=Object.keys(r),s=0;s<a.length;s+=1){var i=a[s],o=r[i];l=e.glyphs[o],l.addUnicode(parseInt(i))}for(s=0;s<e.glyphs.length;s+=1)l=e.glyphs[s],l.name=e.cffEncoding?e.cffEncoding.charset[s]:e.glyphNames.glyphIndexToName(s)}var cffStandardStrings=[".notdef","space","exclam","quotedbl","numbersign","dollar","percent","ampersand","quoteright","parenleft","parenright","asterisk","plus","comma","hyphen","period","slash","zero","one","two","three","four","five","six","seven","eight","nine","colon","semicolon","less","equal","greater","question","at","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","bracketleft","backslash","bracketright","asciicircum","underscore","quoteleft","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","braceleft","bar","braceright","asciitilde","exclamdown","cent","sterling","fraction","yen","florin","section","currency","quotesingle","quotedblleft","guillemotleft","guilsinglleft","guilsinglright","fi","fl","endash","dagger","daggerdbl","periodcentered","paragraph","bullet","quotesinglbase","quotedblbase","quotedblright","guillemotright","ellipsis","perthousand","questiondown","grave","acute","circumflex","tilde","macron","breve","dotaccent","dieresis","ring","cedilla","hungarumlaut","ogonek","caron","emdash","AE","ordfeminine","Lslash","Oslash","OE","ordmasculine","ae","dotlessi","lslash","oslash","oe","germandbls","onesuperior","logicalnot","mu","trademark","Eth","onehalf","plusminus","Thorn","onequarter","divide","brokenbar","degree","thorn","threequarters","twosuperior","registered","minus","eth","multiply","threesuperior","copyright","Aacute","Acircumflex","Adieresis","Agrave","Aring","Atilde","Ccedilla","Eacute","Ecircumflex","Edieresis","Egrave","Iacute","Icircumflex","Idieresis","Igrave","Ntilde","Oacute","Ocircumflex","Odieresis","Ograve","Otilde","Scaron","Uacute","Ucircumflex","Udieresis","Ugrave","Yacute","Ydieresis","Zcaron","aacute","acircumflex","adieresis","agrave","aring","atilde","ccedilla","eacute","ecircumflex","edieresis","egrave","iacute","icircumflex","idieresis","igrave","ntilde","oacute","ocircumflex","odieresis","ograve","otilde","scaron","uacute","ucircumflex","udieresis","ugrave","yacute","ydieresis","zcaron","exclamsmall","Hungarumlautsmall","dollaroldstyle","dollarsuperior","ampersandsmall","Acutesmall","parenleftsuperior","parenrightsuperior","266 ff","onedotenleader","zerooldstyle","oneoldstyle","twooldstyle","threeoldstyle","fouroldstyle","fiveoldstyle","sixoldstyle","sevenoldstyle","eightoldstyle","nineoldstyle","commasuperior","threequartersemdash","periodsuperior","questionsmall","asuperior","bsuperior","centsuperior","dsuperior","esuperior","isuperior","lsuperior","msuperior","nsuperior","osuperior","rsuperior","ssuperior","tsuperior","ff","ffi","ffl","parenleftinferior","parenrightinferior","Circumflexsmall","hyphensuperior","Gravesmall","Asmall","Bsmall","Csmall","Dsmall","Esmall","Fsmall","Gsmall","Hsmall","Ismall","Jsmall","Ksmall","Lsmall","Msmall","Nsmall","Osmall","Psmall","Qsmall","Rsmall","Ssmall","Tsmall","Usmall","Vsmall","Wsmall","Xsmall","Ysmall","Zsmall","colonmonetary","onefitted","rupiah","Tildesmall","exclamdownsmall","centoldstyle","Lslashsmall","Scaronsmall","Zcaronsmall","Dieresissmall","Brevesmall","Caronsmall","Dotaccentsmall","Macronsmall","figuredash","hypheninferior","Ogoneksmall","Ringsmall","Cedillasmall","questiondownsmall","oneeighth","threeeighths","fiveeighths","seveneighths","onethird","twothirds","zerosuperior","foursuperior","fivesuperior","sixsuperior","sevensuperior","eightsuperior","ninesuperior","zeroinferior","oneinferior","twoinferior","threeinferior","fourinferior","fiveinferior","sixinferior","seveninferior","eightinferior","nineinferior","centinferior","dollarinferior","periodinferior","commainferior","Agravesmall","Aacutesmall","Acircumflexsmall","Atildesmall","Adieresissmall","Aringsmall","AEsmall","Ccedillasmall","Egravesmall","Eacutesmall","Ecircumflexsmall","Edieresissmall","Igravesmall","Iacutesmall","Icircumflexsmall","Idieresissmall","Ethsmall","Ntildesmall","Ogravesmall","Oacutesmall","Ocircumflexsmall","Otildesmall","Odieresissmall","OEsmall","Oslashsmall","Ugravesmall","Uacutesmall","Ucircumflexsmall","Udieresissmall","Yacutesmall","Thornsmall","Ydieresissmall","001.000","001.001","001.002","001.003","Black","Bold","Book","Light","Medium","Regular","Roman","Semibold"],cffStandardEncoding=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","space","exclam","quotedbl","numbersign","dollar","percent","ampersand","quoteright","parenleft","parenright","asterisk","plus","comma","hyphen","period","slash","zero","one","two","three","four","five","six","seven","eight","nine","colon","semicolon","less","equal","greater","question","at","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","bracketleft","backslash","bracketright","asciicircum","underscore","quoteleft","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","braceleft","bar","braceright","asciitilde","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","exclamdown","cent","sterling","fraction","yen","florin","section","currency","quotesingle","quotedblleft","guillemotleft","guilsinglleft","guilsinglright","fi","fl","","endash","dagger","daggerdbl","periodcentered","","paragraph","bullet","quotesinglbase","quotedblbase","quotedblright","guillemotright","ellipsis","perthousand","","questiondown","","grave","acute","circumflex","tilde","macron","breve","dotaccent","dieresis","","ring","cedilla","","hungarumlaut","ogonek","caron","emdash","","","","","","","","","","","","","","","","","AE","","ordfeminine","","","","","Lslash","Oslash","OE","ordmasculine","","","","","","ae","","","","dotlessi","","","lslash","oslash","oe","germandbls"],cffExpertEncoding=["","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","space","exclamsmall","Hungarumlautsmall","","dollaroldstyle","dollarsuperior","ampersandsmall","Acutesmall","parenleftsuperior","parenrightsuperior","twodotenleader","onedotenleader","comma","hyphen","period","fraction","zerooldstyle","oneoldstyle","twooldstyle","threeoldstyle","fouroldstyle","fiveoldstyle","sixoldstyle","sevenoldstyle","eightoldstyle","nineoldstyle","colon","semicolon","commasuperior","threequartersemdash","periodsuperior","questionsmall","","asuperior","bsuperior","centsuperior","dsuperior","esuperior","","","isuperior","","","lsuperior","msuperior","nsuperior","osuperior","","","rsuperior","ssuperior","tsuperior","","ff","fi","fl","ffi","ffl","parenleftinferior","","parenrightinferior","Circumflexsmall","hyphensuperior","Gravesmall","Asmall","Bsmall","Csmall","Dsmall","Esmall","Fsmall","Gsmall","Hsmall","Ismall","Jsmall","Ksmall","Lsmall","Msmall","Nsmall","Osmall","Psmall","Qsmall","Rsmall","Ssmall","Tsmall","Usmall","Vsmall","Wsmall","Xsmall","Ysmall","Zsmall","colonmonetary","onefitted","rupiah","Tildesmall","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","exclamdownsmall","centoldstyle","Lslashsmall","","","Scaronsmall","Zcaronsmall","Dieresissmall","Brevesmall","Caronsmall","","Dotaccentsmall","","","Macronsmall","","","figuredash","hypheninferior","","","Ogoneksmall","Ringsmall","Cedillasmall","","","","onequarter","onehalf","threequarters","questiondownsmall","oneeighth","threeeighths","fiveeighths","seveneighths","onethird","twothirds","","","zerosuperior","onesuperior","twosuperior","threesuperior","foursuperior","fivesuperior","sixsuperior","sevensuperior","eightsuperior","ninesuperior","zeroinferior","oneinferior","twoinferior","threeinferior","fourinferior","fiveinferior","sixinferior","seveninferior","eightinferior","nineinferior","centinferior","dollarinferior","periodinferior","commainferior","Agravesmall","Aacutesmall","Acircumflexsmall","Atildesmall","Adieresissmall","Aringsmall","AEsmall","Ccedillasmall","Egravesmall","Eacutesmall","Ecircumflexsmall","Edieresissmall","Igravesmall","Iacutesmall","Icircumflexsmall","Idieresissmall","Ethsmall","Ntildesmall","Ogravesmall","Oacutesmall","Ocircumflexsmall","Otildesmall","Odieresissmall","OEsmall","Oslashsmall","Ugravesmall","Uacutesmall","Ucircumflexsmall","Udieresissmall","Yacutesmall","Thornsmall","Ydieresissmall"],standardNames=[".notdef",".null","nonmarkingreturn","space","exclam","quotedbl","numbersign","dollar","percent","ampersand","quotesingle","parenleft","parenright","asterisk","plus","comma","hyphen","period","slash","zero","one","two","three","four","five","six","seven","eight","nine","colon","semicolon","less","equal","greater","question","at","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","bracketleft","backslash","bracketright","asciicircum","underscore","grave","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","braceleft","bar","braceright","asciitilde","Adieresis","Aring","Ccedilla","Eacute","Ntilde","Odieresis","Udieresis","aacute","agrave","acircumflex","adieresis","atilde","aring","ccedilla","eacute","egrave","ecircumflex","edieresis","iacute","igrave","icircumflex","idieresis","ntilde","oacute","ograve","ocircumflex","odieresis","otilde","uacute","ugrave","ucircumflex","udieresis","dagger","degree","cent","sterling","section","bullet","paragraph","germandbls","registered","copyright","trademark","acute","dieresis","notequal","AE","Oslash","infinity","plusminus","lessequal","greaterequal","yen","mu","partialdiff","summation","product","pi","integral","ordfeminine","ordmasculine","Omega","ae","oslash","questiondown","exclamdown","logicalnot","radical","florin","approxequal","Delta","guillemotleft","guillemotright","ellipsis","nonbreakingspace","Agrave","Atilde","Otilde","OE","oe","endash","emdash","quotedblleft","quotedblright","quoteleft","quoteright","divide","lozenge","ydieresis","Ydieresis","fraction","currency","guilsinglleft","guilsinglright","fi","fl","daggerdbl","periodcentered","quotesinglbase","quotedblbase","perthousand","Acircumflex","Ecircumflex","Aacute","Edieresis","Egrave","Iacute","Icircumflex","Idieresis","Igrave","Oacute","Ocircumflex","apple","Ograve","Uacute","Ucircumflex","Ugrave","dotlessi","circumflex","tilde","macron","breve","dotaccent","ring","cedilla","hungarumlaut","ogonek","caron","Lslash","lslash","Scaron","scaron","Zcaron","zcaron","brokenbar","Eth","eth","Yacute","yacute","Thorn","thorn","minus","multiply","onesuperior","twosuperior","threesuperior","onehalf","onequarter","threequarters","franc","Gbreve","gbreve","Idotaccent","Scedilla","scedilla","Cacute","cacute","Ccaron","ccaron","dcroat"];DefaultEncoding.prototype.charToGlyphIndex=function(e){var l=e.charCodeAt(0),r=this.font.glyphs;if(!r)return null;for(var a=0;a<r.length;a+=1)for(var s=r[a],i=0;i<s.unicodes.length;i+=1)if(s.unicodes[i]===l)return a},CmapEncoding.prototype.charToGlyphIndex=function(e){return this.cmap.glyphIndexMap[e.charCodeAt(0)]||0},CffEncoding.prototype.charToGlyphIndex=function(e){var l=e.charCodeAt(0),r=this.encoding[l];return this.charset.indexOf(r)},GlyphNames.prototype.nameToGlyphIndex=function(e){return this.names.indexOf(e)},GlyphNames.prototype.glyphIndexToName=function(e){return this.names[e]},exports.cffStandardStrings=cffStandardStrings,exports.cffStandardEncoding=cffStandardEncoding,exports.cffExpertEncoding=cffExpertEncoding,exports.standardNames=standardNames,exports.DefaultEncoding=DefaultEncoding,exports.CmapEncoding=CmapEncoding,exports.CffEncoding=CffEncoding,exports.GlyphNames=GlyphNames,exports.addGlyphNames=addGlyphNames;
+
+
+},{}],4:[function(require,module,exports){
+"use strict";function Font(t){t=t||{},this.familyName=t.familyName||" ",this.styleName=t.styleName||" ",this.designer=t.designer||" ",this.designerURL=t.designerURL||" ",this.manufacturer=t.manufacturer||" ",this.manufacturerURL=t.manufacturerURL||" ",this.license=t.license||" ",this.licenseURL=t.licenseURL||" ",this.version=t.version||"Version 0.1",this.description=t.description||" ",this.copyright=t.copyright||" ",this.trademark=t.trademark||" ",this.unitsPerEm=t.unitsPerEm||1e3,this.ascender=t.ascender,this.descender=t.descender,this.supported=!0,this.glyphs=t.glyphs||[],this.encoding=new encoding.DefaultEncoding(this),this.tables={}}var path=require("./path"),sfnt=require("./tables/sfnt"),encoding=require("./encoding");Font.prototype.hasChar=function(t){return null!==this.encoding.charToGlyphIndex(t)},Font.prototype.charToGlyphIndex=function(t){return this.encoding.charToGlyphIndex(t)},Font.prototype.charToGlyph=function(t){var e=this.charToGlyphIndex(t),n=this.glyphs[e];return n||(n=this.glyphs[0]),n},Font.prototype.stringToGlyphs=function(t){for(var e=[],n=0;n<t.length;n+=1){var i=t[n];e.push(this.charToGlyph(i))}return e},Font.prototype.nameToGlyphIndex=function(t){return this.glyphNames.nameToGlyphIndex(t)},Font.prototype.nameToGlyph=function(t){var e=this.nametoGlyphIndex(t),n=this.glyphs[e];return n||(n=this.glyphs[0]),n},Font.prototype.glyphIndexToName=function(t){return this.glyphNames.glyphIndexToName?this.glyphNames.glyphIndexToName(t):""},Font.prototype.getKerningValue=function(t,e){t=t.index||t,e=e.index||e;var n=this.getGposKerningValue;return n?n(t,e):this.kerningPairs[t+","+e]||0},Font.prototype.forEachGlyph=function(t,e,n,i,o,r){if(this.supported){e=void 0!==e?e:0,n=void 0!==n?n:0,i=void 0!==i?i:72,o=o||{};for(var s=void 0===o.kerning?!0:o.kerning,h=1/this.unitsPerEm*i,a=this.stringToGlyphs(t),p=0;p<a.length;p+=1){var c=a[p];if(r(c,e,n,i,o),c.advanceWidth&&(e+=c.advanceWidth*h),s&&p<a.length-1){var u=this.getKerningValue(c,a[p+1]);e+=u*h}}}},Font.prototype.getPath=function(t,e,n,i,o){var r=new path.Path;return this.forEachGlyph(t,e,n,i,o,function(t,e,n,i){var o=t.getPath(e,n,i);r.extend(o)}),r},Font.prototype.draw=function(t,e,n,i,o,r){this.getPath(e,n,i,o,r).draw(t)},Font.prototype.drawPoints=function(t,e,n,i,o,r){this.forEachGlyph(e,n,i,o,r,function(e,n,i,o){e.drawPoints(t,n,i,o)})},Font.prototype.drawMetrics=function(t,e,n,i,o,r){this.forEachGlyph(e,n,i,o,r,function(e,n,i,o){e.drawMetrics(t,n,i,o)})},Font.prototype.validate=function(){function t(t,e){t||n.push(e)}function e(e){t(i[e]&&i[e].trim().length>0,"No "+e+" specified.")}var n=[],i=this;e("familyName"),e("weightName"),e("manufacturer"),e("copyright"),e("version"),t(this.unitsPerEm>0,"No unitsPerEm specified.")},Font.prototype.toTables=function(){return sfnt.fontToTable(this)},Font.prototype.toBuffer=function(){for(var t=this.toTables(),e=t.encode(),n=new ArrayBuffer(e.length),i=new Uint8Array(n),o=0;o<e.length;o++)i[o]=e[o];return n},Font.prototype.download=function(){var t=this.familyName.replace(/\s/g,"")+"-"+this.styleName+".otf",e=this.toBuffer();window.requestFileSystem=window.requestFileSystem||window.webkitRequestFileSystem,window.requestFileSystem(window.TEMPORARY,e.byteLength,function(n){n.root.getFile(t,{create:!0},function(t){t.createWriter(function(n){var i=new DataView(e),o=new Blob([i],{type:"font/opentype"});n.write(o),n.addEventListener("writeend",function(){location.href=t.toURL()},!1)})})},function(t){throw t})},exports.Font=Font;
+
+
+},{"./encoding":3,"./path":8,"./tables/sfnt":23}],5:[function(require,module,exports){
+"use strict";function Glyph(t){this.font=t.font||null,this.index=t.index||0,this.name=t.name||null,this.unicode=t.unicode||void 0,this.unicodes=t.unicodes||void 0!==t.unicode?[t.unicode]:[],this.xMin=t.xMin||0,this.yMin=t.yMin||0,this.xMax=t.xMax||0,this.yMax=t.yMax||0,this.advanceWidth=t.advanceWidth||0,this.path=t.path||null}var check=require("./check"),draw=require("./draw"),path=require("./path");Glyph.prototype.addUnicode=function(t){0===this.unicodes.length&&(this.unicode=t),this.unicodes.push(t)},Glyph.prototype.getPath=function(t,i,e){t=void 0!==t?t:0,i=void 0!==i?i:0,e=void 0!==e?e:72;for(var n=1/this.font.unitsPerEm*e,h=new path.Path,a=this.path.commands,o=0;o<a.length;o+=1){var r=a[o];"M"===r.type?h.moveTo(t+r.x*n,i+-r.y*n):"L"===r.type?h.lineTo(t+r.x*n,i+-r.y*n):"Q"===r.type?h.quadraticCurveTo(t+r.x1*n,i+-r.y1*n,t+r.x*n,i+-r.y*n):"C"===r.type?h.curveTo(t+r.x1*n,i+-r.y1*n,t+r.x2*n,i+-r.y2*n,t+r.x*n,i+-r.y*n):"Z"===r.type&&h.closePath()}return h},Glyph.prototype.getContours=function(){if(void 0===this.points)return[];for(var t=[],i=[],e=0;e<this.points.length;e+=1){var n=this.points[e];i.push(n),n.lastPointOfContour&&(t.push(i),i=[])}return check.argument(0===i.length,"There are still points left in the current contour."),t},Glyph.prototype.getMetrics=function(){for(var t=this.path.commands,i=[],e=[],n=0;n<t.length;n+=1){var h=t[n];"Z"!==h.type&&(i.push(h.x),e.push(h.y)),("Q"===h.type||"C"===h.type)&&(i.push(h.x1),e.push(h.y1)),"C"===h.type&&(i.push(h.x2),e.push(h.y2))}var a={xMin:Math.min.apply(null,i),yMin:Math.min.apply(null,e),xMax:Math.max.apply(null,i),yMax:Math.max.apply(null,e),leftSideBearing:0};return a.rightSideBearing=this.advanceWidth-a.leftSideBearing-(a.xMax-a.xMin),a},Glyph.prototype.draw=function(t,i,e,n){this.getPath(i,e,n).draw(t)},Glyph.prototype.drawPoints=function(t,i,e,n){function h(i,e,n,h){var a=2*Math.PI;t.beginPath();for(var o=0;o<i.length;o+=1)t.moveTo(e+i[o].x*h,n+i[o].y*h),t.arc(e+i[o].x*h,n+i[o].y*h,2,0,a,!1);t.closePath(),t.fill()}i=void 0!==i?i:0,e=void 0!==e?e:0,n=void 0!==n?n:24;for(var a=1/this.font.unitsPerEm*n,o=[],r=[],s=this.path,l=0;l<s.commands.length;l+=1){var p=s.commands[l];void 0!==p.x&&o.push({x:p.x,y:-p.y}),void 0!==p.x1&&r.push({x:p.x1,y:-p.y1}),void 0!==p.x2&&r.push({x:p.x2,y:-p.y2})}t.fillStyle="blue",h(o,i,e,a),t.fillStyle="red",h(r,i,e,a)},Glyph.prototype.drawMetrics=function(t,i,e,n){var h;i=void 0!==i?i:0,e=void 0!==e?e:0,n=void 0!==n?n:24,h=1/this.font.unitsPerEm*n,t.lineWidth=1,t.strokeStyle="black",draw.line(t,i,-1e4,i,1e4),draw.line(t,-1e4,e,1e4,e),t.strokeStyle="blue",draw.line(t,i+this.xMin*h,-1e4,i+this.xMin*h,1e4),draw.line(t,i+this.xMax*h,-1e4,i+this.xMax*h,1e4),draw.line(t,-1e4,e+-this.yMin*h,1e4,e+-this.yMin*h),draw.line(t,-1e4,e+-this.yMax*h,1e4,e+-this.yMax*h),t.strokeStyle="green",draw.line(t,i+this.advanceWidth*h,-1e4,i+this.advanceWidth*h,1e4)},exports.Glyph=Glyph;
+
+
+},{"./check":1,"./draw":2,"./path":8}],6:[function(require,module,exports){
+"use strict";function toArrayBuffer(e){for(var a=new ArrayBuffer(e.length),r=new Uint8Array(a),s=0;s<e.length;s+=1)r[s]=e[s];return a}function loadFromFile(e,a){var r=require("fs");r.readFile(e,function(e,r){return e?a(e.message):void a(null,toArrayBuffer(r))})}function loadFromUrl(e,a){var r=new XMLHttpRequest;r.open("get",e,!0),r.responseType="arraybuffer",r.onload=function(){return 200!==r.status?a("Font could not be loaded: "+r.statusText):a(null,r.response)},r.send()}function parseBuffer(e){var a,r,s,t,n,o,p,l=new _font.Font,i=new DataView(e,0),u=parse.getFixed(i,0);if(1===u)l.outlinesFormat="truetype";else{if(u=parse.getTag(i,0),"OTTO"!==u)throw new Error("Unsupported OpenType version "+u);l.outlinesFormat="cff"}for(var c=parse.getUShort(i,4),f=12,h=0;c>h;h+=1){var d=parse.getTag(i,f),m=parse.getULong(i,f+8);switch(d){case"cmap":l.tables.cmap=cmap.parse(i,m),l.encoding=new encoding.CmapEncoding(l.tables.cmap),l.encoding||(l.supported=!1);break;case"head":l.tables.head=head.parse(i,m),l.unitsPerEm=l.tables.head.unitsPerEm,a=l.tables.head.indexToLocFormat;break;case"hhea":l.tables.hhea=hhea.parse(i,m),l.ascender=l.tables.hhea.ascender,l.descender=l.tables.hhea.descender,l.numberOfHMetrics=l.tables.hhea.numberOfHMetrics;break;case"hmtx":r=m;break;case"maxp":l.tables.maxp=maxp.parse(i,m),l.numGlyphs=l.tables.maxp.numGlyphs;break;case"name":l.tables.name=_name.parse(i,m),l.familyName=l.tables.name.fontFamily,l.styleName=l.tables.name.fontSubfamily;break;case"OS/2":l.tables.os2=os2.parse(i,m);break;case"post":l.tables.post=post.parse(i,m),l.glyphNames=new encoding.GlyphNames(l.tables.post);break;case"glyf":s=m;break;case"loca":t=m;break;case"CFF ":n=m;break;case"kern":o=m;break;case"GPOS":p=m}f+=16}if(s&&t){var b=0===a,g=loca.parse(i,t,l.numGlyphs,b);l.glyphs=glyf.parse(i,s,g,l),hmtx.parse(i,r,l.numberOfHMetrics,l.numGlyphs,l.glyphs),encoding.addGlyphNames(l)}else n?(cff.parse(i,n,l),encoding.addGlyphNames(l)):l.supported=!1;return l.supported&&(l.kerningPairs=o?kern.parse(i,o):{},p&&gpos.parse(i,p,l)),l}function load(e,a){var r="undefined"==typeof window,s=r?loadFromFile:loadFromUrl;s(e,function(e,r){if(e)return a(e);var s=parseBuffer(r);return s.supported?a(null,s):a("Font is not supported (is this a Postscript font?)")})}var encoding=require("./encoding"),_font=require("./font"),glyph=require("./glyph"),parse=require("./parse"),path=require("./path"),cmap=require("./tables/cmap"),cff=require("./tables/cff"),glyf=require("./tables/glyf"),gpos=require("./tables/gpos"),head=require("./tables/head"),hhea=require("./tables/hhea"),hmtx=require("./tables/hmtx"),kern=require("./tables/kern"),loca=require("./tables/loca"),maxp=require("./tables/maxp"),_name=require("./tables/name"),os2=require("./tables/os2"),post=require("./tables/post");exports._parse=parse,exports.Font=_font.Font,exports.Glyph=glyph.Glyph,exports.Path=path.Path,exports.parse=parseBuffer,exports.load=load;
+},{"./encoding":3,"./font":4,"./glyph":5,"./parse":7,"./path":8,"./tables/cff":10,"./tables/cmap":11,"./tables/glyf":12,"./tables/gpos":13,"./tables/head":14,"./tables/hhea":15,"./tables/hmtx":16,"./tables/kern":17,"./tables/loca":18,"./tables/maxp":19,"./tables/name":20,"./tables/os2":21,"./tables/post":22,"fs":undefined}],7:[function(require,module,exports){
+"use strict";function Parser(t,e){this.data=t,this.offset=e,this.relativeOffset=0}exports.getByte=function(t,e){return t.getUint8(e)},exports.getCard8=exports.getByte,exports.getUShort=function(t,e){return t.getUint16(e,!1)},exports.getCard16=exports.getUShort,exports.getShort=function(t,e){return t.getInt16(e,!1)},exports.getULong=function(t,e){return t.getUint32(e,!1)},exports.getFixed=function(t,e){var r=t.getInt16(e,!1),s=t.getUint16(e+2,!1);return r+s/65535},exports.getTag=function(t,e){for(var r="",s=e;e+4>s;s+=1)r+=String.fromCharCode(t.getInt8(s));return r},exports.getOffset=function(t,e,r){for(var s=0,o=0;r>o;o+=1)s<<=8,s+=t.getUint8(e+o);return s},exports.getBytes=function(t,e,r){for(var s=[],o=e;r>o;o+=1)s.push(t.getUint8(o));return s},exports.bytesToString=function(t){for(var e="",r=0;r<t.length;r+=1)e+=String.fromCharCode(t[r]);return e};var typeOffsets={"byte":1,uShort:2,"short":2,uLong:4,fixed:4,longDateTime:8,tag:4};Parser.prototype.parseByte=function(){var t=this.data.getUint8(this.offset+this.relativeOffset);return this.relativeOffset+=1,t},Parser.prototype.parseChar=function(){var t=this.data.getInt8(this.offset+this.relativeOffset);return this.relativeOffset+=1,t},Parser.prototype.parseCard8=Parser.prototype.parseByte,Parser.prototype.parseUShort=function(){var t=this.data.getUint16(this.offset+this.relativeOffset);return this.relativeOffset+=2,t},Parser.prototype.parseCard16=Parser.prototype.parseUShort,Parser.prototype.parseSID=Parser.prototype.parseUShort,Parser.prototype.parseOffset16=Parser.prototype.parseUShort,Parser.prototype.parseShort=function(){var t=this.data.getInt16(this.offset+this.relativeOffset);return this.relativeOffset+=2,t},Parser.prototype.parseF2Dot14=function(){var t=this.data.getInt16(this.offset+this.relativeOffset)/16384;return this.relativeOffset+=2,t},Parser.prototype.parseULong=function(){var t=exports.getULong(this.data,this.offset+this.relativeOffset);return this.relativeOffset+=4,t},Parser.prototype.parseFixed=function(){var t=exports.getFixed(this.data,this.offset+this.relativeOffset);return this.relativeOffset+=4,t},Parser.prototype.parseOffset16List=Parser.prototype.parseUShortList=function(t){for(var e=new Array(t),r=this.data,s=this.offset+this.relativeOffset,o=0;t>o;o++)e[o]=exports.getUShort(r,s),s+=2;return this.relativeOffset+=2*t,e},Parser.prototype.parseString=function(t){var e=this.data,r=this.offset+this.relativeOffset,s="";this.relativeOffset+=t;for(var o=0;t>o;o++)s+=String.fromCharCode(e.getUint8(r+o));return s},Parser.prototype.parseTag=function(){return this.parseString(4)},Parser.prototype.parseLongDateTime=function(){var t=exports.getULong(this.data,this.offset+this.relativeOffset+4);return this.relativeOffset+=8,t},Parser.prototype.parseFixed=function(){var t=exports.getULong(this.data,this.offset+this.relativeOffset);return this.relativeOffset+=4,t/65536},Parser.prototype.parseVersion=function(){var t=exports.getUShort(this.data,this.offset+this.relativeOffset),e=exports.getUShort(this.data,this.offset+this.relativeOffset+2);return this.relativeOffset+=4,t+e/4096/10},Parser.prototype.skip=function(t,e){void 0===e&&(e=1),this.relativeOffset+=typeOffsets[t]*e},exports.Parser=Parser;
+
+
+},{}],8:[function(require,module,exports){
+"use strict";function Path(){this.commands=[],this.fill="black",this.stroke=null,this.strokeWidth=1}Path.prototype.moveTo=function(t,o){this.commands.push({type:"M",x:t,y:o})},Path.prototype.lineTo=function(t,o){this.commands.push({type:"L",x:t,y:o})},Path.prototype.curveTo=Path.prototype.bezierCurveTo=function(t,o,e,i,s,h){this.commands.push({type:"C",x1:t,y1:o,x2:e,y2:i,x:s,y:h})},Path.prototype.quadTo=Path.prototype.quadraticCurveTo=function(t,o,e,i){this.commands.push({type:"Q",x1:t,y1:o,x:e,y:i})},Path.prototype.close=Path.prototype.closePath=function(){this.commands.push({type:"Z"})},Path.prototype.extend=function(t){t.commands&&(t=t.commands),Array.prototype.push.apply(this.commands,t)},Path.prototype.draw=function(t){t.beginPath();for(var o=0;o<this.commands.length;o+=1){var e=this.commands[o];"M"===e.type?t.moveTo(e.x,e.y):"L"===e.type?t.lineTo(e.x,e.y):"C"===e.type?t.bezierCurveTo(e.x1,e.y1,e.x2,e.y2,e.x,e.y):"Q"===e.type?t.quadraticCurveTo(e.x1,e.y1,e.x,e.y):"Z"===e.type&&t.closePath()}this.fill&&(t.fillStyle=this.fill,t.fill()),this.stroke&&(t.strokeStyle=this.stroke,t.lineWidth=this.strokeWidth,t.stroke())},Path.prototype.toPathData=function(t){function o(o){return Math.round(o)===o?""+Math.round(o):o.toFixed(t)}function e(){for(var t="",e=0;e<arguments.length;e+=1){var i=arguments[e];i>=0&&e>0&&(t+=" "),t+=o(i)}return t}t=void 0!==t?t:2;for(var i="",s=0;s<this.commands.length;s+=1){var h=this.commands[s];"M"===h.type?i+="M"+e(h.x,h.y):"L"===h.type?i+="L"+e(h.x,h.y):"C"===h.type?i+="C"+e(h.x1,h.y1,h.x2,h.y2,h.x,h.y):"Q"===h.type?i+="Q"+e(h.x1,h.y1,h.x,h.y):"Z"===h.type&&(i+="Z")}return i},Path.prototype.toSVG=function(t){var o='<path d="';return o+=this.toPathData(t),o+='"',this.fill&&"black"!==this.fill&&(o+=null===this.fill?' fill="none"':' fill="'+this.fill+'"'),this.stroke&&(o+=' stroke="'+this.stroke+'" stroke-width="'+this.strokeWidth+'"'),o+="/>"},exports.Path=Path;
+
+
+},{}],9:[function(require,module,exports){
+"use strict";function Table(e,t,i){var s;for(s=0;s<t.length;s+=1){var r=t[s];this[r.name]=r.value}if(this.tableName=e,this.fields=t,i){var f=Object.keys(i);for(s=0;s<f.length;s+=1){var n=f[s],o=i[n];void 0!==this[n]&&(this[n]=o)}}}var check=require("./check"),encode=require("./types").encode,sizeOf=require("./types").sizeOf;Table.prototype.sizeOf=function(){for(var e=0,t=0;t<this.fields.length;t+=1){var i=this.fields[t],s=this[i.name];if(void 0===s&&(s=i.value),"function"==typeof s.sizeOf)e+=s.sizeOf();else{var r=sizeOf[i.type];check.assert("function"==typeof r,"Could not find sizeOf function for field"+i.name),e+=r(s)}}return e},Table.prototype.encode=function(){return encode.TABLE(this)},exports.Table=Table;
+
+
+},{"./check":1,"./types":24}],10:[function(require,module,exports){
+"use strict";function equals(e,t){if(e===t)return!0;if(Array.isArray(e)&&Array.isArray(t)){if(e.length!==t.length)return!1;for(var a=0;a<e.length;a+=1)if(!equals(e[a],t[a]))return!1;return!0}return!1}function parseCFFIndex(e,t,a){var r,n,s,i=[],h=[],o=parse.getCard16(e,t);if(0!==o){var f=parse.getByte(e,t+2);n=t+(o+1)*f+2;var p=t+3;for(r=0;o+1>r;r+=1)i.push(parse.getOffset(e,p,f)),p+=f;s=n+i[o]}else s=t+2;for(r=0;r<i.length-1;r+=1){var u=parse.getBytes(e,n+i[r],n+i[r+1]);a&&(u=a(u)),h.push(u)}return{objects:h,startOffset:t,endOffset:s}}function parseFloatOperand(e){for(var t="",a=15,r=["0","1","2","3","4","5","6","7","8","9",".","E","E-",null,"-"];;){var n=e.parseByte(),s=n>>4,i=15&n;if(s===a)break;if(t+=r[s],i===a)break;t+=r[i]}return parseFloat(t)}function parseOperand(e,t){var a,r,n,s;if(28===t)return a=e.parseByte(),r=e.parseByte(),a<<8|r;if(29===t)return a=e.parseByte(),r=e.parseByte(),n=e.parseByte(),s=e.parseByte(),a<<24|r<<16|n<<8|s;if(30===t)return parseFloatOperand(e);if(t>=32&&246>=t)return t-139;if(t>=247&&250>=t)return a=e.parseByte(),256*(t-247)+a+108;if(t>=251&&254>=t)return a=e.parseByte(),256*-(t-251)-a-108;throw new Error("Invalid b0 "+t)}function entriesToObject(e){for(var t={},a=0;a<e.length;a+=1){var r,n=e[a][0],s=e[a][1];if(r=1===s.length?s[0]:s,t.hasOwnProperty(n))throw new Error("Object "+t+" already has key "+n);t[n]=r}return t}function parseCFFDict(e,t,a){t=void 0!==t?t:0;var r=new parse.Parser(e,t),n=[],s=[];for(a=void 0!==a?a:e.length;r.relativeOffset<a;){var i=r.parseByte();21>=i?(12===i&&(i=1200+r.parseByte()),n.push([i,s]),s=[]):s.push(parseOperand(r,i))}return entriesToObject(n)}function getCFFString(e,t){return t=390>=t?encoding.cffStandardStrings[t]:e[t-391]}function interpretDict(e,t,a){for(var r={},n=0;n<t.length;n+=1){var s=t[n],i=e[s.op];void 0===i&&(i=void 0!==s.value?s.value:null),"SID"===s.type&&(i=getCFFString(a,i)),r[s.name]=i}return r}function parseCFFHeader(e,t){var a={};return a.formatMajor=parse.getCard8(e,t),a.formatMinor=parse.getCard8(e,t+1),a.size=parse.getCard8(e,t+2),a.offsetSize=parse.getCard8(e,t+3),a.startOffset=t,a.endOffset=t+4,a}function parseCFFTopDict(e,t){var a=parseCFFDict(e,0,e.byteLength);return interpretDict(a,TOP_DICT_META,t)}function parseCFFPrivateDict(e,t,a,r){var n=parseCFFDict(e,t,a);return interpretDict(n,PRIVATE_DICT_META,r)}function parseCFFCharset(e,t,a,r){var n,s,i,h=new parse.Parser(e,t);a-=1;var o=[".notdef"],f=h.parseCard8();if(0===f)for(n=0;a>n;n+=1)s=h.parseSID(),o.push(getCFFString(r,s));else if(1===f)for(;o.length<=a;)for(s=h.parseSID(),i=h.parseCard8(),n=0;i>=n;n+=1)o.push(getCFFString(r,s)),s+=1;else{if(2!==f)throw new Error("Unknown charset format "+f);for(;o.length<=a;)for(s=h.parseSID(),i=h.parseCard16(),n=0;i>=n;n+=1)o.push(getCFFString(r,s)),s+=1}return o}function parseCFFEncoding(e,t,a){var r,n,s={},i=new parse.Parser(e,t),h=i.parseCard8();if(0===h){var o=i.parseCard8();for(r=0;o>r;r+=1)n=i.parseCard8(),s[n]=r}else{if(1!==h)throw new Error("Unknown encoding format "+h);var f=i.parseCard8();for(n=1,r=0;f>r;r+=1)for(var p=i.parseCard8(),u=i.parseCard8(),l=p;p+u>=l;l+=1)s[l]=n,n+=1}return new encoding.CffEncoding(s,a)}function parseCFFCharstring(e,t,a){function r(e,t){v&&p.closePath(),p.moveTo(e,t),v=!0}function n(){var e;e=u.length%2!==0,e&&!c&&(d=u.shift()+t.nominalWidthX),l+=u.length>>1,u.length=0,c=!0}function s(e){for(var y,b,T,C,I,F,D,x,k,S,E,B,w=0;w<e.length;){var M=e[w];switch(w+=1,M){case 1:n();break;case 3:n();break;case 4:u.length>1&&!c&&(d=u.shift()+t.nominalWidthX,c=!0),m+=u.pop(),r(g,m);break;case 5:for(;u.length>0;)g+=u.shift(),m+=u.shift(),p.lineTo(g,m);break;case 6:for(;u.length>0&&(g+=u.shift(),p.lineTo(g,m),0!==u.length);)m+=u.shift(),p.lineTo(g,m);break;case 7:for(;u.length>0&&(m+=u.shift(),p.lineTo(g,m),0!==u.length);)g+=u.shift(),p.lineTo(g,m);break;case 8:for(;u.length>0;)i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f+u.shift(),p.curveTo(i,h,o,f,g,m);break;case 10:I=u.pop()+t.subrsBias,F=t.subrs[I],F&&s(F);break;case 11:return;case 12:switch(M=e[w],w+=1,M){case 35:i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),D=o+u.shift(),x=f+u.shift(),k=D+u.shift(),S=x+u.shift(),E=k+u.shift(),B=S+u.shift(),g=E+u.shift(),m=B+u.shift(),u.shift(),p.curveTo(i,h,o,f,D,x),p.curveTo(k,S,E,B,g,m);break;case 34:i=g+u.shift(),h=m,o=i+u.shift(),f=h+u.shift(),D=o+u.shift(),x=f,k=D+u.shift(),S=f,E=k+u.shift(),B=m,g=E+u.shift(),p.curveTo(i,h,o,f,D,x),p.curveTo(k,S,E,B,g,m);break;case 36:i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),D=o+u.shift(),x=f,k=D+u.shift(),S=f,E=k+u.shift(),B=S+u.shift(),g=E+u.shift(),p.curveTo(i,h,o,f,D,x),p.curveTo(k,S,E,B,g,m);break;case 37:i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),D=o+u.shift(),x=f+u.shift(),k=D+u.shift(),S=x+u.shift(),E=k+u.shift(),B=S+u.shift(),Math.abs(E-g)>Math.abs(B-m)?g=E+u.shift():m=B+u.shift(),p.curveTo(i,h,o,f,D,x),p.curveTo(k,S,E,B,g,m);break;default:console.log("Glyph "+a+": unknown operator 1200"+M),u.length=0}break;case 14:u.length>0&&!c&&(d=u.shift()+t.nominalWidthX,c=!0),v&&(p.closePath(),v=!1);break;case 18:n();break;case 19:case 20:n(),w+=l+7>>3;break;case 21:u.length>2&&!c&&(d=u.shift()+t.nominalWidthX,c=!0),m+=u.pop(),g+=u.pop(),r(g,m);break;case 22:u.length>1&&!c&&(d=u.shift()+t.nominalWidthX,c=!0),g+=u.pop(),r(g,m);break;case 23:n();break;case 24:for(;u.length>2;)i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f+u.shift(),p.curveTo(i,h,o,f,g,m);g+=u.shift(),m+=u.shift(),p.lineTo(g,m);break;case 25:for(;u.length>6;)g+=u.shift(),m+=u.shift(),p.lineTo(g,m);i=g+u.shift(),h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f+u.shift(),p.curveTo(i,h,o,f,g,m);break;case 26:for(u.length%2&&(g+=u.shift());u.length>0;)i=g,h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o,m=f+u.shift(),p.curveTo(i,h,o,f,g,m);break;case 27:for(u.length%2&&(m+=u.shift());u.length>0;)i=g+u.shift(),h=m,o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f,p.curveTo(i,h,o,f,g,m);break;case 28:y=e[w],b=e[w+1],u.push((y<<24|b<<16)>>16),w+=2;break;case 29:I=u.pop()+t.gsubrsBias,F=t.gsubrs[I],F&&s(F);break;case 30:for(;u.length>0&&(i=g,h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f+(1===u.length?u.shift():0),p.curveTo(i,h,o,f,g,m),0!==u.length);)i=g+u.shift(),h=m,o=i+u.shift(),f=h+u.shift(),m=f+u.shift(),g=o+(1===u.length?u.shift():0),p.curveTo(i,h,o,f,g,m);break;case 31:for(;u.length>0&&(i=g+u.shift(),h=m,o=i+u.shift(),f=h+u.shift(),m=f+u.shift(),g=o+(1===u.length?u.shift():0),p.curveTo(i,h,o,f,g,m),0!==u.length);)i=g,h=m+u.shift(),o=i+u.shift(),f=h+u.shift(),g=o+u.shift(),m=f+(1===u.length?u.shift():0),p.curveTo(i,h,o,f,g,m);break;default:32>M?console.log("Glyph "+a+": unknown operator "+M):247>M?u.push(M-139):251>M?(y=e[w],w+=1,u.push(256*(M-247)+y+108)):255>M?(y=e[w],w+=1,u.push(256*-(M-251)-y-108)):(y=e[w],b=e[w+1],T=e[w+2],C=e[w+3],w+=4,u.push((y<<24|b<<16|T<<8|C)/65536))}}}var i,h,o,f,p=new path.Path,u=[],l=0,c=!1,d=t.defaultWidthX,v=!1,g=0,m=0;s(e);var y=new _glyph.Glyph({font:t,index:a});return y.path=p,y.advanceWidth=d,y}function calcCFFSubroutineBias(e){var t;return t=e.length<1240?107:e.length<33900?1131:32768}function parseCFFTable(e,t,a){a.tables.cff={};var r=parseCFFHeader(e,t),n=parseCFFIndex(e,r.endOffset,parse.bytesToString),s=parseCFFIndex(e,n.endOffset),i=parseCFFIndex(e,s.endOffset,parse.bytesToString),h=parseCFFIndex(e,i.endOffset);a.gsubrs=h.objects,a.gsubrsBias=calcCFFSubroutineBias(a.gsubrs);var o=new DataView(new Uint8Array(s.objects[0]).buffer),f=parseCFFTopDict(o,i.objects);a.tables.cff.topDict=f;var p=t+f["private"][1],u=parseCFFPrivateDict(e,p,f["private"][0],i.objects);if(a.defaultWidthX=u.defaultWidthX,a.nominalWidthX=u.nominalWidthX,0!==u.subrs){var l=p+u.subrs,c=parseCFFIndex(e,l);a.subrs=c.objects,a.subrsBias=calcCFFSubroutineBias(a.subrs)}else a.subrs=[],a.subrsBias=0;var d=parseCFFIndex(e,t+f.charStrings);a.nGlyphs=d.objects.length;var v=parseCFFCharset(e,t+f.charset,a.nGlyphs,i.objects);a.cffEncoding=0===f.encoding?new encoding.CffEncoding(encoding.cffStandardEncoding,v):1===f.encoding?new encoding.CffEncoding(encoding.cffExpertEncoding,v):parseCFFEncoding(e,t+f.encoding,v),a.encoding=a.encoding||a.cffEncoding,a.glyphs=[];for(var g=0;g<a.nGlyphs;g+=1){var m=d.objects[g];a.glyphs.push(parseCFFCharstring(m,a,g))}}function encodeString(e,t){var a,r=encoding.cffStandardStrings.indexOf(e);return r>=0&&(a=r),r=t.indexOf(e),r>=0?a=r+encoding.cffStandardStrings.length:(a=encoding.cffStandardStrings.length+t.length,t.push(e)),a}function makeHeader(){return new table.Table("Header",[{name:"major",type:"Card8",value:1},{name:"minor",type:"Card8",value:0},{name:"hdrSize",type:"Card8",value:4},{name:"major",type:"Card8",value:1}])}function makeNameIndex(e){var t=new table.Table("Name INDEX",[{name:"names",type:"INDEX",value:[]}]);t.names=[];for(var a=0;a<e.length;a+=1)t.names.push({name:"name_"+a,type:"NAME",value:e[a]});return t}function makeDict(e,t,a){for(var r={},n=0;n<e.length;n+=1){var s=e[n],i=t[s.name];void 0===i||equals(i,s.value)||("SID"===s.type&&(i=encodeString(i,a)),r[s.op]={name:s.name,type:s.type,value:i})}return r}function makeTopDict(e,t){var a=new table.Table("Top DICT",[{name:"dict",type:"DICT",value:{}}]);return a.dict=makeDict(TOP_DICT_META,e,t),a}function makeTopDictIndex(e){var t=new table.Table("Top DICT INDEX",[{name:"topDicts",type:"INDEX",value:[]}]);return t.topDicts=[{name:"topDict_0",type:"TABLE",value:e}],t}function makeStringIndex(e){var t=new table.Table("String INDEX",[{name:"strings",type:"INDEX",value:[]}]);t.strings=[];for(var a=0;a<e.length;a+=1)t.strings.push({name:"string_"+a,type:"STRING",value:e[a]});return t}function makeGlobalSubrIndex(){return new table.Table("Global Subr INDEX",[{name:"subrs",type:"INDEX",value:[]}])}function makeCharsets(e,t){for(var a=new table.Table("Charsets",[{name:"format",type:"Card8",value:0}]),r=0;r<e.length;r+=1){var n=e[r],s=encodeString(n,t);a.fields.push({name:"glyph_"+r,type:"SID",value:s})}return a}function glyphToOps(e){var t=[],a=e.path;t.push({name:"width",type:"NUMBER",value:e.advanceWidth});for(var r=0,n=0,s=0;s<a.commands.length;s+=1){var i,h,o=a.commands[s];if("Q"===o.type){var f=1/3,p=2/3;o={type:"C",x:o.x,y:o.y,x1:f*r+p*o.x1,y1:f*n+p*o.y1,x2:f*o.x+p*o.x1,y2:f*o.y+p*o.y1}}if("M"===o.type)i=Math.round(o.x-r),h=Math.round(o.y-n),t.push({name:"dx",type:"NUMBER",value:i}),t.push({name:"dy",type:"NUMBER",value:h}),t.push({name:"rmoveto",type:"OP",value:21}),r=Math.round(o.x),n=Math.round(o.y);else if("L"===o.type)i=Math.round(o.x-r),h=Math.round(o.y-n),t.push({name:"dx",type:"NUMBER",value:i}),t.push({name:"dy",type:"NUMBER",value:h}),t.push({name:"rlineto",type:"OP",value:5}),r=Math.round(o.x),n=Math.round(o.y);else if("C"===o.type){var u=Math.round(o.x1-r),l=Math.round(o.y1-n),c=Math.round(o.x2-o.x1),d=Math.round(o.y2-o.y1);i=Math.round(o.x-o.x2),h=Math.round(o.y-o.y2),t.push({name:"dx1",type:"NUMBER",value:u}),t.push({name:"dy1",type:"NUMBER",value:l}),t.push({name:"dx2",type:"NUMBER",value:c}),t.push({name:"dy2",type:"NUMBER",value:d}),t.push({name:"dx",type:"NUMBER",value:i}),t.push({name:"dy",type:"NUMBER",value:h}),t.push({name:"rrcurveto",type:"OP",value:8}),r=Math.round(o.x),n=Math.round(o.y)}}return t.push({name:"endchar",type:"OP",value:14}),t}function makeCharStringsIndex(e){for(var t=new table.Table("CharStrings INDEX",[{name:"charStrings",type:"INDEX",value:[]}]),a=0;a<e.length;a+=1){var r=e[a],n=glyphToOps(r);t.charStrings.push({name:r.name,type:"CHARSTRING",value:n})}return t}function makePrivateDict(e,t){var a=new table.Table("Private DICT",[{name:"dict",type:"DICT",value:{}}]);return a.dict=makeDict(PRIVATE_DICT_META,e,t),a}function makePrivateDictIndex(e){var t=new table.Table("Private DICT INDEX",[{name:"privateDicts",type:"INDEX",value:[]}]);return t.privateDicts=[{name:"privateDict_0",type:"TABLE",value:e}],t}function makeCFFTable(e,t){for(var a=new table.Table("CFF ",[{name:"header",type:"TABLE"},{name:"nameIndex",type:"TABLE"},{name:"topDictIndex",type:"TABLE"},{name:"stringIndex",type:"TABLE"},{name:"globalSubrIndex",type:"TABLE"},{name:"charsets",type:"TABLE"},{name:"charStringsIndex",type:"TABLE"},{name:"privateDictIndex",type:"TABLE"}]),r={version:t.version,fullName:t.fullName,familyName:t.familyName,weight:t.weightName,charset:999,encoding:0,charStrings:999,"private":[0,999]},n={},s=[],i=1;i<e.length;i+=1)s.push(e[i].name);var h=[];a.header=makeHeader(),a.nameIndex=makeNameIndex([t.postScriptName]);var o=makeTopDict(r,h);a.topDictIndex=makeTopDictIndex(o),a.globalSubrIndex=makeGlobalSubrIndex(),a.charsets=makeCharsets(s,h),a.charStringsIndex=makeCharStringsIndex(e);var f=makePrivateDict(n,h);a.privateDictIndex=makePrivateDictIndex(f),a.stringIndex=makeStringIndex(h);var p=a.header.sizeOf()+a.nameIndex.sizeOf()+a.topDictIndex.sizeOf()+a.stringIndex.sizeOf()+a.globalSubrIndex.sizeOf();return r.charset=p,r.encoding=0,r.charStrings=r.charset+a.charsets.sizeOf(),r.private[1]=r.charStrings+a.charStringsIndex.sizeOf(),o=makeTopDict(r,h),a.topDictIndex=makeTopDictIndex(o),a}var encoding=require("../encoding"),_glyph=require("../glyph"),parse=require("../parse"),path=require("../path"),table=require("../table"),TOP_DICT_META=[{name:"version",op:0,type:"SID"},{name:"notice",op:1,type:"SID"},{name:"copyright",op:1200,type:"SID"},{name:"fullName",op:2,type:"SID"},{name:"familyName",op:3,type:"SID"},{name:"weight",op:4,type:"SID"},{name:"isFixedPitch",op:1201,type:"number",value:0},{name:"italicAngle",op:1202,type:"number",value:0},{name:"underlinePosition",op:1203,type:"number",value:-100},{name:"underlineThickness",op:1204,type:"number",value:50},{name:"paintType",op:1205,type:"number",value:0},{name:"charstringType",op:1206,type:"number",value:2},{name:"fontMatrix",op:1207,type:["real","real","real","real","real","real"],value:[.001,0,0,.001,0,0]},{name:"uniqueId",op:13,type:"number"},{name:"fontBBox",op:5,type:["number","number","number","number"],value:[0,0,0,0]},{name:"strokeWidth",op:1208,type:"number",value:0},{name:"xuid",op:14,type:[],value:null},{name:"charset",op:15,type:"offset",value:0},{name:"encoding",op:16,type:"offset",value:0},{name:"charStrings",op:17,type:"offset",value:0},{name:"private",op:18,type:["number","offset"],value:[0,0]}],PRIVATE_DICT_META=[{name:"subrs",op:19,type:"offset",value:0},{name:"defaultWidthX",op:20,type:"number",value:0},{name:"nominalWidthX",op:21,type:"number",value:0}];exports.parse=parseCFFTable,exports.make=makeCFFTable;
+
+
+},{"../encoding":3,"../glyph":5,"../parse":7,"../path":8,"../table":9}],11:[function(require,module,exports){
+"use strict";function parseCmapTable(e,a){var t,r={};r.version=parse.getUShort(e,a),check.argument(0===r.version,"cmap table version should be 0."),r.numTables=parse.getUShort(e,a+2);var n=-1;for(t=0;t<r.numTables;t+=1){var s=parse.getUShort(e,a+4+8*t),l=parse.getUShort(e,a+4+8*t+2);if(3===s&&(1===l||0===l)){n=parse.getULong(e,a+4+8*t+4);break}}if(-1===n)return null;var o=new parse.Parser(e,a+n);r.format=o.parseUShort(),check.argument(4===r.format,"Only format 4 cmap tables are supported."),r.length=o.parseUShort(),r.language=o.parseUShort();var p;r.segCount=p=o.parseUShort()>>1,o.skip("uShort",3),r.glyphIndexMap={};var g=new parse.Parser(e,a+n+14),m=new parse.Parser(e,a+n+16+2*p),u=new parse.Parser(e,a+n+16+4*p),h=new parse.Parser(e,a+n+16+6*p),c=a+n+16+8*p;for(t=0;p-1>t;t+=1)for(var f,d=g.parseUShort(),S=m.parseUShort(),i=u.parseShort(),v=h.parseUShort(),U=S;d>=U;U+=1)0!==v?(c=h.offset+h.relativeOffset-2,c+=v,c+=2*(U-S),f=parse.getUShort(e,c),0!==f&&(f=f+i&65535)):f=U+i&65535,r.glyphIndexMap[U]=f;return r}function addSegment(e,a,t){e.segments.push({end:a,start:a,delta:-(a-t),offset:0})}function addTerminatorSegment(e){e.segments.push({end:65535,start:65535,delta:1,offset:0})}function makeCmapTable(e){var a,t=new table.Table("cmap",[{name:"version",type:"USHORT",value:0},{name:"numTables",type:"USHORT",value:1},{name:"platformID",type:"USHORT",value:3},{name:"encodingID",type:"USHORT",value:1},{name:"offset",type:"ULONG",value:12},{name:"format",type:"USHORT",value:4},{name:"length",type:"USHORT",value:0},{name:"language",type:"USHORT",value:0},{name:"segCountX2",type:"USHORT",value:0},{name:"searchRange",type:"USHORT",value:0},{name:"entrySelector",type:"USHORT",value:0},{name:"rangeShift",type:"USHORT",value:0}]);for(t.segments=[],a=0;a<e.length;a+=1){for(var r=e[a],n=0;n<r.unicodes.length;n+=1)addSegment(t,r.unicodes[n],a);t.segments=t.segments.sort(function(e,a){return e.start-a.start})}addTerminatorSegment(t);var s;s=t.segments.length,t.segCountX2=2*s,t.searchRange=2*Math.pow(2,Math.floor(Math.log(s)/Math.log(2))),t.entrySelector=Math.log(t.searchRange/2)/Math.log(2),t.rangeShift=t.segCountX2-t.searchRange;var l=[],o=[],p=[],g=[],m=[];for(a=0;s>a;a+=1){var u=t.segments[a];l=l.concat({name:"end_"+a,type:"USHORT",value:u.end}),o=o.concat({name:"start_"+a,type:"USHORT",value:u.start}),p=p.concat({name:"idDelta_"+a,type:"SHORT",value:u.delta}),g=g.concat({name:"idRangeOffset_"+a,type:"USHORT",value:u.offset}),void 0!==u.glyphId&&(m=m.concat({name:"glyph_"+a,type:"USHORT",value:u.glyphId}))}return t.fields=t.fields.concat(l),t.fields.push({name:"reservedPad",type:"USHORT",value:0}),t.fields=t.fields.concat(o),t.fields=t.fields.concat(p),t.fields=t.fields.concat(g),t.fields=t.fields.concat(m),t.length=14+2*l.length+2+2*o.length+2*p.length+2*g.length+2*m.length,t}var check=require("../check"),parse=require("../parse"),table=require("../table");exports.parse=parseCmapTable,exports.make=makeCmapTable;
+
+
+},{"../check":1,"../parse":7,"../table":9}],12:[function(require,module,exports){
+"use strict";function parseGlyphCoordinate(r,e,t,o,n){var a;return(e&o)>0?(a=r.parseByte(),0===(e&n)&&(a=-a),a=t+a):a=(e&n)>0?t:t+r.parseShort(),a}function parseGlyph(r,e,t,o){var n=new parse.Parser(r,e),a=new _glyph.Glyph({font:o,index:t});a.numberOfContours=n.parseShort(),a.xMin=n.parseShort(),a.yMin=n.parseShort(),a.xMax=n.parseShort(),a.yMax=n.parseShort();var s,p;if(a.numberOfContours>0){var u,i=a.endPointIndices=[];for(u=0;u<a.numberOfContours;u+=1)i.push(n.parseUShort());for(a.instructionLength=n.parseUShort(),a.instructions=[],u=0;u<a.instructionLength;u+=1)a.instructions.push(n.parseByte());var l=i[i.length-1]+1;for(s=[],u=0;l>u;u+=1)if(p=n.parseByte(),s.push(p),(8&p)>0)for(var h=n.parseByte(),f=0;h>f;f+=1)s.push(p),u+=1;if(check.argument(s.length===l,"Bad flags."),i.length>0){var y,c=[];if(l>0){for(u=0;l>u;u+=1)p=s[u],y={},y.onCurve=!!(1&p),y.lastPointOfContour=i.indexOf(u)>=0,c.push(y);var v=0;for(u=0;l>u;u+=1)p=s[u],y=c[u],y.x=parseGlyphCoordinate(n,p,v,2,16),v=y.x;var x=0;for(u=0;l>u;u+=1)p=s[u],y=c[u],y.y=parseGlyphCoordinate(n,p,x,4,32),x=y.y}a.points=c}else a.points=[]}else if(0===a.numberOfContours)a.points=[];else{a.isComposite=!0,a.points=[],a.components=[];for(var C=!0;C;){s=n.parseUShort();var g={glyphIndex:n.parseUShort(),xScale:1,scale01:0,scale10:0,yScale:1,dx:0,dy:0};(1&s)>0?(g.dx=n.parseShort(),g.dy=n.parseShort()):(g.dx=n.parseChar(),g.dy=n.parseChar()),(8&s)>0?g.xScale=g.yScale=n.parseF2Dot14():(64&s)>0?(g.xScale=n.parseF2Dot14(),g.yScale=n.parseF2Dot14()):(128&s)>0&&(g.xScale=n.parseF2Dot14(),g.scale01=n.parseF2Dot14(),g.scale10=n.parseF2Dot14(),g.yScale=n.parseF2Dot14()),a.components.push(g),C=!!(32&s)}}return a}function transformPoints(r,e){for(var t=[],o=0;o<r.length;o+=1){var n=r[o],a={x:e.xScale*n.x+e.scale01*n.y+e.dx,y:e.scale10*n.x+e.yScale*n.y+e.dy,onCurve:n.onCurve,lastPointOfContour:n.lastPointOfContour};t.push(a)}return t}function getContours(r){for(var e=[],t=[],o=0;o<r.length;o+=1){var n=r[o];t.push(n),n.lastPointOfContour&&(e.push(t),t=[])}return check.argument(0===t.length,"There are still points left in the current contour."),e}function getPath(r){var e=new path.Path;if(!r)return e;for(var t=getContours(r),o=0;o<t.length;o+=1){var n,a,s=t[o],p=s[0],u=s[s.length-1];p.onCurve?(n=null,a=!0):(p=u.onCurve?u:{x:(p.x+u.x)/2,y:(p.y+u.y)/2},n=p,a=!1),e.moveTo(p.x,p.y);for(var i=a?1:0;i<s.length;i+=1){var l=s[i],h=0===i?p:s[i-1];if(h.onCurve&&l.onCurve)e.lineTo(l.x,l.y);else if(h.onCurve&&!l.onCurve)n=l;else if(h.onCurve||l.onCurve){if(h.onCurve||!l.onCurve)throw new Error("Invalid state.");e.quadraticCurveTo(n.x,n.y,l.x,l.y),n=null}else{var f={x:(h.x+l.x)/2,y:(h.y+l.y)/2};e.quadraticCurveTo(h.x,h.y,f.x,f.y),n=l}}p!==u&&(n?e.quadraticCurveTo(n.x,n.y,p.x,p.y):e.lineTo(p.x,p.y))}return e.closePath(),e}function parseGlyfTable(r,e,t,o){var n,a=[];for(n=0;n<t.length-1;n+=1){var s=t[n],p=t[n+1];a.push(s!==p?parseGlyph(r,e+s,n,o):new _glyph.Glyph({font:o,index:n}))}for(n=0;n<a.length;n+=1){var u=a[n];if(u.isComposite)for(var i=0;i<u.components.length;i+=1){var l=u.components[i],h=a[l.glyphIndex];if(h.points){var f=transformPoints(h.points,l);u.points=u.points.concat(f)}}u.path=getPath(u.points)}return a}var check=require("../check"),_glyph=require("../glyph"),parse=require("../parse"),path=require("../path");exports.parse=parseGlyfTable;
+
+
+},{"../check":1,"../glyph":5,"../parse":7,"../path":8}],13:[function(require,module,exports){
+"use strict";function parseTaggedListTable(r,e){for(var a=new parse.Parser(r,e),s=a.parseUShort(),t=[],o=0;s>o;o++)t[a.parseTag()]={offset:a.parseUShort()};return t}function parseCoverageTable(r,e){var a=new parse.Parser(r,e),s=a.parseUShort(),t=a.parseUShort();if(1===s)return a.parseUShortList(t);if(2===s){for(var o=[];t--;)for(var p=a.parseUShort(),n=a.parseUShort(),f=a.parseUShort(),i=p;n>=i;i++)o[f++]=i;return o}}function parseClassDefTable(r,e){var a=new parse.Parser(r,e),s=a.parseUShort();if(1===s){var t=a.parseUShort(),o=a.parseUShort(),p=a.parseUShortList(o);return function(r){return p[r-t]||0}}if(2===s){for(var n=a.parseUShort(),f=[],i=[],h=[],S=0;n>S;S++)f[S]=a.parseUShort(),i[S]=a.parseUShort(),h[S]=a.parseUShort();return function(r){for(var e=0,a=f.length-1;a>e;){var s=e+a+1>>1;r<f[s]?a=s-1:e=s}return f[e]<=r&&r<=i[e]?h[e]||0:0}}}function parsePairPosSubTable(r,e){var a,s,t=new parse.Parser(r,e),o=t.parseUShort(),p=t.parseUShort(),n=parseCoverageTable(r,e+p),f=t.parseUShort(),i=t.parseUShort();if(4===f&&0===i){var h={};if(1===o){for(var S=t.parseUShort(),u=[],v=t.parseOffset16List(S),U=0;S>U;U++){var l=v[U],g=h[l];if(!g){g={},t.relativeOffset=l;for(var T=t.parseUShort();T--;){var c=t.parseUShort();f&&(a=t.parseShort()),i&&(s=t.parseShort()),g[c]=a}}u[n[U]]=g}return function(r,e){var a=u[r];return a?a[e]:void 0}}if(2===o){for(var b=t.parseUShort(),P=t.parseUShort(),L=t.parseUShort(),k=t.parseUShort(),d=parseClassDefTable(r,e+b),w=parseClassDefTable(r,e+P),O=[],C=0;L>C;C++)for(var G=O[C]=[],K=0;k>K;K++)f&&(a=t.parseShort()),i&&(s=t.parseShort()),G[K]=a;var V={};for(C=0;C<n.length;C++)V[n[C]]=1;return function(r,e){if(V[r]){var a=d(r),s=w(e),t=O[a];return t?t[s]:void 0}}}}}function parseLookupTable(r,e){var a=new parse.Parser(r,e),s=a.parseUShort(),t=a.parseUShort(),o=16&t,p=a.parseUShort(),n=a.parseOffset16List(p),f={lookupType:s,lookupFlag:t,markFilteringSet:o?a.parseUShort():-1};if(2===s){for(var i=[],h=0;p>h;h++)i.push(parsePairPosSubTable(r,e+n[h]));f.getKerningValue=function(r,e){for(var a=i.length;a--;){var s=i[a](r,e);if(void 0!==s)return s}return 0}}return f}function parseGposTable(r,e,a){var s=new parse.Parser(r,e),t=s.parseFixed();check.argument(1===t,"Unsupported GPOS table version."),parseTaggedListTable(r,e+s.parseUShort()),parseTaggedListTable(r,e+s.parseUShort());var o=s.parseUShort();s.relativeOffset=o;for(var p=s.parseUShort(),n=s.parseOffset16List(p),f=e+o,i=0;p>i;i++){var h=parseLookupTable(r,f+n[i]);2!==h.lookupType||a.getGposKerningValue||(a.getGposKerningValue=h.getKerningValue)}}var check=require("../check"),parse=require("../parse");exports.parse=parseGposTable;
+
+
+},{"../check":1,"../parse":7}],14:[function(require,module,exports){
+"use strict";function parseHeadTable(e,a){var r={},t=new parse.Parser(e,a);return r.version=t.parseVersion(),r.fontRevision=Math.round(1e3*t.parseFixed())/1e3,r.checkSumAdjustment=t.parseULong(),r.magicNumber=t.parseULong(),check.argument(1594834165===r.magicNumber,"Font header has wrong magic number."),r.flags=t.parseUShort(),r.unitsPerEm=t.parseUShort(),r.created=t.parseLongDateTime(),r.modified=t.parseLongDateTime(),r.xMin=t.parseShort(),r.yMin=t.parseShort(),r.xMax=t.parseShort(),r.yMax=t.parseShort(),r.macStyle=t.parseUShort(),r.lowestRecPPEM=t.parseUShort(),r.fontDirectionHint=t.parseShort(),r.indexToLocFormat=t.parseShort(),r.glyphDataFormat=t.parseShort(),r}function makeHeadTable(e){return new table.Table("head",[{name:"version",type:"FIXED",value:65536},{name:"fontRevision",type:"FIXED",value:65536},{name:"checkSumAdjustment",type:"ULONG",value:0},{name:"magicNumber",type:"ULONG",value:1594834165},{name:"flags",type:"USHORT",value:0},{name:"unitsPerEm",type:"USHORT",value:1e3},{name:"created",type:"LONGDATETIME",value:0},{name:"modified",type:"LONGDATETIME",value:0},{name:"xMin",type:"SHORT",value:0},{name:"yMin",type:"SHORT",value:0},{name:"xMax",type:"SHORT",value:0},{name:"yMax",type:"SHORT",value:0},{name:"macStyle",type:"USHORT",value:0},{name:"lowestRecPPEM",type:"USHORT",value:0},{name:"fontDirectionHint",type:"SHORT",value:2},{name:"indexToLocFormat",type:"SHORT",value:0},{name:"glyphDataFormat",type:"SHORT",value:0}],e)}var check=require("../check"),parse=require("../parse"),table=require("../table");exports.parse=parseHeadTable,exports.make=makeHeadTable;
+
+
+},{"../check":1,"../parse":7,"../table":9}],15:[function(require,module,exports){
+"use strict";function parseHheaTable(e,a){var r={},t=new parse.Parser(e,a);return r.version=t.parseVersion(),r.ascender=t.parseShort(),r.descender=t.parseShort(),r.lineGap=t.parseShort(),r.advanceWidthMax=t.parseUShort(),r.minLeftSideBearing=t.parseShort(),r.minRightSideBearing=t.parseShort(),r.xMaxExtent=t.parseShort(),r.caretSlopeRise=t.parseShort(),r.caretSlopeRun=t.parseShort(),r.caretOffset=t.parseShort(),t.relativeOffset+=8,r.metricDataFormat=t.parseShort(),r.numberOfHMetrics=t.parseUShort(),r}function makeHheaTable(e){return new table.Table("hhea",[{name:"version",type:"FIXED",value:65536},{name:"ascender",type:"FWORD",value:0},{name:"descender",type:"FWORD",value:0},{name:"lineGap",type:"FWORD",value:0},{name:"advanceWidthMax",type:"UFWORD",value:0},{name:"minLeftSideBearing",type:"FWORD",value:0},{name:"minRightSideBearing",type:"FWORD",value:0},{name:"xMaxExtent",type:"FWORD",value:0},{name:"caretSlopeRise",type:"SHORT",value:1},{name:"caretSlopeRun",type:"SHORT",value:0},{name:"caretOffset",type:"SHORT",value:0},{name:"reserved1",type:"SHORT",value:0},{name:"reserved2",type:"SHORT",value:0},{name:"reserved3",type:"SHORT",value:0},{name:"reserved4",type:"SHORT",value:0},{name:"metricDataFormat",type:"SHORT",value:0},{name:"numberOfHMetrics",type:"USHORT",value:0}],e)}var parse=require("../parse"),table=require("../table");exports.parse=parseHheaTable,exports.make=makeHheaTable;
+
+
+},{"../parse":7,"../table":9}],16:[function(require,module,exports){
+"use strict";function parseHmtxTable(e,a,r,t,s){for(var i,l,n=new parse.Parser(e,a),p=0;t>p;p+=1){r>p&&(i=n.parseUShort(),l=n.parseShort());var d=s[p];d.advanceWidth=i,d.leftSideBearing=l}}function makeHmtxTable(e){for(var a=new table.Table("hmtx",[]),r=0;r<e.length;r+=1){var t=e[r],s=t.advanceWidth||0,i=t.leftSideBearing||0;a.fields.push({name:"advanceWidth_"+r,type:"USHORT",value:s}),a.fields.push({name:"leftSideBearing_"+r,type:"SHORT",value:i})}return a}var parse=require("../parse"),table=require("../table");exports.parse=parseHmtxTable,exports.make=makeHmtxTable;
+
+
+},{"../parse":7,"../table":9}],17:[function(require,module,exports){
+"use strict";function parseKernTable(r,e){var a={},s=new parse.Parser(r,e),p=s.parseUShort();check.argument(0===p,"Unsupported kern table version."),s.skip("uShort",1);var t=s.parseUShort();check.argument(0===t,"Unsupported kern sub-table version."),s.skip("uShort",2);var o=s.parseUShort();s.skip("uShort",3);for(var n=0;o>n;n+=1){var h=s.parseUShort(),u=s.parseUShort(),c=s.parseShort();a[h+","+u]=c}return a}var check=require("../check"),parse=require("../parse");exports.parse=parseKernTable;
+
+
+},{"../check":1,"../parse":7}],18:[function(require,module,exports){
+"use strict";function parseLocaTable(r,a,e,s){for(var p=new parse.Parser(r,a),o=s?p.parseUShort:p.parseULong,t=[],c=0;e+1>c;c+=1){var n=o.call(p);s&&(n*=2),t.push(n)}return t}var parse=require("../parse");exports.parse=parseLocaTable;
+
+
+},{"../parse":7}],19:[function(require,module,exports){
+"use strict";function parseMaxpTable(e,a){var r={},s=new parse.Parser(e,a);return r.version=s.parseVersion(),r.numGlyphs=s.parseUShort(),1===r.version&&(r.maxPoints=s.parseUShort(),r.maxContours=s.parseUShort(),r.maxCompositePoints=s.parseUShort(),r.maxCompositeContours=s.parseUShort(),r.maxZones=s.parseUShort(),r.maxTwilightPoints=s.parseUShort(),r.maxStorage=s.parseUShort(),r.maxFunctionDefs=s.parseUShort(),r.maxInstructionDefs=s.parseUShort(),r.maxStackElements=s.parseUShort(),r.maxSizeOfInstructions=s.parseUShort(),r.maxComponentElements=s.parseUShort(),r.maxComponentDepth=s.parseUShort()),r}function makeMaxpTable(e){return new table.Table("maxp",[{name:"version",type:"FIXED",value:20480},{name:"numGlyphs",type:"USHORT",value:e}])}var parse=require("../parse"),table=require("../table");exports.parse=parseMaxpTable,exports.make=makeMaxpTable;
+
+
+},{"../parse":7,"../table":9}],20:[function(require,module,exports){
+"use strict";function parseNameTable(e,a){var r={},n=new parse.Parser(e,a);r.format=n.parseUShort();for(var t=n.parseUShort(),s=n.offset+n.parseUShort(),o=0,m=0;t>m;m++){var l=n.parseUShort(),p=n.parseUShort(),u=n.parseUShort(),i=n.parseUShort(),d=nameTableNames[i],c=n.parseUShort(),f=n.parseUShort();if(3===l&&1===p&&1033===u){for(var h=[],T=c/2,g=0;T>g;g++,f+=2)h[g]=parse.getShort(e,s+f);var S=String.fromCharCode.apply(null,h);d?r[d]=S:(o++,r["unknown"+o]=S)}}return 1===r.format&&(r.langTagCount=n.parseUShort()),r}function makeNameRecord(e,a,r,n,t,s){return new table.Table("NameRecord",[{name:"platformID",type:"USHORT",value:e},{name:"encodingID",type:"USHORT",value:a},{name:"languageID",type:"USHORT",value:r},{name:"nameID",type:"USHORT",value:n},{name:"length",type:"USHORT",value:t},{name:"offset",type:"USHORT",value:s}])}function addMacintoshNameRecord(e,a,r,n){var t=encode.STRING(r);return e.records.push(makeNameRecord(1,0,0,a,t.length,n)),e.strings.push(t),n+=t.length}function addWindowsNameRecord(e,a,r,n){var t=encode.UTF16(r);return e.records.push(makeNameRecord(3,1,1033,a,t.length,n)),e.strings.push(t),n+=t.length}function makeNameTable(e){var a=new table.Table("name",[{name:"format",type:"USHORT",value:0},{name:"count",type:"USHORT",value:0},{name:"stringOffset",type:"USHORT",value:0}]);a.records=[],a.strings=[];var r,n,t=0;for(r=0;r<nameTableNames.length;r+=1)void 0!==e[nameTableNames[r]]&&(n=e[nameTableNames[r]],t=addMacintoshNameRecord(a,r,n,t));for(r=0;r<nameTableNames.length;r+=1)void 0!==e[nameTableNames[r]]&&(n=e[nameTableNames[r]],t=addWindowsNameRecord(a,r,n,t));for(a.count=a.records.length,a.stringOffset=6+12*a.count,r=0;r<a.records.length;r+=1)a.fields.push({name:"record_"+r,type:"TABLE",value:a.records[r]});for(r=0;r<a.strings.length;r+=1)a.fields.push({name:"string_"+r,type:"LITERAL",value:a.strings[r]});return a}var encode=require("../types").encode,parse=require("../parse"),table=require("../table"),nameTableNames=["copyright","fontFamily","fontSubfamily","uniqueID","fullName","version","postScriptName","trademark","manufacturer","designer","description","manufacturerURL","designerURL","licence","licenceURL","reserved","preferredFamily","preferredSubfamily","compatibleFullName","sampleText","postScriptFindFontName","wwsFamily","wwsSubfamily"];exports.parse=parseNameTable,exports.make=makeNameTable;
+
+
+},{"../parse":7,"../table":9,"../types":24}],21:[function(require,module,exports){
+"use strict";function getUnicodeRange(e){for(var n=0;n<unicodeRanges.length;n+=1){var a=unicodeRanges[n];if(e>=a.begin&&e<a.end)return n}return-1}function parseOS2Table(e,n){var a={},i=new parse.Parser(e,n);a.version=i.parseUShort(),a.xAvgCharWidth=i.parseShort(),a.usWeightClass=i.parseUShort(),a.usWidthClass=i.parseUShort(),a.fsType=i.parseUShort(),a.ySubscriptXSize=i.parseShort(),a.ySubscriptYSize=i.parseShort(),a.ySubscriptXOffset=i.parseShort(),a.ySubscriptYOffset=i.parseShort(),a.ySuperscriptXSize=i.parseShort(),a.ySuperscriptYSize=i.parseShort(),a.ySuperscriptXOffset=i.parseShort(),a.ySuperscriptYOffset=i.parseShort(),a.yStrikeoutSize=i.parseShort(),a.yStrikeoutPosition=i.parseShort(),a.sFamilyClass=i.parseShort(),a.panose=[];for(var t=0;10>t;t++)a.panose[t]=i.parseByte();return a.ulUnicodeRange1=i.parseULong(),a.ulUnicodeRange2=i.parseULong(),a.ulUnicodeRange3=i.parseULong(),a.ulUnicodeRange4=i.parseULong(),a.achVendID=String.fromCharCode(i.parseByte(),i.parseByte(),i.parseByte(),i.parseByte()),a.fsSelection=i.parseUShort(),a.usFirstCharIndex=i.parseUShort(),a.usLastCharIndex=i.parseUShort(),a.sTypoAscender=i.parseShort(),a.sTypoDescender=i.parseShort(),a.sTypoLineGap=i.parseShort(),a.usWinAscent=i.parseUShort(),a.usWinDescent=i.parseUShort(),a.version>=1&&(a.ulCodePageRange1=i.parseULong(),a.ulCodePageRange2=i.parseULong()),a.version>=2&&(a.sxHeight=i.parseShort(),a.sCapHeight=i.parseShort(),a.usDefaultChar=i.parseUShort(),a.usBreakChar=i.parseUShort(),a.usMaxContent=i.parseUShort()),a}function makeOS2Table(e){return new table.Table("OS/2",[{name:"version",type:"USHORT",value:3},{name:"xAvgCharWidth",type:"SHORT",value:0},{name:"usWeightClass",type:"USHORT",value:0},{name:"usWidthClass",type:"USHORT",value:0},{name:"fsType",type:"USHORT",value:0},{name:"ySubscriptXSize",type:"SHORT",value:650},{name:"ySubscriptYSize",type:"SHORT",value:699},{name:"ySubscriptXOffset",type:"SHORT",value:0},{name:"ySubscriptYOffset",type:"SHORT",value:140},{name:"ySuperscriptXSize",type:"SHORT",value:650},{name:"ySuperscriptYSize",type:"SHORT",value:699},{name:"ySuperscriptXOffset",type:"SHORT",value:0},{name:"ySuperscriptYOffset",type:"SHORT",value:479},{name:"yStrikeoutSize",type:"SHORT",value:49},{name:"yStrikeoutPosition",type:"SHORT",value:258},{name:"sFamilyClass",type:"SHORT",value:0},{name:"bFamilyType",type:"BYTE",value:0},{name:"bSerifStyle",type:"BYTE",value:0},{name:"bWeight",type:"BYTE",value:0},{name:"bProportion",type:"BYTE",value:0},{name:"bContrast",type:"BYTE",value:0},{name:"bStrokeVariation",type:"BYTE",value:0},{name:"bArmStyle",type:"BYTE",value:0},{name:"bLetterform",type:"BYTE",value:0},{name:"bMidline",type:"BYTE",value:0},{name:"bXHeight",type:"BYTE",value:0},{name:"ulUnicodeRange1",type:"ULONG",value:0},{name:"ulUnicodeRange2",type:"ULONG",value:0},{name:"ulUnicodeRange3",type:"ULONG",value:0},{name:"ulUnicodeRange4",type:"ULONG",value:0},{name:"achVendID",type:"CHARARRAY",value:"XXXX"},{name:"fsSelection",type:"USHORT",value:0},{name:"usFirstCharIndex",type:"USHORT",value:0},{name:"usLastCharIndex",type:"USHORT",value:0},{name:"sTypoAscender",type:"SHORT",value:0},{name:"sTypoDescender",type:"SHORT",value:0},{name:"sTypoLineGap",type:"SHORT",value:0},{name:"usWinAscent",type:"USHORT",value:0},{name:"usWinDescent",type:"USHORT",value:0},{name:"ulCodePageRange1",type:"ULONG",value:0},{name:"ulCodePageRange2",type:"ULONG",value:0},{name:"sxHeight",type:"SHORT",value:0},{name:"sCapHeight",type:"SHORT",value:0},{name:"usDefaultChar",type:"USHORT",value:0},{name:"usBreakChar",type:"USHORT",value:0},{name:"usMaxContext",type:"USHORT",value:0}],e)}var parse=require("../parse"),table=require("../table"),unicodeRanges=[{begin:0,end:127},{begin:128,end:255},{begin:256,end:383},{begin:384,end:591},{begin:592,end:687},{begin:688,end:767},{begin:768,end:879},{begin:880,end:1023},{begin:11392,end:11519},{begin:1024,end:1279},{begin:1328,end:1423},{begin:1424,end:1535},{begin:42240,end:42559},{begin:1536,end:1791},{begin:1984,end:2047},{begin:2304,end:2431},{begin:2432,end:2559},{begin:2560,end:2687},{begin:2688,end:2815},{begin:2816,end:2943},{begin:2944,end:3071},{begin:3072,end:3199},{begin:3200,end:3327},{begin:3328,end:3455},{begin:3584,end:3711},{begin:3712,end:3839},{begin:4256,end:4351},{begin:6912,end:7039},{begin:4352,end:4607},{begin:7680,end:7935},{begin:7936,end:8191},{begin:8192,end:8303},{begin:8304,end:8351},{begin:8352,end:8399},{begin:8400,end:8447},{begin:8448,end:8527},{begin:8528,end:8591},{begin:8592,end:8703},{begin:8704,end:8959},{begin:8960,end:9215},{begin:9216,end:9279},{begin:9280,end:9311},{begin:9312,end:9471},{begin:9472,end:9599},{begin:9600,end:9631},{begin:9632,end:9727},{begin:9728,end:9983},{begin:9984,end:10175},{begin:12288,end:12351},{begin:12352,end:12447},{begin:12448,end:12543},{begin:12544,end:12591},{begin:12592,end:12687},{begin:43072,end:43135},{begin:12800,end:13055},{begin:13056,end:13311},{begin:44032,end:55215},{begin:55296,end:57343},{begin:67840,end:67871},{begin:19968,end:40959},{begin:57344,end:63743},{begin:12736,end:12783},{begin:64256,end:64335},{begin:64336,end:65023},{begin:65056,end:65071},{begin:65040,end:65055},{begin:65104,end:65135},{begin:65136,end:65279},{begin:65280,end:65519},{begin:65520,end:65535},{begin:3840,end:4095},{begin:1792,end:1871},{begin:1920,end:1983},{begin:3456,end:3583},{begin:4096,end:4255},{begin:4608,end:4991},{begin:5024,end:5119},{begin:5120,end:5759},{begin:5760,end:5791},{begin:5792,end:5887},{begin:6016,end:6143},{begin:6144,end:6319},{begin:10240,end:10495},{begin:40960,end:42127},{begin:5888,end:5919},{begin:66304,end:66351},{begin:66352,end:66383},{begin:66560,end:66639},{begin:118784,end:119039},{begin:119808,end:120831},{begin:1044480,end:1048573},{begin:65024,end:65039},{begin:917504,end:917631},{begin:6400,end:6479},{begin:6480,end:6527},{begin:6528,end:6623},{begin:6656,end:6687},{begin:11264,end:11359},{begin:11568,end:11647},{begin:19904,end:19967},{begin:43008,end:43055},{begin:65536,end:65663},{begin:65856,end:65935},{begin:66432,end:66463},{begin:66464,end:66527},{begin:66640,end:66687},{begin:66688,end:66735},{begin:67584,end:67647},{begin:68096,end:68191},{begin:119552,end:119647},{begin:73728,end:74751},{begin:119648,end:119679},{begin:7040,end:7103},{begin:7168,end:7247},{begin:7248,end:7295},{begin:43136,end:43231},{begin:43264,end:43311},{begin:43312,end:43359},{begin:43520,end:43615},{begin:65936,end:65999},{begin:66e3,end:66047},{begin:66208,end:66271},{begin:127024,end:127135}];exports.unicodeRanges=unicodeRanges,exports.getUnicodeRange=getUnicodeRange,exports.parse=parseOS2Table,exports.make=makeOS2Table;
+
+
+},{"../parse":7,"../table":9}],22:[function(require,module,exports){
+"use strict";function parsePostTable(e,a){var r,n={},s=new parse.Parser(e,a);switch(n.version=s.parseVersion(),n.italicAngle=s.parseFixed(),n.underlinePosition=s.parseShort(),n.underlineThickness=s.parseShort(),n.isFixedPitch=s.parseULong(),n.minMemType42=s.parseULong(),n.maxMemType42=s.parseULong(),n.minMemType1=s.parseULong(),n.maxMemType1=s.parseULong(),n.version){case 1:n.names=encoding.standardNames.slice();break;case 2:for(n.numberOfGlyphs=s.parseUShort(),n.glyphNameIndex=new Array(n.numberOfGlyphs),r=0;r<n.numberOfGlyphs;r++)n.glyphNameIndex[r]=s.parseUShort();for(n.names=[],r=0;r<n.numberOfGlyphs;r++)if(n.glyphNameIndex[r]>=encoding.standardNames.length){var p=s.parseChar();n.names.push(s.parseString(p))}break;case 2.5:for(n.numberOfGlyphs=s.parseUShort(),n.offset=new Array(n.numberOfGlyphs),r=0;r<n.numberOfGlyphs;r++)n.offset[r]=s.parseChar()}return n}function makePostTable(){return new table.Table("post",[{name:"version",type:"FIXED",value:196608},{name:"italicAngle",type:"FIXED",value:0},{name:"underlinePosition",type:"FWORD",value:0},{name:"underlineThickness",type:"FWORD",value:0},{name:"isFixedPitch",type:"ULONG",value:0},{name:"minMemType42",type:"ULONG",value:0},{name:"maxMemType42",type:"ULONG",value:0},{name:"minMemType1",type:"ULONG",value:0},{name:"maxMemType1",type:"ULONG",value:0}])}var encoding=require("../encoding"),parse=require("../parse"),table=require("../table");exports.parse=parsePostTable,exports.make=makePostTable;
+
+
+},{"../encoding":3,"../parse":7,"../table":9}],23:[function(require,module,exports){
+"use strict";function log2(e){return Math.log(e)/Math.log(2)|0}function computeCheckSum(e){for(;e.length%4!==0;)e.push(0);for(var a=0,n=0;n<e.length;n+=4)a+=(e[n]<<24)+(e[n+1]<<16)+(e[n+2]<<8)+e[n+3];return a%=Math.pow(2,32)}function makeTableRecord(e,a,n,r){return new table.Table("Table Record",[{name:"tag",type:"TAG",value:void 0!==e?e:""},{name:"checkSum",type:"ULONG",value:void 0!==a?a:0},{name:"offset",type:"ULONG",value:void 0!==n?n:0},{name:"length",type:"ULONG",value:void 0!==r?r:0}])}function makeSfntTable(e){var a=new table.Table("sfnt",[{name:"version",type:"TAG",value:"OTTO"},{name:"numTables",type:"USHORT",value:0},{name:"searchRange",type:"USHORT",value:0},{name:"entrySelector",type:"USHORT",value:0},{name:"rangeShift",type:"USHORT",value:0}]);a.tables=e,a.numTables=e.length;var n=Math.pow(2,log2(a.numTables));a.searchRange=16*n,a.entrySelector=log2(n),a.rangeShift=16*a.numTables-a.searchRange;for(var r=[],t=[],i=a.sizeOf()+makeTableRecord().sizeOf()*a.numTables;i%4!==0;)i+=1,t.push({name:"padding",type:"BYTE",value:0});for(var l=0;l<e.length;l+=1){var s=e[l];check.argument(4===s.tableName.length,"Table name"+s.tableName+" is invalid.");var m=s.sizeOf(),u=makeTableRecord(s.tableName,computeCheckSum(s.encode()),i,m);for(r.push({name:u.tag+" Table Record",type:"TABLE",value:u}),t.push({name:s.tableName+" table",type:"TABLE",value:s}),i+=m,check.argument(!isNaN(i),"Something went wrong calculating the offset.");i%4!==0;)i+=1,t.push({name:"padding",type:"BYTE",value:0})}return r.sort(function(e,a){return e.value.tag>a.value.tag?1:-1}),a.fields=a.fields.concat(r),a.fields=a.fields.concat(t),a}function metricsForChar(e,a,n){for(var r=0;r<a.length;r+=1){var t=e.charToGlyphIndex(a[r]);if(t>0){var i=e.glyphs[t];return i.getMetrics()}}return n}function average(e){for(var a=0,n=0;n<e.length;n+=1)a+=e[n];return a/e.length}function fontToSfntTable(e){for(var a=[],n=[],r=[],t=[],i=[],l=[],s=[],m=null,u=0,c=0,h=0,o=0,d=0,p=0;p<e.glyphs.length;p+=1){var f=e.glyphs[p],g=0|f.unicode;(m>g||null===m)&&(m=g),g>u&&(u=g);var y=os2.getUnicodeRange(g);if(32>y)c|=1<<y;else if(64>y)h|=1<<y-32;else if(96>y)o|=1<<y-64;else{if(!(123>y))throw new Error("Unicode ranges bits > 123 are reserved for internal usage");d|=1<<y-96}if(".notdef"!==f.name){var v=f.getMetrics();a.push(v.xMin),n.push(v.yMin),r.push(v.xMax),t.push(v.yMax),l.push(v.leftSideBearing),s.push(v.rightSideBearing),i.push(f.advanceWidth)}}var x={xMin:Math.min.apply(null,a),yMin:Math.min.apply(null,n),xMax:Math.max.apply(null,r),yMax:Math.max.apply(null,t),advanceWidthMax:Math.max.apply(null,i),advanceWidthAvg:average(i),minLeftSideBearing:Math.min.apply(null,l),maxLeftSideBearing:Math.max.apply(null,l),minRightSideBearing:Math.min.apply(null,s)};x.ascender=void 0!==e.ascender?e.ascender:x.yMax,x.descender=void 0!==e.descender?e.descender:x.yMin;var M=head.make({unitsPerEm:e.unitsPerEm,xMin:x.xMin,yMin:x.yMin,xMax:x.xMax,yMax:x.yMax}),T=hhea.make({ascender:x.ascender,descender:x.descender,advanceWidthMax:x.advanceWidthMax,minLeftSideBearing:x.minLeftSideBearing,minRightSideBearing:x.minRightSideBearing,xMaxExtent:x.maxLeftSideBearing+(x.xMax-x.xMin),numberOfHMetrics:e.glyphs.length}),S=maxp.make(e.glyphs.length),b=os2.make({xAvgCharWidth:Math.round(x.advanceWidthAvg),usWeightClass:500,usWidthClass:5,usFirstCharIndex:m,usLastCharIndex:u,ulUnicodeRange1:c,ulUnicodeRange2:h,ulUnicodeRange3:o,ulUnicodeRange4:d,sTypoAscender:x.ascender,sTypoDescender:x.descender,sTypoLineGap:0,usWinAscent:x.ascender,usWinDescent:-x.descender,sxHeight:metricsForChar(e,"xyvw",{yMax:0}).yMax,sCapHeight:metricsForChar(e,"HIKLEFJMNTZBDPRAGOQSUVWXY",x).yMax,usBreakChar:e.hasChar(" ")?32:0}),k=hmtx.make(e.glyphs),R=cmap.make(e.glyphs),N=e.familyName+" "+e.styleName,U=e.familyName.replace(/\s/g,"")+"-"+e.styleName,L=_name.make({copyright:e.copyright,fontFamily:e.familyName,fontSubfamily:e.styleName,uniqueID:e.manufacturer+":"+N,fullName:N,version:e.version,postScriptName:U,trademark:e.trademark,manufacturer:e.manufacturer,designer:e.designer,description:e.description,manufacturerURL:e.manufacturerURL,designerURL:e.designerURL,license:e.license,licenseURL:e.licenseURL,preferredFamily:e.familyName,preferredSubfamily:e.styleName}),C=post.make(),B=cff.make(e.glyphs,{version:e.version,fullName:N,familyName:e.familyName,weightName:e.styleName,postScriptName:U}),O=[M,T,S,b,L,R,C,B,k],w=makeSfntTable(O),q=w.encode(),W=computeCheckSum(q),A=w.fields,E=!1;for(p=0;p<A.length;p+=1)if("head table"===A[p].name){A[p].value.checkSumAdjustment=2981146554-W,E=!0;break}if(!E)throw new Error("Could not find head table with checkSum to adjust.");return w}var check=require("../check"),table=require("../table"),cmap=require("./cmap"),cff=require("./cff"),head=require("./head"),hhea=require("./hhea"),hmtx=require("./hmtx"),maxp=require("./maxp"),_name=require("./name"),os2=require("./os2"),post=require("./post");exports.computeCheckSum=computeCheckSum,exports.make=makeSfntTable,exports.fontToTable=fontToSfntTable;
+
+
+},{"../check":1,"../table":9,"./cff":10,"./cmap":11,"./head":14,"./hhea":15,"./hmtx":16,"./maxp":19,"./name":20,"./os2":21,"./post":22}],24:[function(require,module,exports){
+"use strict";function constant(e){return function(){return e}}var check=require("./check"),LIMIT16=32768,LIMIT32=2147483648,decode={},encode={},sizeOf={};encode.BYTE=function(e){return check.argument(e>=0&&255>=e,"Byte value should be between 0 and 255."),[e]},sizeOf.BYTE=constant(1),encode.CHAR=function(e){return[e.charCodeAt(0)]},sizeOf.BYTE=constant(1),encode.CHARARRAY=function(e){for(var n=[],o=0;o<e.length;o+=1)n.push(e.charCodeAt(o));return n},sizeOf.CHARARRAY=function(e){return e.length},encode.USHORT=function(e){return[e>>8&255,255&e]},sizeOf.USHORT=constant(2),encode.SHORT=function(e){return e>=LIMIT16&&(e=-(2*LIMIT16-e)),[e>>8&255,255&e]},sizeOf.SHORT=constant(2),encode.UINT24=function(e){return[e>>16&255,e>>8&255,255&e]},sizeOf.UINT24=constant(3),encode.ULONG=function(e){return[e>>24&255,e>>16&255,e>>8&255,255&e]},sizeOf.ULONG=constant(4),encode.LONG=function(e){return e>=LIMIT32&&(e=-(2*LIMIT32-e)),[e>>24&255,e>>16&255,e>>8&255,255&e]},sizeOf.LONG=constant(4),encode.FIXED=encode.ULONG,sizeOf.FIXED=sizeOf.ULONG,encode.FWORD=encode.SHORT,sizeOf.FWORD=sizeOf.SHORT,encode.UFWORD=encode.USHORT,sizeOf.UFWORD=sizeOf.USHORT,encode.LONGDATETIME=function(){return[0,0,0,0,0,0,0,0]},sizeOf.LONGDATETIME=constant(8),encode.TAG=function(e){return check.argument(4===e.length,"Tag should be exactly 4 ASCII characters."),[e.charCodeAt(0),e.charCodeAt(1),e.charCodeAt(2),e.charCodeAt(3)]},sizeOf.TAG=constant(4),encode.Card8=encode.BYTE,sizeOf.Card8=sizeOf.BYTE,encode.Card16=encode.USHORT,sizeOf.Card16=sizeOf.USHORT,encode.OffSize=encode.BYTE,sizeOf.OffSize=sizeOf.BYTE,encode.SID=encode.USHORT,sizeOf.SID=sizeOf.USHORT,encode.NUMBER=function(e){return e>=-107&&107>=e?[e+139]:e>=108&&1131>=e?(e-=108,[(e>>8)+247,255&e]):e>=-1131&&-108>=e?(e=-e-108,[(e>>8)+251,255&e]):e>=-32768&&32767>=e?encode.NUMBER16(e):encode.NUMBER32(e)},sizeOf.NUMBER=function(e){return encode.NUMBER(e).length},encode.NUMBER16=function(e){return[28,e>>8&255,255&e]},sizeOf.NUMBER16=constant(2),encode.NUMBER32=function(e){return[29,e>>24&255,e>>16&255,e>>8&255,255&e]},sizeOf.NUMBER32=constant(4),encode.NAME=encode.CHARARRAY,sizeOf.NAME=sizeOf.CHARARRAY,encode.STRING=encode.CHARARRAY,sizeOf.STRING=sizeOf.CHARARRAY,encode.UTF16=function(e){for(var n=[],o=0;o<e.length;o+=1)n.push(0),n.push(e.charCodeAt(o));return n},sizeOf.UTF16=function(e){return 2*e.length},encode.INDEX=function(e){var n,o=1,t=[o],c=[],r=0;for(n=0;n<e.length;n+=1){var f=encode.OBJECT(e[n]);Array.prototype.push.apply(c,f),r+=f.length,o+=f.length,t.push(o)}if(0===c.length)return[0,0];var d=[],i=1+Math.floor(Math.log(r)/Math.log(2))/8|0,u=[void 0,encode.BYTE,encode.USHORT,encode.UINT24,encode.ULONG][i];for(n=0;n<t.length;n+=1){var a=u(t[n]);Array.prototype.push.apply(d,a)}return Array.prototype.concat(encode.Card16(e.length),encode.OffSize(i),d,c)},sizeOf.INDEX=function(e){return encode.INDEX(e).length},encode.DICT=function(e){for(var n=[],o=Object.keys(e),t=o.length,c=0;t>c;c+=1){var r=parseInt(o[c],0),f=e[r];n=n.concat(encode.OPERAND(f.value,f.type)),n=n.concat(encode.OPERATOR(r))}return n},sizeOf.DICT=function(e){return encode.DICT(e).length},encode.OPERATOR=function(e){return 1200>e?[e]:[12,e-1200]},encode.OPERAND=function(e,n){var o=[];if(Array.isArray(n))for(var t=0;t<n.length;t+=1)check.argument(e.length===n.length,"Not enough arguments given for type"+n),o=o.concat(encode.OPERAND(e[t],n[t]));else o=o.concat("SID"===n?encode.NUMBER(e):"offset"===n?encode.NUMBER32(e):encode.NUMBER(e));return o},encode.OP=encode.BYTE,sizeOf.OP=sizeOf.BYTE;var wmm="function"==typeof WeakMap&&new WeakMap;encode.CHARSTRING=function(e){if(wmm&&wmm.has(e))return wmm.get(e);for(var n=[],o=e.length,t=0;o>t;t+=1){var c=e[t];n=n.concat(encode[c.type](c.value))}return wmm&&wmm.set(e,n),n},sizeOf.CHARSTRING=function(e){return encode.CHARSTRING(e).length},encode.OBJECT=function(e){var n=encode[e.type];return check.argument(void 0!==n,"No encoding function for type "+e.type),n(e.value)},encode.TABLE=function(e){for(var n=[],o=e.fields.length,t=0;o>t;t+=1){var c=e.fields[t],r=encode[c.type];check.argument(void 0!==r,"No encoding function for field type "+c.type);var f=e[c.name];void 0===f&&(f=c.value);var d=r(f);n=n.concat(d)}return n},encode.LITERAL=function(e){return e},sizeOf.LITERAL=function(e){return e.length},exports.decode=decode,exports.encode=encode,exports.sizeOf=sizeOf;
+
+
+},{"./check":1}]},{},[6])(6)
 });
