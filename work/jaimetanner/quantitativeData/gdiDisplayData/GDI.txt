@@ -1,0 +1,39 @@
+area	rank	Country	female2013	male2013	GDI	HDI
+central	152	Cameroon	0.468	0.537	0.872	0.504
+central	184	Chad	0.319	0.419	0.762	0.372
+central	140	Congo	0.543	0.585	0.928	0.564
+central	186	DRC	0.304	0.369	0.822	0.338
+central	142	Sao Tome and Principe	0.524	0.586	0.894	0.558
+east	180	Burundi	0.370	0.410	0.904	0.389
+east	173	Ethiopia	0.401	0.470	0.853	0.435
+east	147	Kenya	0.508	0.560	0.908	0.535
+east	155	Madagascar	0.476	0.519	0.917	0.498
+east	174	Malawi	0.389	0.437	0.891	0.414
+east	63	Mauritius	0.750	0.784	0.957	0.771
+east	178	Mozambique	0.343	0.391	0.879	0.393
+east	151	Rwanda	0.463	0.487	0.950	0.506
+east	159	Tanzania (United Republic of)	0.466	0.509	0.916	0.488
+east	164	Uganda	0.456	0.509	0.896	0.484
+east	141	Zambia	0.534	0.585	0.913	0.561
+east	156	Zimbabwe	0.468	0.515	0.909	0.492
+northern	93	Algeria	0.629	0.746	0.843	0.717
+northern	110	Egypt	0.617	0.722	0.855	0.682
+northern	55	Libya	0.749	0.805	0.931	0.784
+northern	129	Morocco	0.545	0.658	0.828	0.617
+northern	90	Tunisia	0.669	0.751	0.891	0.721
+southern	109	Botswana	0.669	0.694	0.964	0.683
+southern	162	Lesotho	0.474	0.488	0.973	0.486
+southern	127	Namibia	0.616	0.631	0.978	0.624
+southern	148	Swaziland	0.493	0.562	0.877	0.530
+west	165	Benin	0.428	0.520	0.822	0.476
+west	181	Burkina Faso	0.376	0.407	0.924	0.388
+west	138	Ghana	0.537	0.607	0.884	0.573
+west	179	Guinea	0.344	0.439	0.785	0.392
+west	175	Liberia	0.379	0.482	0.786	0.412
+west	176	Mali	0.350	0.455	0.771	0.407
+west	161	Mauritania	0.425	0.530	0.801	0.487
+west	187	Niger	0.275	0.385	0.714	0.337
+west	152	Nigeria	0.458	0.546	0.839	0.504
+west	163	Senegal	0.449	0.520	0.864	0.485
+west	183	Sierra Leone	0.329	0.412	0.799	0.374
+west	166	Togo	0.401	0.499	0.803	0.473

@@ -1,0 +1,54 @@
+Region,Country,HDIF2013,HDIM2013,WageRatio,WageF,WageM,,
+central,Angola,..,..,0.63,"4,717.00","7,526.00",,0
+central,Cameroon,0.468,0.537,0.63,"1,816.00","2,868.00",0,1
+central,Chad,0.319,0.419,0.62,"1,141.00","1,844.00",1,2
+central,Congo,0.543,0.585,,,,2,3
+central,DRC,0.304,0.369,,,,3,4
+central,Equatorial Guinea,..,..,,,,,5
+central,Gabon,..,..,,,,,6
+central,Sao Tome and Principe,0.524,0.586,,,,4,7
+east,Burundi,0.37,0.41,0.79,495,628,5,8
+east,Comoros,..,..,,,,,9
+east,Djibouti,..,..,,,,,10
+east,Eritrea,..,..,,,,,11
+east,Ethiopia,0.401,0.47,0.67,917,"1,360.00",6,12
+east,Kenya,0.508,0.56,0.65,"1,384.00","2,139.00",7,13
+east,Madagascar,0.476,0.519,0.72,818,"1,140.00",8,14
+east,Malawi,0.389,0.437,0.79,794,"1,010.00",9,15
+east,Mauritius,0.75,0.784,0.45,"9,812.00","21,630.00",10,16
+east,Mozambique,0.343,0.391,,,,11,17
+east,Rwanda,0.463,0.487,,,,12,18
+east,Seychelles,..,..,,,,,19
+east,Somalia,..,..,,,,,20
+east,South Sudan,..,..,,,,,21
+east,Sudan,..,..,,,,,22
+east,Tanzania (United Republic of),0.466,0.509,0.69,"1,302.00","1,899.00",13,23
+east,Uganda,0.456,0.509,0.73,"1,139.00","1,563.00",14,24
+east,Zambia,0.534,0.585,0.63,"1,322.00","2,094.00",15,25
+east,Zimbabwe,0.468,0.515,,,,16,26
+northern,Algeria,0.629,0.746,,,,17,27
+northern,Egypt,0.617,0.722,,,,18,28
+northern,Libya,0.749,0.805,,,,19,29
+northern,Morocco,0.545,0.658,,,,20,30
+northern,Tunisia,0.669,0.751,,,,21,31
+southern,Botswana,0.669,0.694,0.47,"10,868.00","23,047.00",22,32
+southern,Lesotho,0.474,0.488,0.61,"1,493.00","2,447.00",23,33
+southern,Namibia,0.616,0.631,0.61,"5,712.00","9,371.00",24,34
+southern,South Africa,..,..,0.52,"7,950.00","15,145.00",,35
+southern,Swaziland,0.493,0.562,,,,25,36
+west,Benin,0.428,0.52,0.68,"1,284.00","1,883.00",26,37
+west,Burkina Faso,0.376,0.407,0.67,"1,214.00","1,816.00",27,38
+west,Cape Verde,..,..,0.47,"2,839.00","6,038.00",,39
+west,Côte d'Ivoire,..,..,0.48,"1,314.00","2,736.00",,40
+west,Gambia,..,..,,,,,41
+west,Ghana,0.537,0.607,0.66,"1,637.00","2,466.00",28,42
+west,Guinea,0.344,0.439,,,,29,43
+west,Guinea-Bissau,..,..,,,,,44
+west,Liberia,0.379,0.482,,,,30,45
+west,Mali,0.35,0.455,0.41,707,"1,714.00",31,46
+west,Mauritania,0.425,0.53,0.28,"1,128.00","4,058.00",32,47
+west,Niger,0.275,0.385,,,,33,48
+west,Nigeria,0.458,0.546,0.58,"1,940.00","3,357.00",34,49
+west,Senegal,0.449,0.52,0.57,"1,413.00","2,497.00",35,50
+west,Sierra Leone,0.329,0.412,,,,36,51
+west,Togo,0.401,0.499,,,,37,52
