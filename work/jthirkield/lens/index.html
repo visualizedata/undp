@@ -3,15 +3,26 @@
 <meta charset=utf-8 />
 <title>The African Continent: Gender Equity in Focus</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+<!-- 
+    <script src="libraries/p5.js" type="text/javascript"></script>
+    <script src="libraries/p5.dom.js" type="text/javascript"></script>
+    <script src="sketch.js" type="text/javascript"></script>
+ -->
+    <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+
 <link rel="stylesheet" type="text/css" href="styles.css">
 <style>
   body { margin:0; padding:0; background: #000000}
+ /* 
+   myCanvas {position:absolute; top:40px; left:20px; z-index: 200;}
+ */
+
   #map { position:absolute; top:0; left:0px; height: 100%; width:100%; }
 </style>
 </head>
 <body>
+<div id="compares">Hello</div>
 <div id="readout"></div>
 <div id="zreadout"><h2>Niger</h2><p><img src="niger.jpg" width="432" height="277" alt="niger" /></p>
 <p>The Nigerien Constitution grants equal rights regardless of gender. Niger has ratified both the Convention on the Elimination of All forms of Discrimination against Women (CEDAW) (in 1999), and the Optional Protocol on violence against women (2004).Niger has signed but not ratified the Protocol to the African Charter on Human and Peoples’ Rights on the Rights of Women in Africa. A Ministry of Social Development, Population, Advancement of Women and Protection of Children has been in place since 1998.</p>
@@ -21,7 +32,7 @@
 <style>
 #map {
   pointer-events:all;
-  cursor:none
+  cursor:pointer;
   }
 #zoommap {
  background:#eeeeee;
@@ -61,7 +72,21 @@
   }
 </style>
 <div id='map'></div>
-<div id='footer'><h3>The African Continent: Gender Equity in Focus</h3>
+<div id='footer'>
+<!-- 
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid #FF0000;">
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.moveTo(100,50);
+ctx.lineTo(200,50);
+ctx.stroke();
+</script>
+</canvas>
+ -->
+
+<h3>The African Continent: Gender Equity in Focus</h3>
+
 </div>
 <div id='zoomlens' class='overlay'>
     <div class='overlay rotater'>
@@ -71,20 +96,23 @@
     </div>
     <div id='border' class='overlay'></div>
 </div>
- <script type="text/javascript" src="africa.js"></script>
+ <script type="text/javascript" src="africa2.js"></script>
 <script>
    var geojson;
+   var nxtHTML;
    var cnArray = [];
    var infoArray = [];
 L.mapbox.accessToken = 'pk.eyJ1IjoianRoaXJraWVsZCIsImEiOiJjaWdiM2JyZWUxbnVydjltM3B5MThwZjdpIn0.6CxRDmKlbzs4MHL3YdrpEw';
 var map = L.mapbox.map('map', 'mapbox.satellite',{
-    gridControl: false // Disable default gridControl interactivity.
+   gridControl: false, // Disable default gridControl interactivity.
+    zoomControl: false
+   //   doubleClickZoom: true
 }).setView([-1.0, 1.0], 4);
    geojson = L.geoJson(africaData, {
    style: style,
      onEachFeature: onEachFeature
    }).addTo(map);
-    
+new L.Control.Zoom({ position: 'topright' }).addTo(map);
 var zoommap = L.mapbox.map('zoommap', 'mapbox.streets', {
     fadeAnimation: false,
     zoomControl: false,
@@ -93,26 +121,35 @@ var zoommap = L.mapbox.map('zoommap', 'mapbox.streets', {
 
 var zl = document.getElementById('zoomlens');
  var elt1 = document.getElementById("readout");
- var elt2 = document.getElementById("zreadout");
+ var elt2 = document.getElementById("zreadout"); 
+ var elt3 = document.getElementById("compares");
 
 
 // Call update or zoom functions when
 // these events occur.
 map.on('mousemove', update);
-map.on('zoomend', zoom);
+map.on('zoomend', zoomMe);
 
-function zoom(e) {
+function zoomMe(e) {
   
     if (e.target.getZoom() > 4) {
          elt2.style.visibility = 'visible';
+         elt1.style.visibility = 'hidden';
+         elt3.style.visibility = 'hidden';
     } else {
-	         elt2.style.visibility = 'hidden';    
+	         elt2.style.visibility = 'hidden';
+         elt1.style.visibility = 'visible';
+         elt3.style.visibility = 'visible';
+
     }
+    
 
 }
  function zoomToFeature(e) {
-     map.setView(e.latlng, map.getZoom() + 1, true);
-//    zoommap.setView(e.latlng, map.getZoom() + 0, true);
+ var thyZoom = map.getZoom() + 1;
+     map.setView(e.latlng, thyZoom, true);
+   zoommap.setView(e.latlng, thyZoom, true);
+
    }
  function style(feature) {
      return {
@@ -128,39 +165,68 @@ function onEachFeature(feature, layer) {
         layer.on({
             mouseover: highlightFeature,
        mouseout: dropWindow,
-           click: zoomToFeature
+       click: clicktoKeep,
+  dblclick: zoomToFeature,
+       zoomend: zoomMe
         });
     }
     
+  function clicktoKeep(e) {
+       elt3.style.visibility = 'visible';
+        elt3.innerHTML = nxtHTML;
+       }
+       
+       
   function highlightFeature(e) {
+  if (map.getZoom() < 5) {
      var layer = e.target;
      dpdate(layer.feature.properties);
      elt1.style.visibility = 'visible';
+     }
        }
+       
        function dropWindow() {
             elt1.style.visibility = 'hidden';
        }
-dpdate = function(props) {
 
-     var nxtHTML =  '<h4>' + props.name + '</h4>';
-if (props.hdifemale2013) {
-if (props.hdifemale2013 != "..") {
-nxtHTML += '<p class="female">HDI ' + props.hdifemale2013 + '</p><p class="male">HDI ' + props.hdimale2013 + '</p>';
+
+
+
+dpdate = function(props) {
+testArray = [];
+valueArray = [];
+
+      nxtHTML =  '<h4>Education in ' + props.CountryName + '</h4>';
+//if (props.CountryName) {
+if (props.MeanSchoolFemale != "..") {
+var Fnum = props.MeanSchoolFemale;
+var Mnum = props.MeanSchoolMale;
+var Fvalue = parseInt(100 * Fnum / 16);
+var Mvalue = parseInt(100 * Mnum / 16);
+nxtHTML += '<p>Mean Years of School</p><p class="female">Girls: ' + Fnum + '&nbsp;<canvas id="myF1Canvas" width="100" height="10"></canvas></p><p class="male">Boys: ' + Mnum + '&nbsp;<canvas id="myM1Canvas" width="100" height="10"></canvas></p>';
+testArray.push("myF1Canvas","myM1Canvas");
+valueArray.push(Fvalue, Mvalue);
 }
+
+if (props.ExpSchoolFemale != "..") {
+var Fnum = props.ExpSchoolFemale;
+var Mnum = props.ExpSchoolMale;
+var Fvalue = parseInt(100 * Fnum / 16);
+var Mvalue = parseInt(100 * Mnum / 16);
+nxtHTML += '<p>Expected Years of School</p><p class="female">Girls: ' + props.ExpSchoolFemale + '&nbsp;<canvas id="myF2Canvas" width="100" height="10"></canvas></p><p class="male">Boys: ' + props.ExpSchoolMale + '&nbsp;<canvas id="myM2Canvas" width="100" height="10"></canvas></p>';
+testArray.push("myF2Canvas","myM2Canvas");
+valueArray.push(Fvalue, Mvalue);
+
 }
-if (props.gniFemale2011) {
-if (props.gniFemale2011 != "..") {
-nxtHTML += '<p class="female">GNI ' + props.gniFemale2011 + '</p><p class="male">GNI ' + props.gniMale2011 + '</p>';
-}
-}
-if (props.lifeexfemal2013) {
-if (props.lifeexfemal2013 != "..") {
-nxtHTML += '<p class="female">Life Expectancy ' + props.lifeexfemal2013 + '</p><p class="male">Life Expectancy' + props.lifeexmale2013 + '</p>';
-}
-}
-if (props.meanSchoolFemale02_12) {
-if (props.meanSchoolFemale02_12 != "..") {
-nxtHTML += '<p  class="female">Mean Years of School ' + props.meanSchoolFemale02_12 + '</p><p class="male">Mean Years of School ' + props.meanSchoolMale00_12 + '</p>';
+
+if (props.PopSecEduFemale != "..") {
+var Fnum = props.PopSecEduFemale;
+var Mnum = props.PopSecEduMale;
+
+nxtHTML += '<p>Percent of Population with Some Secondary Education</p><p class="female">Women: ' + props.PopSecEduFemale + '&nbsp;<canvas id="myF3Canvas" width="100" height="10"></canvas></p><p class="male">Men: ' + props.PopSecEduMale + '&nbsp;<canvas id="myM3Canvas" width="100" height="10"></canvas></p>';
+testArray.push("myF3Canvas","myM3Canvas");
+valueArray.push(Fnum, Mnum);
+
 }
 
 
@@ -173,10 +239,24 @@ infoArray.shift();
        elt1.innerHTML = " ";
        for(var h = 0; h < 1; h++) {
        if (infoArray[h]) {
- elt1.innerHTML += nxtHTML;
+ elt1.innerHTML = nxtHTML;
  }
    }
-   }
+   
+   for (var h = 0; h < testArray.length; h++) {
+   var c = document.getElementById(testArray[h]);
+var ctx = c.getContext("2d");
+ctx.moveTo(0,5);
+ctx.lineTo(valueArray[h],5);
+if (h % 2 == 0) {
+ctx.strokeStyle = '#ff0000'
+} else {
+ctx.strokeStyle = '#0000ff'
+}
+ctx.lineWidth = 5;
+ctx.stroke();
+}
+
    };
 function update(e) {
 

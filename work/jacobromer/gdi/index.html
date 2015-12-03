@@ -1,0 +1,162 @@
+<html>
+  <head>
+    <style>
+      div#root {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin: 0 0;
+      }
+      div#container {
+        background: rgba(255,255,255,0.3);
+        width: 100%;
+        position: absolute; 
+        top: 0px;
+        left: 0px;
+      }
+      div#male_container, div#female_container {
+        font-family: "museo-slab";
+        font-size: 20px;
+        text-align:center;
+        width: 45%;
+        border-bottom: 3px solid white;
+      }
+      div#male_container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      div#female_container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
+      div.top {
+        border-bottom: 3px solid white;
+        margin-bottom: 10px;
+      }
+      div.dimensions span.t50 {
+        width: 50%;
+      }
+      div.dimensions span.t25 {
+        width: 25%;
+      }
+      div.dimensions span {
+        display: inline-block;
+        line-height: 30px;
+      }
+      div#demo {
+        position: absolute;
+        top: 300px;
+        width: 100%;
+        height: 400px;
+        background: url("bg.png") no-repeat top left;
+        background-size: contain;
+      }
+      body {
+        background: #001861;
+        color: #fff;
+        margin: 0 0;
+      }
+      select {
+        color: #fff;
+        font-size: 1em;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        border: 3px solid #fff;
+        border-radius: 5px;
+        margin:12px 10px 0 0;
+        padding: 5px 18px 5px 18px;
+        box-shadow: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+        width: auto;
+      }
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+          select {padding-right:59px}
+      }
+      label {position:relative}
+      label:after {
+          content:'<>';
+          font-weight:light;
+          font:1em "Consolas", monospace;
+          color:#fff;
+          -webkit-transform:rotate(90deg);
+          -moz-transform:rotate(90deg);
+          -ms-transform:rotate(90deg);
+          transform:rotate(90deg);
+          right:0px; bottom:0px;
+          padding:0 0 0 23px ;
+          position:absolute;
+          pointer-events:none;
+      }
+      label:before {
+          content:'';
+          right:6px; top:0px;
+          width:20px; height:20px;
+          /*background:#f8f8f8;*/
+          position:absolute;
+          pointer-events:none;
+      }
+      h1, span.counter {
+        font-family: Helvetica, sans-serif;
+        font-weight: bold;
+      }
+      h1 {
+        font-size:3em;
+      }
+      div {
+        margin 0 0;
+        padding: 0 0;
+      }
+      span, u, select, option {
+        line-height: 84px;
+        vertical-align: middle;
+      }
+      span.counter {
+        transition: all 1.5s ease;
+      }
+
+      span.bad { color: #FF4819; font-size: 1.5em; text-decoration: underline;}
+      span.good { color: #68B209;}
+      span.strike { color: grey; text-decoration: line-through;}
+      h1.underline {text-decoration: none; color:red;}
+
+
+      .phrase-enter {
+        opacity: 0.01;
+      }
+
+      .phrase-enter.phrase-enter-active {
+        opacity: 1;
+        transition: opacity .5s ease-in;
+      }
+      .phrase-leave {
+        opacity: 1;
+      }
+
+      .phrase-leave.phrase-leave-active {
+        opacity: 0.01;
+        transition: opacity .5s ease-in;
+      }
+
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900' rel='stylesheet' type='text/css'>
+    <title>Sketch</title>
+  </head>
+  <body>
+    <div id='root'>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="vendors.js"></script>
+    <script src="app.js"></script>
+    <script src="https://use.typekit.net/agv1hsz.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  </body>
+</html>
