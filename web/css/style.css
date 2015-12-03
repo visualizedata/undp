@@ -245,3 +245,7 @@ h3 {
 .marginbot-50 {
 	margin-bottom: 50px !important;
 }
+
+button { 
+    border: none !important;
+}
