@@ -1,13 +1,14 @@
+var table;
 var reg = []; //array to pull region info
 var cou = []; //array to pull country info
 var region = []; //array to push region info to
 var country = []; //array to push country info to
+var MF = []; //array to pull schooling female info into
+var MM = []; //array to pull schooling male info into
 var MYSF = []; //array to push schooling female info into
 var MYSM = []; //array to push schooling male info into
 var EF = []; //array to pull income female into
 var EM = []; //array to pull income male into
-var EGF = [];
-var EGM = [];
 var EGNIF = []; //array to push income female into
 var EGNIM = []; //array to push income male into
 var diam = []; //diameter of arc, difference of income male and income female
@@ -16,6 +17,8 @@ var c2 = []; //array for smaller income value either male or female
 var egnip = []; //array for percentage of income
 var w = 0; // counter
 var sans; //font
+var EGNIFR = [];
+var EGNIMR = [];
 
 function setup() {
   sans = loadFont("Raleway-Regular.otf");
@@ -25,6 +28,7 @@ function setup() {
 }
 
 function showData() {
+  textFont(sans);
   for (var i = 0; i < table.getRowCount(); i++) {
     var currentRow = table.getRow(i);
     reg = currentRow.getString(0);
@@ -37,17 +41,13 @@ function showData() {
     country.push(cou);
     MYSF.push(MF);
     MYSM.push(MM);
-    EGNIM.push(EM / 19);
-    EGNIF.push(EF / 19);
-    // console.log(EGF[i] + " " + EGM[i]);
-    // EGNIM[i] = map(EGM[i], 0, 1650, 1650,0);
-    // EGNIF[i] = map(EGF[i],0,1650, 1650,0);
-    // console.log(EGNIF[i] + " " + EGNIM[i]);
+    EGNIM.push(EM / 20);
+    EGNIF.push(EF / 20);
     egnip[i] = (EGNIF[i] / EGNIM[i]) * 100;
-    // console.log(egnip[i]);
     diam[i] = abs(EGNIM[i] - EGNIF[i]);
+
   }
-  background(0, 0, 15);
+  background(0);
   noStroke();
   fill(235);
   textFont(sans);
@@ -56,7 +56,7 @@ function showData() {
   fill(135);
   textSize(14);
   text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
-  text("$33,000", (windowWidth - 15), (windowHeight * 3 / 8) + 25);
+  text("$33,000", (windowWidth - 100), (windowHeight * 3 / 8) + 25);
   text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
   text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
   textSize(16);
@@ -64,7 +64,7 @@ function showData() {
   text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
   text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
   textSize(20);
-  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth - 400, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
   for (var k = 0; k < table.getRowCount(); k++) {
     if (EGNIM[k] < EGNIF[k]) {
       c1[k] = EGNIF[k];
@@ -78,109 +78,212 @@ function showData() {
     strokeWeight(2);
     noFill();
     arc((diam[k] / 2) + (windowWidth / 25) + c2[k], (windowHeight * 3 / 8), diam[k], diam[k], 0, PI);
-    console.log(EGNIM[k] - EGNIF[k]);
-    console.log("=============");
-    console.log(diam[k]);
 
     //school lines
     strokeWeight(2);
-    stroke(255, 73, 0);
+    stroke(50, 153, 143);
     line((windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8) - (MYSF[k] * 20));
-    stroke(0, 218, 125);
+    stroke(136, 193, 134);
     line((windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8) - (MYSM[k] * 20));
-    // console.log(k * 10);
-    // console.log(MYSM[k]);
-    // console.log(MYSF[k]);
   }
 }
 
-function mouseReleased() {
-  if (mouseReleased) {
-    w = w + 1; // counter
-    if (w > 43) { //if counter gets before start leave at first country
-      w = 0;
-      noStroke();
-      fill(0, 0, 15);
-      rect(0, 0, windowWidth, windowHeight);
-      for (var l in EGNIF) {
-        stroke(100);
-        strokeWeight(2);
-        noFill();
-        arc((diam[l] / 2) + (windowWidth / 25) + c2[l], (windowHeight * 3 / 8), diam[l], diam[l], 0, PI);
-        strokeWeight(2);
-        stroke(255, 73, 0);
-        line((windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8) - (MYSF[l] * 20));
-        stroke(0, 218, 125);
-        line((windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8) - (MYSM[l] * 20));
-        fill(135);
-        textSize(14);
-        text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
-        text("$33,000", (windowWidth - 15), (windowHeight * 3 / 8) + 25);
-        text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
-        text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
-        textSize(16);
-        fill(235);
-        text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
-        text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
-        textSize(20);
-        text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth - 400, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+// function mouseReleased() {
+//   if (mouseReleased) {
+//     w = w + 1; // counter
+//     if (w > 43) { //if counter gets before start leave at first country
+//       w = 0;
+//       noStroke();
+//       fill(0);
+//       rect(0, 0, windowWidth, windowHeight);
+//       for (var l in EGNIF) {
+//         stroke(100);
+//         strokeWeight(2);
+//         noFill();
+//         arc((diam[l] / 2) + (windowWidth / 25) + c2[l], (windowHeight * 3 / 8), diam[l], diam[l], 0, PI);
+//         strokeWeight(2);
+//         stroke(50,153,143);
+//         line((windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8) - (MYSF[l] * 20));
+//         stroke(136,193,134);
+//         line((windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8) - (MYSM[l] * 20));
+//         fill(135);
+//         textSize(14);
+//         text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
+//         text("$33,000", (windowWidth - 15), (windowHeight * 3 / 8) + 25);
+//         text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
+//         text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
+//         textSize(16);
+//         fill(235);
+//         text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
+//         text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
+//         textSize(20);
+//         text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+//       }
+//     }
+//     noStroke();
+//     fill(0);
+//     rect(0, 0, windowWidth, windowHeight);
+//     for (var j in EGNIF) {
+//       stroke(100);
+//       strokeWeight(2);
+//       noFill();
+//       arc((diam[j] / 2) + (windowWidth / 25) + c2[j], (windowHeight * 3 / 8), diam[j], diam[j], 0, PI);
+//       strokeWeight(2);
+//       stroke(2, 39, 95);
+//       line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
+//       stroke(70,131,68);
+//       line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
+//     }
+//     noStroke();
+//     fill(235);
+//     textFont(sans);
+//     textSize(24);
+//     text(country[w], 25, windowHeight - 110);
+//     fill(50,153,143);
+//     textSize(14);
+//     text("Estimated GNI Female: ", 25, windowHeight - 90);
+//     text("Mean Years Schooling Female: ", 25, windowHeight - 70);
+//     fill(136,193,134);
+//     text("Estimated GNI Male: ", 25, windowHeight - 50);
+//     text("Mean Years Schooling Male: ", 25, windowHeight - 30);
+//     fill(235);
+//     textSize(16);
+//     text("$" + EGNIF[w] * 20, 25 + textWidth("Estimated GNI Female:"), windowHeight - 90);
+//     text("$" + EGNIM[w] * 20, 25 + textWidth("Estimated GNI Male:"), windowHeight - 50);
+//     text(MYSF[w] + " years", 25 + textWidth("Mean Years Schooling Female:"), windowHeight - 70);
+//     text(MYSM[w] + " years", 25 + textWidth("Mean Years Schooling Male:"), windowHeight - 30);
+
+//     strokeWeight(3);
+//     noFill();
+//     stroke(235);
+//     arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
+//     stroke(50,153,143);
+//     line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
+//     stroke(136,193,134);
+//     line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
+//     noStroke();
+//     fill(135);
+//     textSize(14);
+//     text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
+//     text("$33,000", (windowWidth - 15), (windowHeight * 3 / 8) + 25);
+//     text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
+//     text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
+//     textSize(16);
+//     fill(235);
+//     text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
+//     text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
+//     textSize(20);
+//     text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+//   }
+// }
+
+function mouseMoved() {
+
+  var counter2 = 0;
+  var counter3 = 0;
+
+  noStroke();
+  fill(0);
+  rect(0, 0, windowWidth, windowHeight);
+  for (var j in EGNIF) {
+
+
+    var fvalue = (windowWidth / 25) + EGNIF[j];
+    var mvalue = (windowWidth / 25) + EGNIM[j];
+    if (mouseX < fvalue + 4 && mouseX > fvalue - 4) {
+      if (mouseY < windowHeight * 3 / 8 && mouseY > (windowHeight * 3 / 8) - (MYSF[j] * 20)) {
+        w = counter2;
       }
     }
-    noStroke();
-    fill(0, 0, 15);
-    rect(0, 0, windowWidth, windowHeight);
-    for (var j in EGNIF) {
-      stroke(100);
-      strokeWeight(2);
-      noFill();
-      arc((diam[j] / 2) + (windowWidth / 25) + c2[j], (windowHeight * 3 / 8), diam[j], diam[j], 0, PI);
-      strokeWeight(2);
-      stroke(179, 51, 0);
-      line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
-      stroke(0, 143, 81);
-      line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
+    if (mouseX < mvalue + 4 && mouseX > mvalue - 4) {
+      if (mouseY < windowHeight * 3 / 8 && mouseY > (windowHeight * 3 / 8) - (MYSM[j] * 20)) {
+        w = counter3;
+      }
     }
-    noStroke();
-    fill(235);
-    textFont(sans);
-    textSize(24);
-    text(country[w], 25, windowHeight - 110);
-    fill(255, 73, 0);
-    textSize(14);
-    text("Estimated GNI Female: ", 25, windowHeight - 90);
-    text("Mean Years Schooling Female: ", 25, windowHeight - 70);
-    fill(0, 218, 125);
-    text("Estimated GNI Male: ", 25, windowHeight - 50);
-    text("Mean Years Schooling Male: ", 25, windowHeight - 30);
-    fill(235);
-    textSize(16);
-    text("$" + EGNIF[w] * 20, 25 + textWidth("Estimated GNI Female:"), windowHeight - 90);
-    text("$" + EGNIM[w] * 20, 25 + textWidth("Estimated GNI Male:"), windowHeight - 50);
-    text(MYSF[w] + " years", 25 + textWidth("Mean Years Schooling Female:"), windowHeight - 70);
-    text(MYSM[w] + " years",  25 + textWidth("Mean Years Schooling Male:"), windowHeight - 30);
-
-    strokeWeight(3);
+    counter3++;
+    counter2++;
+    stroke(100);
+    strokeWeight(2);
     noFill();
-    stroke(235);
-    arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
-    stroke(255, 73, 0);
-    line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
-    stroke(0, 218, 125);
-    line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
-    noStroke();
-    fill(135);
-    textSize(14);
-    text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
-    text("$33,000", (windowWidth - 15), (windowHeight * 3 / 8) + 25);
-    text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
-    text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
-    textSize(16);
-    fill(235);
-    text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
-    text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
-    textSize(20);
-    text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth - 400, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+    arc((diam[j] / 2) + (windowWidth / 25) + c2[j], (windowHeight * 3 / 8), diam[j], diam[j], 0, PI);
+    strokeWeight(2);
+    stroke(2, 39, 95);
+    line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
+    stroke(70, 131, 68);
+    line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
   }
+  textAlign(CENTER);
+  textFont(sans);
+  textSize(24);
+  noStroke();
+  fill(235);
+  text(country[w], (windowWidth / 25) + EGNIF[w] + (diam[w]/2), (windowHeight * 3 / 8) + (diam[w] / 2) + 25);
+  textAlign(LEFT);
+  text(country[w], 25, windowHeight - 110);
+  fill(50, 153, 143);
+  
+  textSize(14);
+  text("Estimated GNI Female: ", 25, windowHeight - 90);
+  text("Mean Years Schooling Female: ", 25, windowHeight - 70);
+  fill(136, 193, 134);
+  text("Estimated GNI Male: ", 25, windowHeight - 50);
+  text("Mean Years Schooling Male: ", 25, windowHeight - 30);
+
+  fill(235);
+  textSize(16);
+  text("$" + round(EGNIF[w]) * 20, 25 + textWidth("Estimated GNI Female:"), windowHeight - 90);
+  text("$" + round(EGNIM[w]) * 20, 25 + textWidth("Estimated GNI Male:"), windowHeight - 50);
+  text(MYSF[w] + " years", 25 + textWidth("Mean Years Schooling Female:"), windowHeight - 70);
+  text(MYSM[w] + " years", 25 + textWidth("Mean Years Schooling Male:"), windowHeight - 30);
+  fill(235);
+  text("$" + round(EGNIF[w]) * 20, (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) + 25);
+  text("$" + round(EGNIM[w]) * 20,(windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) + 25);
+    text(MYSF[w] + " years",(windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20) - 15);
+    text(MYSM[w] + " years",(windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w]* 20) - 15);
+  strokeWeight(3);
+  noFill();
+  stroke(235);
+  arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
+  stroke(50, 153, 143);
+  line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
+  stroke(136, 193, 134);
+  line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
+  noStroke();
+  fill(135);
+  textSize(14);
+  text("$0", (windowWidth / 25), (windowHeight * 3 / 8) + 25);
+  text("$33,000", (windowWidth - 50), (windowHeight * 3 / 8) + 25);
+  text("0 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8));
+  text("10 years", (windowWidth / 25) - 40, (windowHeight * 3 / 8) - (200));
+  textSize(16);
+  fill(235);
+  text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
+  text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
+  textSize(20);
+  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+ 
+//   var arclength = 0;
+//   for (var k = 0; k < country.length; k++) {
+
+//     // The character and its width
+//     var currentChar = country[w].charAt(k);
+//     // Instead of a constant width, we check the width of each character.
+//     var q = textWidth(currentChar);
+//     // Each box is centered so we move half the width
+//     arclength += q / 2;
+//     // Angle in radians is the arclength divided by the radius
+//     // Starting on the left side of the circle by adding PI
+//     var theta = PI + arclength / rSize;
+//     push();
+//     translate(rSize * cos(theta), rSize * sin(theta));
+//     rotate(theta + PI / 2);
+//     text(currentChar, 0, 0);
+
+//     pop();
+//     // Move halfway again
+//     arclength += q / 2;
+// }
+  
 }
 
 function draw() {}
