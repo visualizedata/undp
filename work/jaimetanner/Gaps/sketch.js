@@ -32,9 +32,9 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  var black = color(240, 250, 255);
-  var backgroundColor = color(162, 178, 185);
-  var groundColor = color(37, 41, 59);
+  var black = color(255);
+  var backgroundColor = color(119,136,153);
+  var groundColor = color(0, 0, 0, 150);
 
   textFont(latoReg);
   background(backgroundColor);
@@ -99,8 +99,8 @@ function setup() {
 
 function draw() {
   //selector 
-  var black = color(240, 250, 255);
-  var backgroundColor = color(162, 178, 185);
+  var black = color(255);
+  var backgroundColor = color(119,136,153);
   var groundColor = color(37, 41, 59);
   // stroke(black);
   // noFill();
@@ -185,9 +185,9 @@ function showData() {
 
 
 function drawTriangle(r) {
-  var mountainColor = color(83, 102, 115, 110);
-  var backgroundColor = color(162, 178, 185);
-  var black = color(240, 250, 255);
+  var mountainColor = color(0, 0, 0, 80);
+  var backgroundColor = color(119,136,153);
+  var black = color(255);
   stroke(83, 102, 115, 150);
   fill(mountainColor);
   if (region[r] == "c" && opt1 == true) {
@@ -205,8 +205,8 @@ function drawTriangle(r) {
 }
 
 function mousePressed() {
-  var mountainColor = color(90, 92, 81, 80);
-  var backgroundColor = color(162, 178, 185);
+  var mountainColor = color(0, 0, 0, 80);
+  var backgroundColor = color(119,136,153);
   var black = color(240, 250, 255);
   fill(backgroundColor);
   stroke(backgroundColor);
@@ -312,7 +312,3 @@ function mousePressed() {
     text("WEST", width * 0.855 - (textWidth("WEST") / 2), height * 0.06 + (width * 0.015));
   }
 }
-
-// function windowResized() {
-//   resizeCanvas(windowWidth, windowHeight);
-// }
