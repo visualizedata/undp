@@ -86,7 +86,7 @@ Styles
 }
 
 iframe {
-    width:100%;
+    width: 100%;
     height: 600px;
     border: 0;
     margin-bottom: 20px;
@@ -113,7 +113,8 @@ a:hover {
     transition: all .3s ease-in-out;
 }
 
-body, p {
+body,
+p {
     font-family: "neue-regular";
     font-size: 14.5px;
 }
@@ -167,7 +168,6 @@ h3 {
 #banner h1 {
     font-size: 18pt;
 }
-
 
 #banner h1.sitename {
     font-size: 4.33333rem;
@@ -243,9 +243,14 @@ h3 {
 }
 
 .marginbot-50 {
-	margin-bottom: 50px !important;
+    margin-bottom: 50px !important;
 }
 
-button { 
+button {
     border: none !important;
+    background-color: white !important;
+}
+
+button:hover {
+    color: #e82e21 !important;
 }
