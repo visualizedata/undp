@@ -11,9 +11,11 @@ var labels = [],
   originY = [],
   endY = [],
   names = [],
+  gapNum = [],
   countryBools = [],
   gaps = [];
 
+/*-----------load fonts-----------*/
 function preload() {
   latoHair = loadFont('Lato-Hairline.ttf');
   latoLight = loadFont('Lato-Light.ttf');
@@ -21,6 +23,7 @@ function preload() {
 }
 
 function setup() {
+  /*-----------title bar-----------*/
   createCanvas(windowWidth, windowHeight);
   var black = color(0);
   var beige = color(238, 226, 210);
@@ -36,19 +39,15 @@ function setup() {
   fill(black);
   text("Productivity Differences between Male and Female African Farmers", width * 0.02, height * 0.06);
 
+  /*-----------right bar title-----------*/
   textFont(latoReg);
-  textSize(20);
+  textSize(18);
   text("Primary Factors Contributing to Gender Gap in Agricultural Productivity", width * 0.70, height * 0.14, width * 0.3);
   table = loadTable("data.txt", "tsv", showData);
 
-  // noStroke();
-  // fill(greens);
-  // for (var i = 0.1; i < 0.8; i = i + 0.1) {
-  //   rect(width * 0.12, height * i, width * 0.3, height * 0.08);
-  // }
 }
 
-
+/*-----------parse tsv-----------*/
 function showData() {
   var deadgrass = color(212, 184, 145);
   var greens = color(77, 102, 25);
@@ -66,14 +65,15 @@ function showData() {
     uganda.push(table.getString(7, j));
   }
   countryBools.push(ethiopia, malawi, niger, nNigeria, sNigeria, tanzania, uganda);
-  console.log(countryBools);
   count = table.getRowCount();
   for (var r = 1; r < 8; r++) {
     var gap = table.getString(r, 1);
     names.push(table.getString(r, 0));
     gaps.push(map(gap, 0, 100, width * 0.12, width * 0.3));
+    gapNum.push(gap);
   }
 
+  /*-----------bar graphs-----------*/
   for (var z = 0; z < 7; z++) {
     noStroke();
     fill(greens);
@@ -87,34 +87,94 @@ function showData() {
     originY.push(height * 0.1 * z + (height * 0.33));
   }
 
+  /*-----------bezier end points-----------*/
   for (var i = 2; i < labels.length; i++) {
-    text(labels[i], width * 0.75, height * 0.14 + i * (height * 0.04));
     endY.push(height * 0.14 + i * (height * 0.04));
   }
   stroke(0, 0, 0, 100);
+  /*-----------initial bezier & list-----------*/
   for (var j = 0; j < 7; j++) {
     for (var i = 0; i < endY.length; i++) {
       if (countryBools[j][2 + i] == "1") {
         connect(j, i);
       }
-      if (mouseX >= width * 0.12 && mouseX <= width * 0.12 + (width * 0.3) && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "1") {
-        selectedConnect(j, i);
-      }
-      if (countryBools[j][2 + i] == "1" && j == 2) {
-        selectedConnect(j, i);
-      }
     }
   }
 }
 
-function connect(n, i) {
-  strokeWeight(0.2);
-  noFill();
-  bezier(width * 0.42, originY[n], width * 0.6, originY[n], width * 0.42, endY[i], width * 0.75, endY[i]);
+function mouseMoved() {
+  /*-----------clear curves -----------*/
+  var beige = color(238, 226, 210);
+  fill(beige);
+  stroke(beige);
+  rect(width * 0.42, height * 0.14 + 2 * (height * 0.03), width * 0.58, height * 0.9);
+
+  /*-----------check mouse location-----------*/
+  for (var j = 0; j < 7; j++) {
+    for (var i = 0; i < endY.length; i++) {
+      if (countryBools[j][2 + i] == "1" ) {
+        connect(j, i);
+      }
+      if (mouseX >= width * 0.12 && mouseX <= width * 0.12 + (width * 0.3) && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "1") {
+        fill(beige);
+        stroke(beige);
+        rect(width * 0.01, height * 0.1, width * 0.6, height * 0.1);
+        selectedConnect(j, i);
+      } //else if (mouseX >= width * 0.12 && mouseX <= width * 0.12 + (width * 0.3) && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "0") {
+      //   connect(j, i);
+      // }
+
+    }
+  }
 }
 
-function selectedConnect(n, i) {
-  strokeWeight(3);
+
+/*-----------background lines-----------*/
+function connect(n, i) {
+  var black = color(0);
+  textFont(latoHair);
+  textSize(16);
+  
+  strokeWeight(0.2);
   noFill();
+  stroke(0, 0, 0, 100);
   bezier(width * 0.42, originY[n], width * 0.6, originY[n], width * 0.42, endY[i], width * 0.75, endY[i]);
+
+  var beige = color(238, 226, 210);
+  stroke(beige);
+  fill(beige);
+  rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
+
+  stroke(150);
+  fill(150);
+  text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
+  // endY.push(height * 0.14 + i * (height * 0.04));
+
+  // console.log(" n : " + n + "....i =" + i);
+}
+
+/*-----------selected curves-----------*/
+function selectedConnect(n, i) {
+  textFont(latoHair);
+  textSize(16);
+
+  strokeWeight(2.5);
+  noFill();
+  stroke(100);
+  bezier(width * 0.42, originY[n], width * 0.6, originY[n], width * 0.42, endY[i], width * 0.75, endY[i]);
+
+  var beige = color(238, 226, 210);
+  stroke(beige);
+  fill(beige);
+  rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.040)), width * 0.22, height * 0.03);
+
+  strokeWeight(1);
+  fill(0);
+  stroke(0);
+  text(labels[2 + i], width * 0.75, height * 0.14 + (2 + i) * (height * 0.04));
+
+  endY.push(height * 0.14 + i * (height * 0.04));
+  stroke(200, 50, 50);
+  textSize(20);
+  text("Female-managed agricultural plots produce an average of " + gapNum[n] + "% less than those that are male managed", width * 0.02, height * 0.19);
 }

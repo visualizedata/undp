@@ -1,4 +1,4 @@
-Country	Percentage	Land Size	Other Land Characteristics	Household Size	Household Male Farm Labour	Household Female Farm Labour	Hired Farm Labour	Time Spent on Farm Activities	Ration of Children to Adults within Household	Improved/Purchased Seeds	Pesticide/Herbicide Use	Fertilizer Use	Farm Tools & Equipment 	Agricultural Extension	Export/Cash Crops	Distance to Market or Road	Non-Farm Income/Activity	Age	Years of Schooling	Wealth/Consumption
+Country	Percentage	Land Size	Other Land Characteristics	Household Size	Household Male Farm Labour	Household Female Farm Labour	Hired Farm Labour	Competing Household Responsibilities	Ratio of Children to Adults within Household	Improved/Purchased Seeds	Pesticide/Herbicide Use	Fertilizer Use	Farm Tools & Equipment 	Knowledge of Improved Farming Practices	Cultivation of Export/Cash Crops	Distance to Market or Road	Non-Farm Income/Activity	Age	Years of Schooling	Wealth/Consumption
 Ethiopia	24	1	1	1	0	0	0	1	0	0	0	1	1	1	0	0	0	0	0	1
 Malawi	25	0	1	1	1	0	0	0	1	1	1	1	1	1	1	1	0	0	1	1
 Niger	66	0	1	1	1	1	1	0	1	0	0	1	0	0	0	0	1	0	0	0
