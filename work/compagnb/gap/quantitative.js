@@ -1,4 +1,9 @@
 var quanTable;
+var hdrTable;
+var lifeTable;
+var meanSchoolTable;
+var expSchoolTable;
+var gniTable;
 
 var countryInfo = [];
 var hdrSorted = [];
@@ -21,9 +26,6 @@ var expSchoolM = [];
 var gniF = [];
 var gniM = [];
 var loaded = false;
-var completed = false;
-
-var centralCheckBox, eastCheckBox, northernCheckBox, southernCheckBox, westCheckBox;
 
 var dropValue = 'HDR Ratings';
 
@@ -34,50 +36,54 @@ var minVal = 100; // make higher for worse case senerio
 var maxVal = 0; // make lower for worse case and gets bumped up higher
 
 var fontLight;
+var c = [];
 
 function preload() {
-  // info imported
+  // load data info from undpGoals.txt
   quanTable = loadTable("data/hdrQuant.txt", "tsv", "header");
+  hdrTable = loadTable("data/hdrSorted.txt", "tsv", "header");
+  lifeTable = loadTable("data/lifeSorted.txt", "tsv", "header");
+  expSchoolTable = loadTable("data/expSchoolSorted.txt", "tsv", "header");
+  meanSchoolTable = loadTable("data/meanSchoolSorted.txt", "tsv", "header");
+  gniTable = loadTable("data/gniSorted.txt", "tsv", "header");
 
-  // load images
   femaleImg = loadImage("images/femalesm.png");
   maleImg = loadImage("images/malesm.png");
   headerImg = loadImage("images/header.png");
-  
-  // load font
   fontLight = loadFont("fonts/Roboto-Light.ttf");
 }
 
+
 function setup() {
-  createCanvas(windowWidth, windowHeight-78);
+  createCanvas(windowWidth, windowHeight);
+  // background(191, 222, 235);
   background('#3d3d3d');
   noLoop(); // no need for input or animation here
   noFill();
-  // textSize(10);
+  textSize(10);
 
-  // process all the data into arrays
-  processData(quanTable);
-
-  if (loaded) {
-    for (row = 0; row < areas.length; row++) {
-      countryInfo.push(new CountryInfo(row));
-    }
-    checkBoxes();
-    dataFilter();
-    completed = true;
-  }
+  createObjects(quanTable, countryInfo);
+  createObjects(hdrTable, hdrSorted);
+  createObjects(lifeTable, lifeSorted);
+  createObjects(expSchoolTable, meanSchoolSorted);
+  createObjects(meanSchoolTable, expSchoolSorted);
+  createObjects(gniTable, gniSorted);
 
 }
 
 function draw() {
-  // draw default
+
   //createHeader(); // need to fix stroke and placement
+  regionFilter();
   drawBkgrd();
   drawRefGuides();
-  if (completed){
-    reload();
+  for (var i = 0; i < hdrSorted.length; i++) {
+    countryInfo[i].showCountryNames();
+    countryInfo[i].display();
   }
-  // console.log("length: " + countryInfo.length);
+  //console.log(countryInfo[i].hdrGap);
+  //update();
+
 }
 
 function processData(test) {
@@ -86,7 +92,7 @@ function processData(test) {
   //  count the columns
   print(test.getColumnCount() + " total columns in table");
   //  print contents of column named Country Name
-  areas = test.getColumn("area");
+  areas = test.getColumn("Area");
   ranks = test.getColumn("HDI ranks");
   countries = test.getColumn("Country");
   hdrF = test.getColumn("hdrF2013");
@@ -100,7 +106,39 @@ function processData(test) {
   gniF = test.getColumn("gniF2013");
   gniM = test.getColumn("gniM2013");
 
+  // mapHighLow(3);
+  // while parsing, give me the max and min values
+
   loaded = true;
+}
+
+function createObjects(table, array) {
+  // process all the data into arrays
+  processData(table);
+  //console.log("min val: " + minVal + " ||  max val: " + maxVal);
+  if (loaded) {
+    for (row = 0; row < areas.length; row++) {
+      array.push(new CountryInfo(row));
+    }
+  }
+  emtyArrays();
+}
+
+function emtyArrays() {
+  areas = [];
+  ranks = [];
+  countries = [];
+  hdrF = [];
+  hdrM = [];
+  lifeF = [];
+  lifeM = [];
+  meanSchoolF = [];
+  meanSchoolM = [];
+  expSchoolF = [];
+  expSchoolM = [];
+  gniF = [];
+  gniM = [];
+  loaded = false;
 }
 
 // function to give max and min values
@@ -159,18 +197,15 @@ CountryInfo.prototype.showCountryNames = function() {
   rotate(45);
   strokeWeight(0);
   fill('rgba(255, 255, 255, 0.8)');
-  textSize(12);
   textFont(fontLight);
   text(this.country, 10, 0);
   rotate(0);
   pop();
-  
-  // fill('rgba(255, 255, 255, 0.3)');
-  // for (var i = 0; i < height - 170; i = i + 20) {
-  //   rect((this.row * width / 55) + 7, i, 1, 0);
-  // }
-};
-
+  fill('rgba(255, 255, 255, 0.1)');
+  for (var i = 0; i < height - 170; i = i + 20) {
+    rect((this.row * width / 55) + 7, i, 1, 0);
+  }
+}
 CountryInfo.prototype.display = function() {
   var femaleRank;
   var maleRank;
@@ -178,8 +213,8 @@ CountryInfo.prototype.display = function() {
   if (dropValue == 'HDR Ratings') {
     femaleRank = this.hdrF;
     maleRank = this.hdrM;
-    minVal = 0.20;
-    maxVal = 0.85;
+    minVal = .20;
+    maxVal = .85;
   } else if (dropValue === 'Life Expectancy') {
     femaleRank = this.lifeF;
     maleRank = this.lifeM;
@@ -198,41 +233,37 @@ CountryInfo.prototype.display = function() {
   } else if (dropValue === 'GNI') {
     femaleRank = this.gniF;
     maleRank = this.gniM;
-    minVal = -2000;
-    maxVal = 35000;
+    minVal = 100;
+    maxVal = 30000;
   }
-  
-  // countryInfo[this.row].showCountryNames();
-  
-  if (this.area == 'central' && centralCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'east' && eastCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'northern' && northernCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'southern' && southernCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'west' && westCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-};
 
-CountryInfo.prototype.sort = function() {
-  // this.xPos = map(this.hdrGap(), min(hdrSorted), max(hdrSorted), 0, width);
-};
+  console.log(minVal + " || " + maxVal);
+  console.log(this.country + " || " + femaleRank + " || " + maleRank);
 
-function dataFilter() {
+  if (femaleRank != ".." || maleRank != "..") {
+    // images
+    image(femaleImg, ((this.row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+    image(maleImg, ((this.row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+
+    beginShape()
+    stroke('rgba(255, 255, 255, 0.1)');
+    strokeWeight(6);
+
+    //lines
+    if (femaleRank < maleRank) {
+      vertex(((this.row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
+      vertex(((this.row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+    } else {
+      vertex(((this.row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
+      vertex(((this.row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+    }
+    endShape();
+  }
+}
+
+function regionFilter() {
   dropdown = createElement('select');
-  // dropdown.position(width - 180, 50);
-  dropdown.parent('header');
+  dropdown.position(width - 180, 50);
   var options = ['HDR Ratings', 'Life Expectancy', 'Avg. Years of Schooling', 'Expected Years of Schooling', 'GNI'];
   for (var i = 0; i < options.length; i++) {
     var option = createElement('option');
@@ -240,8 +271,8 @@ function dataFilter() {
     option.html(options[i]);
     option.parent(dropdown);
   }
-  
-  var droptest = createDiv('HDR Ratings');
+
+  var droptest = createDiv('HDR Ratings')
   droptest.parent('value');
 
   dropdown.elt.onchange = function() {
@@ -250,62 +281,7 @@ function dataFilter() {
     console.log(dropValue);
     update();
 
-  };
-}
-
-function checkBoxes(){
-  
-  centralCheckBox = createCheckbox();
-  centralCheckBox.parent('header');
-  var centralLabel = createElement('label', 'Central');
-  centralLabel.parent('header');
-  
-  centralCheckBox.checked(true);  // passing in an arg sets its state?
-  centralCheckBox.elt.onchange = function() {
-    console.log("central!");
-    update();
-  }; 
-  
-  eastCheckBox = createCheckbox();
-  eastCheckBox.parent('header');
-  var eastLabel = createElement('label', 'East');
-  eastLabel.parent('header');
-  eastCheckBox.checked(true);  // passing in an arg sets its state?
-  eastCheckBox.elt.onchange = function() {
-    console.log("east!");
-    update();
-  };
-
-  northernCheckBox = createCheckbox();
-  northernCheckBox.parent('header');
-  var northernLabel = createElement('label', 'Northern');
-  northernLabel.parent('header');
-  northernCheckBox.checked(true);  // passing in an arg sets its state?
-  northernCheckBox.elt.onchange = function() {
-    console.log("Northern!");
-    update();
-  };
-  
-  southernCheckBox = createCheckbox();
-  southernCheckBox.parent('header');
-  var southernLabel = createElement('label', 'Southern');
-  southernLabel.parent('header');
-  southernCheckBox.checked(true);  // passing in an arg sets its state?
-  southernCheckBox.elt.onchange = function() {
-    console.log("Southern!");
-    update();
-  };
-  
-  westCheckBox = createCheckbox();
-  westCheckBox.parent('header');
-  var westLabel = createElement('label', 'West');
-  westLabel.parent('header');
-  westCheckBox.checked(true);  // passing in an arg sets its state?
-  westCheckBox.elt.onchange = function() {
-    console.log("West!");
-    update();
-  };
-
+  }
 }
 
 function drawBkgrd() {
@@ -358,7 +334,7 @@ function drawRefGuides() {
     stroke("#D3D3D3");
     strokeWeight(0);
     textSize(8);
-    text("0 yrs", 5, map(0.17, 0, 10, height - 170, 0));
+    text("0 yrs", 5, map(.17, 0, 10, height - 170, 0));
     text("2 yrs", 5, map(2, 0, 10, height - 170, 0));
     text("4 yrs", 5, map(4, 0, 10, height - 170, 0));
     text("6 yrs", 5, map(6, 0, 10, height - 170, 0));
@@ -377,7 +353,7 @@ function drawRefGuides() {
     stroke("#D3D3D3");
     strokeWeight(0);
     textSize(8);
-    text("0 yrs", 5, map(0.22, 0, 14, height - 170, 0));
+    text("0 yrs", 5, map(.22, 0, 14, height - 170, 0));
     text("2 yrs", 5, map(2, 0, 14, height - 170, 0));
     text("4 yrs", 5, map(4, 0, 14, height - 170, 0));
     text("6 yrs", 5, map(6, 0, 14, height - 170, 0));
@@ -400,88 +376,78 @@ function drawRefGuides() {
     stroke("#D3D3D3");
     strokeWeight(0);
     textSize(8);
-    text("0 GNI", 5, map(600, 100, 30000, height - 170, 0));
-    text("5000 GNI", 5, map(5000, -2000, 35000, height - 170, 0));
-    text("10000 GNI", 5, map(10000, -2000, 35000, height - 170, 0));
-    text("15000 GNI", 5, map(15000, -2000, 35000, height - 170, 0));
-    text("20000 GNI", 5, map(20000, -2000, 35000, height - 170, 0));
-    text("25000 GNI", 5, map(25000, -2000, 35000, height - 170, 0));
-    text("30000 GNI2", 5, map(30000, -2000, 35000, height - 170, 0));
-     text("35000 GNI2", 5, map(34000, -2000, 35000, height - 170, 0));
+    text("100 GNI", 5, map(600, 100, 30000, height - 170, 0));
+    text("5000 GNI", 5, map(5000, 100, 30000, height - 170, 0));
+    text("10000 GNI", 5, map(10000, 100, 30000, height - 170, 0));
+    text("15000 GNI", 5, map(15000, 100, 30000, height - 170, 0));
+    text("20000 GNI", 5, map(20000, 100, 30000, height - 170, 0));
+    text("25000 GNI", 5, map(25000, 100, 30000, height - 170, 0));
+    text("30000 GNI2", 5, map(29000, 100, 30000, height - 170, 0));
 
     rect(0, map(100, 100, 30000, height - 170, 0), width, 1);
 
     fill("rgba(255, 255, 255, 0.1)");
     stroke("rgba(255, 255, 255, 0.1)");
-    rect(0, map(5000, -2000, 35000, height - 170, 0), width, 1);
-    rect(0, map(10000, -2000, 35000, height - 170, 0), width, 1);
-    rect(0, map(15000, -2000, 35000, height - 170, 0), width, 1);
-    rect(0, map(20000, -2000, 35000, height - 170, 0), width, 1);
-    rect(0, map(25000, -2000, 35000, height - 170, 0), width, 1);
-    rect(0, map(30000, -2000, 35000, height - 170, 0), width, 1);
+    rect(0, map(5000, 100, 30000, height - 170, 0), width, 1);
+    rect(0, map(10000, 100, 30000, height - 170, 0), width, 1);
+    rect(0, map(15000, 100, 30000, height - 170, 0), width, 1);
+    rect(0, map(20000, 100, 30000, height - 170, 0), width, 1);
+    rect(0, map(25000, 100, 30000, height - 170, 0), width, 1);
 
   }
 }
 
-function drawDottedGuides(){
-  for (var j = 1; j < 54; j++){
-    fill('rgba(255, 255, 255, 0.3)');
-    for (var i = 0; i < height - 170; i = i + 20) {
-      rect((j * width / 55) + 7, i, 1, 0);
-      // console.log(this.row);
-    }
-  }
-}
 
 function update() {
   if (dropValue == 'HDR Ratings') {
-    reload();
-  } else if (dropValue === 'Life Expectancy') {
-    reload();
-  } else if (dropValue === 'Avg. Years of Schooling') {
-    reload();
-  } else if (dropValue === 'Expected Years of Schooling') {
-    reload();
-  } else if (dropValue === 'GNI') {
-    reload();
-  }
-}
-
-function reload(){
-  drawBkgrd();
-  drawRefGuides();
-  
-  for (var i = 0; i < countryInfo.length; i++) {
-    countryInfo[i].display();
-  }
-  drawDottedGuides();
-  for (var i = 0; i < countryInfo.length; i++) {
-    countryInfo[i].display();
-  }
-  
-}
-
-function drawImages(femaleRank, maleRank, minVal, maxVal, row){
-    if (femaleRank > 0 || maleRank > 0) {
-
-      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
-
-      beginShape();
-      stroke('rgba(255, 255, 255, 0.1)');
-      strokeWeight(6);
-      //lines
-      if (femaleRank < maleRank) {
-        vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-        vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
-      } else {
-        vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-        vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
-      }
-      endShape();
+    drawBkgrd();
+    drawRefGuides();
+    for (var i = 0; i < countryInfo.length; i++) {
+      countryInfo[i].showCountryNames();
+      countryInfo[i].display();
     }
+  } else if (dropValue === 'Life Expectancy') {
+    drawBkgrd();
+    mapHighLow(5);
+    drawRefGuides();
+    for (var i = 0; i < countryInfo.length; i++) {
+      countryInfo[i].showCountryNames();
+      countryInfo[i].display();
+    }
+  } else if (dropValue === 'Avg. Years of Schooling') {
+    drawBkgrd();
+    mapHighLow(7);
+    drawRefGuides();
+    for (var i = 0; i < countryInfo.length; i++) {
+      countryInfo[i].showCountryNames();
+      countryInfo[i].display();
+    }
+  } else if (dropValue === 'Expected Years of Schooling') {
+    drawBkgrd();
+    mapHighLow(9);
+    drawRefGuides();
+    for (var i = 0; i < countryInfo.length; i++) {
+      countryInfo[i].showCountryNames();
+      countryInfo[i].display();
+    }
+  } else if (dropValue === 'GNI') {
+    drawBkgrd();
+    mapHighLow(11);
+    drawRefGuides();
+    for (var i = 0; i < countryInfo.length; i++) {
+      countryInfo[i].showCountryNames();
+      countryInfo[i].display();
+    }
+
+  }
 }
 
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight-78);
-}
+
+
+
+
+// function mouseMoved(){
+//   console.log("mouseX: " + mouseX);
+//   console.log("mouseY: " + mouseY);
+
+// }

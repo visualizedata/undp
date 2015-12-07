@@ -4,7 +4,7 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700italic,700,900,900italic);
 
 body{
-   margin: 0px;
+   margin: 0;
    background: #3D3D3D;
 }
 #header{
@@ -17,19 +17,16 @@ body{
 }
 
 #header h1{
-   margin: 0px;
+   margin: 0;
    padding-top: 10px;
    padding-left: 20px;
    font-family: 'Roboto', sans-serif;
    font-weight: 100;
    font-size: 30px;
    color: rgba(255, 255, 255, 0.8);
-   /*width: 43%;*/
-   /*border-width: 0 0 1px;*/
-   /*border-style: solid;*/
 }
 #header p{
-   margin: 0px;
+   margin: 0;
    padding-top: 5px;
    padding-left: 20px;
    font-family: 'Roboto', sans-serif;
@@ -50,5 +47,29 @@ span.underline {
 
 #value{
   visibility: hidden;
-  height: 0px;
+  height: 0;
+}
+
+
+input[type="checkbox"]{
+    margin-left: 20px;
+    margin-right: 10px;
+    width:15px;
+    height:15px;
+    /*vertical-align:middle;*/
+    cursor:pointer;
+}
+
+/*input[type="checkbox"]:checked + label span {*/
+    /*background:url(check_radio_sheet.png) -19px top no-repeat;*/
+/*}*/
+label {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 200;
+  font-size: 12px;
+  padding-right: 11%;
+}
+
+select{
+  margin-left: 60px;
 }
