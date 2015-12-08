@@ -1,5 +1,6 @@
 var data = {};
-var country = [];
+var country = [],
+  checker = true;
 var labels = [],
   ethiopia = [],
   malawi = [],
@@ -14,6 +15,7 @@ var labels = [],
   gapNum = [],
   countryBools = [],
   gaps = [];
+
 
 /*-----------load fonts-----------*/
 function preload() {
@@ -31,7 +33,7 @@ function setup() {
   noStroke();
   fill(beige);
   rect(0, height * 0.1, width, height * 0.9);
-  fill(238, 226, 210, 100);
+  fill(238, 226, 210, 10);
   rect(0, 0, width, height * 0.1);
   textFont(latoLight);
   textSize(27);
@@ -95,6 +97,22 @@ function showData() {
   /*-----------initial bezier & list-----------*/
   for (var j = 0; j < 7; j++) {
     for (var i = 0; i < endY.length; i++) {
+      var white = color(243, 235, 223);
+      stroke(white);
+      fill(white);
+      rect(width * 0.75, height * 0.115 + ((2) * (height * 0.040)), width * 0.24, height * 0.07);
+      rect(width * 0.75, height * 0.115 + ((4) * (height * 0.040)), width * 0.24, height * 0.23);
+      rect(width * 0.75, height * 0.115 + ((10) * (height * 0.040)), width * 0.24, height * 0.15);
+      rect(width * 0.75, height * 0.115 + ((14) * (height * 0.040)), width * 0.24, height * 0.03);
+      rect(width * 0.75, height * 0.115 + ((15) * (height * 0.040)), width * 0.24, height * 0.11);
+      rect(width * 0.75, height * 0.115 + ((18) * (height * 0.040)), width * 0.24, height * 0.07);
+      rect(width * 0.75, height * 0.115 + ((20) * (height * 0.040)), width * 0.24, height * 0.03);
+
+    }
+  }
+
+  for (var j = 0; j < 7; j++) {
+    for (var i = 0; i < endY.length; i++) {
       if (countryBools[j][2 + i] == "1") {
         connect(j, i);
       }
@@ -107,23 +125,40 @@ function mouseMoved() {
   var beige = color(238, 226, 210);
   fill(beige);
   stroke(beige);
-  rect(width * 0.42, height * 0.14 + 2 * (height * 0.03), width * 0.58, height * 0.9);
+  rect(width * 0.42, height * 0.14 + 2 * (height * 0.03), width * 0.33, height * 0.9);
+
 
   /*-----------check mouse location-----------*/
   for (var j = 0; j < 7; j++) {
     for (var i = 0; i < endY.length; i++) {
-      if (countryBools[j][2 + i] == "1" ) {
+      if (countryBools[j][2 + i] == "1") {
+        var white = color(243, 235, 223);
+        stroke(white);
+        fill(white);
+        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
+        // var white = color(255, 249, 239);
+        // stroke(white);
+        // fill(white);
+        // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
         connect(j, i);
       }
+    }
+  }
+
+  for (var j = 0; j < 7; j++) {
+    for (var i = 0; i < endY.length; i++) {
       if (mouseX >= width * 0.12 && mouseX <= width * 0.12 + (width * 0.3) && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "1") {
-        fill(beige);
+        var white = color(243, 235, 223);
+        stroke(white);
+        fill(white);
+        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.23, height * 0.03);
+
+        checker = false;
         stroke(beige);
+        fill(beige);
         rect(width * 0.01, height * 0.1, width * 0.6, height * 0.1);
         selectedConnect(j, i);
-      } //else if (mouseX >= width * 0.12 && mouseX <= width * 0.12 + (width * 0.3) && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "0") {
-      //   connect(j, i);
-      // }
-
+      }
     }
   }
 }
@@ -134,19 +169,20 @@ function connect(n, i) {
   var black = color(0);
   textFont(latoHair);
   textSize(16);
-  
+
   strokeWeight(0.2);
   noFill();
   stroke(0, 0, 0, 100);
   bezier(width * 0.42, originY[n], width * 0.6, originY[n], width * 0.42, endY[i], width * 0.75, endY[i]);
 
-  var beige = color(238, 226, 210);
-  stroke(beige);
-  fill(beige);
-  rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
+  // var beige = color(238, 226, 210);
+  // stroke(beige);
+  // fill(beige);
+  // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
 
-  stroke(150);
-  fill(150);
+  strokeWeight(0.4);
+  stroke(170);
+  fill(170);
   text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
   // endY.push(height * 0.14 + i * (height * 0.04));
 
@@ -163,15 +199,21 @@ function selectedConnect(n, i) {
   stroke(100);
   bezier(width * 0.42, originY[n], width * 0.6, originY[n], width * 0.42, endY[i], width * 0.75, endY[i]);
 
-  var beige = color(238, 226, 210);
-  stroke(beige);
-  fill(beige);
-  rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.040)), width * 0.22, height * 0.03);
+  // var beige = color(238, 226, 210);
+  // stroke(beige);
+  // fill(beige);
+  // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.040)), width * 0.22, height * 0.03);
+
+  // var white = color(255, 255, 255);
+  // stroke(white);
+  // fill(white);
+  // rect(width * 0.75, height * 0.115 + ((2) * (height * 0.040)), width * 0.22, height * 0.07);
+
 
   strokeWeight(1);
   fill(0);
   stroke(0);
-  text(labels[2 + i], width * 0.75, height * 0.14 + (2 + i) * (height * 0.04));
+  text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
 
   endY.push(height * 0.14 + i * (height * 0.04));
   stroke(200, 50, 50);
