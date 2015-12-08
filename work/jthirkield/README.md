@@ -13,7 +13,7 @@ While gender gaps are deeply embedded in each country's and each region's cultur
 This chart employs both wage and business/labor data sets for men and women, and charts them against broader indicators for a country such as HDI rank and poverty head count ratio. The design works to highlight the divide between men and women, while never loosing sight of their inherent connection and dependance on each other.
 
 
-##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/lens/">Africa's Schoolhouse: A Leanring Map</a>
+##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/lens/">Africa's Schoolhouse: A Learning Map</a>
 
 #####Can you find Chad on blank map? Lestho? Eritrea? This application looks at education in Africa through many lenses: from the data to the actual schoolhouses.
 ###Research Question
