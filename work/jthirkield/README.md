@@ -2,7 +2,7 @@
 
 ##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/stems/">Labor Data in Africa: Stems and Branches</a>
 
-####No matter how wide the gender gaps may be, we should never forget the dependency between men and women--as mothers, fathers, sisters and brothers--that lies at the root of a country's culture. This interactive visualization allows us to view the fragile balances between a country's economic well-being and roles of men and women in its labor force.
+####No matter how wide the gender gap may be, we should never forget the dependency between men and women--as mothers, fathers, sisters and brothers--that lies at the root of a country's culture. This interactive visualization allows us to view the fragile balances between a country's economic well-being and roles of men and women in its labor force.
 ###Research Question
 How can data on gender gaps in the labor force be viewed against broader economic indicators for a country and a region?
 
@@ -15,7 +15,7 @@ This chart employs both wage and business/labor data sets for men and women, and
 
 ##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/lens/">Africa's Schoolhouse: A Leanring Map</a>
 
-#####Can you find Chad on blank map? This application looks at education in Africa through many lenses: from the data to the actual schoolhouses.
+#####Can you find Chad on blank map? Lestho? Eritrea? This application looks at education in Africa through many lenses: from the data to the actual schoolhouses.
 ###Research Question
 What do we see when we look at the African Continent? How can Gender Equity become a lens for learning about Africa?
 
