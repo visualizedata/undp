@@ -1,11 +1,7 @@
 var quanTable;
 
 var countryInfo = [];
-var hdrSorted = [];
-var lifeSorted = [];
-var meanSchoolSorted = [];
-var expSchoolSorted = [];
-var gniSorted = [];
+var sorted = [];
 
 var areas = [];
 var ranks = [];
@@ -26,6 +22,7 @@ var completed = false;
 var centralCheckBox, eastCheckBox, northernCheckBox, southernCheckBox, westCheckBox;
 
 var dropValue = 'HDR Ratings';
+var sortValue = 'By Male Rating';
 
 var femaleImg, maleImg, headerImg;
 
@@ -43,13 +40,13 @@ function preload() {
   femaleImg = loadImage("images/femalesm.png");
   maleImg = loadImage("images/malesm.png");
   headerImg = loadImage("images/header.png");
-  
+
   // load font
   fontLight = loadFont("fonts/Roboto-Light.ttf");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight-78);
+  createCanvas(windowWidth, windowHeight - 78);
   background('#3d3d3d');
   noLoop(); // no need for input or animation here
   noFill();
@@ -64,8 +61,10 @@ function setup() {
     }
     checkBoxes();
     dataFilter();
+    sortFilter();
     completed = true;
   }
+
 
 }
 
@@ -74,10 +73,10 @@ function draw() {
   //createHeader(); // need to fix stroke and placement
   drawBkgrd();
   drawRefGuides();
-  if (completed){
+  if (completed) {
     reload();
   }
-  // console.log("length: " + countryInfo.length);
+
 }
 
 function processData(test) {
@@ -135,23 +134,87 @@ function createHeader() {
 function CountryInfo(row) {
   this.row = row;
   this.area = areas[this.row];
-  this.rank = ranks[this.row];
   this.country = countries[this.row];
+  this.rank = ranks[this.row];
+
   this.hdrF = hdrF[this.row];
   this.hdrM = hdrM[this.row];
-  this.hdrGap = this.hdrF - this.hdrM;
+
   this.lifeF = lifeF[this.row];
   this.lifeM = lifeM[this.row];
-  this.lifeGap = this.lifeF - this.lifeM;
+
   this.meanSchoolF = meanSchoolF[this.row];
   this.meanSchoolM = meanSchoolM[this.row];
-  this.meanSchoolGap = this.meanSchoolF - this.meanSchoolM;
+
   this.expSchoolF = expSchoolF[this.row];
   this.expSchoolM = expSchoolM[this.row];
-  this.expSchoolGap = this.expSchoolF - this.expSchoolM;
+
   this.gniF = gniF[this.row];
   this.gniM = gniM[this.row];
-  this.gniGap = this.gniF - this.gniM;
+
+
+  if (this.hdrM != "..") {
+    if (this.hdrF < this.hdrM) {
+      this.hdrGap = this.hdrF - this.hdrM;
+    } else if (this.hdrF > this.hdrM) {
+      this.hdrGap = this.hdrM - this.hdrF;
+    }
+  } else {
+    this.hdrGap = 0;
+  }
+
+  if (this.lifeM != "..") {
+    if (this.lifeF < this.lifeM) {
+      this.lifeGap = this.lifeF - this.lifeM;
+    } else if (this.lifeF > this.lifeM) {
+      this.lifeGap = this.lifeM - this.lifeF;
+    }
+  } else {
+    this.lifeGap = 0;
+  }
+
+  if (this.meanSchoolM != "..") {
+    this.meanSchoolF = parseFloat(meanSchoolF[this.row]);
+    this.meanSchoolM = parseFloat(meanSchoolM[this.row]);
+    if (this.meanSchoolF < this.meanSchoolM) {
+      this.meanSchoolGap = this.meanSchoolF - this.meanSchoolM;
+    } else if (this.lifeF > this.lifeM) {
+      this.meanSchoolGap = this.meanSchoolM - this.meanSchoolF;
+    }
+  } else {
+    this.meanSchoolF = 0;
+    this.meanSchoolM = 0;
+    this.meanSchoolGap = 1000;
+  }
+
+  if (this.expSchoolM != "..") {
+    this.expSchoolF = parseFloat(expSchoolF[this.row]);
+    this.expSchoolM = parseFloat(expSchoolM[this.row]);
+    if (this.expSchoolF < this.expSchoolM) {
+      this.expSchoolGap = this.expSchoolF - this.expSchoolM;
+    } else if (this.lifeF > this.lifeM) {
+      this.expSchoolGap = this.expSchoolM - this.expSchoolF;
+    }
+  } else {
+    this.expSchoolF = 0;
+    this.expSchoolM = 0;
+    this.expSchoolGap = 1000;
+  }
+
+  if (this.gniM != "..") {
+    this.gniF = parseInt(gniF[this.row]);
+    this.gniM = parseInt(gniM[this.row]);
+    if (this.gniF < this.gniM) {
+      this.gniGap = this.gniF - this.gniM;
+    } else if (this.lifeF > this.lifeM) {
+      this.gniGap = this.gniM - this.gniF;
+    }
+  } else {
+    this.gniF = 0;
+    this.gniM = 0;
+    this.gniGap = 100000000;
+  }
+
 }
 CountryInfo.prototype.showCountryNames = function() {
   push();
@@ -164,7 +227,7 @@ CountryInfo.prototype.showCountryNames = function() {
   text(this.country, 10, 0);
   rotate(0);
   pop();
-  
+
   // fill('rgba(255, 255, 255, 0.3)');
   // for (var i = 0; i < height - 170; i = i + 20) {
   //   rect((this.row * width / 55) + 7, i, 1, 0);
@@ -189,44 +252,40 @@ CountryInfo.prototype.display = function() {
     femaleRank = this.meanSchoolF;
     maleRank = this.meanSchoolM;
     minVal = 0;
-    maxVal = 10;
+    maxVal = 12;
   } else if (dropValue === 'Expected Years of Schooling') {
     femaleRank = this.expSchoolF;
     maleRank = this.expSchoolM;
     minVal = 0;
-    maxVal = 15;
+    maxVal = 18;
   } else if (dropValue === 'GNI') {
     femaleRank = this.gniF;
     maleRank = this.gniM;
     minVal = -2000;
     maxVal = 35000;
   }
-  
-  // countryInfo[this.row].showCountryNames();
-  
-  if (this.area == 'central' && centralCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'east' && eastCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'northern' && northernCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'southern' && southernCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-  
-  if (this.area == 'west' && westCheckBox.checked()){
-    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
-  }
-};
 
-CountryInfo.prototype.sort = function() {
-  // this.xPos = map(this.hdrGap(), min(hdrSorted), max(hdrSorted), 0, width);
+  // countryInfo[this.row].showCountryNames();
+
+  if (this.area == 'central' && centralCheckBox.checked()) {
+    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
+  }
+
+  if (this.area == 'east' && eastCheckBox.checked()) {
+    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
+  }
+
+  if (this.area == 'northern' && northernCheckBox.checked()) {
+    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
+  }
+
+  if (this.area == 'southern' && southernCheckBox.checked()) {
+    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
+  }
+
+  if (this.area == 'west' && westCheckBox.checked()) {
+    drawImages(femaleRank, maleRank, minVal, maxVal, this.row);
+  }
 };
 
 function dataFilter() {
@@ -240,7 +299,7 @@ function dataFilter() {
     option.html(options[i]);
     option.parent(dropdown);
   }
-  
+
   var droptest = createDiv('HDR Ratings');
   droptest.parent('value');
 
@@ -248,62 +307,86 @@ function dataFilter() {
     droptest.html(this.value);
     dropValue = this.value;
     console.log(dropValue);
-    update();
+    reload();
 
   };
 }
 
-function checkBoxes(){
-  
+function sortFilter() {
+  sortDrop = createElement('select');
+  // dropdown.position(width - 180, 50);
+  sortDrop.parent('header');
+  var sortOptions = ['By Male Rating', 'By Female Rating', 'By Gap Amount'];
+  for (var i = 0; i < sortOptions.length; i++) {
+    var sortOption = createElement('option');
+    sortOption.attribute('value', sortOptions[i]);
+    sortOption.html(sortOptions[i]);
+    sortOption.parent(sortDrop);
+  }
+
+  var sorttest = createDiv('By Male Rating');
+  sorttest.parent('sortValue');
+
+  sortDrop.elt.onchange = function() {
+    sorttest.html(this.value);
+    sortValue = this.value;
+    console.log(sortValue);
+    reload();
+
+  };
+}
+
+function checkBoxes() {
+
   centralCheckBox = createCheckbox();
   centralCheckBox.parent('header');
   var centralLabel = createElement('label', 'Central');
   centralLabel.parent('header');
-  
-  centralCheckBox.checked(true);  // passing in an arg sets its state?
+
+  centralCheckBox.checked(true); // passing in an arg sets its state?
   centralCheckBox.elt.onchange = function() {
     console.log("central!");
-    update();
-  }; 
-  
+    reload();
+  };
+
   eastCheckBox = createCheckbox();
   eastCheckBox.parent('header');
   var eastLabel = createElement('label', 'East');
   eastLabel.parent('header');
-  eastCheckBox.checked(true);  // passing in an arg sets its state?
+  eastCheckBox.checked(true); // passing in an arg sets its state?
   eastCheckBox.elt.onchange = function() {
     console.log("east!");
-    update();
+    reload();
   };
 
   northernCheckBox = createCheckbox();
   northernCheckBox.parent('header');
   var northernLabel = createElement('label', 'Northern');
   northernLabel.parent('header');
-  northernCheckBox.checked(true);  // passing in an arg sets its state?
+  northernCheckBox.checked(true); // passing in an arg sets its state?
   northernCheckBox.elt.onchange = function() {
     console.log("Northern!");
-    update();
+    reload();
   };
-  
+
   southernCheckBox = createCheckbox();
   southernCheckBox.parent('header');
   var southernLabel = createElement('label', 'Southern');
   southernLabel.parent('header');
-  southernCheckBox.checked(true);  // passing in an arg sets its state?
+  southernCheckBox.checked(true); // passing in an arg sets its state?
   southernCheckBox.elt.onchange = function() {
     console.log("Southern!");
-    update();
+    reload();
   };
-  
+
   westCheckBox = createCheckbox();
   westCheckBox.parent('header');
   var westLabel = createElement('label', 'West');
   westLabel.parent('header');
-  westCheckBox.checked(true);  // passing in an arg sets its state?
+  westCheckBox.checked(true); // passing in an arg sets its state?
   westCheckBox.elt.onchange = function() {
     console.log("West!");
-    update();
+    reload();
   };
 
 }
@@ -359,19 +442,21 @@ function drawRefGuides() {
     strokeWeight(0);
     textSize(8);
     text("0 yrs", 5, map(0.17, 0, 10, height - 170, 0));
-    text("2 yrs", 5, map(2, 0, 10, height - 170, 0));
-    text("4 yrs", 5, map(4, 0, 10, height - 170, 0));
-    text("6 yrs", 5, map(6, 0, 10, height - 170, 0));
-    text("8 yrs", 5, map(8, 0, 10, height - 170, 0));
-    text("10 yrs", 5, map(9.67, 0, 10, height - 170, 0));
+    text("2 yrs", 5, map(2, 0, 12, height - 170, 0));
+    text("4 yrs", 5, map(4, 0, 12, height - 170, 0));
+    text("6 yrs", 5, map(6, 0, 12, height - 170, 0));
+    text("8 yrs", 5, map(8, 0, 12, height - 170, 0));
+    text("10 yrs", 5, map(10, 0, 12, height - 170, 0));
+    text("12 yrs", 5, map(9.67, 0, 10, height - 170, 0));
     rect(0, map(0, 0, 10, height - 170, 0), width, 1);
 
     fill("rgba(255, 255, 255, 0.1)");
     stroke("rgba(255, 255, 255, 0.1)");
-    rect(0, map(2, 0, 10, height - 170, 0), width, 1);
-    rect(0, map(4, 0, 10, height - 170, 0), width, 1);
-    rect(0, map(6, 0, 10, height - 170, 0), width, 1);
-    rect(0, map(8, 0, 10, height - 170, 0), width, 1);
+    rect(0, map(2, 0, 12, height - 170, 0), width, 1);
+    rect(0, map(4, 0, 12, height - 170, 0), width, 1);
+    rect(0, map(6, 0, 12, height - 170, 0), width, 1);
+    rect(0, map(8, 0, 12, height - 170, 0), width, 1);
+    rect(0, map(10, 0, 12, height - 170, 0), width, 1);
   } else if (dropValue === 'Expected Years of Schooling') {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
@@ -379,22 +464,26 @@ function drawRefGuides() {
     textSize(8);
     text("0 yrs", 5, map(0.22, 0, 14, height - 170, 0));
     text("2 yrs", 5, map(2, 0, 14, height - 170, 0));
-    text("4 yrs", 5, map(4, 0, 14, height - 170, 0));
-    text("6 yrs", 5, map(6, 0, 14, height - 170, 0));
-    text("8 yrs", 5, map(8, 0, 14, height - 170, 0));
-    text("10 yrs", 5, map(10, 0, 14, height - 170, 0));
-    text("12 yrs", 5, map(12, 0, 14, height - 170, 0));
-    text("14 yrs", 5, map(13.55, 0, 14, height - 170, 0));
+    text("4 yrs", 5, map(4, 0, 18, height - 170, 0));
+    text("6 yrs", 5, map(6, 0, 18, height - 170, 0));
+    text("8 yrs", 5, map(8, 0, 18, height - 170, 0));
+    text("10 yrs", 5, map(10, 0, 18, height - 170, 0));
+    text("12 yrs", 5, map(12, 0, 18, height - 170, 0));
+    text("14 yrs", 5, map(14, 0, 18, height - 170, 0));
+    text("16 yrs", 5, map(16, 0, 18, height - 170, 0));
+    text("18 yrs", 5, map(13.55, 0, 14, height - 170, 0));
     rect(0, map(0, 0, 15, height - 170, 0), width, 1);
 
     fill("rgba(255, 255, 255, 0.1)");
     stroke("rgba(255, 255, 255, 0.1)");
-    rect(0, map(2, 0, 14, height - 170, 0), width, 1);
-    rect(0, map(4, 0, 14, height - 170, 0), width, 1);
-    rect(0, map(6, 0, 14, height - 170, 0), width, 1);
-    rect(0, map(8, 0, 14, height - 170, 0), width, 1);
-    rect(0, map(10, 0, 14, height - 170, 0), width, 1);
-    rect(0, map(12, 0, 14, height - 170, 0), width, 1);
+    rect(0, map(2, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(4, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(6, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(8, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(10, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(12, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(14, 0, 18, height - 170, 0), width, 1);
+    rect(0, map(16, 0, 18, height - 170, 0), width, 1);
   } else if (dropValue === 'GNI') {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
@@ -407,7 +496,7 @@ function drawRefGuides() {
     text("20000 GNI", 5, map(20000, -2000, 35000, height - 170, 0));
     text("25000 GNI", 5, map(25000, -2000, 35000, height - 170, 0));
     text("30000 GNI2", 5, map(30000, -2000, 35000, height - 170, 0));
-     text("35000 GNI2", 5, map(34000, -2000, 35000, height - 170, 0));
+    text("35000 GNI2", 5, map(34000, -2000, 35000, height - 170, 0));
 
     rect(0, map(100, 100, 30000, height - 170, 0), width, 1);
 
@@ -419,12 +508,11 @@ function drawRefGuides() {
     rect(0, map(20000, -2000, 35000, height - 170, 0), width, 1);
     rect(0, map(25000, -2000, 35000, height - 170, 0), width, 1);
     rect(0, map(30000, -2000, 35000, height - 170, 0), width, 1);
-
   }
 }
 
-function drawDottedGuides(){
-  for (var j = 1; j < 54; j++){
+function drawDottedGuides() {
+  for (var j = 1; j < 54; j++) {
     fill('rgba(255, 255, 255, 0.3)');
     for (var i = 0; i < height - 170; i = i + 20) {
       rect((j * width / 55) + 7, i, 1, 0);
@@ -433,55 +521,332 @@ function drawDottedGuides(){
   }
 }
 
-function update() {
-  if (dropValue == 'HDR Ratings') {
-    reload();
-  } else if (dropValue === 'Life Expectancy') {
-    reload();
-  } else if (dropValue === 'Avg. Years of Schooling') {
-    reload();
-  } else if (dropValue === 'Expected Years of Schooling') {
-    reload();
-  } else if (dropValue === 'GNI') {
-    reload();
-  }
-}
-
-function reload(){
+function reload() {
   drawBkgrd();
   drawRefGuides();
-  
-  for (var i = 0; i < countryInfo.length; i++) {
-    countryInfo[i].display();
+
+
+  sortMe();
+
+  for (var i = 0; i < sorted.length; i++) {
+    sorted[i].display();
+    sorted[i].showCountryNames();
   }
   drawDottedGuides();
-  for (var i = 0; i < countryInfo.length; i++) {
-    countryInfo[i].display();
-  }
-  
+
 }
 
-function drawImages(femaleRank, maleRank, minVal, maxVal, row){
-    if (femaleRank > 0 || maleRank > 0) {
-
-      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
-
-      beginShape();
-      stroke('rgba(255, 255, 255, 0.1)');
-      strokeWeight(6);
-      //lines
-      if (femaleRank < maleRank) {
-        vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-        vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
-      } else {
-        vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-        vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+function sortMe() {
+  // hdr
+  if (dropValue == 'HDR Ratings' && sortValue == 'By Male Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.hdrM > b.hdrM) {
+        return 1;
       }
-      endShape();
+      if (a.hdrM < b.hdrM) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'HDR Ratings' && sortValue == 'By Female Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.hdrF > b.hdrF) {
+        return 1;
+      }
+      if (a.hdrF < b.hdrF) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'HDR Ratings' && sortValue == 'By Gap Amount') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.hdrGap > b.hdrGap) {
+        return 1;
+      }
+      if (a.hdrGap < b.hdrGap) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+
+  // life
+  if (dropValue == 'Life Expectancy' && sortValue == 'By Male Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.lifeM > b.lifeM) {
+        return 1;
+      }
+      if (a.lifeM < b.lifeM) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'Life Expectancy' && sortValue == 'By Female Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.lifeF > b.lifeF) {
+        return 1;
+      }
+      if (a.lifeF < b.lifeF) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'Life Expectancy' && sortValue == 'By Gap Amount') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.lifeGap > b.lifeGap) {
+        return 1;
+      }
+      if (a.lifeGap < b.lifeGap) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+
+  // Avg. Years of Schooling
+  if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Male Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.meanSchoolM > b.meanSchoolM) {
+        return 1;
+      }
+      if (a.meanSchoolM < b.meanSchoolM) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+
+    for (var i = 0; i < countryInfo.length; i++) {
+      console.log("meanSchoolM: " + countryInfo[i].meanSchoolM + " || " + sorted[i].meanSchoolM);
     }
+  }
+  if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Female Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.meanSchoolF > b.meanSchoolF) {
+        return 1;
+      }
+      if (a.meanSchoolF < b.meanSchoolF) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Gap Amount') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.meanSchoolGap > b.meanSchoolGap) {
+        return 1;
+      }
+      if (a.meanSchoolGap < b.meanSchoolGap) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+
+  // Exp. Years of Schooling
+  if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Male Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.expSchoolM > b.expSchoolM) {
+        return 1;
+      }
+      if (a.expSchoolM < b.expSchoolM) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Female Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.expSchoolF > b.expSchoolF) {
+        return 1;
+      }
+      if (a.expSchoolF < b.expSchoolF) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Gap Amount') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.expSchoolGap > b.expSchoolGap) {
+        return 1;
+      }
+      if (a.expSchoolGap < b.expSchoolGap) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+
+  // GNI
+  if (dropValue == 'GNI' && sortValue == 'By Male Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.gniM > b.gniM) {
+        return 1;
+      }
+      if (a.gniM < b.gniM) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'GNI' && sortValue == 'By Female Rating') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.gniF > b.gniF) {
+        return 1;
+      }
+      if (a.gniF < b.gniF) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+  if (dropValue == 'GNI' && sortValue == 'By Gap Amount') {
+    sorted = [];
+    sorted = countryInfo.sort(function(a, b) {
+      if (a.gniGap > b.gniGap) {
+        return 1;
+      }
+      if (a.gniGap < b.gniGap) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
+
+    sorted = sorted.map(function(val, ind) {
+      val.row = ind;
+      return val;
+    });
+  }
+
+
+
 }
+
+function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
+  if (femaleRank > 0 || maleRank > 0) {
+
+    image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+    image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+
+    beginShape();
+    stroke('rgba(255, 255, 255, 0.1)');
+    strokeWeight(6);
+    //lines
+    if (femaleRank < maleRank) {
+      vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
+      vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+    } else {
+      vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
+      vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+    }
+    endShape();
+  }
+}
+
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight-78);
+  resizeCanvas(windowWidth, windowHeight - 78);
 }

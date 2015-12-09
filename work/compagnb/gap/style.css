@@ -49,6 +49,10 @@ span.underline {
   visibility: hidden;
   height: 0;
 }
+#sortValue{
+  visibility: hidden;
+  height: 0;
+}
 
 
 input[type="checkbox"]{
@@ -67,9 +71,9 @@ label {
   font-family: 'Roboto', sans-serif;
   font-weight: 200;
   font-size: 12px;
-  padding-right: 11%;
+  padding-right: 5%;
 }
 
 select{
-  margin-left: 60px;
+  margin-left: 5%;
 }

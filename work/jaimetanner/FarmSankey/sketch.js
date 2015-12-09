@@ -118,6 +118,21 @@ function showData() {
       }
     }
   }
+  stroke(0);
+  fill(0);
+  textSize(7);
+  var categories = [];
+  var places = [];
+  categories.push("LAND", "LABOUR", "NON_LABOUR INPUTS", "INFO", "ACCCESS TO MARKETS", "HUMAN CAPITOL", "WEALTH");
+  places.push(0.22, 0.38, 0.55, 0.68, 0.72, 0.835, 0.92);
+  for (var i = 0; i < places.length; i++) {
+    push();
+    translate(width * 0.985, height * places[i]);
+    rotate(HALF_PI);
+    text(categories[i], 0, 0);
+    pop();
+  }
+
 }
 
 function mouseMoved() {
@@ -151,12 +166,12 @@ function mouseMoved() {
         var white = color(243, 235, 223);
         stroke(white);
         fill(white);
-        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.23, height * 0.03);
+        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
 
         checker = false;
         stroke(beige);
         fill(beige);
-        rect(width * 0.01, height * 0.1, width * 0.6, height * 0.1);
+        rect(width * 0.01, height * 0.1, width * 0.62, height * 0.1);
         selectedConnect(j, i);
       }
     }
@@ -168,7 +183,7 @@ function mouseMoved() {
 function connect(n, i) {
   var black = color(0);
   textFont(latoHair);
-  textSize(16);
+  textSize(14);
 
   strokeWeight(0.2);
   noFill();
@@ -184,15 +199,12 @@ function connect(n, i) {
   stroke(170);
   fill(170);
   text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
-  // endY.push(height * 0.14 + i * (height * 0.04));
-
-  // console.log(" n : " + n + "....i =" + i);
 }
 
 /*-----------selected curves-----------*/
 function selectedConnect(n, i) {
   textFont(latoHair);
-  textSize(16);
+  textSize(14);
 
   strokeWeight(2.5);
   noFill();
@@ -204,16 +216,12 @@ function selectedConnect(n, i) {
   // fill(beige);
   // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.040)), width * 0.22, height * 0.03);
 
-  // var white = color(255, 255, 255);
-  // stroke(white);
-  // fill(white);
-  // rect(width * 0.75, height * 0.115 + ((2) * (height * 0.040)), width * 0.22, height * 0.07);
-
-
   strokeWeight(1);
   fill(0);
   stroke(0);
   text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
+
+
 
   endY.push(height * 0.14 + i * (height * 0.04));
   stroke(200, 50, 50);
