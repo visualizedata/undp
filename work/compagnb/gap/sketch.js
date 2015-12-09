@@ -291,7 +291,7 @@ CountryInfo.prototype.display = function() {
 function dataFilter() {
   dropdown = createElement('select');
   // dropdown.position(width - 180, 50);
-  dropdown.parent('header');
+  dropdown.parent('filters');
   var options = ['HDR Ratings', 'Life Expectancy', 'Avg. Years of Schooling', 'Expected Years of Schooling', 'GNI'];
   for (var i = 0; i < options.length; i++) {
     var option = createElement('option');
@@ -315,7 +315,7 @@ function dataFilter() {
 function sortFilter() {
   sortDrop = createElement('select');
   // dropdown.position(width - 180, 50);
-  sortDrop.parent('header');
+  sortDrop.parent('filters');
   var sortOptions = ['By Male Rating', 'By Female Rating', 'By Gap Amount'];
   for (var i = 0; i < sortOptions.length; i++) {
     var sortOption = createElement('option');
@@ -339,9 +339,9 @@ function sortFilter() {
 function checkBoxes() {
 
   centralCheckBox = createCheckbox();
-  centralCheckBox.parent('header');
+  centralCheckBox.parent('filters');
   var centralLabel = createElement('label', 'Central');
-  centralLabel.parent('header');
+  centralLabel.parent('filters');
 
   centralCheckBox.checked(true); // passing in an arg sets its state?
   centralCheckBox.elt.onchange = function() {
@@ -350,9 +350,9 @@ function checkBoxes() {
   };
 
   eastCheckBox = createCheckbox();
-  eastCheckBox.parent('header');
+  eastCheckBox.parent('filters');
   var eastLabel = createElement('label', 'East');
-  eastLabel.parent('header');
+  eastLabel.parent('filters');
   eastCheckBox.checked(true); // passing in an arg sets its state?
   eastCheckBox.elt.onchange = function() {
     console.log("east!");
@@ -360,9 +360,9 @@ function checkBoxes() {
   };
 
   northernCheckBox = createCheckbox();
-  northernCheckBox.parent('header');
+  northernCheckBox.parent('filters');
   var northernLabel = createElement('label', 'Northern');
-  northernLabel.parent('header');
+  northernLabel.parent('filters');
   northernCheckBox.checked(true); // passing in an arg sets its state?
   northernCheckBox.elt.onchange = function() {
     console.log("Northern!");
@@ -370,9 +370,9 @@ function checkBoxes() {
   };
 
   southernCheckBox = createCheckbox();
-  southernCheckBox.parent('header');
+  southernCheckBox.parent('filters');
   var southernLabel = createElement('label', 'Southern');
-  southernLabel.parent('header');
+  southernLabel.parent('filters');
   southernCheckBox.checked(true); // passing in an arg sets its state?
   southernCheckBox.elt.onchange = function() {
     console.log("Southern!");
@@ -380,9 +380,9 @@ function checkBoxes() {
   };
 
   westCheckBox = createCheckbox();
-  westCheckBox.parent('header');
+  westCheckBox.parent('filters');
   var westLabel = createElement('label', 'West');
-  westLabel.parent('header');
+  westLabel.parent('filters');
   westCheckBox.checked(true); // passing in an arg sets its state?
   westCheckBox.elt.onchange = function() {
     console.log("West!");
@@ -828,17 +828,23 @@ function sortMe() {
 function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
   if (femaleRank > 0 || maleRank > 0) {
 
-    image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-    image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+    // image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+    // image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
 
     beginShape();
     stroke('rgba(255, 255, 255, 0.1)');
     strokeWeight(6);
     //lines
     if (femaleRank < maleRank) {
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+    
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
     } else {
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+      
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
     }
