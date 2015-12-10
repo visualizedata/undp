@@ -64,7 +64,7 @@ function showData() {
   text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
   text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
   textSize(20);
-  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 4, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
   for (var k = 0; k < table.getRowCount(); k++) {
     if (EGNIM[k] < EGNIF[k]) {
       c1[k] = EGNIF[k];
@@ -81,9 +81,9 @@ function showData() {
 
     //school lines
     strokeWeight(2);
-    stroke(50, 153, 143);
+    stroke(121, 181, 231);
     line((windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8) - (MYSF[k] * 20));
-    stroke(136, 193, 134);
+    stroke(230, 113, 63);
     line((windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8) - (MYSM[k] * 20));
   }
 }
@@ -102,9 +102,9 @@ function mouseReleased() {
         noFill();
         arc((diam[l] / 2) + (windowWidth / 25) + c2[l], (windowHeight * 3 / 8), diam[l], diam[l], 0, PI);
         strokeWeight(2);
-        stroke(50,153,143);
+        stroke(121, 181, 231);
         line((windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8) - (MYSF[l] * 20));
-        stroke(136,193,134);
+        stroke(230, 113, 63);
         line((windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8) - (MYSM[l] * 20));
         fill(135);
         textSize(14);
@@ -117,7 +117,7 @@ function mouseReleased() {
         text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
         text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
         textSize(20);
-        text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+        // text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
       }
     }
     noStroke();
@@ -129,9 +129,9 @@ function mouseReleased() {
       noFill();
       arc((diam[j] / 2) + (windowWidth / 25) + c2[j], (windowHeight * 3 / 8), diam[j], diam[j], 0, PI);
       strokeWeight(2);
-      stroke(2, 39, 95);
+      stroke(19, 79, 129);
       line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
-      stroke(70,131,68);
+      stroke(153, 36, 0);
       line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
     }
     noStroke();
@@ -139,11 +139,11 @@ function mouseReleased() {
     textFont(sans);
     textSize(24);
     text(country[w], 25, windowHeight - 110);
-    fill(50,153,143);
+    fill(121, 181, 231);
     textSize(14);
     text("Estimated GNI Female: ", 25, windowHeight - 90);
     text("Mean Years Schooling Female: ", 25, windowHeight - 70);
-    fill(136,193,134);
+    fill(230, 113, 63);
     text("Estimated GNI Male: ", 25, windowHeight - 50);
     text("Mean Years Schooling Male: ", 25, windowHeight - 30);
     fill(235);
@@ -157,9 +157,9 @@ function mouseReleased() {
     noFill();
     stroke(235);
     arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
-    stroke(50,153,143);
+    stroke(121, 181, 231);
     line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
-    stroke(136,193,134);
+    stroke(230, 113, 63);
     line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
     noStroke();
     fill(135);
@@ -173,7 +173,7 @@ function mouseReleased() {
     text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
     text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
     textSize(20);
-    text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
+    // text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth /2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
   }
 }
 
@@ -207,9 +207,9 @@ function mouseMoved() {
     noFill();
     arc((diam[j] / 2) + (windowWidth / 25) + c2[j], (windowHeight * 3 / 8), diam[j], diam[j], 0, PI);
     strokeWeight(2);
-    stroke(2, 39, 95);
+    stroke(19, 79, 129);
     line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
-    stroke(70, 131, 68);
+    stroke(153, 36, 0);
     line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
   }
   textAlign(CENTER);
@@ -220,12 +220,11 @@ function mouseMoved() {
   text(country[w], (windowWidth / 25) + EGNIF[w] + (diam[w]/2), (windowHeight * 3 / 8) + (diam[w] / 2) + 25);
   textAlign(LEFT);
   text(country[w], 25, windowHeight - 110);
-  fill(50, 153, 143);
-  
+  fill(121, 181, 231);
   textSize(14);
   text("Estimated GNI Female: ", 25, windowHeight - 90);
   text("Mean Years Schooling Female: ", 25, windowHeight - 70);
-  fill(136, 193, 134);
+  fill(230, 113, 63);
   text("Estimated GNI Male: ", 25, windowHeight - 50);
   text("Mean Years Schooling Male: ", 25, windowHeight - 30);
 
@@ -244,9 +243,9 @@ function mouseMoved() {
   noFill();
   stroke(235);
   arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
-  stroke(50, 153, 143);
+  stroke(121, 181, 231);
   line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
-  stroke(136, 193, 134);
+  stroke(230, 113, 63);
   line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
   noStroke();
   fill(135);
@@ -260,29 +259,7 @@ function mouseMoved() {
   text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
   text("Mean Years Schooling", (windowWidth / 25) - 50, (windowHeight * 3 / 8) - 130, (windowWidth / 25) - 25, (windowHeight * 3 / 8) - 90);
   textSize(20);
-  text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
- 
-//   var arclength = 0;
-//   for (var k = 0; k < country.length; k++) {
-
-//     // The character and its width
-//     var currentChar = country[w].charAt(k);
-//     // Instead of a constant width, we check the width of each character.
-//     var q = textWidth(currentChar);
-//     // Each box is centered so we move half the width
-//     arclength += q / 2;
-//     // Angle in radians is the arclength divided by the radius
-//     // Starting on the left side of the circle by adding PI
-//     var theta = PI + arclength / rSize;
-//     push();
-//     translate(rSize * cos(theta), rSize * sin(theta));
-//     rotate(theta + PI / 2);
-//     text(currentChar, 0, 0);
-
-//     pop();
-//     // Move halfway again
-//     arclength += q / 2;
-// }
+  // text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 2, 20, windowWidth - 15, (windowHeight * 3 / 8) - (250));
   
 }
 
