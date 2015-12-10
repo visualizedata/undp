@@ -10,6 +10,7 @@
   <link href="web/css/style.css" rel="stylesheet">
   <link href="web/css/color.css" rel="stylesheet">
   <link href="web/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 </head>
 
@@ -70,7 +71,7 @@
 
     <!--Jacob-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="jp1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">The Story Behind the Data</span> (<a href="https://github.com/jacobmbr">Jacob Romer</a>)
@@ -79,10 +80,30 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jacobromer/gdi/index.html" width="100%" height="640"></iframe>
+      <img id="jp1i" class="col-sm-12" src="./work/jacobromer/gdi.png">
+      <script>
+        var myIframe, script;
+        $("#jp1").hover(function() {
+          myIframe = document.getElementById("jp1f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jacobromer/gdi/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jp1f").show();
+          $("#jp1i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jp1f").hide();
+          $("#jp1i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jp1f" width="100%" height="640"></iframe>
     </div>
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="jp2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Exploring the GDI</span> (<a href="https://github.com/jacobmbr">Jacob Romer</a>)
@@ -91,12 +112,32 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jacobromer/story/index.html" width="100%" height="640"></iframe>
+      <img id="jp2i" class="col-sm-12" src="./work/jacobromer/story.png">
+      <script>
+        var myIframe, script;
+        $("#jp2").hover(function() {
+          myIframe = document.getElementById("jp2f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jacobromer/story/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jp2f").show();
+          $("#jp2i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jp2f").hide();
+          $("#jp2i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jp2f" width="100%" height="640"></iframe>
     </div>
 
     <!--Jaime-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="jaime_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Agricultural Productivity Differences Between Male and Female Managed Farms</span> (<a href="https://github.com/jat3002">Jaime Tanner</a>)
@@ -105,11 +146,31 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jaimetanner/AerialPhoto/index.html" width="100%" height="640"></iframe>
+      <img id="jaime_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">
+      <script>
+        var myIframe, script;
+        $("#jaime_p1").hover(function() {
+          myIframe = document.getElementById("jaime_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jaimetanner/AerialPhoto/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jaime_p1_f").show();
+          $("#jaime_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jaime_p1_f").hide();
+          $("#jaime_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jaime_p1_f" width="100%" height="640"></iframe>
     </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="jaime_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Child Marriage and the Gender Gap</span> (<a href="https://github.com/jat3002">Jaime Tanner</a>)
@@ -118,7 +179,27 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jaimetanner/Gaps/index.html"></iframe>
+      <!--<img id="jaime_p2_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#jaime_p2").hover(function() {
+          myIframe = document.getElementById("jaime_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jaimetanner/Gaps/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jaime_p2_f").show();
+          // $("#jaime_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jaime_p2_f").hide();
+          // $("#jaime_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jaime_p2_f" width="100%" height="640"></iframe>
     </div>
 
     <h3 class="col-sm-12">Equal opportunities for economic, sociocultural and political advancement</h3>
@@ -128,7 +209,7 @@
 
     <!--Jon-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="jon_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Stems and Branches: Charting Gender Gaps in Sub-Saharan Africa's Labor Markets</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
@@ -137,11 +218,31 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jthirkield/stems/index.html"></iframe>
+      <img id="jon_p1_i" class="col-sm-12" src="./work/jthirkield/stems/stems_branches.png">
+      <script>
+        var myIframe, script;
+        $("#jon_p1").hover(function() {
+          myIframe = document.getElementById("jon_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jthirkield/stems/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jon_p1_f").show();
+          $("#jon_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jon_p1_f").hide();
+          $("#jon_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jon_p1_f" width="100%" height="640"></iframe>
     </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="jon_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">The African Continent: Gender Equity in Focus</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
@@ -150,12 +251,32 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/jthirkield/lens/index.html"></iframe>
+      <img id="jon_p2_i" class="col-sm-12" src="./work/jthirkield/lens/niger.jpg">
+      <script>
+        var myIframe, script;
+        $("#jon_p2").hover(function() {
+          myIframe = document.getElementById("jon_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/jthirkield/lens/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#jon_p2_f").show();
+          $("#jon_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#jon_p2_f").hide();
+          $("#jon_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="jon_p2_f" width="100%" height="640"></iframe>
     </div>
 
     <!--Justine-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="justine_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Human Development Index Gender Gap</span> (<a href="https://github.com/Justinerk2">Justine Keller</a>)
@@ -164,11 +285,31 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/justinekeller/Project1/index.html"></iframe>
+      <!--<img id="justine_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#justine_p1").hover(function() {
+          myIframe = document.getElementById("justine_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/justinekeller/Project1/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#justine_p1_f").show();
+          // $("#justine_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#justine_p1_f").hide();
+          // $("#justine_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="justine_p1_f" width="100%" height="640"></iframe>
     </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="justine_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender</span> (<a href="https://github.com/Justinerk2">Justine Keller</a>)
@@ -177,7 +318,27 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/justinekeller/Project2/index.html"></iframe>
+      <!--<img id="justine_p2_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#justine_p2").hover(function() {
+          myIframe = document.getElementById("justine_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/justinekeller/Project2/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#justine_p2_f").show();
+          // $("#justine_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#justine_p2_f").hide();
+          // $("#justine_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="justine_p2_f" width="100%" height="640"></iframe>
     </div>
 
     <h3 class="col-sm-12">Institutions and the political economy</h3>
@@ -187,7 +348,7 @@
 
     <!--Linnea-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="linnea_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Gender imbalance & legislation in Africa</span> (<a href="https://github.com/llapp">Linnea Lapp</a>)
@@ -196,11 +357,31 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/linnealapp/childMarriageProject.js/index.html"></iframe>
+     <!--<img id="linnea_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#linnea_p1").hover(function() {
+          myIframe = document.getElementById("linnea_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/linnealapp/childMarriageProject.js/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#linnea_p1_f").show();
+          // $("#linnea_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#linnea_p1_f").hide();
+          // $("#linnea_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="linnea_p1_f" width="100%" height="640"></iframe>
     </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="linnea_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Gender imbalance & marital social norms in Africa</span> (<a href="https://github.com/llapp">Linnea Lapp</a>)
@@ -209,8 +390,27 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/linnealapp/legislationProject.js/index.html"></iframe>
-    </div>
+   <!--<img id="linnea_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#linnea_p2").hover(function() {
+          myIframe = document.getElementById("linnea_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/linnealapp/legislationProject.js/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#linnea_p2_f").show();
+          // $("#linnea_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#linnea_p2_f").hide();
+          // $("#linnea_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="linnea_p2_f" width="100%" height="640"></iframe>    </div>
 
     <h3 class="col-sm-12">Education Gaps</h3>
     <div id="stripe-1" class="bottom-stripe col-sm-12">
@@ -219,7 +419,7 @@
 
     <!--Gabi-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="gabi_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Combating Gender Disparities in Education Levels</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
@@ -228,30 +428,69 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/gabisteele/Project_1_Education/index.html"></iframe>
-    </div>
+   <!--<img id="gabi_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#gabi_p1").hover(function() {
+          myIframe = document.getElementById("gabi_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/gabisteele/Project_1_Education/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#gabi_p1_f").show();
+          // $("#gabi_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#gabi_p1_f").hide();
+          // $("#gabi_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="gabi_p1_f" width="100%" height="640"></iframe>      </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="gabi_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Investigating Opinions and Occurances of the Domestic Maltreatment of Women in Africa</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
         </p>
-        <button type="button" class="btn btn-lg btn-default pull-right" onClick="location.href='./work/gabisteele/Project2_WomenData_Dec10'">
+        <button type="button" class="btn btn-lg btn-default pull-right" onClick="location.href='./work/gabisteele/Project2_WomenData_Dec10/index.html'">
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/gabisteele/Project2_WomenData_Dec10/index.html"></iframe>
+   <!--<img id="gabi_p2_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#gabi_p2").hover(function() {
+          myIframe = document.getElementById("gabi_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/gabisteele/Project2_WomenData_Dec10/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#gabi_p2_f").show();
+          // $("#gabi_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#gabi_p2_f").hide();
+          // $("#gabi_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="gabi_p2_f" width="100%" height="640"></iframe> 
     </div>
 
     <h3 class="col-sm-12">Men and women’s opportunities in markets, supporting livelihoods</h3>
     <div id="stripe-1" class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
-    
+
     <!--Barbara-->
     <!--Project1-->
-    <div class="project col-sm-12">
+    <div id="barbara_p1" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Impacts of economic matters on gender equality</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
@@ -260,11 +499,30 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="http://b.parsons.edu/~compagnb/AfricaMapTest2/index.html"></iframe>
-    </div>
+   <!--<img id="barbara_p1_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#barbara_p1").hover(function() {
+          myIframe = document.getElementById("barbara_p1_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "http://b.parsons.edu/~compagnb/AfricaMapTest2/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#barbara_p1_f").show();
+          // $("#barbara_p1_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#barbara_p1_f").hide();
+          // $("#barbara_p1_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="barbara_p1_f" width="100%" height="640"></iframe>     </div>
 
     <!--Project2-->
-    <div class="project col-sm-12">
+    <div id="barbara_p2" class="project col-sm-12">
       <row>
         <p class="col-sm-11">
           <span class="title">Impacts of economic matters on gender equality</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
@@ -273,8 +531,27 @@
           <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
         </button>
       </row>
-      <iframe class="lazyload" src="./work/compagnb/gap/index.html"></iframe>
-    </div>
+   <!--<img id="barbara_p2_i" class="col-sm-12" src="./work/jaimetanner/AerialPhoto/EthiopiaFinal.png">-->
+      <script>
+        var myIframe, script;
+        $("#barbara_p2").hover(function() {
+          myIframe = document.getElementById("barbara_p2_f");
+          script = myIframe.contentWindow.document.createElement("iframe");
+          // script.type = "text/html";
+          script.src = "./work/compagnb/gap/index.html";
+          script.style.width = "100%";
+          script.style.height = "640px";
+          myIframe.contentWindow.document.body.appendChild(script);
+          $("#barbara_p2_f").show();
+          // $("#barbara_p2_i").hide();
+        }, function() {
+          script = null;
+          myIframe = null;
+          $("#barbara_p2_f").hide();
+          // $("#barbara_p2_i").show();
+        });
+      </script>
+      <iframe class="col-sm-12 collapse" id="barbara_p2_f" width="100%" height="640"></iframe>     </div>
 
     <div id="stripe-1" class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
@@ -342,7 +619,6 @@
     </div>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="web/js/bootstrap.min.js"></script>
   <script src="web/js/lazysizes.min.js"></script>
   <script src="web/js/custom.js"></script>

@@ -92,6 +92,12 @@ iframe {
     margin-bottom: 20px;
 }
 
+img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+}
+
 h2 {
     font-family: "neue-regular" !important;
     font-size: 14.5pt;
