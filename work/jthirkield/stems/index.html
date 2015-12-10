@@ -2,19 +2,11 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Stems and Branches: Charting Gender Gaps in Sub-Saharan Africa's Labor Markets</title>
+    <title>STEMS AND BRANCHES: GENDER GAPS AND DIVISIONS OF LABOR IN AFRICA</title>
     <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="libraries/p5.js" type="text/javascript"></script>
-
-    <script src="libraries/p5.dom.js" type="text/javascript"></script>
-    <script src="libraries/p5.sound.js" type="text/javascript"></script>
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+   <script src="libraries/p5.js" type="text/javascript"></script>
 
     <script src="sketch.js" type="text/javascript"></script>
       <link rel="stylesheet" type="text/css" href="styles.css" />
@@ -22,33 +14,32 @@
     <style> body {padding: 0; margin: 0;} canvas {vertical-align: top;} </style>
   </head>
   <body>
+    
     <div class="topbar">
-      <span class="header">Stems and Branches</span>
-      <span class="tagline">Charting Gender Gaps in Sub-Saharan Africa's Labor Markets</span>
+      <span class="header">STEMS AND BRANCHES</span>
+      <span class="tagline">GENDER GAPS AND DIVISIONS OF LABOR IN AFRICA</span>
       </div>
       <div class="filters">
-        <p>
-<span class="west"> <input type="checkbox" onchange="regionSort(0)" checked>&nbsp;West&nbsp;</span>
-<span class="central"> <input type="checkbox" onchange="regionSort(1)" checked>&nbsp;Central&nbsp;</span>
- <span class="east"><input type="checkbox" onchange="regionSort(2)" checked>&nbsp;East&nbsp;</span>
- <span class="southern"><input type="checkbox" onchange="regionSort(3)" checked>&nbsp;Southern&nbsp;</span>
- </p>
- </div>
- <div class="select1"><p>View Gender Gaps by&nbsp;&nbsp;<select id="comboA" onchange="dataChange(this)">
+
+        <p>REGIONS</p>
+<p class="west"><input type="checkbox" onchange="regionSort(0)" checked>&nbsp;West&nbsp;</p>
+<p class="central"> <input type="checkbox" onchange="regionSort(1)" checked>&nbsp;Central&nbsp;</p>
+ <p class="east"><input type="checkbox" onchange="regionSort(2)" checked>&nbsp;East&nbsp;</p>
+ <p class="southern"><input type="checkbox" onchange="regionSort(3)" checked>&nbsp;Southern&nbsp;</p>
+    </div>
+         <span class="branch"> <p>BRANCHES (Y-Axis)&nbsp;<select id="comboA" onchange="dataChange(this)">
 <option value=1>Annual Income</option>
-<option value=2>% Participation in Business Ownership</option>
-<option value=3>% of Top Managerial Positions</option>
-<option value=4>% Companies with Majority Female Ownership</option>
-<option value=5>% Permanent Full Time Workers</option>
-<option value=6>% of Full Time Production Workers</option>
-<option value=7>% of Full Time Non-Production Workers</option>
-</select></p>
-</div>
-<div class="select2">
-<p>Sort Countries by&nbsp;&nbsp;<select id="xaxis" onchange="sortChange(this)"><option value=0>Countries By Human Development Index</option>
-<option value=1>Countries By Poverty Head Count Ratio</option>
+<option value=2>Business Ownership</option>
+<option value=3>Managerial Positions</option>
+<option value=4>Female Ownership</option>
+<option value=5>Full Time Workers</option>
+<option value=6>Production Workers</option>
+<option value=7>Non-Production Workers</option>
+</select></p></span>
+<span class="stem"><p>STEMS (X-Axis)&nbsp;<select id="xaxis" onchange="sortChange(this)"><option value=0>Human Development Index</option>
+<option value=1>Poverty Head Count Ratio</option>
 </select>
-</p>
- </div>
+</p></span>
+
   </body>
 </html>

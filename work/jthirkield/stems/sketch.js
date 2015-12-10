@@ -14,6 +14,8 @@ var xmaxmin = [];
 var dataset = 0;
 var dataspec = 2;
 var datasort = 0;
+var timeoutTrack = 0;
+var lasttimer = 2000;
 //variables for the default X data
 var basedata = 0;
 var hdimax = 190;
@@ -28,6 +30,12 @@ var eastColor;
 var southernColor;
 var westColor;
 var backColor;
+var rolloverArray = [];
+var countrySelected = "none";
+var backopac = 100;
+var startup = true;
+var tracktimer = true;
+var trackWindow = false;
 
 
 
@@ -43,12 +51,21 @@ function setup() {
 // centralColor = color(255, 140, 0);
 // eastColor = color(50, 205, 50);
 // southernColor = color(65, 105, 225);
-// westColor =  color(220, 20, 60);
-centralColor = color('GoldenRod');
-eastColor = color('SeaGreen');
-southernColor = color('MidnightBlue');
-westColor =  color('Maroon');
-backColor = color(210,180,140,40)
+ //westColor =  color(220, 20, 60,100);
+ //GoldenRod
+ //SeaGreen
+ //MidnightBlue
+ //Maroon
+ colorMode(RGB, 255, 255, 255, 255);
+centralColor = color(218,165,32,255);
+eastColor = color(46, 139, 87,255);
+southernColor = color(25,25,112,255);
+westColor =  color(128,0,0,255);
+centralFade = color(218,165,32,100);
+eastFade = color(46, 139, 87,100);
+southernFade = color(25,25,112,100);
+westFade =  color(128,0,0,100);
+backColor = color(210,180,140,100);
 
 // backColor = color(238,226,210);
 // //backColor = color(0);
@@ -59,7 +76,7 @@ backColor = color(210,180,140,40)
 // //southernColor = color(2, 39, 95);
 // westColor =  color(50,153,143);
 // //westColor =  color(185,61,71);
-
+frameRate(1);
 background(255);
 background(backColor);
 
@@ -108,9 +125,7 @@ function setData() {
 
 }
 
-function draw() {
-  
-}
+
 function setAlt () {
   dataset = 0;
  }
@@ -199,6 +214,7 @@ for (var i = 0; i < countryObject.length; i++) {
       background(backColor);
     makeAxis();
     namecollision = [];
+      rolloverArray = [];
  for (var i = 0; i < countryObject.length; i++) {
   countryObject[i].display();
  }
@@ -214,6 +230,7 @@ function regionSort(num) {
         background(backColor);
     makeAxis();
     namecollision = [];
+      rolloverArray = [];
    for (var i = 0; i < countryObject.length; i++) {
   countryObject[i].display();
  }
@@ -229,6 +246,7 @@ function sortChange(sel) {
           background(backColor);
     makeAxis();
     namecollision = [];
+      rolloverArray = [];
  for (var i = 0; i < countryObject.length; i++) {
   countryObject[i].display();
  }
@@ -262,25 +280,25 @@ function makeAxis() {
  //fill(152,142,120, 50);
  fill(211,211,211, 50);
  stroke(152,142,120,50);
- rect(width * 0.05, height * 0.75, width * 0.85, 20);
+ rect(width * 0.1, height * 0.75, width * 0.90, 20);
   fill(33);
 
 stroke(88);
 //X-AXIS
-line(width * 0.05, height * 0.75, width * 0.9, height * 0.75);
+line(width * 0.1, height * 0.75, width * 0.95, height * 0.75);
 //Y-AXIS
-line(width * 0.9, height * 0.75, width * 0.9, height * 0.1);
+line(width * 0.95, height * 0.75, width * 0.95, height * 0.1);
 var maxtomin = 5 + int(max(xmaxmin) / 5) * 5;
 var minnum = int(min(xmaxmin) / 5) * 5;
 var maxnum = 5 + int(max(xmaxmin) / 5) * 5;
 while(maxtomin > 0) {
   stroke(88);
-  line(map(maxtomin,maxnum,minnum,width * 0.05,width * 0.9),height * 0.75 + 5,map(maxtomin,maxnum,minnum,width * 0.05,width * 0.9),height * 0.75 - 5);
+  line(map(maxtomin,maxnum,minnum,width * 0.1,width * 0.95),height * 0.75 + 5,map(maxtomin,maxnum,minnum,width * 0.10,width * 0.95),height * 0.75 - 5);
   noStroke();
   textAlign(CENTER,TOP);
   if (maxtomin != maxnum) {
     if (maxtomin != minnum) {
-  text(maxtomin,map(maxtomin,maxnum,minnum,width * 0.05,width * 0.9),height * 0.75 + 8);
+  text(maxtomin,map(maxtomin,maxnum,minnum,width * 0.1,width * 0.95),height * 0.75 + 8);
     }
   }
   if (maxtomin > minnum) {
@@ -302,10 +320,10 @@ var ymin = 0;
 var yinc = ymax * 0.25;
 while(ymaxtomin > 0) {
   stroke(88);
-  line(width * 0.9 + 5,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75),width * 0.9 - 5,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75));
+  line(width * 0.95 + 5,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75),width * 0.95 - 5,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75));
   noStroke();
   textAlign(LEFT,CENTER);
-  text(ymaxtomin,width * 0.9 + 8,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75));
+  text(ymaxtomin,width * 0.95 + 8,map(ymaxtomin,ymax,ymin,height * 0.1,height * 0.75));
   ymaxtomin = ymaxtomin - yinc;
   }
 }
@@ -327,11 +345,15 @@ var maxnum = 5 + int(max(xmaxmin) / 5) * 5;
   maleHigher = true;
 }
 //get the x position
-var thisX = map(xpoint,maxnum,minnum,width * 0.05,width * 0.9);
+var thisX = map(xpoint,maxnum,minnum,width * 0.1,width * 0.95);
 //console.log(thisX);
+
+var locationinfo = [theYlimit, theLowerY, thisX, maleHigher, countryName];
+rolloverArray.push(locationinfo);
 
 textAlign(CENTER,TOP);
 noStroke();
+if (countrySelected == "none" || countrySelected == countryName) {
 if (region == "central")
   fill(centralColor);
 else if (region == "east")
@@ -340,6 +362,16 @@ else if (region == "southern")
   fill(southernColor);
 else if (region == "west")
   fill(westColor);
+} else {
+ if (region == "central")
+  fill(centralFade);
+else if (region == "east")
+  fill(eastFade);
+else if (region == "southern")
+  fill(southernFade);
+else if (region == "west")
+  fill(westFade);
+}
 
 var startDraw = height * 0.75 + 20;
 var forkHere = theLowerY + 25;
@@ -357,7 +389,9 @@ push();
 text(countryName,0,0);
 pop();
 namecollision.push(texpoint);
-
+if (startup) {
+aniTheDraw(startDraw,forkHere,thisX,theLowerY,theYlimit,forkdraw,region,mdata);
+} else {
 while (startDraw > forkHere) {
   ellipse(thisX, startDraw,2,2);
   startDraw -= 5;
@@ -382,6 +416,7 @@ while (startDraw - 5 > theYlimit) {
       }
 }
 noFill();
+if (countrySelected == "none" || countrySelected == countryName) {
 if (region == "central")
   stroke(centralColor);
 else if (region == "east")
@@ -390,17 +425,187 @@ else if (region == "southern")
   stroke(southernColor);
 else if (region == "west")
   stroke(westColor);
+} else {
+ if (region == "central")
+  stroke(centralFade);
+else if (region == "east")
+  stroke(eastFade);
+else if (region == "southern")
+  stroke(southernFade);
+else if (region == "west")
+  stroke(westFade);
+}
   ellipse(thisX + 10, theYlimit,8,8);
 
+if (countrySelected == countryName) {
+  fill(255)
+    rect(thisX - 160,theYlimit-55, 155, 60,5);
+
+  fill(153);
+  noStroke();
+  var ystart = theLowerY - 7;
+  if (theLowerY < 100) {
+   ystart = theLowerY;
+  }
+  while(ystart > theYlimit + 5) {
+      ellipse(thisX - 10, ystart,2,2);
+      ystart -= 5;
+  }
+  fill(0);
+  noStroke();
+  textAlign(LEFT);
+ text("In " + countryName, thisX - 155,theYlimit-55);
+ text("Women" + fdata + " Men" + mdata, thisX - 155,theYlimit-40);
 }
+}
+}
+
+
 function windowResized() {
+  trackWindow = true;
+ // if (!startup) {
 resizeCanvas(windowWidth, windowHeight);
 background(255);
+         background(backColor);
+    makeAxis();
+    namecollision = [];
+      rolloverArray = [];
+     // trackWindow = false;
+ for (var i = 0; i < countryObject.length; i++) {
+  countryObject[i].display();
+ }
+ 
+//  }
+ }
+
+function mouseMoved() {
+  if (!startup) {
+  var nowSelected = "none";
+  var foundCountry = []
+  for (var u=0; u < rolloverArray.length; u++) {
+    
+  var ldist = dist(rolloverArray[u][2]-10,rolloverArray[u][1], mouseX, mouseY);
+  var hdist = dist(rolloverArray[u][2]+10,rolloverArray[u][0], mouseX, mouseY);
+  if (ldist < 6 || hdist < 6) {
+    foundCountry.push(rolloverArray[u][4]);
+    if (ldist < 6) {
+      foundCountry.push(ldist);
+    } else {
+     foundCountry.push(hdist);
+    }
+  }
+  }
+  if (foundCountry.length > 2) {
+    var themin = foundCountry[1];
+    var minIndex = 0;
+    //search for the lowest distance between the center and the cursor
+  for (var j = 3; j < foundCountry.length; j = j + 2) {
+         if (foundCountry[j] < themin) {
+        minIndex = j - 1;
+        themin = foundCountry[j];
+      }
+    }
+    nowSelected = foundCountry[minIndex];
+    //below if you just get one dots
+  } else if (foundCountry.length == 2) {
+        nowSelected = foundCountry[0];
+  }
+  if (countrySelected != nowSelected) {
+    if (nowSelected != "none") {
+        cursor(HAND);
+        text(nowSelected,10,10);
+    } else {
+      cursor(ARROW)
+    }
+    countrySelected = nowSelected;
+    background(255);
          background(backColor);
     makeAxis();
     namecollision = [];
  for (var i = 0; i < countryObject.length; i++) {
   countryObject[i].display();
  }
- }
 
+  }
+}
+}
+
+function aniTheDraw(AstartDraw,AforkHere,AthisX,AtheLowerY,AtheYlimit,Aforkdraw,Aregion,AData) {
+if (Aregion == "central")
+  fill(centralColor);
+else if (Aregion == "east")
+  fill(eastColor);
+else if (Aregion == "southern")
+  fill(southernColor);
+else if (Aregion == "west")
+  fill(westColor);
+
+noStroke();
+if (AstartDraw > AforkHere) {
+  ellipse(AthisX, AstartDraw,2,2);
+  AstartDraw -= 5;
+} else if (AstartDraw > AtheLowerY) {
+ // fill(222,222,0);
+    ellipse(AthisX + forkArray[Aforkdraw], AstartDraw,2,2);
+    ellipse(AthisX - forkArray[Aforkdraw], AstartDraw,2,2);
+      AstartDraw -= 5;
+        Aforkdraw++;
+} else if (AstartDraw -5 <= AtheLowerY && Aforkdraw > 1) {
+ellipse(AthisX - 10, AtheLowerY,8,8);
+if (AstartDraw - 5 <= AtheYlimit) {
+  ellipse(AthisX + 10, AtheYlimit,8,8);
+}
+Aforkdraw = 1;
+} else if (AstartDraw - 5 > AtheYlimit) {
+      ellipse(AthisX + 10, AstartDraw,2,2);
+     AstartDraw -= 5;
+   if (AstartDraw - 5 < AtheYlimit) {
+        noFill();
+if (Aregion == "central")
+  stroke(centralColor);
+else if (Aregion == "east")
+  stroke(eastColor);
+else if (Aregion == "southern")
+  stroke(southernColor);
+else if (Aregion == "west")
+  stroke(westColor);
+
+      ellipse(AthisX + 10, AtheYlimit,8,8);
+
+    }
+ if (AstartDraw < -10) {
+        textAlign(LEFT);
+        text("^ " + AData,AthisX + 15, 10);
+        startup = false;
+        AstartDraw = -15;
+        
+    }
+} else {
+  AstartDraw = -15;
+ // startup = false;
+}
+
+  
+if (AstartDraw > AtheYlimit && AstartDraw > -15) {
+  var aniSpeed = 100;
+  if (AstartDraw < height/3 + height/3) {
+    aniSpeed = 25;
+  } else if (AstartDraw < height/3) {
+    aniSpeed = 5;
+  }
+  timeoutTrack++;
+ // if (!trackWindow) {
+var mytime = setTimeout(function() {
+    aniTheDraw(AstartDraw,AforkHere,AthisX,AtheLowerY,AtheYlimit,Aforkdraw,Aregion,AData);
+}, aniSpeed)
+if (trackWindow) {
+  while(mytime--) {
+  clearTimeout(mytime);
+  }
+  trackWindow = false;
+  timeoutTrack = 0;
+}
+
+//}
+}
+}
