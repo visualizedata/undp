@@ -9,7 +9,6 @@ var jsonRegions = [];
 var geometrys = [];
 var geojson = [];
 var regions = [
-    'Pick A Region',
     'All Africa - HDR',
     'Central - HDR',
     'East - HDR',
@@ -17,19 +16,29 @@ var regions = [
     'Northern - HDR',
     'Southern - HDR'];
     
-var dropValue = 'Central - HDR';
+var countriesLayer = [];
+    
+var dropValue = 'All Africa - HDR';
+var africa;
+
+var loaded = false;
 
 function preload(){
+  africa = loadJSON("africa.json");
   
 }
 function setup() {
+  showData(africa);
+  // loadJSON("africa.json", showData);
   canvas = createCanvas(windowWidth, windowHeight); // full window p5 canvas
   canvas.parent('map'); // make p5 and leaflet use the same canvas (and z-index)
    
   initLeaflet(); // load leaflet functions and creat map and defined view
-  loadJSON("africa.json", showData);
+  
   regionFilter();
+  addGeoJson();
 
+  
 }
 
 function draw() {
@@ -42,13 +51,60 @@ function removeGeoJson(i) {
   geojson[i].clearLayers();
 }
 
-function addGeoJson(i) {
-      geojson[i] = L.geoJson([geometrys[i]],{
+function addGeoJson() {
+    countriesLayer.clearLayers();
+    
+      if (dropValue == 'All Africa - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          addCountry(i);
+        }
+      }
+      if (dropValue ==  'Central - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          if( jsonRegions[i] == 'central'){
+          addCountry(i);
+          }
+        }
+      }
+      if (dropValue ==  'East - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          if( jsonRegions[i] == 'east'){
+          addCountry(i);
+          }
+        }
+      }
+      if (dropValue ==  'West - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          if( jsonRegions[i] == 'west'){
+          addCountry(i);
+          }
+        }
+      }
+      if (dropValue ==  'Northern - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          if( jsonRegions[i] == 'northern'){
+          addCountry(i);
+          }
+        }
+      }
+      if (dropValue ==  'Southern - HDR'){
+        for(var i = 0; i< geometrys.length; i++){
+          if( jsonRegions[i] == 'southern'){
+          addCountry(i);
+          }
+        }
+      }
+  
+
+}
+
+function addCountry(i){
+   var country = L.geoJson([geometrys[i]],{
         style: addStyle(i)
         // onEachFeature: onEachFeature(i)
         });
     
-      geojson[i].on('mouseover', function(e) {
+      country.on('mouseover', function(e) {
         var layer = e.target;
         // console.log("test in");
         layer.setStyle({
@@ -64,8 +120,9 @@ function addGeoJson(i) {
         });
       }).on('click', function(e){
         map.fitBounds(e.target.getBounds());
-      }).addTo(map);
-
+      });
+      
+      countriesLayer.addLayer(country);
 }
 
 function addStyle(i){
@@ -98,8 +155,8 @@ function showData(data) {
     hdiGaps[i]= data.features[i].properties.hdrGap;
     geometrys[i]= data.features[i].geometry;
     jsonRegions[i] = data.features[i].properties.region;
-   
   }
+  loaded = true;
 }
 
 // init leaflet using a custom mapbox
@@ -115,6 +172,8 @@ function initLeaflet() {
   function onMapClick(e) {}
   map.on('click', onMapClick);
   
+  countriesLayer = new L.FeatureGroup().addTo(map);
+  
 }
 
 function regionFilter() {
@@ -127,40 +186,15 @@ function regionFilter() {
     option.parent(dropdown);
   }
   dropdown.parent('filter');
-    var droptest = createDiv('what is selected?')
+    var droptest = createDiv('All Africa - HDR');
   droptest.parent('value');
 
   dropdown.elt.onchange = function() {
     droptest.html(this.value);
     dropValue = this.value;
     console.log(dropValue);
-    for(var i = 0; i< geometrys.length; i++){
-      if (dropValue === 'All Africa - HDR'){
-        addGeoJson(i);
-      } else if (dropValue === 'Central - HDR' && jsonRegions[i] === 'central'){
-        addGeoJson(i);
-      } else if (dropValue === 'Central - HDR' && jsonRegions[i] != 'central') {
-        removeGeoJson(i);
-      } else if (dropValue === 'East - HDR' && jsonRegions[i] === 'east'){
-        addGeoJson(i);
-      } else if (dropValue === 'East - HDR' && jsonRegions[i] !== 'east') {
-        removeGeoJson(i);
-      } else if (dropValue === 'Northern - HDR' && jsonRegions[i] === 'northern'){
-        addGeoJson(i);
-      } else if (dropValue === 'Northern - HDR' && jsonRegions[i] !== 'northern') {
-        removeGeoJson(i);
-      } else if (dropValue === 'Southern - HDR' && jsonRegions[i] === 'southern'){
-        addGeoJson(i);
-      } else if (dropValue === 'Southern - HDR' && jsonRegions[i] !== 'southern') {
-        removeGeoJson(i);
-      }else if (dropValue === 'West - HDR' && jsonRegions[i] === 'west'){
-        addGeoJson(i);
-      }else if (dropValue === 'West - HDR' && jsonRegions[i] !== 'west') {
-        removeGeoJson(i);
-      }else {
-        removeGeoJson(i);
-      }
-    }
+    // countriesLayer.clearLayers();
+    addGeoJson();
   }
 }
 
