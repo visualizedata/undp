@@ -47,7 +47,7 @@ function showData() {
     diam[i] = abs(EGNIM[i] - EGNIF[i]);
 
   }
-  background(0);
+  background(0, 0, 26);
   noStroke();
   fill(235);
   textFont(sans);
@@ -83,7 +83,7 @@ function showData() {
     strokeWeight(2);
     stroke(121, 181, 231);
     line((windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[k], (windowHeight * 3 / 8) - (MYSF[k] * 20));
-    stroke(230, 113, 63);
+    stroke(225,225,94);
     line((windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[k], (windowHeight * 3 / 8) - (MYSM[k] * 20));
   }
 }
@@ -94,7 +94,7 @@ function mouseReleased() {
     if (w > 43) { //if counter gets before start leave at first country
       w = 0;
       noStroke();
-      fill(0);
+      fill(0, 51, 102);
       rect(0, 0, windowWidth, windowHeight);
       for (var l in EGNIF) {
         stroke(100);
@@ -104,7 +104,7 @@ function mouseReleased() {
         strokeWeight(2);
         stroke(121, 181, 231);
         line((windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8) - (MYSF[l] * 20));
-        stroke(230, 113, 63);
+        stroke(225,225,94);
         line((windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8) - (MYSM[l] * 20));
         fill(135);
         textSize(14);
@@ -121,7 +121,7 @@ function mouseReleased() {
       }
     }
     noStroke();
-    fill(0);
+    fill(0, 0, 26);
     rect(0, 0, windowWidth, windowHeight);
     for (var j in EGNIF) {
       stroke(100);
@@ -131,7 +131,7 @@ function mouseReleased() {
       strokeWeight(2);
       stroke(19, 79, 129);
       line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
-      stroke(153, 36, 0);
+      stroke(123, 123, 0);
       line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
     }
     noStroke();
@@ -143,7 +143,7 @@ function mouseReleased() {
     textSize(14);
     text("Estimated GNI Female: ", 25, windowHeight - 90);
     text("Mean Years Schooling Female: ", 25, windowHeight - 70);
-    fill(230, 113, 63);
+    fill(225,225,94);
     text("Estimated GNI Male: ", 25, windowHeight - 50);
     text("Mean Years Schooling Male: ", 25, windowHeight - 30);
     fill(235);
@@ -159,7 +159,7 @@ function mouseReleased() {
     arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
     stroke(121, 181, 231);
     line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
-    stroke(230, 113, 63);
+    stroke(225,225,94);
     line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
     noStroke();
     fill(135);
@@ -183,7 +183,7 @@ function mouseMoved() {
   var counter3 = 0;
 
   noStroke();
-  fill(0);
+  fill(0, 0, 26);
   rect(0, 0, windowWidth, windowHeight);
   for (var j in EGNIF) {
 
@@ -209,7 +209,7 @@ function mouseMoved() {
     strokeWeight(2);
     stroke(19, 79, 129);
     line((windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[j], (windowHeight * 3 / 8) - (MYSF[j] * 20));
-    stroke(153, 36, 0);
+    stroke(123, 123, 0);
     line((windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[j], (windowHeight * 3 / 8) - (MYSM[j] * 20));
   }
   textAlign(CENTER);
@@ -224,7 +224,7 @@ function mouseMoved() {
   textSize(14);
   text("Estimated GNI Female: ", 25, windowHeight - 90);
   text("Mean Years Schooling Female: ", 25, windowHeight - 70);
-  fill(230, 113, 63);
+  fill(225,225,94);
   text("Estimated GNI Male: ", 25, windowHeight - 50);
   text("Mean Years Schooling Male: ", 25, windowHeight - 30);
 
@@ -245,7 +245,7 @@ function mouseMoved() {
   arc((diam[w] / 2) + (windowWidth / 25) + c2[w], (windowHeight * 3 / 8), diam[w], diam[w], 0, PI);
   stroke(121, 181, 231);
   line((windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[w], (windowHeight * 3 / 8) - (MYSF[w] * 20));
-  stroke(230, 113, 63);
+  stroke(225,225,94);
   line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 20));
   noStroke();
   fill(135);

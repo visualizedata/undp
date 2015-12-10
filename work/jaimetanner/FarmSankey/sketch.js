@@ -92,7 +92,7 @@ function showData() {
     textSize(24);
     
     text(names[z], width * 0.04, height * 0.1 * z + (height * 0.33));
-    originY.push(height * 0.1 * z + (height * 0.33));
+    originY.push(height * 0.1 * z + (height * 0.32));
   }
 
   /*-----------bezier end points-----------*/
