@@ -5,24 +5,43 @@ var isOverRectangle;
 var tableRows = 0;
 var countryPostions = [];
 var countryObjectArray = [];
-var boy = boy;
+var boy;
 var myFont;
 var myFontBold;
+var boyLoaded = false;
 
 function preload() {
   table = loadTable("educationdata.txt", "tsv", "header");
   myFont = loadFont('CabinSketch-Regular.otf');
   myFontBold = loadFont('CabinSketch-Bold.otf');
+  boy = loadImage("boy.png");
 }
 
-function draw() {}
+function draw() {
+
+  for (var a = 0; a < countryObjectArray.length; a++) {
+    countryObjectArray[a].display();
+    tableRows++;
+
+  }
+}
 
 
 function setup() {
   createCanvas(2000, 5000);
   background(255);
   noFill();
-  
+
+  // load boy img
+  // loadImage("boy.png", function(boy_) {
+  //   for (var i = 0; i < 30; i++) {
+  //     var years = random(12);
+  //     boy = boy_;
+  //     boyLoaded = true;
+  //     // image(boy, i*50,  0, 100, years * 20);
+  //   }
+  // });
+
 
   // Years of Schooling Gradient
   // elementary school
@@ -41,8 +60,8 @@ function setup() {
   noStroke();
   fill(229, 243, 255);
   rect(780, 193, 130, 3765);
-  
-  
+
+
   // notebook cubes 1
   strokeWeight(1);
   stroke(51, 102, 204, 80);
@@ -94,7 +113,7 @@ function setup() {
     var Region = table.getString(row, 0);
 
     if (isNaN(parseInt(table.getString(row, 4)))) {
-      meanyrsBoys = " ";
+      meanyrsBoys = text("No Data");
     } else {
       meanyrsBoys = table.getNum(row, 4);
     }
@@ -110,13 +129,7 @@ function setup() {
   }
   makeHeader();
 
-  for (var a = 0; a < countryObjectArray.length; a++) {
-    countryObjectArray[a].display();
-    tableRows++;
 
- 
-
-  }
 
 }
 
@@ -133,31 +146,43 @@ country.prototype.display = function() {
   textSize(28);
   noStroke();
   fill("black");
-  text(this.CountryName, 120, 310 + 70 * tableRows);
+  text(this.CountryName, 120, 310 + 40 * tableRows);
 
   // text(Region, 300, 100+30*row);
   fill("navy");
   for (var k = 0; k < this.meanyrsBoys; k++) {
-    rect(490 + 25 * k, 280 + 70 * tableRows, 15, 15, 15);
+    rect(490 + 25 * k, 280 + 40 * tableRows, 15, 15, 15);
+    // if (boyLoaded === true) {
+    // image(boy, 490 + 25 * k, 280 + 70 * tableRows, 100, 100);
+    //}
+
   }
   textSize(22)
-  text(this.meanyrsBoys + " " , 515 + 25 * this.meanyrsBoys, 295 + 70 *tableRows);
-  
-// add text here for meanyrs boys showing final number th
+  text(this.meanyrsBoys + " ", 430, 295 + 40 * tableRows);
+  if (this.meanyrsBoys == "..") {
+    text("No Data");
+  }
+
+  // add text here for meanyrs boys showing final number th
   fill("maroon");
   for (var g = 0; g < this.meanyrsGirls; g++) {
-        rect(490 + 25 * g, 300 + 70 * tableRows, 15, 15, 15);
-      }
-  text(this.meanyrsGirls + " " , 515 + 25 * this.meanyrsGirls, 315 + 70 *tableRows);
+    rect(490 + 25 * g, 300 + 40 * tableRows, 15, 15, 15);
+  }
+  text(this.meanyrsGirls + " ", 430, 315 + 40 * tableRows);
+  if (isNaN.meanyrsGirls) {
+    text("No Data");
+  }
+
+
   // vertex(map(val, minVal, maxVal, height, 2), map(col, 3, 25, 0, width));
 
   stroke("black");
   strokeWeight(2);
-  line(0,195,2000,195);
+  line(0, 195, 2000, 195);
 
   stroke("black");
   strokeWeight(2);
-  line(420,0,420,5000);
+  line(420, 0, 420, 5000);
 
 
 };
@@ -173,7 +198,7 @@ function makeHeader() {
   // TITLE - Years of Schooling
   text("YEARS OF SCHOOLING", 475, 190);
   // Years of School Labeling
-  
+
   textFont(myFont);
   textSize(23);
   fill("black");
@@ -189,11 +214,11 @@ function makeHeader() {
 }
 //---------------------------
 
-  function mouseOver() {
+function mouseOver() {
 
   var div = createDiv();
   div.id("rectangle");
-  div.position(490,500, 500, 400);
+  div.position(490, 500, 500, 400);
 }
 
 
