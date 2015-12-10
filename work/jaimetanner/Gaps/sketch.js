@@ -215,7 +215,8 @@ function showData() {
 function drawTriangle(spot) {
   var backgroundColor = color(119, 136, 153);
   fill(backgroundColor);
-  rect(0, height * 0.15, width * 0.9, height * 0.8);
+  stroke(backgroundColor);
+  rect(0, height * 0.15, width * 0.9, height * 0.75);
   
   var mountainColor = color(0, 0, 0, 80);
   var black = color(255);
