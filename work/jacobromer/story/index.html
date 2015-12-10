@@ -29,7 +29,7 @@
       #container1 {
         top: 0;
         position: absolute;
-        transition: top 0.1s linear;
+        transition: all 0.2s ease-in-out;
       }
       #container1.container1pushdown {
         top: 100%;
@@ -40,7 +40,7 @@
         height: 100%;
         top: -100%;
         margin: 0 0;
-        transition: all 0.1s linear;
+        transition: all 0.2s ease-in-out;
       }
       .bgNormal {
         background: #001861;
@@ -96,7 +96,7 @@
       }
       label {position:relative}
       label:after {
-          content:'<>';
+          content:'>';
           font-weight:light;
           font:1em "Consolas", monospace;
           color:#fff;
@@ -136,8 +136,16 @@
         transition: all 0.3s ease;
       }
 
-      span.bad { color: #FF4819; font-size: 1.5em; text-decoration: underline;}
-      span.good { color: #68B209;}
+      span.bad { 
+        color: Red;
+        //color: #FF4819; 
+        font-size: 1.5em;
+        text-decoration: underline;
+      }
+      span.good { 
+        color: LimeGreen;
+        //color: #68B209;
+      }
       span.strike { color: #5B6B9D; text-decoration: line-through; transition: all 0.5s ease;}
       h1.underline {text-decoration: none; color:red;}
 
@@ -160,7 +168,7 @@
       }
 
     </style>
-    <title>The Story Behind the Data</title>
+    <title>Sketch</title>
   </head>
   <body>
     <div id='root'>
