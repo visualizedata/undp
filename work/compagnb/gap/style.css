@@ -14,6 +14,13 @@ body{
    border-width: 0 0 1px;
    border-style: solid;
    color: rgba(255, 255, 255, 0.8);
+   font-family: 'Roboto', sans-serif;
+}
+#filters{
+  background: #2B2B2B;
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+
 }
 
 #header h1{
@@ -49,24 +56,66 @@ span.underline {
   visibility: hidden;
   height: 0;
 }
+
 #sortValue{
   visibility: hidden;
   height: 0;
 }
 
 
-input[type="checkbox"]{
-    margin-left: 20px;
-    margin-right: 10px;
-    width:15px;
-    height:15px;
-    /*vertical-align:middle;*/
-    cursor:pointer;
+/*
+input[type=checkbox].css-checkbox {
+  position:absolute;
+  z-index:-1000;
+  left:-1000px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height:1px; width:1px;
+  margin:-1px;
+  padding:0;
+  border:0;
 }
 
-/*input[type="checkbox"]:checked + label span {*/
-    /*background:url(check_radio_sheet.png) -19px top no-repeat;*/
-/*}*/
+input[type=checkbox].css-checkbox + label.css-label {
+  padding-left:20px;
+  height:15px;
+  display:inline-block;
+  line-height:15px;
+  background-repeat:no-repeat;
+  background-position: 0 0;
+  font-size:15px;
+  vertical-align:middle;
+  cursor:pointer;
+
+  }
+
+input[type=checkbox].css-checkbox:checked + label.css-label {
+   background-position: 0 -15px;
+ }
+
+label.css-label {
+  background-image:url(http://csscheckbox.com/checkboxes/u/csscheckbox_48d8724c081a4367c3b4a38f504fcc0c.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+   user-select: none;
+}*/
+
+
+input[type="checkbox"] {
+    margin-left: 20px;
+    height: 15px;
+    display: inline-block;
+    line-height: 15px;
+    border: 0;
+    border-radius: 5px;
+    font-size: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
 label {
   font-family: 'Roboto', sans-serif;
   font-weight: 200;
@@ -74,6 +123,29 @@ label {
   padding-right: 5%;
 }
 
+
+.styled-select {
+   overflow: hidden;
+   background: url('images/down_arrow_select.png') no-repeat right rgba(255, 255, 255, 0.1);
+   }
+
 select{
-  margin-left: 5%;
+  margin-left: 2%;
+  font-family: 'Roboto', sans-serif;
+  background: transparent;
+  /*background: rgba(255, 255, 255, 0.1);*/
+  /*background: url(female.png) no-repeat right #ddd;*/
+  color: rgba(255, 255, 255, 0.8);
+  width: 160px;
+  /*padding: 5px;*/
+  line-height: 1;
+  border: 0;
+  border-radius: 5px;
+  height: 20px;
+  -moz-appearance: none;
+}
+
+option{
+  font-family: 'Roboto', sans-serif;
+  border-radius: 5px;
 }

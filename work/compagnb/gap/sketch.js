@@ -155,9 +155,9 @@ function CountryInfo(row) {
 
   if (this.hdrM != "..") {
     if (this.hdrF < this.hdrM) {
-      this.hdrGap = this.hdrF - this.hdrM;
-    } else if (this.hdrF > this.hdrM) {
       this.hdrGap = this.hdrM - this.hdrF;
+    } else if (this.hdrF > this.hdrM) {
+      this.hdrGap = this.hdrF - this.hdrM;
     }
   } else {
     this.hdrGap = 0;
@@ -165,54 +165,56 @@ function CountryInfo(row) {
 
   if (this.lifeM != "..") {
     if (this.lifeF < this.lifeM) {
-      this.lifeGap = this.lifeF - this.lifeM;
-    } else if (this.lifeF > this.lifeM) {
       this.lifeGap = this.lifeM - this.lifeF;
+    } else if (this.lifeF > this.lifeM) {
+      this.lifeGap = this.lifeF - this.lifeM;
     }
   } else {
     this.lifeGap = 0;
   }
 
-  if (this.meanSchoolM != "..") {
+  if (this.meanSchoolF != "..") {
     this.meanSchoolF = parseFloat(meanSchoolF[this.row]);
     this.meanSchoolM = parseFloat(meanSchoolM[this.row]);
     if (this.meanSchoolF < this.meanSchoolM) {
-      this.meanSchoolGap = this.meanSchoolF - this.meanSchoolM;
-    } else if (this.lifeF > this.lifeM) {
       this.meanSchoolGap = this.meanSchoolM - this.meanSchoolF;
+    } else if (this.meanSchoolF > this.meanSchoolM) {
+      this.meanSchoolGap = this.meanSchoolF - this.meanSchoolM;
+
     }
   } else {
     this.meanSchoolF = 0;
     this.meanSchoolM = 0;
-    this.meanSchoolGap = 1000;
+    this.meanSchoolGap = -100;
   }
+
 
   if (this.expSchoolM != "..") {
     this.expSchoolF = parseFloat(expSchoolF[this.row]);
     this.expSchoolM = parseFloat(expSchoolM[this.row]);
     if (this.expSchoolF < this.expSchoolM) {
-      this.expSchoolGap = this.expSchoolF - this.expSchoolM;
-    } else if (this.lifeF > this.lifeM) {
       this.expSchoolGap = this.expSchoolM - this.expSchoolF;
+    } else if (this.expSchoolF > this.expSchoolM) {
+      this.expSchoolGap = this.expSchoolF - this.expSchoolM;
     }
   } else {
     this.expSchoolF = 0;
     this.expSchoolM = 0;
-    this.expSchoolGap = 1000;
+    this.expSchoolGap = -100;
   }
 
   if (this.gniM != "..") {
     this.gniF = parseInt(gniF[this.row]);
     this.gniM = parseInt(gniM[this.row]);
     if (this.gniF < this.gniM) {
-      this.gniGap = this.gniF - this.gniM;
-    } else if (this.lifeF > this.lifeM) {
       this.gniGap = this.gniM - this.gniF;
+    } else if (this.lifeF > this.lifeM) {
+      this.gniGap = this.gniF - this.gniM;
     }
   } else {
     this.gniF = 0;
     this.gniM = 0;
-    this.gniGap = 100000000;
+    this.gniGap = 0;
   }
 
 }
@@ -290,8 +292,9 @@ CountryInfo.prototype.display = function() {
 
 function dataFilter() {
   dropdown = createElement('select');
+  dropdown.addClass('styled-select');
   // dropdown.position(width - 180, 50);
-  dropdown.parent('header');
+  dropdown.parent('filters');
   var options = ['HDR Ratings', 'Life Expectancy', 'Avg. Years of Schooling', 'Expected Years of Schooling', 'GNI'];
   for (var i = 0; i < options.length; i++) {
     var option = createElement('option');
@@ -306,7 +309,7 @@ function dataFilter() {
   dropdown.elt.onchange = function() {
     droptest.html(this.value);
     dropValue = this.value;
-    console.log(dropValue);
+    // console.log(dropValue);
     reload();
 
   };
@@ -314,8 +317,9 @@ function dataFilter() {
 
 function sortFilter() {
   sortDrop = createElement('select');
+  sortDrop.addClass('styled-select');
   // dropdown.position(width - 180, 50);
-  sortDrop.parent('header');
+  sortDrop.parent('filters');
   var sortOptions = ['By Male Rating', 'By Female Rating', 'By Gap Amount'];
   for (var i = 0; i < sortOptions.length; i++) {
     var sortOption = createElement('option');
@@ -330,7 +334,7 @@ function sortFilter() {
   sortDrop.elt.onchange = function() {
     sorttest.html(this.value);
     sortValue = this.value;
-    console.log(sortValue);
+    // console.log(sortValue);
     reload();
 
   };
@@ -338,54 +342,68 @@ function sortFilter() {
 
 function checkBoxes() {
 
-  centralCheckBox = createCheckbox();
-  centralCheckBox.parent('header');
+  centralCheckBox = createCheckbox('checkboxG1');
+  centralCheckBox.id('checkboxG1');
+  // centralCheckBox.parent('ck1');
+  centralCheckBox.parent('filters');
+
+  centralCheckBox.addClass('css-checkbox');
   var centralLabel = createElement('label', 'Central');
-  centralLabel.parent('header');
+  centralLabel.addClass('css-label');
+  // centralLabel.parent('ck1');
+  centralLabel.parent('filters');
 
   centralCheckBox.checked(true); // passing in an arg sets its state?
   centralCheckBox.elt.onchange = function() {
-    console.log("central!");
+    // console.log("central!");
     reload();
   };
 
   eastCheckBox = createCheckbox();
-  eastCheckBox.parent('header');
+  eastCheckBox.parent('filters');
+  eastCheckBox.addClass('pinkcheck');
   var eastLabel = createElement('label', 'East');
-  eastLabel.parent('header');
+  eastLabel.parent('filters');
+  eastLabel.addClass('pinkcheck');
   eastCheckBox.checked(true); // passing in an arg sets its state?
   eastCheckBox.elt.onchange = function() {
-    console.log("east!");
+    // console.log("east!");
     reload();
   };
 
   northernCheckBox = createCheckbox();
-  northernCheckBox.parent('header');
+  northernCheckBox.parent('filters');
+  northernCheckBox.addClass('pinkcheck');
   var northernLabel = createElement('label', 'Northern');
-  northernLabel.parent('header');
+  northernLabel.parent('filters');
+  northernLabel.addClass('pinkcheck');
   northernCheckBox.checked(true); // passing in an arg sets its state?
   northernCheckBox.elt.onchange = function() {
-    console.log("Northern!");
+    // console.log("Northern!");
     reload();
   };
 
   southernCheckBox = createCheckbox();
-  southernCheckBox.parent('header');
+  southernCheckBox.parent('filters');
+  southernCheckBox.addClass('pinkcheck');
   var southernLabel = createElement('label', 'Southern');
-  southernLabel.parent('header');
+  southernLabel.addClass('pinkcheck');
+  southernLabel.parent('filters');
   southernCheckBox.checked(true); // passing in an arg sets its state?
   southernCheckBox.elt.onchange = function() {
-    console.log("Southern!");
+    // console.log("Southern!");
     reload();
   };
 
   westCheckBox = createCheckbox();
-  westCheckBox.parent('header');
+  westCheckBox.parent('filters');
+  westCheckBox.addClass('pinkcheck');
   var westLabel = createElement('label', 'West');
-  westLabel.parent('header');
+  westLabel.parent('filters');
+  westLabel.addClass('pinkcheck');
   westCheckBox.checked(true); // passing in an arg sets its state?
   westCheckBox.elt.onchange = function() {
-    console.log("West!");
+    // console.log("West!");
     reload();
   };
 
@@ -669,7 +687,7 @@ function sortMe() {
     });
 
     for (var i = 0; i < countryInfo.length; i++) {
-      console.log("meanSchoolM: " + countryInfo[i].meanSchoolM + " || " + sorted[i].meanSchoolM);
+      // console.log("meanSchoolM: " + countryInfo[i].meanSchoolM + " || " + sorted[i].meanSchoolM);
     }
   }
   if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Female Rating') {
@@ -828,17 +846,21 @@ function sortMe() {
 function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
   if (femaleRank > 0 || maleRank > 0) {
 
-    image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-    image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
 
     beginShape();
     stroke('rgba(255, 255, 255, 0.1)');
     strokeWeight(6);
     //lines
     if (femaleRank < maleRank) {
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
     } else {
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
     }

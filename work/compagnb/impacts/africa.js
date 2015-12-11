@@ -1,9 +1,4 @@
-// undp final
-// barbara compagnoni
-// africa data supplied by Natural Earth
-// hdi and gap data provided by UNDP
-
-var africaData = {
+{
   "type": "FeatureCollection",
   "features": [{
     "type": "Feature",
@@ -15,7 +10,15 @@ var africaData = {
       "hdrRank": 149,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 53.4,
+      "2013Mlife": 50.4,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": 5080,
+      "2013gniM": 7587,
+      "nominalGDP": 131.401,
+      "region": "central"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -1681,7 +1684,15 @@ var africaData = {
       "hdrRank": 180,
       "hdiGap": 0.039337353,
       "2013Fhdi": 0.370,
-      "2013Mhdi": 0.410
+      "2013Mhdi": 0.410,
+      "2013Flife": 56.1,
+      "2013Mlife": 52.2,
+      "0212XSchF": 2.2,
+      "0212XSchM": 3.3,
+      "2013gniF": 685,
+      "2013gniM": 815,
+      "nominalGDP": 3.094,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -2005,7 +2016,15 @@ var africaData = {
       "hdrRank": 165,
       "hdiGap": 0.092751381,
       "2013Fhdi": 0.428,
-      "2013Mhdi": 0.520
+      "2013Mhdi": 0.520,
+      "2013Flife": 60.7,
+      "2013Mlife": 57.9,
+      "0212XSchF": 2.0,
+      "0212XSchM": 4.4,
+      "2013gniF": 1455,
+      "2013gniM": 1999,
+      "nominalGDP": 8.747,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -2636,7 +2655,15 @@ var africaData = {
       "hdrRank": 181,
       "hdiGap": 0.030989227,
       "2013Fhdi": 0.376,
-      "2013Mhdi": 0.407
+      "2013Mhdi": 0.407,
+      "2013Flife": 1.9,
+      "2013Mlife": 1.1,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": 1335,
+      "2013gniM": 1871,
+      "nominalGDP": 12.543,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -3754,7 +3781,15 @@ var africaData = {
       "hdrRank": 109,
       "hdiGap": 0.025310061,
       "2013Fhdi": 0.669,
-      "2013Mhdi": 0.694
+      "2013Mhdi": 0.694,
+       "2013Flife": 66.8,
+      "2013Mlife": 62.1,
+      "0212XSchF": 8.7,
+      "0212XSchM": 9.0,
+      "2013gniF": 11491,
+      "2013gniM": 18054,
+      "nominalGDP": 15.813,
+      "region": "southern"
     },
     "geometry": {
       "type": "Polygon",
@@ -4727,7 +4762,15 @@ var africaData = {
       "hdrRank": "unknown",
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": "unknown",
+      "2013Mlife": "unknown",
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": "unknown",
+      "2013gniM": "unknown",
+      "nominalGDP": "unknown",
+      "region": "unknown"
     },
     "geometry": {
       "type": "Polygon",
@@ -6536,7 +6579,15 @@ var africaData = {
       "hdrRank": 171,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 51.6,
+      "2013Mlife": 50.0,
+      "0212XSchF": 3.1,
+      "0212XSchM": 5.4,
+      "2013gniF": 1866,
+      "2013gniM": 3648,
+      "nominalGDP": "unknown",
+      "region": "west"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -8147,7 +8198,15 @@ var africaData = {
       "hdrRank": 152,
       "hdiGap": 0.06878535,
       "2013Fhdi": 0.468,
-      "2013Mhdi": 0.537
+      "2013Mhdi": 0.537,
+      "2013Flife": 56.2,
+      "2013Mlife": 53.9,
+      "0212XSchF": 6.7,
+      "0212XSchM": "unknown",
+      "2013gniF": 2062,
+      "2013gniM": 3052,
+      "nominalGDP": 32.549,
+      "region": "central"
     },
     "geometry": {
       "type": "Polygon",
@@ -9613,10 +9672,18 @@ var africaData = {
       "id": "CD",
       "name": "Congo, Democratic Republic of the",
       "random": 31.65826196782291,
-      "hdrRank": 140,
-      "hdiGap": 0.04231877,
-      "2013Fhdi": 0.543,
-      "2013Mhdi": 0.585
+      "hdrRank": 186,
+      "hdiGap": 0.065,
+      "2013Fhdi": 0.304,
+      "2013Mhdi": 0.369,
+      "2013Flife": 51.8,
+      "2013Mlife": 48.2,
+      "0212XSchF": 2.1,
+      "0212XSchM": 4.1,
+      "2013gniF": 390,
+      "2013gniM": 499,
+      "nominalGDP": 32.962,
+      "region": "central"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -12500,7 +12567,15 @@ var africaData = {
       "hdrRank": 140,
       "hdiGap": 0.04231877,
       "2013Fhdi": 0.543,
-      "2013Mhdi": 0.585
+      "2013Mhdi": 0.585,
+      "2013Flife": 60.2,
+      "2013Mlife": 57.4,
+      "0212XSchF": 5.5,
+      "0212XSchM": 6.7,
+      "2013gniF": 4222,
+      "2013gniM": 5597,
+      "nominalGDP": 14.135,
+      "region": "central"
     },
     "geometry": {
       "type": "Polygon",
@@ -13861,7 +13936,15 @@ var africaData = {
       "hdrRank": 170,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 63.4,
+      "2013Mlife": 60.2,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": 1907,
+      "2013gniM": 4300,
+      "nominalGDP": 1.582,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -14089,7 +14172,15 @@ var africaData = {
       "hdrRank": 93,
       "hdiGap": 0.116945704,
       "2013Fhdi": 0.629,
-      "2013Mhdi": 0.746
+      "2013Mhdi": 0.746,
+      "2013Flife": 72.7,
+      "2013Mlife": 69.4,
+      "0212XSchF": 5.9,
+      "0212XSchM": 7.8,
+      "2013gniF": 3695,
+      "2013gniM": 21219,
+      "nominalGDP": 214.063,
+      "region": "northern"
     },
     "geometry": {
       "type": "Polygon",
@@ -15351,7 +15442,15 @@ var africaData = {
       "hdrRank": 110,
       "hdiGap": 0.104923579,
       "2013Fhdi": 0.617,
-      "2013Mhdi": 0.722
+      "2013Mhdi": 0.722,
+      "2013Flife": 73.6,
+      "2013Mlife": 68.8,
+      "0212XSchF": 5.3,
+      "0212XSchM": 7.5,
+      "2013gniF": 4225,
+      "2013gniM": 7587,
+      "nominalGDP": 16522,
+      "region": "northern"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -17296,7 +17395,15 @@ var africaData = {
       "hdrRank": 182,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 65.2,
+      "2013Mlife": 60.5,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": 986,
+      "2013gniM": 1309,
+      "nominalGDP": 3.858,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -18323,7 +18430,15 @@ var africaData = {
       "hdrRank": 173,
       "hdiGap": 0.069204134,
       "2013Fhdi": 0.401,
-      "2013Mhdi": 0.470
+      "2013Mhdi": 0.470,
+      "2013Flife": 65.3,
+      "2013Mlife": 62.0,
+      "0212XSchF": 1.4,
+      "0212XSchM": 3.6,
+      "2013gniF": 1090,
+      "2013gniM": 1515,
+      "nominalGDP": 131.401,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -19414,7 +19529,15 @@ var africaData = {
       "hdrRank": 112,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 64.5,
+      "2013Mlife": 62.4,
+      "0212XSchF": 8.4,
+      "0212XSchM": 6.4,
+      "2013gniF": 14003,
+      "2013gniM": 19919,
+      "nominalGDP": 54.798,
+      "region": "central"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -20902,7 +21025,15 @@ var africaData = {
       "hdrRank": 138,
       "hdiGap": 0.070193617,
       "2013Fhdi": 0.537,
-      "2013Mhdi": 0.607
+      "2013Mhdi": 0.607,
+      "2013Flife": 62.1,
+      "2013Mlife": 60.2,
+      "0212XSchF": 5.9,
+      "0212XSchM": 8.1,
+      "2013gniF": 2937,
+      "2013gniM": 4138,
+      "nominalGDP": 38.648,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -21738,7 +21869,15 @@ var africaData = {
       "hdrRank": 179,
       "hdiGap": 0.094496,
       "2013Fhdi": 0.344,
-      "2013Mhdi": 0.439
+      "2013Mhdi": 0.439,
+      "2013Flife": 56.9,
+      "2013Mlife": 55.3,
+      "0212XSchF": 0.8,
+      "0212XSchM": 2.6,
+      "2013gniF": 913,
+      "2013gniM": 1370,
+      "nominalGDP": 6.624,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -23379,7 +23518,15 @@ var africaData = {
       "hdrRank": 172,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 60.2,
+      "2013Mlife": 57.5,
+      "0212XSchF": 2.0,
+      "0212XSchM": 3.6,
+      "2013gniF": 1309,
+      "2013gniM": 1811,
+      "nominalGDP": 0.807,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -23800,7 +23947,15 @@ var africaData = {
       "hdrRank": 177,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 55.8,
+      "2013Mlife": 52.8,
+      "0212XSchF": 1.4,
+      "0212XSchM": 3.4,
+      "2013gniF": 907,
+      "2013gniM": 1275,
+      "nominalGDP": 1.022,
+      "region": "west"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -25148,7 +25303,15 @@ var africaData = {
       "hdrRank": "unknown",
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": "unknown",
+      "2013Mlife": "unknown",
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": "unknown",
+      "2013gniM": "unknown",
+      "nominalGDP": "unknown",
+      "region": "unknown"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -25412,7 +25575,15 @@ var africaData = {
       "hdrRank": 147,
       "hdiGap": 0.05145753,
       "2013Fhdi": 0.508,
-      "2013Mhdi": 0.560
+      "2013Mhdi": 0.560,
+      "2013Flife": 63.6,
+      "2013Mlife": 59.8,
+      "0212XSchF": 5.4,
+      "0212XSchM": 7.1,
+      "2013gniF": 1763,
+      "2013gniM": 2554,
+      "nominalGDP": 65.90,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -26308,7 +26479,15 @@ var africaData = {
       "hdrRank": 175,
       "hdiGap": 0.102937668,
       "2013Fhdi": 0.379,
-      "2013Mhdi": 0.482
+      "2013Mhdi": 0.482,
+      "2013Flife": 61.5,
+      "2013Mlife": 59.6,
+      "0212XSchF": 2.3,
+      "0212XSchM": 5.6,
+      "2013gniF": 634,
+      "2013gniM": 868,
+      "nominalGDP": 2.027,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -27019,7 +27198,15 @@ var africaData = {
       "hdrRank": 55,
       "hdiGap": 0.055529771,
       "2013Fhdi": 0.749,
-      "2013Mhdi": 0.805
+      "2013Mhdi": 0.805,
+      "2013Flife": 77.3,
+      "2013Mlife": 73.5,
+      "0212XSchF": 7.5,
+      "0212XSchM": 7.5,
+      "2013gniF": 10649,
+      "2013gniM": 32678,
+      "nominalGDP": 41.119,
+      "region": "northern"
     },
     "geometry": {
       "type": "Polygon",
@@ -27696,7 +27883,15 @@ var africaData = {
       "hdrRank": 162,
       "hdiGap": 0.013376202,
       "2013Fhdi": 0.474,
-      "2013Mhdi": 0.488
+      "2013Mhdi": 0.488,
+      "2013Flife": 49.5,
+      "2013Mlife": 49.2,
+      "0212XSchF": 6.8,
+      "0212XSchM": 4.6,
+      "2013gniF": 2217,
+      "2013gniM": 3395,
+      "nominalGDP": 2.088,
+      "region": "southern"
     },
     "geometry": {
       "type": "Polygon",
@@ -28034,7 +28229,15 @@ var africaData = {
       "hdrRank": 129,
       "hdiGap": 0.113314275,
       "2013Fhdi": 0.545,
-      "2013Mhdi": 0.658
+      "2013Mhdi": 0.658,
+      "2013Flife": 72.7,
+      "2013Mlife": 69.1,
+      "0212XSchF": 3.2,
+      "0212XSchM": 5.6,
+      "2013gniF": 3215,
+      "2013gniM": 10692,
+      "nominalGDP": 107.005,
+      "region": "northern"
     },
     "geometry": {
       "type": "Polygon",
@@ -29066,7 +29269,15 @@ var africaData = {
       "hdrRank": 155,
       "hdiGap": 0.043272613,
       "2013Fhdi": 0.476,
-      "2013Mhdi": 0.519
+      "2013Mhdi": 0.519,
+      "2013Flife": 66.2,
+      "2013Mlife": 63.2,
+      "0212XSchF": 4.8,
+      "0212XSchM": 5.6,
+      "2013gniF": 1102,
+      "2013gniM": 1566,
+      "nominalGDP": 10.593,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -30743,7 +30954,15 @@ var africaData = {
       "hdrRank": 176,
       "hdiGap": 0.104291239,
       "2013Fhdi": 0.350,
-      "2013Mhdi": 0.455
+      "2013Mhdi": 0.455,
+      "2013Flife": 54.9,
+      "2013Mlife": 55.1,
+      "0212XSchF": 1.4,
+      "0212XSchM": 2.6,
+      "2013gniF": 914,
+      "2013gniM": 7587,
+      "nominalGDP": 2076,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -32469,7 +32688,15 @@ var africaData = {
       "hdrRank": 178,
       "hdiGap": 0.04743852,
       "2013Fhdi": 0.343,
-      "2013Mhdi": 0.391
+      "2013Mhdi": 0.391,
+      "2013Flife": 51.0,
+      "2013Mlife": 49.3,
+      "0212XSchF": 0.8,
+      "0212XSchM": 1.7,
+      "2013gniF": 5080,
+      "2013gniM": 7587,
+      "nominalGDP": 16.386,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -34831,7 +35058,15 @@ var africaData = {
       "hdrRank": 161,
       "hdiGap": 0.10535966,
       "2013Fhdi": 0.425,
-      "2013Mhdi": 0.530
+      "2013Mhdi": 0.530,
+      "2013Flife": 63.1,
+      "2013Mlife": 60.0,
+      "0212XSchF": 2.6,
+      "0212XSchM": 4.9,
+      "2013gniF": 1362,
+      "2013gniM": 4592,
+      "nominalGDP": 5.061,
+      "region": "west"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -35984,7 +36219,15 @@ var africaData = {
       "hdrRank": 174,
       "hdiGap": 0.047789029,
       "2013Fhdi": 0.389,
-      "2013Mhdi": 0.437
+      "2013Mhdi": 0.437,
+      "2013Flife": 55.4,
+      "2013Mlife": 55.1,
+      "0212XSchF": 3.4,
+      "0212XSchM": 5.1,
+      "2013gniF": 652,
+      "2013gniM": 777,
+      "nominalGDP": 4.258,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -36822,7 +37065,15 @@ var africaData = {
       "hdrRank": 127,
       "hdiGap": 0.014157862,
       "2013Fhdi": 0.616,
-      "2013Mhdi": 0.631
+      "2013Mhdi": 0.631,
+      "2013Flife": 67.1,
+      "2013Mlife": 61.7,
+      "0212XSchF": 6.3,
+      "0212XSchM": 6.1,
+      "2013gniF": 7288,
+      "2013gniM": 11196,
+      "nominalGDP": 13.430,
+      "region": "southern"
     },
     "geometry": {
       "type": "Polygon",
@@ -38020,7 +38271,15 @@ var africaData = {
       "hdrRank": 187,
       "hdiGap": 0.110025767,
       "2013Fhdi": 0.275,
-      "2013Mhdi": 0.385
+      "2013Mhdi": 0.385,
+      "2013Flife": 58.6,
+      "2013Mlife": 58.3,
+      "0212XSchF": 0.8,
+      "0212XSchM": 2.1,
+      "2013gniF": 471,
+      "2013gniM": 1268,
+      "nominalGDP": 8.169,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -39077,7 +39336,15 @@ var africaData = {
       "hdrRank": 152,
       "hdiGap": 0.08820085,
       "2013Fhdi": 0.458,
-      "2013Mhdi": 0.546
+      "2013Mhdi": 0.546,
+      "2013Flife": 52.8,
+      "2013Mlife": 52.2,
+      "0212XSchF": 4.2,
+      "0212XSchM": 6.3,
+      "2013gniF": 4068,
+      "2013gniM": 6594,
+      "nominalGDP": 568.508,
+      "region": "west"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -40871,7 +41138,15 @@ var africaData = {
       "hdrRank": 151,
       "hdiGap": 0.024446841,
       "2013Fhdi": 0.463,
-      "2013Mhdi": 0.487
+      "2013Mhdi": 0.487,
+      "2013Flife": 65.7,
+      "2013Mlife": 62.4,
+      "0212XSchF": 3.1,
+      "0212XSchM": 3.6,
+      "2013gniF": 1263,
+      "2013gniM": 1550,
+      "nominalGDP": 7.890,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -41210,7 +41485,15 @@ var africaData = {
       "hdrRank": "unknown",
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": "unknown",
+      "2013Mlife": "unknown",
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": "unknown",
+      "2013gniM": "unknown",
+      "nominalGDP": "unknown",
+      "region": "unknown"
     },
     "geometry": {
       "type": "Polygon",
@@ -41516,7 +41799,15 @@ var africaData = {
       "hdrRank": 166,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 63.9,
+      "2013Mlife": 60.3,
+      "0212XSchF": 2.5,
+      "0212XSchM": 3.8,
+      "2013gniF": 1692,
+      "2013gniM": 5153,
+      "nominalGDP": 63.815,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -42709,7 +43000,15 @@ var africaData = {
       "hdrRank": "unknown",
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 56.3,
+      "2013Mlife": 54.2,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": "unknown",
+      "2013gniM": "unknown",
+      "nominalGDP": 13.070,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -43881,7 +44180,15 @@ var africaData = {
       "hdrRank": 163,
       "hdiGap": 0.070596946,
       "2013Fhdi": 0.449,
-      "2013Mhdi": 0.520
+      "2013Mhdi": 0.520,
+      "2013Flife": 64.9,
+      "2013Mlife": 61.9,
+      "0212XSchF": 3.4,
+      "0212XSchM": 5.6,
+      "2013gniF": 1642,
+      "2013gniM": 2717,
+      "nominalGDP": 15.579,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -45272,7 +45579,15 @@ var africaData = {
       "hdrRank": 183,
       "hdiGap": 0.082677726,
       "2013Fhdi": 0.329,
-      "2013Mhdi": 0.412
+      "2013Mhdi": 0.412,
+      "2013Flife": 45.8,
+      "2013Mlife": 45.3,
+      "0212XSchF": 2.0,
+      "0212XSchM": 3.8,
+      "2013gniF": 1617,
+      "2013gniM": 2016,
+      "nominalGDP": 4.892,
+      "region": "west"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -45991,7 +46306,15 @@ var africaData = {
       "hdrRank": "unknown",
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 56.7,
+      "2013Mlife": 53.4,
+      "0212XSchF": "unknown",
+      "0212XSchM": "unknown",
+      "2013gniF": "unknown",
+      "2013gniM": "unknown",
+      "nominalGDP": "unknown",
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -46676,7 +46999,15 @@ var africaData = {
       "hdrRank": 148,
       "hdiGap": 0.06936569,
       "2013Fhdi": 0.493,
-      "2013Mhdi": 0.562
+      "2013Mhdi": 0.562,
+      "2013Flife": 48.3,
+      "2013Mlife": 49.6,
+      "0212XSchF": 7.4,
+      "0212XSchM": 6.8,
+      "2013gniF": 3738,
+      "2013gniM": 7384,
+      "nominalGDP": 3.400,
+      "region": "southern"
     },
     "geometry": {
       "type": "Polygon",
@@ -46780,7 +47111,15 @@ var africaData = {
       "hdrRank": 184,
       "hdiGap": 0.099540854,
       "2013Fhdi": 0.319,
-      "2013Mhdi": 0.419
+      "2013Mhdi": 0.419,
+      "2013Flife": 52.1,
+      "2013Mlife": 50.3,
+      "0212XSchF": 0.6,
+      "0212XSchM": 2.3,
+      "2013gniF": 1289,
+      "2013gniM": 1953,
+      "nominalGDP": 13.922,
+      "region": "central"
     },
     "geometry": {
       "type": "Polygon",
@@ -48012,7 +48351,15 @@ var africaData = {
       "hdrRank": 166,
       "hdiGap": 0.098127659,
       "2013Fhdi": 0.401,
-      "2013Mhdi": 0.499
+      "2013Mhdi": 0.499,
+      "2013Flife": 57.4,
+      "2013Mlife": 55.6,
+      "0212XSchF": 3.3,
+      "0212XSchM": 6.7,
+      "2013gniF": 998,
+      "2013gniM": 1263,
+      "nominalGDP": 4.518,
+      "region": "west"
     },
     "geometry": {
       "type": "Polygon",
@@ -48511,7 +48858,15 @@ var africaData = {
       "hdrRank": 90,
       "hdiGap": 0.081640123,
       "2013Fhdi": 0.669,
-      "2013Mhdi": 0.751
+      "2013Mhdi": 0.751,
+      "2013Flife": 78.3,
+      "2013Mlife": 73.6,
+      "0212XSchF": 5.5,
+      "0212XSchM": 7.5,
+      "2013gniF": 4751,
+      "2013gniM": 16226,
+      "nominalGDP": 46.995,
+      "region": "northern"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -49243,7 +49598,15 @@ var africaData = {
       "hdrRank": 159,
       "hdiGap": 0.04274946,
       "2013Fhdi": 0.466,
-      "2013Mhdi": 0.509
+      "2013Mhdi": 0.509,
+      "2013Flife": 62.9,
+      "2013Mlife": 60.2,
+      "0212XSchF": 4.5,
+      "0212XSchM": 5.8,
+      "2013gniF": 1501,
+      "2013gniM": 1903,
+      "nominalGDP": 49.115,
+      "region": "east"
     },
     "geometry": {
       "type": "MultiPolygon",
@@ -51044,7 +51407,15 @@ var africaData = {
       "hdrRank": 164,
       "hdiGap": 0.053171448,
       "2013Fhdi": 0.456,
-      "2013Mhdi": 0.509
+      "2013Mhdi": 0.509,
+      "2013Flife": 60.4,
+      "2013Mlife": 58.0,
+      "0212XSchF": 4.3,
+      "0212XSchM": 6.4,
+      "2013gniF": 1167,
+      "2013gniM": 1502,
+      "nominalGDP": 26.312,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -51670,7 +52041,15 @@ var africaData = {
       "hdrRank": 118,
       "hdiGap": "unknown",
       "2013Fhdi": "unknown",
-      "2013Mhdi": "unknown"
+      "2013Mhdi": "unknown",
+      "2013Flife": 58.8,
+      "2013Mlife": 54.7,
+      "0212XSchF": 9.8,
+      "0212XSchM": 10.1,
+      "2013gniF": 8539,
+      "2013gniM": 15233,
+      "nominalGDP": 352.817,
+      "region": "southern"
     },
     "geometry": {
       "type": "Polygon",
@@ -53856,7 +54235,15 @@ var africaData = {
       "hdrRank": 141,
       "hdiGap": 0.05108256,
       "2013Fhdi": 0.534,
-      "2013Mhdi": 0.585
+      "2013Mhdi": 0.585,
+      "2013Flife": 60.0,
+      "2013Mlife": 56.3,
+      "0212XSchF": 5.8,
+      "0212XSchM": 7.2,
+      "2013gniF": 2344,
+      "2013gniM": 3455,
+      "nominalGDP": 27.066,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",
@@ -55379,7 +55766,15 @@ var africaData = {
       "hdrRank": 156,
       "hdiGap": 0.046816888,
       "2013Fhdi": 0.468,
-      "2013Mhdi": 0.515
+      "2013Mhdi": 0.515,
+      "2013Flife": 60.8,
+      "2013Mlife": 58.8,
+      "0212XSchF": 6.7,
+      "0212XSchM": 7.8,
+      "2013gniF": 1124,
+      "2013gniM": 1496,
+      "nominalGDP": 13.663,
+      "region": "east"
     },
     "geometry": {
       "type": "Polygon",

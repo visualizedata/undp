@@ -1,6 +1,6 @@
 #Jon Thirkield
 
-##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/stems/">Labor Data in Africa: Stems and Branches</a>
+##<a href="https://undp-jonst.c9.io/undp/work/jthirkield/stems/">Stems and Branches: Gender Gaps and Divisions of Labor in Africa</a>
 
 ####No matter how wide the gender gap may be, we should never forget the dependency between men and women--as mothers, fathers, sisters and brothers--that lies at the root of a country's culture. This interactive visualization allows us to view the fragile balances between a country's economic well-being and roles of men and women in its labor force.
 ###Research Question

@@ -10,6 +10,8 @@
  -->
     <script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+
 
 <link rel="stylesheet" type="text/css" href="styles.css">
 <style>
@@ -24,10 +26,10 @@
 <body>
 <div id="compares">Hello</div>
 <div id="readout"></div>
-<div id="zreadout"><h2>Niger</h2><p><img src="niger.jpg" width="432" height="277" alt="niger" /></p>
-<p>The Nigerien Constitution grants equal rights regardless of gender. Niger has ratified both the Convention on the Elimination of All forms of Discrimination against Women (CEDAW) (in 1999), and the Optional Protocol on violence against women (2004).Niger has signed but not ratified the Protocol to the African Charter on Human and Peoples’ Rights on the Rights of Women in Africa. A Ministry of Social Development, Population, Advancement of Women and Protection of Children has been in place since 1998.</p>
-<p>Links: http://genderindex.org/country/niger<br></p>
-<p>etc...</p></h3></div>
+<div id="zreadout"><h2>A Schoolhouse in Chad</h2><p><img src="schools/Chad_east_Resize_07.jpg" width="430" height="287 alt="chad" /></p>
+<p>Please send us pictures of schoolhouses across Africa, via Twitter (#AfricanSchoolhouses).</p>
+
+<p>...</p></div>
 
 <style>
 #map {
@@ -62,6 +64,7 @@
   width:100px;
   height:100px;
   z-index:1000;
+  visibility: visible;
   }
 .rotater {
   -webkit-transform:rotate(30deg);
@@ -85,9 +88,16 @@ ctx.stroke();
 </canvas>
  -->
 
-<h3>The African Continent: Gender Equity in Focus</h3>
+<span class="myheader">Africa's Schoolhouse: A Learning Map</span>
+<span>CHANGE YOUR MAP</span><span><a id="myLink" title="Change the Map!"
+ href="#" onclick="changeLayer(0);return false;">SATELLITE</a></span>
+<span><a id="myLink" title="Change the Map!"
+ href="#" onclick="changeLayer(1);return false;">GEOGRAPHY MAP</a></span>
+<span><a id="myLink" title="Change the Map!"
+ href="#" onclick="changeLayer(2);return false;">NIGHT MAP</a></span>
 
 </div>
+
 <div id='zoomlens' class='overlay'>
     <div class='overlay rotater'>
         <div class='overlay rotater'>
@@ -99,15 +109,24 @@ ctx.stroke();
  <script type="text/javascript" src="africa2.js"></script>
 <script>
    var geojson;
+   var layerTracker = 0;
    var nxtHTML;
    var cnArray = [];
    var infoArray = [];
 L.mapbox.accessToken = 'pk.eyJ1IjoianRoaXJraWVsZCIsImEiOiJjaWdiM2JyZWUxbnVydjltM3B5MThwZjdpIn0.6CxRDmKlbzs4MHL3YdrpEw';
 var map = L.mapbox.map('map', 'mapbox.satellite',{
    gridControl: false, // Disable default gridControl interactivity.
-    zoomControl: false
-   //   doubleClickZoom: true
+    zoomControl: false,
+    touchZoom: false,
+    doubleClickZoom: true
 }).setView([-1.0, 1.0], 4);
+
+var geographyLayer = L.mapbox.tileLayer('mapbox.geography-class');
+var nightLayer = L.mapbox.tileLayer('mapbox.control-room');
+
+
+
+
    geojson = L.geoJson(africaData, {
    style: style,
      onEachFeature: onEachFeature
@@ -130,6 +149,31 @@ var zl = document.getElementById('zoomlens');
 map.on('mousemove', update);
 map.on('zoomend', zoomMe);
 
+function changeLayer(num) {
+if (layerTracker != num) {
+	if (layerTracker == 0 && num == 1) {
+	  geographyLayer.addTo(map);
+	  }
+	if (layerTracker == 0 && num == 2) {
+	  nightLayer.addTo(map);
+	  }
+	if (layerTracker == 1) {
+		  map.removeLayer(geographyLayer);
+	if (num == 2) {
+	  nightLayer.addTo(map);
+	  }
+	  }
+	if (layerTracker == 2) {
+		  map.removeLayer(nightLayer);
+	if (num == 1) {
+	  geographyLayer.addTo(map);
+	  }
+	  }
+	  layerTracker = num;
+}
+        
+}
+
 function zoomMe(e) {
   
     if (e.target.getZoom() > 4) {
@@ -142,13 +186,11 @@ function zoomMe(e) {
          elt3.style.visibility = 'visible';
 
     }
-    
-
 }
  function zoomToFeature(e) {
  var thyZoom = map.getZoom() + 1;
-     map.setView(e.latlng, thyZoom, true);
-   zoommap.setView(e.latlng, thyZoom, true);
+    map.setZoomAround(e.latlng, thyZoom,true);
+    zoommap.setView(e.latlng, thyZoom, true);
 
    }
  function style(feature) {
@@ -166,8 +208,10 @@ function onEachFeature(feature, layer) {
             mouseover: highlightFeature,
        mouseout: dropWindow,
        click: clicktoKeep,
-  dblclick: zoomToFeature,
-       zoomend: zoomMe
+         //  doubleClickZoom: true
+
+  dblclick: zoomToFeature
+    //   zoomend: zoomMe
         });
     }
     

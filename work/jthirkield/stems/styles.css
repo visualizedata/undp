@@ -24,29 +24,48 @@ font-size: 11pt;
 p {
 font-family: geneva, Helvetica, Arial;
 font-size: 9pt;
-line-height: 15px;
+line-height: 11px;
 }
 
 .header {
-font-family:geneva, Helvetica, Arial;
+font-family: 'Roboto', sans-serif;
 font-style: normal;
       position: absolute;
   z-index: 110;
-  bottom:30px;
-  left: 25px;
+  bottom:45px;
+  right: 25px;
 
 font-weight: 400;
-font-size: 16pt;
+font-size: 17pt;
 color: #EEEEEE;
+text-align: right;
 
+}
+.stem {
+font-family: 'Roboto', sans-serif;
+      position: absolute;
+  z-index: 109;
+  bottom:40px;
+  left: 25px;
+    color: #FFFFFF;
+
+
+}
+.branch {
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  z-index: 109;
+  bottom:15px;
+  left: 25px;
+  color: #FFFFFF;
 }
 .tagline {
   position: absolute;
   z-index: 110;
-  bottom:10px;
-  left: 25px;
+  bottom:20px;
+  right: 25px;
 
-font-family:geneva, Helvetica, Arial;
+font-family: 'Roboto', sans-serif;
 font-style: normal;
 font-weight: 400;
 font-size: 11pt;
@@ -55,26 +74,28 @@ color: #EEEEEE;
 .filters {
       position: absolute;
   z-index: 120;
-  bottom:20px;
-  width: 100%;
-  text-align: center;
+  bottom:75px;
+  left: 20px;
+  text-align: left;
+  /*width:200px;*/
   padding:5px;
-  line-height: 22px;
+  line-height: 11px;
   color: #333333;
   font-size: 13px;
 
 }
+
 .central {
- color: rgb(177, 154, 36);
-}
-.west {
- color: rgb(177,84,36);
-}
-.southern {
- color: rgb(72, 96, 218);
+ color: GoldenRod;
 }
 .east {
- color: rgb(85,149,40);
+ color: SeaGreen;
+}
+.southern {
+ color: MidnightBlue;
+}
+.west {
+ color: Maroon;
 }
 
 .headline {
@@ -90,12 +111,13 @@ a {
 }
 .topbar {
       position: absolute;
-        background-color: rgba(152,142,120,0.5);
+        /*background-color: rgba(152,142,120,0.5);*/
+        background-color: rgba(33,33,33,0.5);
   z-index: 100;
-  bottom:0px;
+  bottom:0;
   left: 0;
   width: 100%;
-  height: 60px;
+  height: 70px;
   padding:5px;
   line-height: 22px;
   color: #333333;
@@ -105,8 +127,8 @@ a {
       position: absolute;
 /*         background-color: rgba(33,33,33,0.8); */
   z-index: 101;
-  bottom:0px;
-  left: 0px;
+  bottom:0;
+  left: 0;
   width: 100%;
   height: 40px;
   padding:15px;
@@ -114,3 +136,5 @@ a {
   color: #333333;
   font-size: 13px;
 }
+
+
