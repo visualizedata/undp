@@ -1,6 +1,6 @@
 <html>
   <head>
-    <style>
+        <style>
       div#root {
         position: relative;
         top: 0;
@@ -10,50 +10,77 @@
         margin: 0 0;
       }
       div#container {
-        background: rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.0);
+        text-align: center;
         width: 100%;
-        position: absolute; 
-        top: 0px;
-        left: 0px;
+        height: 100%;
+        position: relative; 
+      }
+      div#select {
+        width: 100%;
+        text-align: center;
+      }
+      div.dimension_index span, div.indicators span, div.dimensions span {
+        vertical-align:text-top
+      }
+      span.counter {
+        display: block;
+        margin: 0 0 5px 0;
+      }
+      div#gdi {
+        font-family: "museo-slab";
+        font-size: 15px;
+        width: 98%;
+        clear: both;
+        background: rgba(255,255,255,0.1);
+        margin: 0 1%;
+        padding: 5px 0;
       }
       div#male_container, div#female_container {
         font-family: "museo-slab";
-        font-size: 20px;
-        text-align:center;
-        width: 45%;
-        border-bottom: 3px solid white;
+        font-size: 12px;
+        text-align: center;
+        width: 48%;
+        float: left;
+        margin: 0 1%;
       }
-      div#male_container {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-      }
-      div#female_container {
-        position: absolute;
-        top: 10px;
-        left: 10px;
+      div#legend {
+        text-align: center;
+        font-family: "museo-slab";
+        width: 15%;
+        margin: 0 1%;
+        float: left;
       }
       div.top {
         border-bottom: 3px solid white;
-        margin-bottom: 10px;
+        padding: 0 0 10px 0;
+        margin-bottom: 0px;
       }
-      div.dimensions span.t50 {
+      div.dimension_index, div.dimensions, div.indicators, div.result {
+        padding: 10px 10px;
+        margin-bottom: 5px;
+        background: rgba(255,255,255,0.1);
+      }
+      div.missingData {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(255,255,255,0.1);
+
+      }
+      .hide { display:none; }
+      .show { display: block; }
+      .hideOp {opacity: 0; visibility: hidden;}
+      .showOp {opacity: 1; visibility: visible;}
+      span.t50 {
         width: 50%;
       }
-      div.dimensions span.t25 {
+      span.t25 {
         width: 25%;
       }
-      div.dimensions span {
+      span.t25, span.t50 {
         display: inline-block;
-        line-height: 30px;
-      }
-      div#demo {
-        position: absolute;
-        top: 300px;
-        width: 100%;
-        height: 400px;
-        background: url("bg.png") no-repeat top left;
-        background-size: contain;
+        line-height: 1.7em;
       }
       body {
         background: #001861;
@@ -62,13 +89,13 @@
       }
       select {
         color: #fff;
-        font-size: 1em;
+        font-size: 3em;
         font-weight: bold;
         font-family: Helvetica, sans-serif;
         border: 3px solid #fff;
         border-radius: 5px;
-        margin:12px 10px 0 0;
-        padding: 5px 18px 5px 18px;
+        margin:12px 0px 0 0;
+        padding: 5px 0px 5px 18px;
         box-shadow: none;
         background: transparent;
         background-image: none;
@@ -79,7 +106,7 @@
         width: auto;
       }
       @media screen and (-webkit-min-device-pixel-ratio:0) {
-          select {padding-right:59px}
+          select {padding-right:29px}
       }
       label {position:relative}
       label:after {
@@ -92,7 +119,7 @@
           -ms-transform:rotate(90deg);
           transform:rotate(90deg);
           right:0px; bottom:0px;
-          padding:0 0 0 23px ;
+          padding:0 0 0 15px ;
           position:absolute;
           pointer-events:none;
       }
@@ -116,15 +143,15 @@
         padding: 0 0;
       }
       span, u, select, option {
-        line-height: 84px;
+        /*line-height: 24px;*/
         vertical-align: middle;
       }
       span.counter {
-        transition: all 1.5s ease;
+        transition: all 0.5s ease;
       }
 
-      span.bad { color: #FF4819; font-size: 1.5em; text-decoration: underline;}
-      span.good { color: #68B209;}
+      span.bad { color: Red; font-size: 1.5em; text-decoration: underline;}
+      span.good { color: LimeGreen;}
       span.strike { color: grey; text-decoration: line-through;}
       h1.underline {text-decoration: none; color:red;}
 
