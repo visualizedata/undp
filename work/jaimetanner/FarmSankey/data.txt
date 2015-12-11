@@ -1,0 +1,8 @@
+Country	Percentage	Land Size	Other Land Characteristics	Household Size	Household Male Farm Labour	Household Female Farm Labour	Hired Farm Labour	Time Spent on Farm Activities	Ration of Children to Adults within Household	Improved/Purchased Seeds	Pesticide/Herbicide Use	Fertilizer Use	Farm Tools & Equipment 	Agricultural Extension	Export/Cash Crops	Distance to Market or Road	Non-Farm Income/Activity	Age	Years of Schooling	Wealth/Consumption
+Ethiopia	80.6	1	1	1	0	0	0	1	0	0	0	1	1	1	0	0	0	0	0	1
+Malawi	80	0	1	1	1	0	0	0	1	1	1	1	1	1	1	1	0	0	1	1
+Niger	60.2	0	1	1	1	1	1	0	1	0	0	1	0	0	0	0	1	0	0	0
+Northern Nigeria	68.5	0	0	1	0	0	1	0	0	0	0	1	0	0	0	0	0	1	0	0
+Southern Nigeria	85.5	0	0	0	1	0	0	0	1	0	1	0	0	0	0	0	0	1	0	0
+Tanzania	81.3	1	0	1	1	1	1	0	0	0	1	1	0	0	0	1	0	1	0	0
+Uganda	75.2	0	0	1	1	1	1	0	1	1	1	1	0	1	1	0	0	1	1	1

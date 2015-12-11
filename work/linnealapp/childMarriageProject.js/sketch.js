@@ -121,13 +121,19 @@ function buttons() {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW & DISPLAY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function draw() {
+<<<<<<< HEAD
   background(220);
   var whatever = (height - 250) / 4;
   var start = width * 0.25;
+=======
+  background(238, 226, 210);
+  var whatever = (height - 250) / 4;
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
 
   // SET UP GRID FOR GRAPH
   push();
   stroke('black');
+<<<<<<< HEAD
   line(start, 150, start, height - 100);
   stroke(0, 100);
   line(start, 150, width - 70, 150);
@@ -138,6 +144,19 @@ function draw() {
   pop();
 
   // LABEL Y AXIS
+=======
+  line(70, 150, 70, height - 100);
+  stroke(0, 100);
+  line(70, 150, width - 70, 150);
+  line(70, 150 + whatever, width - 70, 150 + whatever);
+  line(70, 150 + 2 * whatever, width - 70, 150 + 2 * whatever);
+  line(70, 150 + 3 * whatever, width - 70, 150 + 3 * whatever);
+  line(70, height - 100, width - 70, height - 100);
+  pop();
+
+
+
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   push();
   fill('black');
   noStroke();
@@ -147,6 +166,7 @@ function draw() {
   text(yAxis[next], start, 140);
   textFont(myriadReg);
   textAlign(RIGHT, TOP);
+<<<<<<< HEAD
   text(yAxis5[next], start - 5, 145);
   text(yAxis2[next], start - 5, (height - 100) - ((height - 100) / 5));
   textAlign(RIGHT, CENTER);
@@ -154,17 +174,34 @@ function draw() {
   textAlign(RIGHT, BASELINE);
   text(yAxis4[next], start - 5, 150 + ((height - 100) / 5));
   text(yAxis0[next], start - 5, height - 100);
+=======
+  text(yAxis5[next], 65, 145);
+  text(yAxis2[next], 65, (height - 100) - ((height - 100) / 5));
+  textAlign(RIGHT, CENTER);
+  text(yAxis3[next], 65, (150 + (height - 100)) / 2);
+  textAlign(RIGHT, BASELINE);
+  text(yAxis4[next], 65, 150 + ((height - 100) / 5));
+  text(yAxis0[next], 65, height - 100);
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   pop();
   
   for (var j = 0; j < rowNum.length; j++) {
     countryObjectArray[j].display();
   }
+
+<<<<<<< HEAD
+Country.prototype.display = function() {
+  // sort();
+
+  // MAP GNI COMPONENT VALUES TO SCALE TO GRAPH
+=======
+
 }
 
 Country.prototype.display = function() {
   // sort();
 
-  // MAP GNI COMPONENT VALUES TO SCALE TO GRAPH
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   var edu = map(this.femMnYrsSchool, 0, 10, 0, height - 250);
   var le = map(this.femLifeExp, 30, 90, 0, height - 250);
   var gni = map(this.femaleGNI, 0, 27500, 0, height - 250);
@@ -174,6 +211,7 @@ Country.prototype.display = function() {
   var gni2 = map(this.maleGNI, 0, 27500, 0, height - 250);
   var componentsM = [edu2, le2, gni2];
   // console.log(components[next]);
+<<<<<<< HEAD
   var xvar = width * 0.275 + (this.row * (width * 0.75) / 31);
 
   var eduGap = this.maleMnYrsSchool - this.femMnYrsSchool; // Get gap value for schooling
@@ -184,12 +222,28 @@ Country.prototype.display = function() {
   var gniGap = this.maleGNI - this.femaleGNI; // Get gap value for GNI
   var gniGap = gniGap.toFixed(2); // Round to 2 decimal places
   if (gniGap < 0) { // If female value is higher don't display the gap
+=======
+  var xvar = 100 + (this.row * width / 32);
+  var eduGap = this.maleMnYrsSchool - this.femMnYrsSchool;
+  var eduGap = eduGap.toFixed(1);
+  if (eduGap < 0) {
+    eduGap = '';
+  }
+  var gniGap = this.maleGNI - this.femaleGNI;
+  var gniGap = gniGap.toFixed(2);
+  if (gniGap < 0) {
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
     gniGAp = '';
   }
   var statNums = [eduGap + " years less schooling than men", this.femLifeExp.toFixed(1) + ' average female life expectancy', '$' + gniGap + " less income than men"];
 
+<<<<<<< HEAD
   // SET UP DETECTION FOR HOVERING OVER CIRCLES
   var distance = dist(mouseX, mouseY, xvar, (height - 100) - componentsF[next]);
+=======
+  var distance = dist(mouseX, mouseY, xvar, (height - 100) - componentsF[next]);
+
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   if (distance < ((this.marriedBy18 * 1.5) / 2)) {
     isOverCircle = true;
   } else {
@@ -197,6 +251,7 @@ Country.prototype.display = function() {
   }
 
   push();
+<<<<<<< HEAD
   if (isOverCircle == false) {
     fill(113, 121, 124, 100);
   } else {
@@ -208,10 +263,21 @@ Country.prototype.display = function() {
   noStroke();
   ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy18 * 1.5, this.marriedBy18 * 1.5);
   fill("SlateGray");
+=======
+  if (isOverCircle == true) {
+    fill(113, 121, 124, 200);
+  } else {
+    fill(113, 121, 124, 100);
+  }
+  noStroke();
+  ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy18 * 1.5, this.marriedBy18 * 1.5);
+  fill(113, 121, 124);
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy15 * 1.5, this.marriedBy15 * 1.5);
   pop();
 
   push();
+<<<<<<< HEAD
   if (isOverCircle == false) {
     strokeWeight(1);
   } else {
@@ -219,12 +285,22 @@ Country.prototype.display = function() {
   }
   stroke('black');
   line(xvar - 0.5, (height - 100) - componentsM[next], xvar, (height - 100) - componentsF[next]);
+=======
+  if (isOverCircle == true) {
+    strokeWeight(2);
+  } else {
+    strokeWeight(1);
+  }
+  stroke('black');
+  line(99.5 + (this.row * width / 32), (height - 100) - componentsM[next], 99.5 + (this.row * width / 32), (height - 100) - componentsF[next]);
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   pop();
 
   push();
   noStroke();
   ellipseMode(CENTER);
   fill('black');
+<<<<<<< HEAD
   if (isOverCircle == false) {
     ellipse(xvar + 0.5, (height - 100) - componentsF[next], 3, 3);
     ellipse(xvar, (height - 100) - componentsM[next], 3, 3);
@@ -233,6 +309,61 @@ Country.prototype.display = function() {
     ellipse(xvar - 0.5, (height - 100) - componentsM[next], 4, 4);
   }
   pop();
+=======
+  if (isOverCircle == true) {
+    ellipse(xvar, (height - 100) - componentsF[next], 6, 6);
+    ellipse(xvar, (height - 100) - componentsM[next], 6, 6);
+  } else {
+    ellipse(xvar, (height - 100) - componentsF[next], 3, 3);
+    ellipse(xvar, (height - 100) - componentsM[next], 3, 3);
+  }
+  pop();
+
+  // make pop-up box with country stats
+  if (isOverCircle == true) {
+    fill(238, 226, 210, 100);
+    noStroke();
+    rect(70, 150, width - 70, height - 100);
+    rectMode(CENTER);
+    fill(255, 255, 255, 220);
+    noStroke();
+    if (componentsM[next] > componentsF[next]) {
+      rect(xvar, (height - 150) - componentsM[next], 170, 70, 5);
+      triangle(xvar, (height - 105) - componentsM[next], 95 + (this.row * width / 32), (height - 115) - componentsM[next], 105 + (this.row * width / 32), (height - 115) - componentsM[next]);
+      push();
+      noStroke();
+      fill('black');
+      textSize(18);
+      textAlign(LEFT);
+      textFont(myriadCond);
+      text(this.countryName.toUpperCase(), xvar - 75, (height - 190) - componentsM[next]);
+      textSize(13);
+      if (this.maleMnYrsSchool > this.femMnYrsSchool) {
+      text(statNums[next], xvar - 75, (height - 129) - componentsM[next]);
+      }
+      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 165) - componentsM[next]);
+      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 147) - componentsM[next]);
+      pop();
+    } else if (componentsM[next] < componentsF[next]) {
+      rect(xvar, (height - 150) - componentsF[next], 170, 50, 5);
+      triangle(xvar, (height - 115) - componentsF[next], 95 + (this.row * width / 32), (height - 125) - componentsF[next], 105 + (this.row * width / 32), (height - 125) - componentsF[next]);
+      push();
+      noStroke();
+      fill('black');
+      textSize(18);
+      textAlign(LEFT);
+      textFont(myriadCond);
+      text(this.countryName.toUpperCase(), xvar - 75, (height - 180) - componentsF[next]);
+      textSize(13);
+      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
+      // text(statNums[next], xvar - 75, (height - 139) - componentsF[next]);
+      // }
+      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 137) - componentsF[next]);
+      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 155) - componentsF[next]);
+      pop();
+    }
+  }
+>>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
 
   // make pop-up box with country stats
   if (isOverCircle == true) {
