@@ -255,7 +255,7 @@ Country.prototype.display = function() {
     }
   }
 
-  buttons();
+  // buttons();
 };
 
 // ATTEMPTING TO SORT OBJECTS BY VALUE
