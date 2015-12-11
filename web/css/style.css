@@ -90,6 +90,7 @@ iframe {
     height: 600px;
     border: 0;
     margin-bottom: 20px;
+    padding: 0;
 }
 
 img {
