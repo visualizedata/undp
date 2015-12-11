@@ -159,6 +159,7 @@ function draw() {
   for (var j = 0; j < rowNum.length; j++) {
     countryObjectArray[j].display();
   }
+}
 
 Country.prototype.display = function() {
   // sort();
@@ -233,7 +234,50 @@ Country.prototype.display = function() {
   }
   pop();
 
-  // buttons();
+  // make pop-up box with country stats
+  if (isOverCircle == true) {
+    // fill(238, 226, 210, 100);
+    // noStroke();
+    // rect(70, 150, width - 70, height - 100);
+    rectMode(CENTER);
+    fill(255, 255, 255, 220);
+    noStroke();
+    if (componentsM[next] > componentsF[next]) {
+      rect(xvar, (height - 150) - componentsM[next], 170, 70, 5);
+      triangle(xvar, (height - 105) - componentsM[next], xvar - 5, (height - 115) - componentsM[next], xvar + 5, (height - 115) - componentsM[next]);
+      push();
+      noStroke();
+      fill('black');
+      textSize(18);
+      textAlign(LEFT);
+      textFont(myriadCond);
+      text(this.countryName.toUpperCase(), xvar - 75, (height - 190) - componentsM[next]);
+      textSize(13);
+      if (this.maleMnYrsSchool > this.femMnYrsSchool) {
+        text(statNums[next], xvar - 75, (height - 129) - componentsM[next]);
+      }
+      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 165) - componentsM[next]);
+      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 147) - componentsM[next]);
+      pop();
+    } else if (componentsM[next] < componentsF[next]) {
+      rect(xvar, (height - 150) - componentsF[next], 170, 50, 5);
+      triangle(xvar, (height - 115) - componentsF[next], xvar - 5, (height - 125) - componentsF[next], xvar + 5, (height - 125) - componentsF[next]);
+      push();
+      noStroke();
+      fill('black');
+      textSize(18);
+      textAlign(LEFT);
+      textFont(myriadCond);
+      text(this.countryName.toUpperCase(), xvar - 75, (height - 180) - componentsF[next]);
+      textSize(13);
+      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
+      // text(statNums[next], xvar - 75, (height - 139) - componentsF[next]);
+      // }
+      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 137) - componentsF[next]);
+      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 155) - componentsF[next]);
+      pop();
+    }
+  }
 };
 
 // ATTEMPTING TO SORT OBJECTS BY VALUE

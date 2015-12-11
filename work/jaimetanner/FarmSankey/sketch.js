@@ -15,6 +15,7 @@ var labels = [],
   gapNum = [],
   countryBools = [],
   gaps = [];
+lines = [];
 
 
 
@@ -28,6 +29,7 @@ function preload() {
 function setup() {
   /*-----------title bar-----------*/
   createCanvas(windowWidth, windowHeight);
+
   var black = color(0);
   var beige = color(238, 226, 210);
   var greens = color(77, 102, 25);
@@ -35,19 +37,25 @@ function setup() {
   fill(beige);
   background(beige);
   fill(253, 241, 225);
-  rect(width * 0.69, 0, width * 0.28, height * 0.18, 0, 0, 5, 5);
-
   textFont(latoLight);
-  textSize(28);
+  textSize(24);
   stroke(black);
   fill(black);
-  text("Productivity Differences Between Male and Female African Farmers", width * 0.012, height * 0.07);
-  line(width * 0.01, height * 0.09, width * 0.012 + textWidth("Productivity Differences Between Male and Female African Farmers"), height * 0.09);
+  text("Productivity Differences Between", width * 0.02, height * 0.05);
+  text("Male and Female African Farmers", width * 0.02, height * 0.09);
 
+  // line(width * 0.01, height * 0.13, width * 0.012 + textWidth("Productivity Differences Between Male"), height * 0.13);
+  for (i = 0; i < width * 0.06; i++) {
+    ellipse(0 + (i * 5), height * 0.11, 1, 1);
+  }
+  for (i = 0; i < width * 0.3; i++) {
+    ellipse(width * 0.2 + (i * 5), height * 0.87, 1, 1);
+  }
   /*-----------right bar title-----------*/
   textFont(latoLight);
-  textSize(22);
-  text("Primary Factors Contributing to Gender Gap in Agricultural Productivity", width * 0.70, height * 0.08, width * 0.27);
+  textSize(16);
+  stroke(200, 50, 50, 100);
+  text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.13);
   table = loadTable("data.txt", "tsv", showData);
 
 }
@@ -74,30 +82,37 @@ function showData() {
   for (var r = 1; r < 8; r++) {
     var gap = table.getString(r, 1);
     names.push(table.getString(r, 0));
-    gaps.push(map(gap, 0, 100, width * 0.46, width * 0.23));
+    gaps.push(map(gap, 0, 100, width * 0.53, width * 0.28));
+    lineStates = [50, 60, 70, 80, 90, 100];
+    lines.push(map(lineStates, 0, 100, width * 0.53, width * 0.28))
     gapNum.push(gap);
   }
 
   /*-----------bar graphs-----------*/
   for (var z = 0; z < 7; z++) {
+    stroke(30, 30, 30, 100);
+    strokeWeight(0.5);
+    line(width * 0.28, height * 0.09 * z + (height * 0.24), width * 0.5, height * 0.09 * z + (height * 0.24));
+    // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
-    fill(greens);
-    // rect(width * 0.23, height * 0.1 * z + (height * 0.28), width * 0.23, height * 0.08);
     fill(119, 136, 153);
-    rect(width * 0.23, height * 0.1 * z + (height * 0.28), width * 0.3, height * 0.04);
+    rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
     fill(119, 136, 153, 100);
-    rect(gaps[z], height * 0.1 * z + (height * 0.32), width * 0.3, height * 0.04);
+    rect(gaps[z], height * 0.09 * z + (height * 0.22), width * 0.25, height * 0.02);
 
+    /*----------country names-----------*/
     stroke(black);
-    textSize(24);
-    
-    text(names[z], width * 0.04, height * 0.1 * z + (height * 0.33));
-    originY.push(height * 0.1 * z + (height * 0.32));
+    strokeWeight(1);
+    textSize(18);
+    textAlign(RIGHT);
+    text(names[z], width * 0.23, height * 0.09 * z + (height * 0.23));
+    originY.push(height * 0.09 * z + (height * 0.22));
+    textAlign(LEFT);
   }
 
   /*-----------bezier end points-----------*/
   for (var i = 2; i < labels.length; i++) {
-    endY.push(height * 0.14 + i * (height * 0.04));
+    endY.push(height * 0.09 + i * (height * 0.0369));
   }
   stroke(0, 0, 0, 100);
   /*-----------initial bezier & list-----------*/
@@ -106,23 +121,25 @@ function showData() {
       stroke(black);
       fill(black);
       stroke(1);
-      line(width * 0.97, height * 0.20, width * 0.97, height * 0.26);
-      line(width * 0.97, height * 0.28, width * 0.97, height * 0.505);
-      line(width * 0.97, height * 0.515, width * 0.97, height * 0.655);
-      line(width * 0.97, height * 0.675, width * 0.97, height * 0.705);
-      line(width * 0.97, height * 0.725, width * 0.97, height * 0.825);
-      line(width * 0.97, height * 0.84, width * 0.97, height * 0.9);
-      line(width * 0.97, height * 0.92, width * 0.97, height * 0.95);
+      line(width * 0.86, height * 0.14, width * 0.86, height * 0.21);
+      line(width * 0.86, height * 0.22, width * 0.86, height * 0.43);
+      line(width * 0.86, height * 0.44, width * 0.86, height * 0.58);
+      line(width * 0.86, height * 0.59, width * 0.86, height * 0.61);
+      line(width * 0.86, height * 0.62, width * 0.86, height * 0.73);
+      line(width * 0.86, height * 0.74, width * 0.86, height * 0.8);
+      line(width * 0.86, height * 0.81, width * 0.86, height * 0.84);
     }
   }
+
+
+  var beige = color(238, 226, 210);
+  fill(beige);
+  stroke(beige);
+  rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
 
   for (var j = 0; j < 7; j++) {
     for (var i = 0; i < endY.length; i++) {
       if (countryBools[j][2 + i] == "1") {
-        var beige = color(238, 226, 210);
-        fill(beige);
-        stroke(beige);
-        rect(width * 0.46, height * 0.14 + 2 * (height * 0.03), width * 0.29, height * 0.9);
         connect(j, i);
       }
     }
@@ -133,10 +150,10 @@ function showData() {
   var categories = [];
   var places = [];
   categories.push("LAND", "LABOUR", "NON-LABOUR INPUTS", "INFO", "ACCCESS TO MARKETS", "HUMAN CAPITOL", "WEALTH");
-  places.push(0.24, 0.42, 0.63, 0.7, 0.82, 0.90, 0.95);
+  places.push(0.19, 0.35, 0.55, 0.61, 0.72, 0.8, 0.845);
   for (var i = 0; i < places.length; i++) {
     push();
-    translate(width * 0.98, height * places[i]);
+    translate(width * 0.87, height * places[i]);
     rotate(-HALF_PI);
     text(categories[i], 0, 0);
     pop();
@@ -149,7 +166,7 @@ function mouseMoved() {
   var beige = color(238, 226, 210);
   fill(beige);
   stroke(beige);
-  rect(width * 0.46, height * 0.14 + 2 * (height * 0.03), width * 0.29, height * 0.9);
+  rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
 
 
   /*-----------check mouse location-----------*/
@@ -159,11 +176,7 @@ function mouseMoved() {
 
         stroke(beige);
         fill(beige);
-        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.21, height * 0.03);
-        // var white = color(255, 249, 239);
-        // stroke(white);
-        // fill(white);
-        // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
+        rect(width * 0.653, height * 0.07 + ((2 + i) * (height * 0.0369)), width * 0.2, height * 0.03);
         connect(j, i);
       }
     }
@@ -171,20 +184,36 @@ function mouseMoved() {
 
   for (var j = 0; j < 7; j++) {
     for (var i = 0; i < endY.length; i++) {
-      if (mouseX >= 0 && mouseX <= width * 0.46 && mouseY >= height * 0.1 * j + (height * 0.28) && mouseY <= (height * 0.1 * j + (height * 0.28)) + height * 0.08 && countryBools[j][2 + i] == "1") {
+      if (mouseX >= width * 0.1 && mouseX <= width * 0.1 + width * 0.5 && mouseY >= height * 0.09 * j + (height * 0.2) && mouseY <= (height * 0.09 * j + (height * 0.2)) + height * 0.04 && countryBools[j][2 + i] == "1") {
+        stroke(beige);
+        fill(beige);
+        rect(width * 0.653, height * 0.07 + ((2 + i) * (height * 0.0369)), width * 0.2, height * 0.03);
 
         stroke(beige);
         fill(beige);
-        rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.21, height * 0.03);
+        rect(width * 0.1, height * 0.88, width * 0.9, height * 0.3);
 
-        checker = false;
-        stroke(beige);
-        fill(beige);
-        rect(width * 0.01, height * 0.11, width * 0.65, height * 0.11);
         selectedConnect(j, i);
       }
     }
   }
+
+
+    for (var i = 0; i < labels.length; i++) {
+  for (var j = 0; j < 7; j++) {
+      if (mouseX >= width * 0.655 && mouseX <= width * 0.655 + width * 0.2 && mouseY >= height * 0.07 + ((2 + i) * (height * 0.0369)) && mouseY <= (height * 0.07 + ((2 + i) * (height * 0.0369))) + height * 0.03 &&  countryBools[j][2 + i] == "1") {
+        stroke(beige);
+        fill(beige);
+        rect(width * 0.653, height * 0.07 + ((2 + i) * (height * 0.0369)), width * 0.2, height * 0.03);
+
+        stroke(beige);
+        fill(beige);
+        rect(width * 0.1, height * 0.88, width * 0.9, height * 0.3);
+        selectedLabels(j, i);
+      }
+    }
+  }
+
 }
 
 
@@ -192,51 +221,73 @@ function mouseMoved() {
 function connect(n, i) {
   var black = color(0);
   textFont(latoHair);
-  textSize(14);
+  textSize(13);
 
   strokeWeight(0.2);
   noFill();
   stroke(0, 0, 0, 100);
-  bezier(width * 0.46, originY[n], width * 0.6, originY[n], width * 0.46, endY[i], width * 0.75, endY[i]);
+  bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
 
-  // var beige = color(238, 226, 210);
-  // stroke(beige);
-  // fill(beige);
-  // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.04)), width * 0.22, height * 0.03);
-
-  strokeWeight(0.4);
+  strokeWeight(0.5);
   stroke(170);
   fill(170);
-  text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
+  text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
 }
 
 /*-----------selected curves-----------*/
 function selectedConnect(n, i) {
   textFont(latoHair);
-  textSize(14);
+  textSize(13);
 
-  strokeWeight(2.5);
+  strokeWeight(1.5);
   noFill();
   stroke(100);
-  bezier(width * 0.46, originY[n], width * 0.6, originY[n], width * 0.46, endY[i], width * 0.75, endY[i]);
-
-  // var beige = color(238, 226, 210);
-  // stroke(beige);
-  // fill(beige);
-  // rect(width * 0.75, height * 0.115 + ((2 + i) * (height * 0.040)), width * 0.22, height * 0.03);
+  bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
 
   strokeWeight(1);
   fill(0);
   stroke(0);
-  text(labels[2 + i], width * 0.75, height * 0.14 + ((2 + i) * (height * 0.04)));
+  text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
 
-
-
+  var number = parseInt(100 - gapNum[n]);
+  textFont(latoLight);
   endY.push(height * 0.14 + i * (height * 0.04));
-  stroke(200, 50, 50);
+  stroke(147, 38, 47);
+  fill(147, 38, 47);
   textSize(19);
-  text("Female-managed agricultural plots produce an average of " + gapNum[n] + "% less than those that are male managed", width * 0.02, height * 0.19);
+  strokeWeight(0.8);
+  text("Female-managed agricultural plots in" + " ", width * 0.2, height * 0.93);
+  strokeWeight(1.7);
+  text(names[n], width * 0.2 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.93);
+  strokeWeight(0.8);
+  text(" " + "produce an average of ", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.93);
+  strokeWeight(1.7);
+  text(number + "%", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.93);
+  strokeWeight(0.8);
+  text(" " + "less than those that are male managed ", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.93);
 }
+
+function selectedLabels(n, i) {
+  textFont(latoHair);
+  textSize(13);
+
+  strokeWeight(1.5);
+  noFill();
+  stroke(100);
+  bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
+
+  strokeWeight(1);
+  fill(0);
+  stroke(0);
+  text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
+}
+
+
+// function scaleBars () {
+//   for (var z = 0; z < 7; z++) {
+//         rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
+//   }
+// }
 
 // function windowResized() {
 //   resizeCanvas(windowWidth, windowHeight);
