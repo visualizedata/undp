@@ -1,4 +1,5 @@
 var data = {};
+var desc;
 var country = [],
   checker = true;
 var labels = [],
@@ -14,6 +15,7 @@ var labels = [],
   names = [],
   gapNum = [],
   countryBools = [],
+  summary = [],
   gaps = [];
 lines = [];
 
@@ -56,8 +58,8 @@ function setup() {
   textSize(16);
   stroke(200, 50, 50, 100);
   text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.13);
-  table = loadTable("data.txt", "tsv", showData);
 
+  table = loadTable("data.txt", "tsv", showData);
 }
 
 /*-----------parse tsv-----------*/
@@ -76,6 +78,7 @@ function showData() {
     sNigeria.push(table.getString(5, j));
     tanzania.push(table.getString(6, j));
     uganda.push(table.getString(7, j));
+
   }
   countryBools.push(ethiopia, malawi, niger, nNigeria, sNigeria, tanzania, uganda);
   count = table.getRowCount();
@@ -113,6 +116,10 @@ function showData() {
   /*-----------bezier end points-----------*/
   for (var i = 2; i < labels.length; i++) {
     endY.push(height * 0.09 + i * (height * 0.0369));
+  }
+  /*-----------contributer descriptions-----------*/
+  for (var i = 0; i < 19; i++) {
+    summary.push(table.getString(8, i));
   }
   stroke(0, 0, 0, 100);
   /*-----------initial bezier & list-----------*/
@@ -199,9 +206,9 @@ function mouseMoved() {
   }
 
 
-    for (var i = 0; i < labels.length; i++) {
-  for (var j = 0; j < 7; j++) {
-      if (mouseX >= width * 0.655 && mouseX <= width * 0.655 + width * 0.2 && mouseY >= height * 0.07 + ((2 + i) * (height * 0.0369)) && mouseY <= (height * 0.07 + ((2 + i) * (height * 0.0369))) + height * 0.03 &&  countryBools[j][2 + i] == "1") {
+  for (var i = 0; i < labels.length; i++) {
+    for (var j = 0; j < 7; j++) {
+      if (mouseX >= width * 0.655 && mouseX <= width * 0.655 + width * 0.2 && mouseY >= height * 0.07 + ((2 + i) * (height * 0.0369)) && mouseY <= (height * 0.07 + ((2 + i) * (height * 0.0369))) + height * 0.03 && countryBools[j][2 + i] == "1") {
         stroke(beige);
         fill(beige);
         rect(width * 0.653, height * 0.07 + ((2 + i) * (height * 0.0369)), width * 0.2, height * 0.03);
@@ -280,6 +287,14 @@ function selectedLabels(n, i) {
   fill(0);
   stroke(0);
   text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
+
+  textFont(latoLight);
+  endY.push(height * 0.14 + i * (height * 0.04));
+  stroke(147, 38, 47);
+  fill(147, 38, 47);
+  textSize(16);
+  strokeWeight(0.8);
+  text(summary[i], width * 0.2, height * 0.91, width * 0.7);
 }
 
 
