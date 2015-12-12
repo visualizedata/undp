@@ -16,13 +16,16 @@ var marriedBy18 = [];
 var marriedDataYear = [];
 var marriedDataSource = [];
 var femaleHDI = [];
+var region = [];
 
 // ~~~~~~ INTERACTIVITY & HTML ~~~~~~~~
 var canvas;
 var eduButton;
 var leButton;
 var gniButton;
-var yAxis = ['Mean years of schooling', 'Life expectancy, 2013', 'GNI, 2013'];
+var allButton;
+var yLabel, yLabel2, yLabel3;
+var yAxis = ['Mean years of schooling, 2002-2012', 'Life expectancy, 2013', 'Gross national income (GNI), 2013'];
 var yAxis5 = ['10.0', '90', '27,500'];
 var yAxis4 = ['7.5', '75', '20,625'];
 var yAxis3 = ['5.0', '60', '13,750'];
@@ -34,7 +37,7 @@ var w = 0;
 var isOverCircle;
 
 // ~~~~~~ COLOURS ~~~~~~~~
-
+var mb, sg, dsg, sb, or, lines, gap;
 
 
 
@@ -48,7 +51,6 @@ function preload() {
 }
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP & HTML STUFF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function setup() {
-  // noLoop(); // no need for input or animation here
   canvas = createCanvas(windowWidth, windowHeight);
   canvas.position(0, 0);
   canvas.class('canvas');
@@ -57,48 +59,103 @@ function setup() {
   title.class('title');
   // title.position(70, 30);
 
+  var central = createElement("div");
+  central.class('region');
+  central.position(width * 0.25, height * 0.94);
+  central.id('c');
+  var C = createElement("span", "Central");
+  C.class('regionText');
+  C.parent(central);
+
+  var eastern = createElement("div");
+  eastern.class('region');
+  eastern.position(width * 0.385, height * 0.94);
+  eastern.id('e');
+  var E = createElement("span", "Eastern");
+  E.class('regionText');
+  E.parent(eastern);
+
+  var southern = createElement("div");
+  southern.class('region');
+  southern.position(width * 0.6525, height * 0.94);
+  southern.id('s');
+  var S = createElement("span", "Southern");
+  S.class('regionText');
+  S.parent(southern);
+
+  var western = createElement("div");
+  western.class('region');
+  western.position(width * 0.702, height * 0.94);
+  western.id('w');
+  var W = createElement("span", "Western");
+  W.class('regionText');
+  W.parent(western);
+
   processData();
 
   // LABEL X AXIS
   for (var i = 0; i < countryName.length; i++) {
     var xAxis = createElement("div", countryName[i]);
     xAxis.class('xLabels');
-    xAxis.position(width * 0.235 + (i * (width * 0.75) / 31), height - 45);
+    xAxis.position(width * 0.235 + (i * (width * 0.75) / 31), height * 0.88);
   }
 
   if (loaded) {
     for (var i = 0; i < rowNum.length; i++) {
-      countryObjectArray.push(new Country(rowNum[i], countryName[i], marriedBy15[i], marriedBy18[i], marriedDataYear[i], marriedDataSource[i], marriedDataSource[i], femaleHDI[i], femLifeExp[i], maleLifeExp[i], femMnYrsSchool[i], maleMnYrsSchool[i], femaleGNI[i], maleGNI[i]));
+      countryObjectArray.push(new Country(rowNum[i], countryName[i], marriedBy15[i], marriedBy18[i], marriedDataYear[i], marriedDataSource[i], marriedDataSource[i], femaleHDI[i], femLifeExp[i], maleLifeExp[i], femMnYrsSchool[i], maleMnYrsSchool[i], femaleGNI[i], maleGNI[i], region[i]));
     }
     // console.log(countryObjectArray);
   }
+  console.log(region.length);
   buttons();
 }
 
 function buttons() {
-  eduButton = createButton('EDUCATION');
+
+  yLabel = createElement("div", yAxis[0]);
+  yLabel.position(width * 0.14, height * 0.47);
+  yLabel.class('yLabel');
+  yLabel.style('color', 'dimgrey');
+
+  yLabel2 = createElement("div", yAxis[1]);
+  yLabel2.position(width * 0.17, height * 0.47);
+  yLabel2.class('yLabel');
+  yLabel2.style('color', 'transparent');
+
+  yLabel3 = createElement("div", yAxis[2]);
+  yLabel3.position(width * 0.135, height * 0.47);
+  yLabel3.class('yLabel');
+  yLabel3.style('color', 'transparent');
+
+  eduButton = createButton('Education');
   eduButton.class('button');
   eduButton.id('edu');
-  eduButton.style('background-color', 'gray');
+  eduButton.style('color', 'rgb(102, 0, 101)');
   eduButton.mousePressed(function() {
     next = 0;
-    eduButton.style('background-color', 'gray');
-    leButton.style('background-color', 'black');
-    gniButton.style('background-color', 'black');
+    eduButton.style('color', 'rgb(102, 0, 101)');
+    leButton.style('color', 'dimgrey');
+    gniButton.style('color', 'dimgrey');
+    yLabel.style('color', 'dimgrey');
+    yLabel2.style('color', 'transparent');
+    yLabel3.style('color', 'transparent');
   });
   eduButton.mouseOver(function() {
     cursor(HAND);
   });
 
-  leButton = createButton('LIFE EXPECTANCY');
+  leButton = createButton('Life expectancy');
   leButton.class('button');
   leButton.id('le');
-  leButton.style('background-color', 'black');
+  leButton.style('color', 'dimgrey');
   leButton.mousePressed(function() {
     next = 1;
-    leButton.style('background-color', 'gray');
-    eduButton.style('background-color', 'black');
-    gniButton.style('background-color', 'black');
+    leButton.style('color', 'rgb(102, 0, 101)');
+    eduButton.style('color', 'dimgrey');
+    gniButton.style('color', 'dimgrey');
+    yLabel.style('color', 'transparent');
+    yLabel2.style('color', 'dimgrey');
+    yLabel3.style('color', 'transparent');
   });
   leButton.mouseOver(function() {
     cursor(HAND);
@@ -107,305 +164,224 @@ function buttons() {
   gniButton = createButton('GNI');
   gniButton.class('button');
   gniButton.id('gni');
-  gniButton.style('background-color', 'black');
+  gniButton.style('color', 'dimgrey');
   gniButton.mousePressed(function() {
     next = 2;
-    gniButton.style('background-color', 'gray');
-    eduButton.style('background-color', 'black');
-    leButton.style('background-color', 'black');
+    gniButton.style('color', 'rgb(102, 0, 101)');
+    eduButton.style('color', 'dimgrey');
+    leButton.style('color', 'dimgrey');
+    yLabel.style('color', 'transparent');
+    yLabel2.style('color', 'transparent');
+    yLabel3.style('color', 'dimgrey');
   });
   gniButton.mouseOver(function() {
     cursor(HAND);
   });
+
+  // allButton = createButton('ALL REGIONS');
+  // allButton.class('button');
+  // allButton.id('all');
+  // allButton.style('background-color', 'gray');
+  // allButton.mousePressed(function() {
+  //   next = 0;
+  // });
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DRAW & DISPLAY ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function draw() {
-<<<<<<< HEAD
-  background(220);
-  var whatever = (height - 250) / 4;
+  colorMode(RGB, 255, 255, 255, 255);
+  mb = color(25, 25, 112, 255);
+  sg = color(139, 0, 139, 255);
+  dsg = color(102, 0, 101, 255);
+  or = color(255, 69, 0, 255);
+  sb = color(70, 130, 180, 255);
+  lines = color(50, 50, 50, 255);
+  gap = color(0, 0, 0, 255);
+
+  background(225);
+
+  var top = height * 0.15;
+  var bottom = height * 0.8;
+  var whatever = (height * 0.65) / 4;
   var start = width * 0.25;
-=======
-  background(238, 226, 210);
-  var whatever = (height - 250) / 4;
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
+  var end = width * 0.95;
+
+  // stroke(200);
+  // line(width * 0.3825, top, width * 0.3825, height * 0.97);
+  // line(width * 0.6525, top, width * 0.6525, height * 0.97);
+  // line(width * 0.702, top, width * 0.702, height * 0.97);
+  // line(width * 0.95, top, width * 0.95, height * 0.97);
 
   // SET UP GRID FOR GRAPH
   push();
-  stroke('black');
-<<<<<<< HEAD
-  line(start, 150, start, height - 100);
-  stroke(0, 100);
-  line(start, 150, width - 70, 150);
-  line(start, 150 + whatever, width - 70, 150 + whatever);
-  line(start, 150 + 2 * whatever, width - 70, 150 + 2 * whatever);
-  line(start, 150 + 3 * whatever, width - 70, 150 + 3 * whatever);
-  line(start, height - 100, width - 70, height - 100);
+  stroke(120);
+  line(start, top, end, top);
+  line(start, top + whatever, end, top + whatever);
+  line(start, top + 2 * whatever, end, top + 2 * whatever);
+  line(start, top + 3 * whatever, end, top + 3 * whatever);
+  line(start, bottom, end, bottom);
   pop();
 
   // LABEL Y AXIS
-=======
-  line(70, 150, 70, height - 100);
-  stroke(0, 100);
-  line(70, 150, width - 70, 150);
-  line(70, 150 + whatever, width - 70, 150 + whatever);
-  line(70, 150 + 2 * whatever, width - 70, 150 + 2 * whatever);
-  line(70, 150 + 3 * whatever, width - 70, 150 + 3 * whatever);
-  line(70, height - 100, width - 70, height - 100);
-  pop();
-
-
-
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
   push();
-  fill('black');
+  fill(lines);
   noStroke();
   textSize(12);
-  textAlign(CENTER);
-  textFont(myriadBCon);
-  text(yAxis[next], start, 140);
+  // textAlign(CENTER);
+  // textFont(myriadBCon);
+  // text(yAxis[next], start, top - 10);
   textFont(myriadReg);
   textAlign(RIGHT, TOP);
-<<<<<<< HEAD
-  text(yAxis5[next], start - 5, 145);
-  text(yAxis2[next], start - 5, (height - 100) - ((height - 100) / 5));
+  text(yAxis5[next], start - 5, top - 5);
+  text(yAxis2[next], start - 5, top + 3 * whatever);
   textAlign(RIGHT, CENTER);
-  text(yAxis3[next], start - 5, (150 + (height - 100)) / 2);
+  text(yAxis3[next], start - 5, top + 2 * whatever);
   textAlign(RIGHT, BASELINE);
-  text(yAxis4[next], start - 5, 150 + ((height - 100) / 5));
-  text(yAxis0[next], start - 5, height - 100);
-=======
-  text(yAxis5[next], 65, 145);
-  text(yAxis2[next], 65, (height - 100) - ((height - 100) / 5));
-  textAlign(RIGHT, CENTER);
-  text(yAxis3[next], 65, (150 + (height - 100)) / 2);
-  textAlign(RIGHT, BASELINE);
-  text(yAxis4[next], 65, 150 + ((height - 100) / 5));
-  text(yAxis0[next], 65, height - 100);
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
+  text(yAxis4[next], start - 5, top + whatever);
+  text(yAxis0[next], start - 5, bottom);
   pop();
-  
+
   for (var j = 0; j < rowNum.length; j++) {
     countryObjectArray[j].display();
   }
-
-<<<<<<< HEAD
-Country.prototype.display = function() {
-  // sort();
-
-  // MAP GNI COMPONENT VALUES TO SCALE TO GRAPH
-=======
-
 }
 
 Country.prototype.display = function() {
   // sort();
+  var top = height * 0.15;
+  var bottom = height * 0.8;
+  var whatever = (height * 0.65) / 4;
+  var start = width * 0.25;
+  var end = width * 0.95;
 
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
-  var edu = map(this.femMnYrsSchool, 0, 10, 0, height - 250);
-  var le = map(this.femLifeExp, 30, 90, 0, height - 250);
-  var gni = map(this.femaleGNI, 0, 27500, 0, height - 250);
+  // MAP GNI COMPONENT VALUES TO SCALE TO GRAPH
+  var edu = map(this.femMnYrsSchool, 0, 10, 0, height * 0.65);
+  var le = map(this.femLifeExp, 30, 90, 0, height * 0.65);
+  var gni = map(this.femaleGNI, 0, 27500, 0, height * 0.65);
   var componentsF = [edu, le, gni];
-  var edu2 = map(this.maleMnYrsSchool, 0, 10, 0, height - 250);
-  var le2 = map(this.maleLifeExp, 30, 90, 0, height - 250);
-  var gni2 = map(this.maleGNI, 0, 27500, 0, height - 250);
+  var edu2 = map(this.maleMnYrsSchool, 0, 10, 0, height * 0.65);
+  var le2 = map(this.maleLifeExp, 30, 90, 0, height * 0.65);
+  var gni2 = map(this.maleGNI, 0, 27500, 0, height * 0.65);
   var componentsM = [edu2, le2, gni2];
   // console.log(components[next]);
-<<<<<<< HEAD
   var xvar = width * 0.275 + (this.row * (width * 0.75) / 31);
 
   var eduGap = this.maleMnYrsSchool - this.femMnYrsSchool; // Get gap value for schooling
   var eduGap = eduGap.toFixed(1); // Round to one decimal place
   if (eduGap < 0) { // If female value is higher don't display the gap
-    eduGap = ''; 
-  }
-  var gniGap = this.maleGNI - this.femaleGNI; // Get gap value for GNI
-  var gniGap = gniGap.toFixed(2); // Round to 2 decimal places
-  if (gniGap < 0) { // If female value is higher don't display the gap
-=======
-  var xvar = 100 + (this.row * width / 32);
-  var eduGap = this.maleMnYrsSchool - this.femMnYrsSchool;
-  var eduGap = eduGap.toFixed(1);
-  if (eduGap < 0) {
     eduGap = '';
   }
-  var gniGap = this.maleGNI - this.femaleGNI;
-  var gniGap = gniGap.toFixed(2);
-  if (gniGap < 0) {
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
+  var gniGap = (this.femaleGNI/this.maleGNI) * 100; // Get gap value for GNI
+  var gniGap = gniGap.toFixed(1); // Round to 1 decimal place
+  if (gniGap < 0) { // If female value is higher don't display the gap
     gniGAp = '';
   }
-  var statNums = [eduGap + " years less schooling than men", this.femLifeExp.toFixed(1) + ' average female life expectancy', '$' + gniGap + " less income than men"];
+  var statNums = ["women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling, " + eduGap + " years less than men", this.femLifeExp.toFixed(1) + ' is the average female life expectancy', 'women earn $' + this.femaleGNI.toFixed(2) + ' , ' + gniGap + "% less than men"];
 
-<<<<<<< HEAD
   // SET UP DETECTION FOR HOVERING OVER CIRCLES
-  var distance = dist(mouseX, mouseY, xvar, (height - 100) - componentsF[next]);
-=======
-  var distance = dist(mouseX, mouseY, xvar, (height - 100) - componentsF[next]);
-
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
+  var distance = dist(mouseX, mouseY, xvar, bottom - componentsF[next]);
   if (distance < ((this.marriedBy18 * 1.5) / 2)) {
     isOverCircle = true;
   } else {
     isOverCircle = false;
   }
 
+  // DRAWING DATA POINTS ON GRAPH
   push();
-<<<<<<< HEAD
   if (isOverCircle == false) {
-    fill(113, 121, 124, 100);
+    fill(139, 0, 139, 150);
   } else {
     fill(255, 255, 255, 150);
     noStroke();
-    ellipse(xvar, (height - 100) - componentsF[next], 150, 150);
-    fill(113, 121, 124, 200);
+    ellipse(xvar, bottom - componentsF[next], 150, 150);
+    fill(dsg);
   }
   noStroke();
-  ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy18 * 1.5, this.marriedBy18 * 1.5);
-  fill("SlateGray");
-=======
-  if (isOverCircle == true) {
-    fill(113, 121, 124, 200);
-  } else {
-    fill(113, 121, 124, 100);
-  }
-  noStroke();
-  ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy18 * 1.5, this.marriedBy18 * 1.5);
-  fill(113, 121, 124);
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
-  ellipse(xvar, (height - 100) - componentsF[next], this.marriedBy15 * 1.5, this.marriedBy15 * 1.5);
+  ellipse(xvar, bottom - componentsF[next], this.marriedBy18 * 1.5, this.marriedBy18 * 1.5);
+  fill(or);
+  ellipse(xvar, bottom - componentsF[next], this.marriedBy15 * 1.5, this.marriedBy15 * 1.5);
   pop();
 
   push();
-<<<<<<< HEAD
   if (isOverCircle == false) {
     strokeWeight(1);
   } else {
     strokeWeight(2);
   }
-  stroke('black');
-  line(xvar - 0.5, (height - 100) - componentsM[next], xvar, (height - 100) - componentsF[next]);
-=======
-  if (isOverCircle == true) {
-    strokeWeight(2);
-  } else {
-    strokeWeight(1);
-  }
-  stroke('black');
-  line(99.5 + (this.row * width / 32), (height - 100) - componentsM[next], 99.5 + (this.row * width / 32), (height - 100) - componentsF[next]);
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
+  stroke(gap);
+  line(xvar - 0.5, bottom - componentsM[next], xvar, bottom - componentsF[next]);
   pop();
 
   push();
   noStroke();
   ellipseMode(CENTER);
-  fill('black');
-<<<<<<< HEAD
+  fill(gap);
   if (isOverCircle == false) {
-    ellipse(xvar + 0.5, (height - 100) - componentsF[next], 3, 3);
-    ellipse(xvar, (height - 100) - componentsM[next], 3, 3);
+    ellipse(xvar + 0.5, bottom - componentsF[next], 3, 3);
+    ellipse(xvar, bottom - componentsM[next], 3, 3);
   } else {
-    ellipse(xvar, (height - 100) - componentsF[next], 4, 4);
-    ellipse(xvar - 0.5, (height - 100) - componentsM[next], 4, 4);
-  }
-  pop();
-=======
-  if (isOverCircle == true) {
-    ellipse(xvar, (height - 100) - componentsF[next], 6, 6);
-    ellipse(xvar, (height - 100) - componentsM[next], 6, 6);
-  } else {
-    ellipse(xvar, (height - 100) - componentsF[next], 3, 3);
-    ellipse(xvar, (height - 100) - componentsM[next], 3, 3);
+    ellipse(xvar, bottom - componentsF[next], 4, 4);
+    ellipse(xvar - 0.5, bottom - componentsM[next], 4, 4);
   }
   pop();
 
-  // make pop-up box with country stats
-  if (isOverCircle == true) {
-    fill(238, 226, 210, 100);
-    noStroke();
-    rect(70, 150, width - 70, height - 100);
-    rectMode(CENTER);
-    fill(255, 255, 255, 220);
-    noStroke();
-    if (componentsM[next] > componentsF[next]) {
-      rect(xvar, (height - 150) - componentsM[next], 170, 70, 5);
-      triangle(xvar, (height - 105) - componentsM[next], 95 + (this.row * width / 32), (height - 115) - componentsM[next], 105 + (this.row * width / 32), (height - 115) - componentsM[next]);
-      push();
-      noStroke();
-      fill('black');
-      textSize(18);
-      textAlign(LEFT);
-      textFont(myriadCond);
-      text(this.countryName.toUpperCase(), xvar - 75, (height - 190) - componentsM[next]);
-      textSize(13);
-      if (this.maleMnYrsSchool > this.femMnYrsSchool) {
-      text(statNums[next], xvar - 75, (height - 129) - componentsM[next]);
-      }
-      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 165) - componentsM[next]);
-      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 147) - componentsM[next]);
-      pop();
-    } else if (componentsM[next] < componentsF[next]) {
-      rect(xvar, (height - 150) - componentsF[next], 170, 50, 5);
-      triangle(xvar, (height - 115) - componentsF[next], 95 + (this.row * width / 32), (height - 125) - componentsF[next], 105 + (this.row * width / 32), (height - 125) - componentsF[next]);
-      push();
-      noStroke();
-      fill('black');
-      textSize(18);
-      textAlign(LEFT);
-      textFont(myriadCond);
-      text(this.countryName.toUpperCase(), xvar - 75, (height - 180) - componentsF[next]);
-      textSize(13);
-      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
-      // text(statNums[next], xvar - 75, (height - 139) - componentsF[next]);
-      // }
-      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 137) - componentsF[next]);
-      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 155) - componentsF[next]);
-      pop();
-    }
-  }
->>>>>>> 1fc6576fca6d57a3a456387a5d50994093592a59
-
+  textSize(15);
+  var tw = textWidth("In " + this.countryName) + 1;
   // make pop-up box with country stats
   if (isOverCircle == true) {
     // fill(238, 226, 210, 100);
     // noStroke();
     // rect(70, 150, width - 70, height - 100);
-    rectMode(CENTER);
+    // rectMode(CENTER);
     fill(255, 255, 255, 220);
     noStroke();
     if (componentsM[next] > componentsF[next]) {
-      rect(xvar, (height - 150) - componentsM[next], 170, 70, 5);
-      triangle(xvar, (height - 105) - componentsM[next], xvar - 5, (height - 115) - componentsM[next], xvar + 5, (height - 115) - componentsM[next]);
+      // rect(xvar, (bottom - 50) - componentsM[next], 170, 70, 5);
+      // rect(start - 15, height * 0.03, tw + 225, height * 0.1, 5);
+      // triangle(xvar, (bottom - 5) - componentsM[next], xvar - 5, (bottom - 15) - componentsM[next], xvar + 5, (bottom - 15) - componentsM[next]);
       push();
       noStroke();
-      fill('black');
-      textSize(18);
+      textSize(20);
+      fill(dsg);
       textAlign(LEFT);
       textFont(myriadCond);
-      text(this.countryName.toUpperCase(), xvar - 75, (height - 190) - componentsM[next]);
-      textSize(13);
-      if (this.maleMnYrsSchool > this.femMnYrsSchool) {
-        text(statNums[next], xvar - 75, (height - 129) - componentsM[next]);
-      }
-      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 165) - componentsM[next]);
-      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 147) - componentsM[next]);
+      // text(this.countryName.toUpperCase(), xvar - 75, (bottom - 90) - componentsM[next]);
+      text("In " + this.countryName, start, height * 0.06);
+      fill(sg);
+      textSize(14);
+      textFont(myriadReg);
+      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
+        // text(statNums[next], xvar - 75, (bottom - 29) - componentsM[next]);
+        text(statNums[next], start + tw, height * 0.12);
+      // }
+      // text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (bottom - 65) - componentsM[next]);
+      // text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (bottom - 47) - componentsM[next]);
+      text(this.marriedBy18 + "% of girls are married before age 18 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.06);
+      text(this.marriedBy15 + "% of girls are married before age 15 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.09);
       pop();
     } else if (componentsM[next] < componentsF[next]) {
-      rect(xvar, (height - 150) - componentsF[next], 170, 50, 5);
-      triangle(xvar, (height - 115) - componentsF[next], xvar - 5, (height - 125) - componentsF[next], xvar + 5, (height - 125) - componentsF[next]);
+      // rect(xvar, (bottom - 60) - componentsF[next], 170, 50, 5);
+      // triangle(xvar, (bottom - 25) - componentsF[next], xvar - 5, (bottom - 35) - componentsF[next], xvar + 5, (bottom - 35) - componentsF[next]);
       push();
       noStroke();
-      fill('black');
-      textSize(18);
+      fill(dsg);
+      textSize(20);
       textAlign(LEFT);
       textFont(myriadCond);
-      text(this.countryName.toUpperCase(), xvar - 75, (height - 180) - componentsF[next]);
-      textSize(13);
-      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
-      // text(statNums[next], xvar - 75, (height - 139) - componentsF[next]);
-      // }
-      text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (height - 137) - componentsF[next]);
-      text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (height - 155) - componentsF[next]);
+      text("In " + this.countryName, start, height * 0.06);
+      fill(sg);
+      textSize(14);
+      textFont(myriadReg);
+      if (next === 1) {
+      text(statNums[1], start + tw, height * 0.12);
+      }
+      if (next === 0) {
+      text("women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling", start + tw, height * 0.12);
+      }
+      // text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (bottom - 47) - componentsF[next]);
+      // text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (bottom - 65) - componentsF[next]);
+      text(this.marriedBy18 + "% of girls are married before age 18 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.06);
+      text(this.marriedBy15 + "% of girls are married before age 15 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.09);
       pop();
     }
   }
@@ -478,6 +454,7 @@ function processData() {
     maleGNI[i] = maleGNI[i].replace(/\,/g, "");
     maleGNI[i] = parseFloat(maleGNI[i]);
   }
+  region = table.getColumn('region');
 
   for (var row = 0; row < count; row++) {
     rowNum.push(row);
@@ -485,7 +462,7 @@ function processData() {
   loaded = true;
 }
 
-function Country(rowNum, countryName, marriedBy15, marriedBy18, marriedDataYear, marriedDataSource, marriedDataSource, femaleHDI, femLifeExp, maleLifeExp, femMnYrsSchool, maleMnYrsSchool, femaleGNI, maleGNI) {
+function Country(rowNum, countryName, marriedBy15, marriedBy18, marriedDataYear, marriedDataSource, marriedDataSource, femaleHDI, femLifeExp, maleLifeExp, femMnYrsSchool, maleMnYrsSchool, femaleGNI, maleGNI, region) {
   this.row = rowNum;
   this.countryName = countryName;
   this.marriedBy15 = marriedBy15;
@@ -499,6 +476,7 @@ function Country(rowNum, countryName, marriedBy15, marriedBy18, marriedDataYear,
   this.maleMnYrsSchool = maleMnYrsSchool;
   this.femaleGNI = femaleGNI;
   this.maleGNI = maleGNI;
+  this.region = region;
 }
 
 function windowResized() {
