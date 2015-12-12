@@ -53,10 +53,27 @@ hr{
    padding: 0px;
 }
 
-#map {
-   width: 50%;
-   height: 100%;
+#maps{
+  
 }
+#map1 { 
+  position:absolute; 
+  top:75px; 
+  bottom:0; 
+  left:0; 
+  right:50%; 
+  
+}
+
+#map2 { 
+  position:absolute; 
+  top:75px; 
+  bottom:0; 
+  left:50%; 
+  right:0; 
+  
+}
+
 .info {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
@@ -92,23 +109,37 @@ hr{
     margin-right: 8px;
     opacity: 0.7;
 }
-#test{
-   width: 50%;
-   height: 500px;
-   background: #2B2B2B;
-}
+
 #value{
   visibility: hidden;
   height: 0px;
 }
 #filter{
-  position: absolute;
-  width: 40%;
-  height: 10%;
-  /*background: #2B2B2B;*/
+  position:absolute; 
+  top:75px; 
+  bottom:0; 
+  left:0; 
+  right:50%;
   z-index: 100;
 }
 #filter select{
   margin-top:10px;
-  margin-left:75%;
+  margin-left:65%;
+}
+
+#value2{
+  visibility: hidden;
+  height: 0px;
+}
+#filter2{
+  position:absolute; 
+  top:75px; 
+  bottom:0; 
+  left:50%; 
+  right:0; 
+  z-index: 100;
+}
+#filter2 select{
+  margin-top:10px;
+  margin-left:65%;
 }

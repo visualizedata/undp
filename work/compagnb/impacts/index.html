@@ -13,18 +13,20 @@ barbara compagnoni -->
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css"/>
   <!-- external style  -->
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="easy-button.css" media="screen" />
   <!-- google FONTS!! -->
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700italic,700,900,900italic' rel='stylesheet' type='text/css'>
 <!-- JS!!! -->
   <script src="libraries/p5.js" type="text/javascript"></script>
   <script src="libraries/p5.dom.js" type="text/javascript"></script>
-  
+
   <!-- Leaflet JS to make run!!! -->
-  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
-  
+  <script type="text/javascript" src='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
+  <script src='easy-button.js'></script>
+
   <!-- P5 Sketch -->
   <script src="sketch.js" type="text/javascript"></script>
-  
+
 </head>
 
 <body>
@@ -34,15 +36,20 @@ barbara compagnoni -->
    </div>
    <!-- div to put map in! -->
    <div id="filter"></div>
-   <div id="map"></div>
-   <div id="test"></div>
+   <div id="filter2"></div>
+   <div id="maps">
+      <div id='map1'></div>
+      <div id='map2'></div>
+   </div>
+
    <div id="value"></div>
+   <div id="value2"></div>
 
    <!-- data about african countries -->
    <!--<script type="text/javascript" src="africa.js"></script>-->
    <!-- javascript for map populate -->
    <!--<script type="text/javascript" src="mapGoodies.js"></script>-->
-   
+
 </body>
 
 </html>
