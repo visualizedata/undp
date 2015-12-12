@@ -10,8 +10,8 @@ container {
   position: absolute;
   background-color: black;
   padding-top: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding-left: 40px;
+  padding-right: 30px;
   font-size: 20pt;
   color: white;
   z-index: 15;
@@ -22,6 +22,17 @@ container {
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: black;
+}
+.desc{
+  /*position: absolute;*/
+  background-color: black;
+  padding-top: 15px;
+  /*padding-right: 5px;*/
+  color: white;
+  z-index: 15;
+  font-family: "Myriad Pro";
+  font-size: 9pt;
+  line-height: 14pt;
 }
 .xLabels {
   position: absolute;
@@ -47,6 +58,7 @@ container {
 .button {
   position: absolute;
   top: 3%;
+  width: 100px;
   font-size: 10pt;
   color: white;
   border-left: none;
@@ -64,19 +76,16 @@ container {
 }
 #gni {
   right: 70px;
-  width: 120px;
   height: 30px;
 }
 
 #le {
-  right: 200px;
-  width: 120px;
+  right: 190px;
   height: 30px;
 }
 
 #edu {
-  right: 330px;
-  width: 120px;
+  right: 310px;
   height: 30px;
 }
 .region {

@@ -25,14 +25,15 @@ var leButton;
 var gniButton;
 var allButton;
 var yLabel, yLabel2, yLabel3;
-var yAxis = ['Mean years of schooling, 2002-2012', 'Life expectancy, 2013', 'Gross national income (GNI), 2013'];
+var yAxis = ['Mean years of schooling, 2002-2012', 'Life expectancy at birth, 2013', 'Estimated GNI per capita, 2013'];
 var yAxis5 = ['10.0', '90', '27,500'];
 var yAxis4 = ['7.5', '75', '20,625'];
 var yAxis3 = ['5.0', '60', '13,750'];
 var yAxis2 = ['2.5', '45', '6,875'];
 var yAxis0 = ['0', '30', '0'];
 var next = 0;
-var title;
+var title, desc, desc2;
+var img;
 var w = 0;
 var isOverCircle;
 
@@ -48,6 +49,7 @@ function preload() {
   myriadReg = loadFont('MyriadPro-Regular.otf');
   myriadCond = loadFont('MyriadPro-Cond.otf');
   myriadBCon = loadFont('MyriadPro-BoldCond.otf');
+  // img = loadImage("legend.svg");
 }
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SETUP & HTML STUFF ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function setup() {
@@ -57,7 +59,15 @@ function setup() {
 
   title = createDiv("Child marriage & female development in Africa");
   title.class('title');
-  // title.position(70, 30);
+  desc = createDiv("The formal or informal union of a girl under the age of 18 can compromise a girl's development; limiting educational and career opportunities.");
+  desc.parent(title);
+  desc.class('desc');
+  desc2 = createDiv('The main indicator for this data examines African women aged 20-24 and reports the percentage of that group who were first married or in union before the age of 15 and 18.');
+  desc2.class('desc');
+  desc2.parent(title);
+  img = createImg('legend.svg');
+  img.parent(title);
+  img.class('desc');
 
   var central = createElement("div");
   central.class('region');
@@ -118,7 +128,7 @@ function buttons() {
   yLabel.style('color', 'dimgrey');
 
   yLabel2 = createElement("div", yAxis[1]);
-  yLabel2.position(width * 0.17, height * 0.47);
+  yLabel2.position(width * 0.155, height * 0.47);
   yLabel2.class('yLabel');
   yLabel2.style('color', 'transparent');
 
@@ -233,11 +243,11 @@ function draw() {
   textFont(myriadReg);
   textAlign(RIGHT, TOP);
   text(yAxis5[next], start - 5, top - 5);
-  text(yAxis2[next], start - 5, top + 3 * whatever);
   textAlign(RIGHT, CENTER);
+  text(yAxis2[next], start - 5, top + 3 * whatever);
   text(yAxis3[next], start - 5, top + 2 * whatever);
-  textAlign(RIGHT, BASELINE);
   text(yAxis4[next], start - 5, top + whatever);
+  textAlign(RIGHT, BASELINE);
   text(yAxis0[next], start - 5, bottom);
   pop();
 
@@ -271,7 +281,7 @@ Country.prototype.display = function() {
   if (eduGap < 0) { // If female value is higher don't display the gap
     eduGap = '';
   }
-  var gniGap = (this.femaleGNI/this.maleGNI) * 100; // Get gap value for GNI
+  var gniGap = (this.femaleGNI / this.maleGNI) * 100; // Get gap value for GNI
   var gniGap = gniGap.toFixed(1); // Round to 1 decimal place
   if (gniGap < 0) { // If female value is higher don't display the gap
     gniGAp = '';
@@ -325,61 +335,44 @@ Country.prototype.display = function() {
   }
   pop();
 
-  textSize(15);
-  var tw = textWidth("In " + this.countryName) + 1;
+  textSize(18);
+  var tw = textWidth("In " + this.countryName + " ");
   // make pop-up box with country stats
   if (isOverCircle == true) {
-    // fill(238, 226, 210, 100);
-    // noStroke();
-    // rect(70, 150, width - 70, height - 100);
-    // rectMode(CENTER);
     fill(255, 255, 255, 220);
     noStroke();
     if (componentsM[next] > componentsF[next]) {
-      // rect(xvar, (bottom - 50) - componentsM[next], 170, 70, 5);
-      // rect(start - 15, height * 0.03, tw + 225, height * 0.1, 5);
-      // triangle(xvar, (bottom - 5) - componentsM[next], xvar - 5, (bottom - 15) - componentsM[next], xvar + 5, (bottom - 15) - componentsM[next]);
       push();
       noStroke();
-      textSize(20);
+      textSize(18);
       fill(dsg);
       textAlign(LEFT);
-      textFont(myriadCond);
-      // text(this.countryName.toUpperCase(), xvar - 75, (bottom - 90) - componentsM[next]);
+      textFont(minionSemi);
       text("In " + this.countryName, start, height * 0.06);
       fill(sg);
       textSize(14);
       textFont(myriadReg);
-      // if (this.maleMnYrsSchool > this.femMnYrsSchool) {
-        // text(statNums[next], xvar - 75, (bottom - 29) - componentsM[next]);
-        text(statNums[next], start + tw, height * 0.12);
-      // }
-      // text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (bottom - 65) - componentsM[next]);
-      // text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (bottom - 47) - componentsM[next]);
+      text(statNums[next], start + tw, height * 0.12);
       text(this.marriedBy18 + "% of girls are married before age 18 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.06);
       text(this.marriedBy15 + "% of girls are married before age 15 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.09);
       pop();
     } else if (componentsM[next] < componentsF[next]) {
-      // rect(xvar, (bottom - 60) - componentsF[next], 170, 50, 5);
-      // triangle(xvar, (bottom - 25) - componentsF[next], xvar - 5, (bottom - 35) - componentsF[next], xvar + 5, (bottom - 35) - componentsF[next]);
       push();
       noStroke();
+      textSize(18);
       fill(dsg);
-      textSize(20);
       textAlign(LEFT);
-      textFont(myriadCond);
+      textFont(minionSemi);
       text("In " + this.countryName, start, height * 0.06);
       fill(sg);
       textSize(14);
       textFont(myriadReg);
       if (next === 1) {
-      text(statNums[1], start + tw, height * 0.12);
+        text(statNums[1], start + tw, height * 0.12);
       }
       if (next === 0) {
-      text("women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling", start + tw, height * 0.12);
+        text("women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling", start + tw, height * 0.12);
       }
-      // text(this.marriedBy15 + "% of girls are married before age 15", xvar - 75, (bottom - 47) - componentsF[next]);
-      // text(this.marriedBy18 + "% of girls are married before age 18", xvar - 75, (bottom - 65) - componentsF[next]);
       text(this.marriedBy18 + "% of girls are married before age 18 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.06);
       text(this.marriedBy15 + "% of girls are married before age 15 (" + this.marriedDataYear + ")", width * 0.25 + tw, height * 0.09);
       pop();
