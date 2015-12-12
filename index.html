@@ -34,7 +34,7 @@
           if (usePreview) {
             $(this).append("<img class='col-sm-12' src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "'>");
             $(this).find("img").error(function() {
-              $(this).parent().append("<iframe width='100%' src='" + $(this).parent().attr('href') + "'><iframe>");
+              $(this).parent().append("<iframe width='100%' height='688' src='" + $(this).parent().attr('href') + "'><iframe>");
               $(this).parent().find("img").remove();
             });
           }
