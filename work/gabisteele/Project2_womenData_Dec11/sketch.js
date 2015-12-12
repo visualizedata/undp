@@ -4,6 +4,10 @@ var maxVal = 1000;
 var col;
 var countryObjectArray;
 
+//Positions
+var barY = 850;
+var fobX = 80 * row + 123;
+
 var isOverBurn = false;
 var isOverArgues = false;
 var isOverOut = false;
@@ -16,6 +20,7 @@ var isOverNoData = false;
 
 var countryName = [];
 var FGM = [];
+var dataYr = [];
 var womanBurns = [];
 var manBurns = [];
 var womanArgues = [];
@@ -41,6 +46,8 @@ var count = 0;
 var y = [];
 var easing = 0.02;
 var targetY = [88.7, 74.3, 27.1, 97.0, 1.4, 14.6, 1.4, 24.2, 44.2, 91.1, 88.0, 7.3, 75.8, 38.2, 76.3, 3.8, 96.9, 49.8, 49.8, 91.4, 69.4, 24.8];
+
+var rectH = [88.7, 74.3, 27.1, 97.0, 1.4, 14.6, 1.4, 24.2, 44.2, 91.1, 88.0, 7.3, 75.8, 38.2, 76.3, 3.8, 96.9, 49.8, 49.8, 91.4, 69.4, 24.8];
 
 //Key
 var y1 = 0;
@@ -84,24 +91,24 @@ function draw() {
   y1 += dy * easingKey;
   fill(89, 89, 89);
   noStroke();
-  rect(1220, 170, 35, -y1);
+  rect(1270, 170, 35, -y1);
   
   fill(255);
-  text("Percentage of Women aged 15 - 49 who have undergone Female Genital Mutilation", 1270, 150, 360);
+  text("Percentage of Women aged 15 - 49 who have undergone Female Genital Mutilation", 1320, 150, 360);
 
   var dy = targetY2 - y2;
   y2 += dy * easingKey;
   fill(255, 0, 102);
-  rect(1255, 240, 4, -y2);
+  rect(1305, 240, 4, -y2);
   fill(255);
-  text("Women's Opinions", 1270, 240);
+  text("Women's Opinions", 1320, 240);
   
   var dy = targetY3 - y3;
   y3 += dy * easingKey;
   fill(166, 166, 166);
-  rect(1255, 310, 4, -y3);
+  rect(1305, 310, 4, -y3);
   fill(255);
-  text("Men's Opinions", 1270, 310);
+  text("Men's Opinions", 1320, 310);
   
   fill(255);
   text("Burns the food", 125, 115);
@@ -147,8 +154,10 @@ function draw() {
   //bottom bar chart lines
   noStroke();
   fill(255);
-  rect(100, 750, 2300, 5);
-  rect(100, 350, 2300, 5);
+  rect(100, 850, 1730, 5);
+  rect(100, 420, 1730, 5);
+  text("0%", 60, 859);
+  text("100%", 46, 428);
 
   noStroke;
   // count the rows in table 
@@ -174,6 +183,7 @@ function draw() {
     // show country names
     countryName = table.getString(row, 0);
     FGM = table.getString(row, 2);
+    dataYrs = table.getString(row, 1);
     womanBurns = table.getString(row, 9);
     manBurns = table.getString(row, 15);
     womanArgues = table.getString(row, 10);
@@ -197,7 +207,8 @@ function draw() {
 
     // Country Name list
     fill(255);
-    text(countryName, 80 * row + 100, 800, 10);
+    textAlign(CENTER);
+    text(countryName, 80 * row + 120, barY + 50, 10);
 
     // FGM bars
     noStroke();
@@ -205,15 +216,25 @@ function draw() {
     var dy = targetY[row] - y[row]; // Eritrea
     y[row] += dy * easing;
     // print(y[row]);
-    rect(80 * row + 100, 750, 50, -y[row] * 4);
+    rect(80 * row + 100, barY, 50, -y[row] * 4);
+    //years
+    fill("grey");
+    text( dataYrs, 80 * row + 120, barY + 25);
+    textAlign(LEFT);
+    
+    // percentages
+    fill("grey");
+    text(FGM + "%", 80 * row + 100, barY - 400);
+    
+    
 
 
     //Burns Food Data
     if (isOverBurn) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanBurns) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanBurns) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manBurns) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manBurns) * 4);
       fill(255);
       ellipse(110, 110, 12, 12);
     }
@@ -221,9 +242,9 @@ function draw() {
     // Argues with Husband Data
     if (isOverArgues) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanArgues) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanArgues) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manArgues) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manArgues) * 4);
       fill(255);
       ellipse(110, 140, 12, 12);
     }
@@ -231,9 +252,9 @@ function draw() {
     // Woman Goes out w/out telling
     if (isOverOut) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanOut) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanOut) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manOut) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manOut) * 4);
       fill(255);
       ellipse(110, 170, 12, 12);
     }
@@ -241,9 +262,9 @@ function draw() {
     // Woman Neglects the Children
     if (isOverNeg) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanNeg) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanNeg) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manNeg) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manNeg) * 4);
       fill(255);
       ellipse(110, 200, 12, 12);
     }
@@ -251,9 +272,9 @@ function draw() {
     // Woman Refuses to Have Sex
     if (isOverSex) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanSex) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanSex) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manSex) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manSex) * 4);
       fill(255);
       ellipse(110, 230, 12, 12);
     }
@@ -261,9 +282,9 @@ function draw() {
     //All or one of the above
     if (isOverAll) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanAll) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanAll) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manAll) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manAll) * 4);
       fill(255);
       ellipse(110, 260, 12, 12);
     }
@@ -271,9 +292,9 @@ function draw() {
     //FGM Continued
     if (isOverCont) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanCont) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanCont) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manCont) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manCont) * 4);
       fill(255);
       ellipse(710, 110, 12, 12); // cont
     }
@@ -281,18 +302,18 @@ function draw() {
     // FGM Discontinued
     if (isOverDis) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanDis) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanDis) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manDis) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manDis) * 4);
       fill(255);
       ellipse(710, 140, 12, 12); // cont
     }
 
     if (isOverNoData) {
       fill(255, 0, 102);
-      rect(80 * row + 110, 750, 4, -parseFloat(womanNoData) * 4);
+      rect(80 * row + 123, barY, 4, -parseFloat(womanNoData) * 4);
       fill(166, 166, 166);
-      rect(80 * row + 120, 750, 4, -parseFloat(manNoData) * 4);
+      rect(80 * row + 133, barY, 4, -parseFloat(manNoData) * 4);
       fill(255);
       ellipse(710, 170, 12, 12); // cont
     }
