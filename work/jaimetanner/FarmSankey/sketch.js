@@ -43,11 +43,21 @@ function setup() {
   textSize(24);
   stroke(black);
   fill(black);
-  text("Productivity Differences Between", width * 0.02, height * 0.05);
-  text("Male and Female African Farmers", width * 0.02, height * 0.09);
+  text("Productivity Differences Between Male and Female African Farmers", width * 0.02, height * 0.05, width * 0.02 + textWidth("Productivity Differences Between"));
+  var titleLength = width * 0.02 + textWidth("Productivity Differences Between");
+  textSize(10);
+  strokeWeight(0.6);
+  textFont(latoHair);
+
+  stroke(black);
+  fill(black);
+  stroke(1);
+  line(titleLength + width * 0.01, height * 0.1, titleLength + width * 0.01, height * 0.02);
+
+  text("This visualization explores the gender gap in agricultural productivity across six countries that account for more than 40% of sub-Saharan Africa's population. Data presented was provided in the report \" Levelling the Field: Improving Opportunities for Women Farmer's in Africa \", a joint production of World Bank and the ONE campaign.", titleLength + width * 0.02, height * 0.04, width * 0.3)
 
   // line(width * 0.01, height * 0.13, width * 0.012 + textWidth("Productivity Differences Between Male"), height * 0.13);
-  for (i = 0; i < width * 0.06; i++) {
+  for (i = 0; i < width * 0.12; i++) {
     ellipse(0 + (i * 5), height * 0.11, 1, 1);
   }
   for (i = 0; i < width * 0.3; i++) {
