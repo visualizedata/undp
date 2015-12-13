@@ -15,6 +15,9 @@ var lifeF = [];
 var lifeM = [];
 var xSchoolF = [];
 var xSchoolM = [];
+var expSchF = [];
+var expSchM = [];
+var expSchGap = [];
 var gniF = [];
 var gniM = [];
 var gdp = [];
@@ -249,6 +252,16 @@ function setColor(i, mapNum){
         xSchoolGap[i]  > 0 ? '#FED976' :
         '#FED976';
     }
+    if (dropValue == 'Expected Years of Schooling'){
+      return xSchoolGap[i] > 3.0 ? '#800026' :
+        xSchoolGap[i]  > 2.5 ? '#BD0026' :
+        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
+        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
+        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
+        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
+        xSchoolGap[i]  > 0 ? '#FED976' :
+        '#FED976';
+    }
     if (dropValue == 'GNI Rating'){
       return gniGap[i] > 10000 ? '#800026' :
        gniGap[i]  > 8000 ? '#BD0026' :
@@ -293,6 +306,16 @@ function setColor(i, mapNum){
        '#FED976';
     }
     if (dropValue2 == 'Avg. Years of Schooling'){
+      return xSchoolGap[i] > 3.0 ? '#800026' :
+        xSchoolGap[i]  > 2.5 ? '#BD0026' :
+        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
+        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
+        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
+        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
+        xSchoolGap[i]  > 0 ? '#FED976' :
+        '#FED976';
+    }
+    if (dropValue == 'Expected Years of Schooling'){
       return xSchoolGap[i] > 3.0 ? '#800026' :
         xSchoolGap[i]  > 2.5 ? '#BD0026' :
         xSchoolGap[i]  > 2.0 ? '#E31A1C' :
@@ -364,12 +387,12 @@ function showData(data) {
 
     expSchM[i] = data.features[i].properties.XSchM;
     expSchF[i] = data.features[i].properties.XSchF;
-    if (xSchoolF[i] > xSchoolM[i]){
-     xSchoolGap[i] = xSchoolF[i] - xSchoolM[i];
-    }else if( xSchoolF[i] < xSchoolM[i]){
-      xSchoolGap[i] = xSchoolM[i] - xSchoolF[i];
+    if (expSchF[i] > expSchM[i]){
+     expSchGap[i] = expSchF[i] - expSchM[i];
+    }else if( expSchF[i] < expSchM[i]){
+      expSchGap[i] = xSchoolM[i] - expSchF[i];
     }else{
-      xSchoolGap[i] = "unknown";
+      expSchGap[i] = "unknown";
     }
 
     gniM[i] = data.features[i].properties.gniM;
@@ -456,6 +479,7 @@ function initLeaflet() {
 
 function comparisonFilter() {
   dropdown = createElement('select');
+  dropdown.addClass('styled-select');
   dropdown.position(0, 0);
   for (var i = 0; i < comparisonOpts.length; i++) {
     var option = createElement('option');
@@ -480,6 +504,7 @@ function comparisonFilter() {
 
 function comparisonFilter2() {
   dropdown2 = createElement('select');
+  dropdown2.addClass('styled-select');
   dropdown2.position(0, 0);
   for (var i = 0; i < comparisonOpts2.length; i++) {
     var option = createElement('option');
@@ -545,6 +570,10 @@ function legendInfo(map, dropV) {
     rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
     unitsOfMeasure = "Years"
   }
+   if (dropV == 'Expected Years of Schooling'){
+    rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
+    unitsOfMeasure = "Years"
+  }
 
   if (dropV == 'GNI Rating'){
     rangeArray = [10000, 8000, 6000, 4000, 2000, 500, "Unknown"];
@@ -590,6 +619,11 @@ function legend2Info(map, dropV) {
   }
 
   if (dropV == 'Avg. Years of Schooling'){
+    rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
+    unitsOfMeasure = "Years"
+  }
+
+  if (dropV == 'Expected Years of Schooling'){
     rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
     unitsOfMeasure = "Years"
   }

@@ -43,6 +43,14 @@ body{
    /*text-decoration: underline;*/
    color: rgba(255, 255, 255, 0.8);
 }
+a {
+   font-family: 'Roboto', sans-serif;
+   font-weight: 100;
+   font-size: 12px;
+   font-style: italic;
+   color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
 
 span.underline {
    margin-top: -2px;
@@ -136,7 +144,7 @@ select{
   /*background: rgba(255, 255, 255, 0.1);*/
   /*background: url(female.png) no-repeat right #ddd;*/
   color: rgba(255, 255, 255, 0.8);
-  width: 160px;
+  width: 165px;
   /*padding: 5px;*/
   line-height: 1;
   border: 0;
