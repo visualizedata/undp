@@ -101,7 +101,6 @@ img {
 
 h2 {
     font-family: "neue-regular" !important;
-    font-size: 14.5pt;
 }
 
 a {
@@ -131,10 +130,10 @@ input[type=text] {
 h3 {
     font-family: "neue-display-ultra" !important;
     letter-spacing: 0.05em;
-    font-kerning: normal;
     line-height: 1em;
     text-transform: uppercase;
-    margin-bottom: 2px;
+    margin: 2px 0 0 1em !important;
+    padding: 0  !important;
     font-size: 14.5px !important;
 }
 
