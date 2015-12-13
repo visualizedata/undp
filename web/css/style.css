@@ -122,6 +122,7 @@ a:hover {
 
 body,
 p,
+ul,
 input[type=text] {
     font-family: "neue-regular";
     font-size: 14.5px;
@@ -248,6 +249,15 @@ h3 {
     margin-top: -120px;
 }
 
+ul {
+    margin-top: 0.7em !important;
+}
+
+ul li {
+    list-style: none;
+    margin-left: -2.5em;
+}
+
 #inner-menu-stripe {
     margin-top: 1px;
     width: 100px;
@@ -269,7 +279,7 @@ button {
 }
 
 button:hover,
-#embed:hover {
+.glyphicon:hover {
     color: #e82e21 !important;
     transition: all .3s ease-in-out;
 }

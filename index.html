@@ -31,7 +31,7 @@
               width: 'toggle'
             }).select();
           });
-          
+
           // scale
           var str = "<button type='button' class='btn btn-default btn-default' onClick='location.href=\"";
           str += $(this).attr('href');
@@ -78,8 +78,15 @@
         $(this).has("img").find("iframe").remove();
         $(this).find("img").show();
       });
+      
+      // index
+      $("h3").each(function(i) {
+        $("#index").append("<li><a href='#"+ i +"'>" + $(this).text() + "</a><li>");
+        $(this).prepend("<a id='" + i + "'>");
+      });
 
     });
+
   </script>
 </head>
 
@@ -119,19 +126,31 @@
       </div>
     </div>
 
-    <!--YEAR-->
-    <div class="font-width-3 col-sm-12">
-      2015
-    </div>
 
     <h2 class="col-sm-10 col-sm-offset-1">
       Partnering with the <a href="http://www.africa.undp.org/">United Nations Development Programme on Africa Human Development</a>, <a href="http://www.newschool.edu/parsons/ms-data-visualization/">Parsons Data Visualization</a> <a href="#about">students</a> investigate how gender inequality impact economics on a micro- and macro level.
     </h2>
+    
+    <!--YEAR-->
+        <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <div class="font-width-3 col-sm-12">
+      2015
+    </div>
+    
+    <!--INDEX-->
+    <div class="col-sm-12 col-sm-10 col-sm-offset-1">
+      <ul id="index">
+
+      </ul>
+      <br />
+    </div>
+
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
-
-
+    
     <h3 class="col-sm-12">Economic Gaps</h3>
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
@@ -185,7 +204,7 @@
     <!--Project2-->
     <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
-        <span class="title">Africa's Schoolhouse: A Learning Map</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
+        <span class="title">Africa’s Schoolhouse: A Learning Map</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
       </p>
     </div>
 
@@ -339,7 +358,7 @@
   </div>
 
   <script src="web/js/bootstrap.min.js"></script>
-  <script src="web/js/lazysizes.min.js"></script>
+  <script src="web/js/jquery.easing.min.js"></script>
   <script src="web/js/custom.js"></script>
 </body>
 
