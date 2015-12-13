@@ -8,6 +8,7 @@ body{
    background: #3D3D3D;
 }
 #header{
+
    width: 100%;
    height: 75px;
    background: #2B2B2B;
@@ -28,6 +29,11 @@ body{
    /*border-width: 0 0 1px;*/
    /*border-style: solid;*/
 }
+
+#header span{
+  color: #FED976;
+}
+
 #header p{
    margin: 0px;
    padding-top: 5px;
@@ -38,6 +44,23 @@ body{
    font-style: italic;
    /*text-decoration: underline;*/
    color: rgba(255, 255, 255, 0.8);
+}
+
+a {
+   font-family: 'Roboto', sans-serif;
+   font-weight: 100;
+   font-size: 12px;
+   font-style: italic;
+   color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
+a:hover{
+   font-family: 'Roboto', sans-serif;
+   font-weight: 100;
+   font-size: 12px;
+   font-style: italic;
+   color: #FED976;
+    text-decoration: none;
 }
 
 span.underline {
@@ -54,24 +77,24 @@ hr{
 }
 
 #maps{
-  
+
 }
-#map1 { 
-  position:absolute; 
-  top:75px; 
-  bottom:0; 
-  left:0; 
-  right:50%; 
-  
+#map1 {
+  position:absolute;
+  top:75px;
+  bottom:0;
+  left:0;
+  right:50%;
+
 }
 
-#map2 { 
-  position:absolute; 
-  top:75px; 
-  bottom:0; 
-  left:50%; 
-  right:0; 
-  
+#map2 {
+  position:absolute;
+  top:75px;
+  bottom:0;
+  left:50%;
+  right:0;
+
 }
 
 .info {
@@ -87,8 +110,8 @@ hr{
     color: #777;
 }
 
-.legend {
-   background: #3D3D3D;
+#legend1 {
+   /*background: #3D3D3D;*/
    left-margin:10px;
    line-height: 18px;
    color: rgba(255, 255, 255, 0.8);
@@ -96,18 +119,81 @@ hr{
    font-weight: 300;
    font-size: 8px;
 }
-.legend h4 {
+#legend2 {
+   /*background: #3D3D3D;*/
+   left-margin:10px;
+   line-height: 18px;
    color: rgba(255, 255, 255, 0.8);
    font-family: 'Roboto', sans-serif;
-   font-weight: 400;
-   font-size: 15px;
- }
-.legend i {
-    width: 18px;
+   font-weight: 300;
+   font-size: 8px;
+}
+#legend1{
+  position: relative;
+  margin-top: 60%;
+  margin-left: 0px;
+  padding: 0px;
+  width: 200px;
+  height: 200px;
+}
+#legend2{
+  position: relative;
+  margin-top: 60%;
+  margin-left: 0px;
+  padding: 0px;
+  width: 200px;
+  height: 200px;
+}
+
+#legend1 h4 {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+#legend2 h4 {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+#legend1 .legendLabel {
+    width: 80%;
     height: 18px;
     float: left;
-    margin-right: 8px;
+    font-size: 10px;
+    padding-left: 85px;
+    padding-top: 2px;
     opacity: 0.7;
+}
+
+#legend2 .legendLabel {
+    width: 80%;
+    height: 18px;
+    float: left;
+    font-size: 10px;
+    padding-left: 85px;
+    padding-top: 2px;
+    opacity: 0.7;
+}
+
+#legend1 .legendColorBox {
+    position: relative;
+    margin-left: 40px;
+    opacity: 0.8;
+    width: 25px;
+    height: 20px;
+}
+#legend2 .legendColorBox {
+    position: relative;
+    margin-left: 40px;
+    opacity: 0.8;
+    width: 25px;
+    height: 20px;
 }
 
 #value{
@@ -115,10 +201,10 @@ hr{
   height: 0px;
 }
 #filter{
-  position:absolute; 
-  top:75px; 
-  bottom:0; 
-  left:0; 
+  position:absolute;
+  top:75px;
+  bottom:0;
+  left:0;
   right:50%;
   z-index: 100;
 }
@@ -132,14 +218,37 @@ hr{
   height: 0px;
 }
 #filter2{
-  position:absolute; 
-  top:75px; 
-  bottom:0; 
-  left:50%; 
-  right:0; 
+  position:absolute;
+  top:75px;
+  bottom:0;
+  left:50%;
+  right:0;
   z-index: 100;
 }
 #filter2 select{
   margin-top:10px;
   margin-left:65%;
+}
+
+#toggle-check-and-x{
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+  font-size: 12px;
+  width: 70px;
+  height: 30px;
+  transition-duration: .3s;
+}
+#toggle-check-and-x.x-mark-active{
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #3d3d3d;
+}
+#toggle-check-and-x.check-mark-active{
+  /*color: rgba(255, 255, 255, 0.1);*/
+  background-color: #696969;
+}
+
+loadingdiv {
+  visibility:hidden;
+  width: 0;
+  height: 0;
 }
