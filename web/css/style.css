@@ -121,7 +121,8 @@ a:hover {
 }
 
 body,
-p {
+p,
+input[type=text] {
     font-family: "neue-regular";
     font-size: 14.5px;
 }
@@ -182,7 +183,7 @@ h3 {
     margin-top: -0.2rem;
     padding-left: 100px;
     color: #E82E21 !important;
-    margin-left:.2rem;
+    margin-left: .2rem;
 }
 
 #banner h1 {
@@ -191,10 +192,12 @@ h3 {
     line-height: 1em;
     text-transform: uppercase;
     margin-bottom: -2px;
-    margin-left:-.5rem;
+    margin-left: -.5rem;
 }
 
-#banner h1 a, #banner h1 a:hover, #banner h1 a:active {
+#banner h1 a,
+#banner h1 a:hover,
+#banner h1 a:active {
     color: #000;
     text-decoration: none;
 }
@@ -205,7 +208,9 @@ h3 {
     margin-left: 100px;
 }
 
-#banner #u_name a, #u_name a:hover, #u_name a:active {
+#banner #u_name a,
+#u_name a:hover,
+#u_name a:active {
     margin-bottom: 0 !important;
     color: #000 !important;
 }
@@ -244,7 +249,7 @@ h3 {
 }
 
 #inner-menu-stripe {
-    margin-top:1px;
+    margin-top: 1px;
     width: 100px;
     position: absolute;
 }
@@ -263,6 +268,8 @@ button {
     background-color: white !important;
 }
 
-button:hover {
+button:hover,
+#embed:hover {
     color: #e82e21 !important;
+    transition: all .3s ease-in-out;
 }
