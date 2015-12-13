@@ -1,0 +1,73 @@
+function checkBoxes() {
+
+  centralCheckBox = createCheckbox('checkboxG1');
+  centralCheckBox.id('checkboxG1');
+  // centralCheckBox.parent('ck1');
+  centralCheckBox.parent('filters');
+
+  centralCheckBox.addClass('css-checkbox');
+  var centralLabel = createElement('label', 'Central');
+  centralLabel.style('color', '#B452CD');
+  centralLabel.addClass('css-label');
+  // centralLabel.parent('ck1');
+  centralLabel.parent('filters');
+
+  centralCheckBox.checked(true); // passing in an arg sets its state?
+  centralCheckBox.elt.onchange = function() {
+    // console.log("central!");
+    reload();
+  };
+
+  eastCheckBox = createCheckbox();
+  eastCheckBox.parent('filters');
+  eastCheckBox.addClass('pinkcheck');
+  var eastLabel = createElement('label', 'Eastern');
+  eastLabel.style('color', '#8470FF');
+  eastLabel.parent('filters');
+  eastLabel.addClass('pinkcheck');
+  eastCheckBox.checked(true); // passing in an arg sets its state?
+  eastCheckBox.elt.onchange = function() {
+    // console.log("east!");
+    reload();
+  };
+
+  northernCheckBox = createCheckbox();
+  northernCheckBox.parent('filters');
+  northernCheckBox.addClass('pinkcheck');
+  var northernLabel = createElement('label', 'Northern');
+  northernLabel.style('color', '#63B8FF');
+  northernLabel.parent('filters');
+  northernLabel.addClass('pinkcheck');
+  northernCheckBox.checked(true); // passing in an arg sets its state?
+  northernCheckBox.elt.onchange = function() {
+    // console.log("Northern!");
+    reload();
+  };
+
+  southernCheckBox = createCheckbox();
+  southernCheckBox.parent('filters');
+  southernCheckBox.addClass('pinkcheck');
+  var southernLabel = createElement('label', 'Southern');
+  southernLabel.style('color', '#00E5EE');
+  southernLabel.addClass('pinkcheck');
+  southernLabel.parent('filters');
+  southernCheckBox.checked(true); // passing in an arg sets its state?
+  southernCheckBox.elt.onchange = function() {
+    // console.log("Southern!");
+    reload();
+  };
+
+  westCheckBox = createCheckbox();
+  westCheckBox.parent('filters');
+  westCheckBox.addClass('pinkcheck');
+  var westLabel = createElement('label', 'Western');
+  westLabel.style('color', '#7CCD7C');
+  westLabel.parent('filters');
+  westLabel.addClass('pinkcheck');
+  westCheckBox.checked(true); // passing in an arg sets its state?
+  westCheckBox.elt.onchange = function() {
+    // console.log("West!");
+    reload();
+  };
+
+}
