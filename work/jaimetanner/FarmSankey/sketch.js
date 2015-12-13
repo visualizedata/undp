@@ -19,8 +19,6 @@ var labels = [],
   gaps = [];
 lines = [];
 
-
-
 /*-----------load fonts-----------*/
 function preload() {
   latoHair = loadFont('Lato-Hairline.ttf');
@@ -41,10 +39,10 @@ function setup() {
   fill(253, 241, 225);
   textFont(latoLight);
   textSize(24);
-  stroke(black);
-  fill(black);
-  text("Productivity Differences Between Male and Female African Farmers", width * 0.02, height * 0.05, width * 0.02 + textWidth("Productivity Differences Between"));
-  var titleLength = width * 0.02 + textWidth("Productivity Differences Between");
+  stroke(147, 38, 47);
+  fill(147, 38, 47);
+  var titleLength = width * 0.13 + textWidth("Productivity Differences Between");
+  text("Productivity Differences Between Male and Female African Farmers", width * 0.13, height * 0.91, textWidth("Productivity Differences Between Male"));
   textSize(10);
   strokeWeight(0.6);
   textFont(latoHair);
@@ -52,22 +50,22 @@ function setup() {
   stroke(black);
   fill(black);
   stroke(1);
-  line(titleLength + width * 0.01, height * 0.1, titleLength + width * 0.01, height * 0.02);
+  line(titleLength + width * 0.01, height * 0.89, titleLength + width * 0.01, height * 0.97);
 
-  text("This visualization explores the gender gap in agricultural productivity across six countries that account for more than 40% of sub-Saharan Africa's population. Data presented was provided in the report \" Levelling the Field: Improving Opportunities for Women Farmer's in Africa \", a joint production of World Bank and the ONE campaign.", titleLength + width * 0.02, height * 0.04, width * 0.3)
+  text("This visualization explores the gender gap in agricultural productivity across six countries that account for more than 40% of sub-Saharan Africa's population. Data presented was provided in the report \" Levelling the Field: Improving Opportunities for Women Farmer's in Africa \", a joint production of World Bank and the ONE campaign.", titleLength + width * 0.02, height * 0.9, width * 0.3)
 
   // line(width * 0.01, height * 0.13, width * 0.012 + textWidth("Productivity Differences Between Male"), height * 0.13);
-  for (i = 0; i < width * 0.12; i++) {
-    ellipse(0 + (i * 5), height * 0.11, 1, 1);
+  for (i = 0; i < width * 0.145; i++) {
+    ellipse(width * 0.13 + (i * 5), height * 0.11, 1, 1);
   }
-  for (i = 0; i < width * 0.3; i++) {
-    ellipse(width * 0.2 + (i * 5), height * 0.87, 1, 1);
+  for (i = 0; i < width * 0.145; i++) {
+    ellipse(width * 0.13 + (i * 5), height * 0.87, 1, 1);
   }
   /*-----------right bar title-----------*/
   textFont(latoLight);
   textSize(16);
   stroke(200, 50, 50, 100);
-  text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.13);
+  text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.135);
 
   table = loadTable("data.txt", "tsv", showData);
 }
@@ -105,8 +103,10 @@ function showData() {
   for (var z = 0; z < 7; z++) {
     stroke(30, 30, 30, 100);
     strokeWeight(0.5);
-    line(width * 0.28, height * 0.09 * z + (height * 0.24), width * 0.5, height * 0.09 * z + (height * 0.24));
-    // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
+    line(width * 0.28, height * 0.09 * z + (height * 0.25), width * 0.5, height * 0.09 * z + (height * 0.25));
+    line(width * 0.28, height * 0.09 * z + (height * 0.25), width * 0.28, height * 0.09 * z + (height * 0.2))
+    line(width * 0.575, height * 0.09 * z + (height * 0.25), width * 0.575, height * 0.09 * z + (height * 0.2))
+      // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
     fill(119, 136, 153);
     rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
@@ -208,7 +208,7 @@ function mouseMoved() {
 
         stroke(beige);
         fill(beige);
-        rect(width * 0.1, height * 0.88, width * 0.9, height * 0.3);
+        rect(width * 0.1, 0, width * 0.9, height * 0.1);
 
         selectedConnect(j, i);
       }
@@ -225,7 +225,7 @@ function mouseMoved() {
 
         stroke(beige);
         fill(beige);
-        rect(width * 0.1, height * 0.88, width * 0.9, height * 0.3);
+        rect(width * 0.1, 0, width * 0.9, height * 0.1);
         selectedLabels(j, i);
       }
     }
@@ -269,19 +269,18 @@ function selectedConnect(n, i) {
   var number = parseInt(100 - gapNum[n]);
   textFont(latoLight);
   endY.push(height * 0.14 + i * (height * 0.04));
-  stroke(147, 38, 47);
-  fill(147, 38, 47);
-  textSize(19);
-  strokeWeight(0.8);
-  text("Female-managed agricultural plots in" + " ", width * 0.2, height * 0.93);
+  textSize(21);
+  stroke(0);
+  strokeWeight(0.9);
+  text("Female-managed agricultural plots in" + " ", width * 0.13, height * 0.07);
   strokeWeight(1.7);
-  text(names[n], width * 0.2 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.93);
+  text(names[n], width * 0.13 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.07);
   strokeWeight(0.8);
-  text(" " + "produce an average of ", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.93);
+  text(" " + "produce an average of ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.07);
   strokeWeight(1.7);
-  text(number + "%", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.93);
+  text(number + "%", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.07);
   strokeWeight(0.8);
-  text(" " + "less than those that are male managed ", width * 0.2 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.93);
+  text(" " + "less than those that are male managed ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.07);
 }
 
 function selectedLabels(n, i) {
@@ -298,22 +297,15 @@ function selectedLabels(n, i) {
   stroke(0);
   text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
 
-  textFont(latoLight);
   endY.push(height * 0.14 + i * (height * 0.04));
-  stroke(147, 38, 47);
-  fill(147, 38, 47);
-  textSize(16);
-  strokeWeight(0.8);
-  text(summary[i], width * 0.2, height * 0.91, width * 0.7);
+  textFont(latoLight);
+  textSize(18);
+  stroke(0);
+  strokeWeight(0.9);
+  // fill(0);
+  text("\"" + summary[i] + "\"", width * 0.13, height * 0.03, width * 0.8);
 }
 
-
-// function scaleBars () {
-//   for (var z = 0; z < 7; z++) {
-//         rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
-//   }
-// }
-
-// function windowResized() {
-//   resizeCanvas(windowWidth, windowHeight);
-// }
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
