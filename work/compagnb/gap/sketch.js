@@ -37,8 +37,8 @@ function preload() {
   quanTable = loadTable("data/hdrQuant.txt", "tsv", "header");
 
   // load images
-  femaleImg = loadImage("images/femalesm.png");
-  maleImg = loadImage("images/malesm.png");
+  femaleImg = loadImage("images/femalesmW.png");
+  maleImg = loadImage("images/malesmW.png");
   headerImg = loadImage("images/header.png");
 
   // load font
@@ -362,7 +362,7 @@ function checkBoxes() {
   eastCheckBox = createCheckbox();
   eastCheckBox.parent('filters');
   eastCheckBox.addClass('pinkcheck');
-  var eastLabel = createElement('label', 'East');
+  var eastLabel = createElement('label', 'Eastern');
   eastLabel.parent('filters');
   eastLabel.addClass('pinkcheck');
   eastCheckBox.checked(true); // passing in an arg sets its state?
@@ -398,7 +398,7 @@ function checkBoxes() {
   westCheckBox = createCheckbox();
   westCheckBox.parent('filters');
   westCheckBox.addClass('pinkcheck');
-  var westLabel = createElement('label', 'West');
+  var westLabel = createElement('label', 'Western');
   westLabel.parent('filters');
   westLabel.addClass('pinkcheck');
   westCheckBox.checked(true); // passing in an arg sets its state?
@@ -421,7 +421,8 @@ function drawRefGuides() {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
     strokeWeight(0);
-    textSize(8);
+    textFont(fontLight);
+    textSize(12);
     text(".20 HDR", 5, map(0.21, 0.20, 0.85, height - 170, 0));
     text(".35 HDR", 5, map(0.35, 0.20, 0.85, height - 170, 0));
     text(".50 HDR", 5, map(0.5, 0.20, 0.85, height - 170, 0));
@@ -439,7 +440,8 @@ function drawRefGuides() {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
     strokeWeight(0);
-    textSize(8);
+    textFont(fontLight);
+    textSize(12);
     text("20 yrs", 5, map(21.25, 20, 100, height - 170, 0));
     text("40 yrs", 5, map(40, 20, 100, height - 170, 0));
     text("60 yrs", 5, map(60, 20, 100, height - 170, 0));
@@ -458,7 +460,8 @@ function drawRefGuides() {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
     strokeWeight(0);
-    textSize(8);
+    textFont(fontLight);
+    textSize(12);
     text("0 yrs", 5, map(0.17, 0, 10, height - 170, 0));
     text("2 yrs", 5, map(2, 0, 12, height - 170, 0));
     text("4 yrs", 5, map(4, 0, 12, height - 170, 0));
@@ -479,7 +482,8 @@ function drawRefGuides() {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
     strokeWeight(0);
-    textSize(8);
+    textFont(fontLight);
+    textSize(12);
     text("0 yrs", 5, map(0.22, 0, 14, height - 170, 0));
     text("2 yrs", 5, map(2, 0, 14, height - 170, 0));
     text("4 yrs", 5, map(4, 0, 18, height - 170, 0));
@@ -506,7 +510,8 @@ function drawRefGuides() {
     fill("rgba(255, 255, 255, 0.8)");
     stroke("#D3D3D3");
     strokeWeight(0);
-    textSize(8);
+    textFont(fontLight);
+    textSize(12);
     text("0 GNI", 5, map(600, 100, 30000, height - 170, 0));
     text("5000 GNI", 5, map(5000, -2000, 35000, height - 170, 0));
     text("10000 GNI", 5, map(10000, -2000, 35000, height - 170, 0));
@@ -530,10 +535,11 @@ function drawRefGuides() {
 }
 
 function drawDottedGuides() {
+   stroke('rgba(255, 255, 255, 0.1)');
   for (var j = 1; j < 54; j++) {
     fill('rgba(255, 255, 255, 0.3)');
-    for (var i = 0; i < height - 170; i = i + 20) {
-      rect((j * width / 55) + 7, i, 1, 0);
+    for (var i = 0; i < height - 170; i = i + 5) {
+      rect((j * width / 55) + 7,i, 1, 0);
       // console.log(this.row);
     }
   }
@@ -845,26 +851,61 @@ function sortMe() {
 
 function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
   if (femaleRank > 0 || maleRank > 0) {
-
-
+    
+    if (femaleRank < maleRank) {
+      strokeWeight(0);
+      fill('rgba(255, 255, 255, 0.8)');
+      textSize(12);
+      textFont(fontLight);
+      text(nfc(maleRank-femaleRank,2,2), ((row + 1) * width / 55)-7, map(maleRank, minVal, maxVal, height - 170, 0)-30);
+      
+    }else{
+      strokeWeight(0);
+      fill('rgba(255, 255, 255, 0.8)');
+      textSize(12);
+      textFont(fontLight);
+      text(nfc(femaleRank-maleRank,2,2), ((row + 1) * width / 55)-7, map(femaleRank, minVal, maxVal, height - 170, 0)-30);
+      
+    }
+    
     beginShape();
-    stroke('rgba(255, 255, 255, 0.1)');
+    stroke('rgba(255, 255, 255, 0.3)');
     strokeWeight(6);
     //lines
+    
     if (femaleRank < maleRank) {
-      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
-      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0)-25);
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0)+5);
+      
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-      vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+      vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
+
     } else {
-      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0));
-      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0));
+      image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 170, 0)-25);
+      image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 170, 0)+5);
 
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
-      vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0) + 20); // record one vertex per data point
+      vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 170, 0)); // record one vertex per data point
     }
     endShape();
+  }
+}
+
+function pickColor(region){
+  if (region == "Central"){
+    return ;
+  }
+  if (region == "East"){
+    return ;
+  }
+  if (region == "West"){
+    return ;
+  }
+  if (region == "Southern"){
+    return ;
+  }
+  if (region == "Northern"){
+    return ;
   }
 }
 
