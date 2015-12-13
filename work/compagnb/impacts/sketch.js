@@ -479,6 +479,7 @@ function initLeaflet() {
 
 function comparisonFilter() {
   dropdown = createElement('select');
+  dropdown.addClass('styled-select');
   dropdown.position(0, 0);
   for (var i = 0; i < comparisonOpts.length; i++) {
     var option = createElement('option');
@@ -503,6 +504,7 @@ function comparisonFilter() {
 
 function comparisonFilter2() {
   dropdown2 = createElement('select');
+  dropdown2.addClass('styled-select');
   dropdown2.position(0, 0);
   for (var i = 0; i < comparisonOpts2.length; i++) {
     var option = createElement('option');
