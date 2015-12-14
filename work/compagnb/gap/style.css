@@ -9,19 +9,37 @@ body{
 }
 #header{
    width: 100%;
-   height: 75px;
-   background: #2B2B2B;
+   height: 100px;
+   background: #1B1B1B;
    border-width: 0 0 1px;
    border-style: solid;
    color: rgba(255, 255, 255, 0.8);
    font-family: 'Roboto', sans-serif;
 }
-#filters{
-  background: #2B2B2B;
-  font-family: 'Roboto', sans-serif;
+
+#filter-master{
   width: 100%;
+  height: 30px;
+  float: left;
+}
+#filters{
+  position: absolute;
+  background-color: #1B1B1B;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 10px;
+  margin-left:22px;
+  width: 40%;
 
 }
+#pulldowns{
+  position: absolute;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 5px;
+  margin-left: 70%;
+  width: 40%;
+
+}
+
 
 #header h1{
    margin: 0;
@@ -43,6 +61,14 @@ body{
    /*text-decoration: underline;*/
    color: rgba(255, 255, 255, 0.8);
 }
+a {
+   font-family: 'Roboto', sans-serif;
+   font-weight: 100;
+   font-size: 12px;
+   font-style: italic;
+   color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+}
 
 span.underline {
    margin-top: -2px;
@@ -63,7 +89,7 @@ span.underline {
 }
 
 
-/*
+
 input[type=checkbox].css-checkbox {
   position:absolute;
   z-index:-1000;
@@ -71,13 +97,14 @@ input[type=checkbox].css-checkbox {
   overflow: hidden;
   clip: rect(0 0 0 0);
   height:1px; width:1px;
-  margin:-1px;
-  padding:0;
+  margin:20px;
+  padding-left: 20px;
   border:0;
 }
 
 input[type=checkbox].css-checkbox + label.css-label {
   padding-left:20px;
+  padding-right: 5%;
   height:15px;
   display:inline-block;
   line-height:15px;
@@ -93,59 +120,83 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
    background-position: 0 -15px;
  }
 
-label.css-label {
-  background-image:url(http://csscheckbox.com/checkboxes/u/csscheckbox_48d8724c081a4367c3b4a38f504fcc0c.png);
+#cLabel {
+  background-image:url(images/centralCkBox.png);
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
    user-select: none;
-}*/
-
-
-input[type="checkbox"] {
-    margin-left: 20px;
-    height: 15px;
-    display: inline-block;
-    line-height: 15px;
-    border: 0;
-    border-radius: 5px;
-    font-size: 15px;
-    vertical-align: middle;
-    cursor: pointer;
 }
 
-label {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 200;
-  font-size: 12px;
-  padding-right: 5%;
+#sLabel {
+  background-image:url(images/southCkBox.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+   user-select: none;
+}
+
+#nLabel {
+  background-image:url(images/northCkBox.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+   user-select: none;
+}
+
+#wLabel {
+  background-image:url(images/westCkBox.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+   user-select: none;
+}
+
+#eLabel {
+  background-image:url(images/eastCkBox.png);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+   user-select: none;
 }
 
 
 .styled-select {
-   overflow: hidden;
-   background: url('images/down_arrow_select.png') no-repeat right rgba(255, 255, 255, 0.1);
-   }
+  color: #1B1B1B;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  padding-left: 5px;
+  /*text-align: center;*/
+  font-size: 13px;
+  overflow: hidden;
+  background: url('images/down_arrow_select.png') no-repeat right rgba(255, 255, 255, 0.8);
+}
 
 select{
-  margin-left: 2%;
-  font-family: 'Roboto', sans-serif;
+  margin-left: 5%;
+  margin-right: 1%;
   background: transparent;
-  /*background: rgba(255, 255, 255, 0.1);*/
-  /*background: url(female.png) no-repeat right #ddd;*/
-  color: rgba(255, 255, 255, 0.8);
-  width: 160px;
-  /*padding: 5px;*/
+  width: 200px;
   line-height: 1;
   border: 0;
   border-radius: 5px;
   height: 20px;
   -moz-appearance: none;
+  -webkit-appearance: none;
 }
 
 option{
   font-family: 'Roboto', sans-serif;
-  border-radius: 5px;
+  border: 0;
+  /*border-radius: 5px;*/
 }

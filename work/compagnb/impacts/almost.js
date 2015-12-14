@@ -1,6 +1,5 @@
 var map1; // global
 var map2; // global
-
 var canvas; // p5 canvas
 
 var countryNames = [];
@@ -15,9 +14,6 @@ var lifeF = [];
 var lifeM = [];
 var xSchoolF = [];
 var xSchoolM = [];
-var expSchF = [];
-var expSchM = [];
-var expSchGap = [];
 var gniF = [];
 var gniM = [];
 var gdp = [];
@@ -42,7 +38,6 @@ var comparisonOpts2 = [
 
 var legend1;
 var legend2;
-var header;
 var countriesLayer = [];
 var countriesLayer2 = [];
 
@@ -59,11 +54,8 @@ var xSchool = false;
 var life = false;
 var gdi = false;
 
-var dropdown;
-var dropdown2;
 var dropValue = 'HDR Rating';
 var dropValue2 = 'GDP Rating';
-var africa;
 
 function preload(){
   africa = loadJSON("africa.json");
@@ -71,14 +63,12 @@ function preload(){
 }
 function setup() {
   showData(africa);
-  heading(dropValue, dropValue2);
   // loadJSON("africa.json", showData);
   canvas = createCanvas(windowWidth, windowHeight-75); // full window p5 canvas
   canvas.parent('maps'); // make p5 and leaflet use the same canvas (and z-index)
 
   initLeaflet(); // load leaflet functions and creat map and defined view
   // checkBoxes();
-
   comparisonFilter();
   comparisonFilter2();
   checkBoxes();
@@ -86,8 +76,8 @@ function setup() {
         addCountry(i, 1);
         addCountry(i, 2);
   }
-  legendInfo(map1, dropValue);
-  legend2Info(map2, dropValue2);
+  legend(map1, dropValue);
+  legend2(map2, dropValue2);
 }
 
 function draw() {
@@ -252,16 +242,6 @@ function setColor(i, mapNum){
         xSchoolGap[i]  > 0 ? '#FED976' :
         '#FED976';
     }
-    if (dropValue == 'Expected Years of Schooling'){
-      return xSchoolGap[i] > 3.0 ? '#800026' :
-        xSchoolGap[i]  > 2.5 ? '#BD0026' :
-        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
-        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
-        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
-        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
-        xSchoolGap[i]  > 0 ? '#FED976' :
-        '#FED976';
-    }
     if (dropValue == 'GNI Rating'){
       return gniGap[i] > 10000 ? '#800026' :
        gniGap[i]  > 8000 ? '#BD0026' :
@@ -306,16 +286,6 @@ function setColor(i, mapNum){
        '#FED976';
     }
     if (dropValue2 == 'Avg. Years of Schooling'){
-      return xSchoolGap[i] > 3.0 ? '#800026' :
-        xSchoolGap[i]  > 2.5 ? '#BD0026' :
-        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
-        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
-        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
-        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
-        xSchoolGap[i]  > 0 ? '#FED976' :
-        '#FED976';
-    }
-    if (dropValue == 'Expected Years of Schooling'){
       return xSchoolGap[i] > 3.0 ? '#800026' :
         xSchoolGap[i]  > 2.5 ? '#BD0026' :
         xSchoolGap[i]  > 2.0 ? '#E31A1C' :
@@ -384,17 +354,6 @@ function showData(data) {
       xSchoolGap[i] = "unknown";
     }
 
-
-    expSchM[i] = data.features[i].properties.XSchM;
-    expSchF[i] = data.features[i].properties.XSchF;
-    if (expSchF[i] > expSchM[i]){
-     expSchGap[i] = expSchF[i] - expSchM[i];
-    }else if( expSchF[i] < expSchM[i]){
-      expSchGap[i] = xSchoolM[i] - expSchF[i];
-    }else{
-      expSchGap[i] = "unknown";
-    }
-
     gniM[i] = data.features[i].properties.gniM;
     gniF[i] = data.features[i].properties.gniF;
     if (gniF[i] > gniM[i]){
@@ -430,10 +389,7 @@ function initLeaflet() {
     map1.setView(e.latlng, map1.setView([3, 17], 3));
     });
 
-  map2 = L.mapbox.map('map2', 'compagnb.AfricaHDR', {
-    doubleClickZoom: false,
-    zoomControl: false
-  }).setView([3, 17], 3);
+  map2 = L.mapbox.map('map2', 'compagnb.AfricaHDR', { doubleClickZoom: false, zoomControl: false }).setView([3, 17], 3);
 
   // double click to zoom out !
   // when either map finishes moving, trigger an update on the other one.
@@ -478,8 +434,7 @@ function initLeaflet() {
 }
 
 function comparisonFilter() {
-  dropdown = createElement('select');
-  dropdown.addClass('styled-select');
+  var dropdown = createElement('select');
   dropdown.position(0, 0);
   for (var i = 0; i < comparisonOpts.length; i++) {
     var option = createElement('option');
@@ -494,17 +449,15 @@ function comparisonFilter() {
   dropdown.elt.onchange = function() {
     droptest.html(this.value);
     dropValue = this.value;
-    header.remove()
-    heading(dropValue, dropValue2);
+    console.log(dropValue);
     addGeoJson(1);
     legend1.remove();
-    legendInfo(map1, dropValue);
+    legend(map1, dropValue);
   }
 }
 
 function comparisonFilter2() {
-  dropdown2 = createElement('select');
-  dropdown2.addClass('styled-select');
+  var dropdown2 = createElement('select');
   dropdown2.position(0, 0);
   for (var i = 0; i < comparisonOpts2.length; i++) {
     var option = createElement('option');
@@ -519,39 +472,15 @@ function comparisonFilter2() {
   dropdown2.elt.onchange = function() {
     droptest2.html(this.value);
     dropValue2 = this.value;
-    header.remove()
-    heading(dropValue, dropValue2);
+    console.log(dropValue2);
     addGeoJson(2);
     legend2.remove();
-    legend2Info(map2, dropValue2);
+    legend2(map2, dropValue2);
+
   }
 }
 
-function update(){
-}
-
-function heading(dropV, dropV2){
-  var text;
-  var text2;
-  if ( dropV != 'GDP Rating'){
-    text = 'Comparing gaps in ';
-  }else if (dropV == 'GDP Rating') {
-    text = 'Comparing '
-  }
-  if ( dropV2 != 'GDP Rating'){
-    text2 = ' to gaps in ';
-  }else if (dropV2 == 'GDP Rating'){
-    text2= ' to '
-  }
-  header = createDiv('<h1>' + text + '<span>'+ dropV + '</span>' + text2 + '<span>'+ dropV2 + '</span>' +' within African Countries </h1> ');
-  header.id('header');
-  header.position(0, 0);
-  var sources = createDiv('<p> Sources: <a class="source" href="http://hdr.undp.org/en/content/human-development-report-2014" target="_blank">UNDP 2014 Human Development Report </a> and <a class="source" href="http://databank.worldbank.org/data/download/GDP.pdf" target="_blank">GDP Ranking provided by World Bank </a.');
-  // sources.id('source');
-  sources.parent(header);
-}
-
-function legendInfo(map, dropV) {
+function legend(map, dropV) {
   var colorArray = [];
   colorArray = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976']
   var unitsOfMeasure;
@@ -567,10 +496,6 @@ function legendInfo(map, dropV) {
   }
 
   if (dropV == 'Avg. Years of Schooling'){
-    rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
-    unitsOfMeasure = "Years"
-  }
-   if (dropV == 'Expected Years of Schooling'){
     rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
     unitsOfMeasure = "Years"
   }
@@ -603,7 +528,7 @@ function legendInfo(map, dropV) {
   }
 }
 
-function legend2Info(map, dropV) {
+function legend2(map, dropV) {
   var colorArray = [];
   colorArray = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976']
   var unitsOfMeasure;
@@ -619,11 +544,6 @@ function legend2Info(map, dropV) {
   }
 
   if (dropV == 'Avg. Years of Schooling'){
-    rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
-    unitsOfMeasure = "Years"
-  }
-
-  if (dropV == 'Expected Years of Schooling'){
     rangeArray = [3.0, 2.5, 2.0, 1.5, 1.0, 0.5, "Unknown"];
     unitsOfMeasure = "Years"
   }
