@@ -103,7 +103,7 @@ h2 {
     font-family: "neue-regular" !important;
 }
 
-a {
+a, a:visited {
     color: black !important;
     text-decoration: none;
 }

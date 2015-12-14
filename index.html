@@ -81,7 +81,9 @@
 
       // index
       $("h3").each(function(i) {
-        $("#index").append("<li><a href='#" + i + "'>" + $(this).text() + "</a><li>");
+        $("#index").append("<li><a href='#" + i + "'>" + 
+        "<span class='glyphicon glyphicon-chevron-down'></span>  &nbsp;" +
+        $(this).text() + "</a><li>");
         $(this).prepend("<a id='" + i + "'>");
       });
 
@@ -141,7 +143,7 @@
     <!--INDEX-->
     <div class="col-sm-12 col-sm-10 col-sm-offset-1">
       <ul id="index">
-
+        <!--dynamically generated-->
       </ul>
       <br />
     </div>
@@ -149,40 +151,53 @@
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
-    <h3 class="col-sm-12">Economic Gaps</h3>
+    <h3 class="col-sm-12">Gender Equality and Women’s Empowerment</h3>
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
 
     <!--PROJECTS-->
 
-    <!--Jacob-->
-    <!--Project1-->
-    <div href="./work/jacobromer/gdi/index.html" img-src="preview.png" class="project col-sm-12">
-      <p class=" col-sm-11">
-        <span class="title">The Story Behind the Data</span> (<a href="https://github.com/jacobmbr">Jacob Romer</a>)
-      </p>
-    </div>
-
-    <!--Project2-->
+    <!--*Jacob Project2-->
     <div href="./work/jacobromer/story/index.html" img-src="preview.png" class="project col-sm-12">
       <p class="col-sm-11">
         <span class="title">Exploring the GDI</span> (<a href="https://github.com/jacobmbr">Jacob Romer</a>)
       </p>
     </div>
 
-    <!--Jaime-->
-    <!--Project1-->
+    <!--*Barbara Project1-->
+    <div href="./work/compagnb/gap/index.html" img-src="preview.png" class="project col-sm-12">
+      <p class=" col-sm-11">
+        <span class="title">Establishing the gender gap</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-sm-12">Linkages between Gender Equality, Human Development & Structural Transformation</h3>
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    
+    <!--*Jaime Project1-->
     <div href="./work/jaimetanner/FarmSankey/index.html" img-src="" class="project col-sm-12">
       <p class=" col-sm-11">
         <span class="title">Agricultural Productivity Differences Between Male and Female Managed Farms</span> (<a href="https://github.com/jat3002">Jaime Tanner</a>)
       </p>
     </div>
 
-    <!--Project2-->
-    <div href="./work/jaimetanner/Gaps/index.html" img-src="preview.png" class="project col-sm-12">
+    <!--*Jon Project1-->
+    <div href="./work/jthirkield/stems/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
-        <span class="title">Child Marriage and the Gender Gap</span> (<a href="https://github.com/jat3002">Jaime Tanner</a>)
+        <span class="title">Stems and Branches: Gender Gaps and Divisions of Labor in Africa</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
+      </p>
+    </div>
+
+    <!--*Justine Project1-->
+    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-sm-12">
+      <p class=" col-sm-11">
+        <span class="title">Human Development Index Gender Gap</span> (<a href="https://github.com/Justinerk2">Justine Keller</a>)
       </p>
     </div>
 
@@ -194,30 +209,21 @@
       <div class="bottom-stripe-inner"></div>
     </div>
 
-    <!--Jon-->
-    <!--Project1-->
-    <div href="./work/jthirkield/stems/index.html" img-src="preview.png" class="project col-sm-12">
+    <!--*Barbara Project2-->
+    <div href="./work/compagnb/impacts/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
-        <span class="title">Stems and Branches: Gender Gaps and Divisions of Labor in Africa</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
+        <span class="title">Impacts of economic matters on gender equality</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
       </p>
     </div>
-
-    <!--Project2-->
-    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-sm-12">
+    
+    <!--*Gabi Project1-->
+    <div href="./work/gabisteele/Project_1_Education/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
-        <span class="title">Africa’s Schoolhouse: A Learning Map</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
+        <span class="title">Combating Gender Disparities in Education Levels</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
       </p>
     </div>
-
-    <!--Justine-->
-    <!--Project1-->
-    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-sm-12">
-      <p class=" col-sm-11">
-        <span class="title">Human Development Index Gender Gap</span> (<a href="https://github.com/Justinerk2">Justine Keller</a>)
-      </p>
-    </div>
-
-    <!--Project2-->
+    
+    <!--*Justine Project2-->
     <div href="./work/justinekeller/Project2/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
         <span class="title">Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender</span> (<a href="https://github.com/Justinerk2">Justine Keller</a>)
@@ -227,78 +233,74 @@
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
-    <h3 class="col-sm-12">Institutions and the political economy</h3>
+    <h3 class="col-sm-12">Institutions and the political economy: Tools to promote Gender Equality</h3>
     <div class="bottom-stripe col-sm-12">
       <div class="bottom-stripe-inner"></div>
     </div>
 
-    <!--Linnea-->
-    <!--Project1-->
+    <!--*Jon Project2-->
+    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-sm-12">
+      <p class=" col-sm-11">
+        <span class="title">Africa’s Schoolhouse: A Learning Map</span> (<a href="https://github.com/jthirkield">Jon Thirkield</a>)
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-sm-12">Deconstructing the influence of social norms</h3>
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    
+    <!--*Linnea Project1-->
     <div href="./work/linnealapp/childMarriageProject.js/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
         <span class="title">Child marriage & female development in Africa</span> (<a href="https://github.com/llapp">Linnea Lapp</a>)
       </p>
     </div>
+    
+    <!--*Jaime Project2-->
+    <div href="./work/jaimetanner/Gaps/index.html" img-src="preview.png" class="project col-sm-12">
+      <p class=" col-sm-11">
+        <span class="title">Child Marriage and the Gender Gap</span> (<a href="https://github.com/jat3002">Jaime Tanner</a>)
+      </p>
+    </div>
 
-    <!--Project2-->
+    <!--*Gabi Project2-->
+    <div href="./work/gabisteele/Project2_WomenData_Dec10/index.html" img-src="preview.png" class="project col-sm-12">
+      <p class=" col-sm-11">
+        <span class="title">Investigating Opinions and Occurances of the Domestic Maltreatment of Women in Africa</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-sm-12">Engendering policies for achieving Africa’s development agenda</h3>
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    
+    <!--*Linnea Project2-->
     <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
         <span class="title">Gender imbalance & marital social norms in Africa</span> (<a href="https://github.com/llapp">Linnea Lapp</a>)
       </p>
     </div>
-    
-    <div class="bottom-stripe col-sm-12">
-      <div class="bottom-stripe-inner"></div>
-    </div>
-    <h3 class="col-sm-12">Education Gaps</h3>
-    <div class="bottom-stripe col-sm-12">
-      <div class="bottom-stripe-inner"></div>
-    </div>
 
-    <!--Gabi-->
-    <!--Project1-->
-    <div href="./work/gabisteele/Project_1_Education/index.html" img-src="preview.png" class="project col-sm-12">
+    <!--*Jacob Project1-->
+    <div href="./work/jacobromer/gdi/index.html" img-src="preview.png" class="project col-sm-12">
       <p class=" col-sm-11">
-        <span class="title">Combating Gender Disparities in Education Levels</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
+        <span class="title">The Story Behind the Data</span> (<a href="https://github.com/jacobmbr">Jacob Romer</a>)
       </p>
-    </div>
-
-    <!--Project2-->
-    <div href="./work/gabisteele/Project2_WomenData_Dec10/index.html" img-src="preview.png" class="project col-sm-12">
-      <p class=" col-sm-11">
-        <span class="title">Combating Gender Disparities in Education Levels</span> (<a href="https://github.com/gabisteele">Gabi Steele</a>)
-      </p>
-    </div>
-
-    <div class="bottom-stripe col-sm-12">
-      <div class="bottom-stripe-inner"></div>
-    </div>
-    <h3 class="col-sm-12">Men and women’s opportunities in markets, supporting livelihoods</h3>
-    <div class="bottom-stripe col-sm-12">
-      <div class="bottom-stripe-inner"></div>
-    </div>
-
-    <!--Barbara-->
-    <!--Project1-->
-    <div href="./work/compagnb/gap/index.html" img-src="preview.png" class="project col-sm-12">
-      <p class=" col-sm-11">
-        <span class="title">Establishing the gender gap</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
-      </p>
-    </div>
-
-    <!--Project2-->
-    <div href="./work/compagnb/impacts/index.html" img-src="preview.png" class="project col-sm-12">
-      <p class=" col-sm-11">
-        <span class="title">Impacts of economic matters on gender equality</span> (<a href="https://github.com/compagnb">Barbara Compagnoni</a>)
-      </p>
-    </div>
-
-    <div class="bottom-stripe col-sm-12">
-      <div class="bottom-stripe-inner"></div>
     </div>
 
     <!--/PROJECTS-->
 
+    <div class="bottom-stripe col-sm-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
 
     <!--FOOTER-->
     <div id="about">
