@@ -99,15 +99,17 @@ img {
     margin-bottom: 15px;
 }
 
-div + .bottom-stripe, .project + .project {
-    margin-top:15px;
-}
-
-.project + .project
-
 h2 {
     font-family: "neue-regular" !important;
 }
+
+div + .bottom-stripe, 
+.project + .project,
+.bottom-stripe + .project
+{
+    margin-top:15px;
+}
+
 
 a, a:visited {
     color: black !important;
@@ -195,7 +197,7 @@ span {
     font-size: 4.33333rem;
     line-height: 4.46667rem;
     margin-top: -0.2rem;
-    padding-left: 100px;
+    padding-left: 95px;
     color: #E82E21 !important;
     margin-left: .2rem;
 }
@@ -218,7 +220,7 @@ span {
 
 #banner .subtitle {
     font-size: 1.5rem;
-    letter-spacing: 0;
+    letter-spacing: 1px;
     margin-left: 100px;
 }
 
@@ -268,12 +270,12 @@ ul {
 
 ul li {
     list-style: none;
-    margin-left: -2.5em;
+    margin-left: -2.7em;
 }
 
 #inner-menu-stripe {
     margin-top: 1px;
-    width: 100px;
+    width: 95px;
     position: absolute;
 }
 
