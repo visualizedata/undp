@@ -66,6 +66,7 @@ function setup() {
   textSize(16);
   stroke(200, 50, 50, 100);
   text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.135);
+  text("Relative Productivity of Female Farmers", width * 0.285, height * 0.135);
 
   table = loadTable("data.txt", "tsv", showData);
 }
@@ -89,28 +90,43 @@ function showData() {
 
   }
   countryBools.push(ethiopia, malawi, niger, nNigeria, sNigeria, tanzania, uganda);
+  lineStates = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   count = table.getRowCount();
   for (var r = 1; r < 8; r++) {
     var gap = table.getString(r, 1);
     names.push(table.getString(r, 0));
-    gaps.push(map(gap, 0, 100, width * 0.53, width * 0.28));
-    lineStates = [50, 60, 70, 80, 90, 100];
-    lines.push(map(lineStates, 0, 100, width * 0.53, width * 0.28))
+    gaps.push(map(gap, 0, 100, width * 0.50, width * 0.28));
     gapNum.push(gap);
   }
-
+  stroke(30, 30, 30, 100);
+  strokeWeight(0.5);
+  for (var r = 0; r < 11; r++) {
+    lines.push(map(lineStates[r], 0, 100, width * 0.50, width * 0.28));
+    // print(lines[r]);
+    line(lines[r], height * 0.09 * z + (height * 0.25), lines[r], height * 0.09 * z + (height * 0.2))
+  }
   /*-----------bar graphs-----------*/
   for (var z = 0; z < 7; z++) {
     stroke(30, 30, 30, 100);
     strokeWeight(0.5);
     line(width * 0.28, height * 0.09 * z + (height * 0.25), width * 0.5, height * 0.09 * z + (height * 0.25));
-    line(width * 0.28, height * 0.09 * z + (height * 0.25), width * 0.28, height * 0.09 * z + (height * 0.2))
-    line(width * 0.575, height * 0.09 * z + (height * 0.25), width * 0.575, height * 0.09 * z + (height * 0.2))
-      // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
+    for (var i = 0; i < 11; i++) {
+      stroke(30, 30, 30, 100);
+      strokeWeight(1);
+      line(lines[i], height * 0.09 * z + (height * 0.25), lines[i], height * 0.09 * z + (height * 0.2))
+      textFont(latoHair);
+      stroke(80);
+      fill(80);
+      textSize(7);
+      strokeWeight(0.7);
+      text(lineStates[i] + "%", lines[i], height * 0.09 * z + (height * 0.265));
+    }
+    // line(width * 0.305, height * 0.09 * z + (height * 0.25), width * 0.33, height * 0.09 * z + (height * 0.2))
+    // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
     fill(119, 136, 153);
     rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
-    fill(119, 136, 153, 100);
+    fill(192, 190, 188);
     rect(gaps[z], height * 0.09 * z + (height * 0.22), width * 0.25, height * 0.02);
 
     /*----------country names-----------*/
@@ -269,18 +285,21 @@ function selectedConnect(n, i) {
   var number = parseInt(100 - gapNum[n]);
   textFont(latoLight);
   endY.push(height * 0.14 + i * (height * 0.04));
-  textSize(21);
+  textSize(20);
   stroke(0);
   strokeWeight(0.9);
+
   text("Female-managed agricultural plots in" + " ", width * 0.13, height * 0.07);
-  strokeWeight(1.7);
+  strokeWeight(1.6);
+
   text(names[n], width * 0.13 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.07);
   strokeWeight(0.8);
   text(" " + "produce an average of ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.07);
-  strokeWeight(1.7);
+  strokeWeight(1.6);
   text(number + "%", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.07);
   strokeWeight(0.8);
   text(" " + "less than those that are male managed ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.07);
+
 }
 
 function selectedLabels(n, i) {
@@ -299,11 +318,13 @@ function selectedLabels(n, i) {
 
   endY.push(height * 0.14 + i * (height * 0.04));
   textFont(latoLight);
-  textSize(18);
-  stroke(0);
-  strokeWeight(0.9);
+  textAlign(CENTER, CENTER);
+  textSize(15);
+  stroke(0.9);
+  strokeWeight(0.8);
   // fill(0);
-  text("\"" + summary[i] + "\"", width * 0.13, height * 0.03, width * 0.8);
+  text("\"" + summary[i] + "\"", width * 0.13, height * 0.02, width * 0.74, height * 0.08);
+  textAlign(LEFT);
 }
 
 function windowResized() {
