@@ -1,6 +1,15 @@
 
 # [Parsons MS Data Visualization - UNDP Africa Human Development Report Partnership](https://visualizedata.github.io/undp/index.html)
 
+## 2015
+- [Barbara Compagnoni](work/compagnb) [[1](https://visualizedata.github.io/undp/index.html#barbara_1), [2](https://visualizedata.github.io/undp/index.html#barbara_2)]
+- [Gabi Steele](work/gabisteele) [[1](https://visualizedata.github.io/undp/index.html#gabi_1), [2](https://visualizedata.github.io/undp/index.html#gabi_2)]
+- [Jacob Romer](work/jacobromer) [[1](https://visualizedata.github.io/undp/index.html#jacob_1), [2](https://visualizedata.github.io/undp/index.html#jacob_2)]
+- [Jaime Tanner](work/jaimetanner) [[1](https://visualizedata.github.io/undp/index.html#jaime_1), [2](https://visualizedata.github.io/undp/index.html#jaime_2)]
+- [Jon Thirkield](work/jthirkield) [[1](https://visualizedata.github.io/undp/index.html#jon_1), [2](https://visualizedata.github.io/undp/index.html#jon_2)]
+- [Justine Keller](work/justinekeller) [[1](https://visualizedata.github.io/undp/index.html#justine_1), [2](https://visualizedata.github.io/undp/index.html#justine_2)]
+- [Linnea Lapp](work/linnealapp) [[1](https://visualizedata.github.io/undp/index.html#linnea_1), [2](https://visualizedata.github.io/undp/index.html#linnea_2)]
+
 ## Research questions
 
 ### [1.1 Linkages between Empowerment, Gender Equality & Sustainable Human Development](./data/1.1/)
