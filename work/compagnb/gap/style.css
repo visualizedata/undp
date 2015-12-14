@@ -35,7 +35,7 @@ body{
   position: absolute;
   font-family: 'Roboto', sans-serif;
   margin-top: 5px;
-  margin-left: 73%;
+  margin-left: 70%;
   width: 40%;
 
 }
@@ -175,7 +175,8 @@ input[type=checkbox].css-checkbox:checked + label.css-label {
   color: #1B1B1B;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  text-align: center;
+  padding-left: 5px;
+  /*text-align: center;*/
   font-size: 13px;
   overflow: hidden;
   background: url('images/down_arrow_select.png') no-repeat right rgba(255, 255, 255, 0.8);
@@ -185,7 +186,7 @@ select{
   margin-left: 5%;
   margin-right: 1%;
   background: transparent;
-  width: 175px;
+  width: 200px;
   line-height: 1;
   border: 0;
   border-radius: 5px;
