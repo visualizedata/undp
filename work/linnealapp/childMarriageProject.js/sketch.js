@@ -36,6 +36,7 @@ var title, desc, desc2;
 var img;
 var w = 0;
 var isOverCircle;
+var overlap = false;
 
 // ~~~~~~ COLOURS ~~~~~~~~
 var mb, sg, dsg, sb, or, lines, gap;
@@ -286,7 +287,7 @@ Country.prototype.display = function() {
   if (gniGap < 0) { // If female value is higher don't display the gap
     gniGAp = '';
   }
-  var statNums = ["women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling, " + eduGap + " years less than men", this.femLifeExp.toFixed(1) + ' is the average female life expectancy', 'women earn $' + this.femaleGNI.toFixed(2) + ' , ' + gniGap + "% less than men"];
+  var statNums = ["women receive " + this.femMnYrsSchool.toFixed(1) + " years of schooling, " + eduGap + " years less than men", this.femLifeExp.toFixed(1) + ' is the average female life expectancy', 'women earn ' + gniGap + "% less than men"]; // '$' + this.femaleGNI.toFixed(2) 
 
   // SET UP DETECTION FOR HOVERING OVER CIRCLES
   var distance = dist(mouseX, mouseY, xvar, bottom - componentsF[next]);
@@ -378,6 +379,7 @@ Country.prototype.display = function() {
       pop();
     }
   }
+
 };
 
 // ATTEMPTING TO SORT OBJECTS BY VALUE
