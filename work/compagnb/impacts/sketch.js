@@ -214,7 +214,7 @@ function addStyle(i, mapNum){
     opacity: 1,
     color: '#FFF',
     dashArray: '0',
-    fillOpacity: .8,
+    fillOpacity: 1,
     fillColor: setColor(i, mapNum)
   }
 }
@@ -254,12 +254,12 @@ function setColor(i, mapNum){
     }
     if (dropValue == 'Expected Years of Schooling'){
       return xSchoolGap[i] > 3.0 ? '#800026' :
-        xSchoolGap[i]  > 2.5 ? '#BD0026' :
-        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
-        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
-        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
-        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
-        xSchoolGap[i]  > 0 ? '#FED976' :
+        expSchGap[i]  > 2.5 ? '#BD0026' :
+        expSchGap[i]  > 2.0 ? '#E31A1C' :
+        expSchGap[i]  > 1.5 ? '#FC4E2A' :
+        expSchGap[i]  > 1.0 ? '#FD8D3C' :
+        expSchGap[i]  > 0.5 ? '#FEB24C' :
+        expSchGap[i]  > 0 ? '#FED976' :
         '#FED976';
     }
     if (dropValue == 'GNI Rating'){
@@ -315,14 +315,14 @@ function setColor(i, mapNum){
         xSchoolGap[i]  > 0 ? '#FED976' :
         '#FED976';
     }
-    if (dropValue == 'Expected Years of Schooling'){
+    if (dropValue2 == 'Expected Years of Schooling'){
       return xSchoolGap[i] > 3.0 ? '#800026' :
-        xSchoolGap[i]  > 2.5 ? '#BD0026' :
-        xSchoolGap[i]  > 2.0 ? '#E31A1C' :
-        xSchoolGap[i]  > 1.5 ? '#FC4E2A' :
-        xSchoolGap[i]  > 1.0 ? '#FD8D3C' :
-        xSchoolGap[i]  > 0.5 ? '#FEB24C' :
-        xSchoolGap[i]  > 0 ? '#FED976' :
+        expSchGap[i]  > 2.5 ? '#BD0026' :
+        expSchGap[i]  > 2.0 ? '#E31A1C' :
+        expSchGap[i]  > 1.5 ? '#FC4E2A' :
+        expSchGap[i]  > 1.0 ? '#FD8D3C' :
+        expSchGap[i]  > 0.5 ? '#FEB24C' :
+        expSchGap[i]  > 0 ? '#FED976' :
         '#FED976';
     }
     if (dropValue2 == 'GNI Rating'){
@@ -593,7 +593,7 @@ function legendInfo(map, dropV) {
   for (var i=0; i < rangeArray.length; i++){
     var unavail = createDiv( rangeArray[i] + ' ' + unitsOfMeasure);
     unavail.parent(legend1);
-    unavail.addClass('legendLabel')
+    unavail.addClass('legendLabel');
       var unavailColor = createDiv("");
       unavailColor.parent(legend1);
       unavailColor.addClass('legendColorBox')
@@ -646,7 +646,7 @@ function legend2Info(map, dropV) {
   for (var i=0; i < rangeArray.length; i++){
     var unavail = createDiv( rangeArray[i] + ' ' + unitsOfMeasure);
     unavail.parent(legend2);
-    unavail.addClass('legendLabel')
+    unavail.addClass('legendLabel');
       var unavailColor = createDiv("");
       unavailColor.parent(legend2);
       unavailColor.addClass('legendColorBox')
