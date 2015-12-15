@@ -21,12 +21,11 @@ var completed = false;
 
 var unitsOfMeasure;
 var rangeArray = [];
-var colorArray = ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976']
 
 var centralCheckBox, eastCheckBox, northernCheckBox, southernCheckBox, westCheckBox;
 
 var dropValue = 'HDR Ratings';
-var sortValue = 'By Male Rating';
+var sortValue = 'By Gap Amount';
 
 var femaleImg, maleImg, headerImg;
 
@@ -142,23 +141,25 @@ function CountryInfo(row) {
   this.country = countries[this.row];
   this.rank = ranks[this.row];
 
-  this.hdrF = hdrF[this.row];
-  this.hdrM = hdrM[this.row];
+  // this.hdrF = hdrF[this.row];
+  // this.hdrM = hdrM[this.row];
 
-  this.lifeF = lifeF[this.row];
-  this.lifeM = lifeM[this.row];
+  // this.lifeF = lifeF[this.row];
+  // this.lifeM = lifeM[this.row];
 
-  this.meanSchoolF = meanSchoolF[this.row];
-  this.meanSchoolM = meanSchoolM[this.row];
+  // this.meanSchoolF = meanSchoolF[this.row];
+  // this.meanSchoolM = meanSchoolM[this.row];
 
-  this.expSchoolF = expSchoolF[this.row];
-  this.expSchoolM = expSchoolM[this.row];
+  // this.expSchoolF = expSchoolF[this.row];
+  // this.expSchoolM = expSchoolM[this.row];
 
-  this.gniF = gniF[this.row];
-  this.gniM = gniM[this.row];
+  // this.gniF = gniF[this.row];
+  // this.gniM = gniM[this.row];
 
 
-  if (this.hdrM != "..") {
+  if (hdrM[this.row] != "..") {
+    this.hdrF = parseFloat(hdrF[this.row]);
+    this.hdrM = parseFloat(hdrM[this.row]);
     if (this.hdrF < this.hdrM) {
       this.hdrGap = this.hdrM - this.hdrF;
     } else if (this.hdrF > this.hdrM) {
@@ -168,47 +169,60 @@ function CountryInfo(row) {
     this.hdrGap = 0;
   }
 
-  if (this.lifeM != "..") {
+  if (lifeF[this.row] != "..") {
+    this.lifeF = parseFloat(lifeF[this.row]);
+    this.lifeM = parseFloat(lifeM[this.row]);
     if (this.lifeF < this.lifeM) {
       this.lifeGap = this.lifeM - this.lifeF;
     } else if (this.lifeF > this.lifeM) {
       this.lifeGap = this.lifeF - this.lifeM;
     }
-  } else {
+  } else if (this.lifeM == "..") {
+    this.lifeF = 0;
+    this.lifeM = 0;
     this.lifeGap = 0;
   }
 
-  if (this.meanSchoolF != "..") {
+  if (meanSchoolF[this.row] != "..") {
     this.meanSchoolF = parseFloat(meanSchoolF[this.row]);
     this.meanSchoolM = parseFloat(meanSchoolM[this.row]);
+
     if (this.meanSchoolF < this.meanSchoolM) {
       this.meanSchoolGap = this.meanSchoolM - this.meanSchoolF;
+      // console.log(this.meanSchoolF);
+
     } else if (this.meanSchoolF > this.meanSchoolM) {
       this.meanSchoolGap = this.meanSchoolF - this.meanSchoolM;
 
+    }else if (this.meanSchoolF == this.meanSchoolM) {
+      this.meanSchoolGap = 0;
     }
   } else {
-    this.meanSchoolF = 0;
-    this.meanSchoolM = 0;
-    this.meanSchoolGap = -100;
+    this.meanSchoolF = -10;
+    this.meanSchoolM = -10;
+    this.meanSchoolGap = -10;
+
   }
 
 
-  if (this.expSchoolM != "..") {
+  if (expSchoolM[this.row] != "..") {
     this.expSchoolF = parseFloat(expSchoolF[this.row]);
     this.expSchoolM = parseFloat(expSchoolM[this.row]);
     if (this.expSchoolF < this.expSchoolM) {
       this.expSchoolGap = this.expSchoolM - this.expSchoolF;
     } else if (this.expSchoolF > this.expSchoolM) {
       this.expSchoolGap = this.expSchoolF - this.expSchoolM;
+    } else if (this.expSchoolF == this.expSchoolM) {
+      this.meanSchoolGap = 0;
     }
   } else {
-    this.expSchoolF = 0;
-    this.expSchoolM = 0;
-    this.expSchoolGap = -100;
+    this.expSchoolF = -10;
+    this.expSchoolM = -10;
+    this.expSchoolGap = -10;
+
   }
 
-  if (this.gniM != "..") {
+  if (gniM[this.row]!= "..") {
     this.gniF = parseInt(gniF[this.row]);
     this.gniM = parseInt(gniM[this.row]);
     if (this.gniF < this.gniM) {
@@ -326,7 +340,7 @@ function sortFilter() {
   sortDrop.addClass('styled-select');
   // dropdown.position(width - 180, 50);
   sortDrop.parent('pulldowns');
-  var sortOptions = ['By Male Rating', 'By Female Rating', 'By Gap Amount', 'By Region'];
+  var sortOptions = ['By Gap Amount', 'By Male Rating', 'By Female Rating', 'By Region'];
   for (var i = 0; i < sortOptions.length; i++) {
     var sortOption = createElement('option');
     sortOption.attribute('value', sortOptions[i]);
@@ -334,7 +348,7 @@ function sortFilter() {
     sortOption.parent(sortDrop);
   }
 
-  var sorttest = createDiv('By Male Rating');
+  var sorttest = createDiv('By Gap Amount');
   sorttest.parent('sortValue');
 
   sortDrop.elt.onchange = function() {
@@ -356,7 +370,7 @@ function checkBoxes() {
   var centralLabel = createElement('label', 'Central');
   centralLabel.id('cLabel');
   centralLabel.attribute('for', 'central');
-  centralLabel.style('color', '#FFF8DC');
+  centralLabel.style('color', '#b8da8a');
   centralLabel.addClass('css-label');
   // centralLabel.parent('ck1');
   centralLabel.parent('filters');
@@ -375,7 +389,7 @@ function checkBoxes() {
   var eastLabel = createElement('label', 'Eastern');
   eastLabel.id("eLabel");
   eastLabel.attribute('for', 'eastern');
-  eastLabel.style('color', '#FFEC8B');
+  eastLabel.style('color', '#71c18b');
   eastLabel.parent('filters');
   eastLabel.addClass('css-label');
   eastCheckBox.checked(true); // passing in an arg sets its state?
@@ -392,7 +406,7 @@ function checkBoxes() {
   var northernLabel = createElement('label', 'Northern');
   northernLabel.id('nLabel');
   northernLabel.attribute('for', 'northern');
-  northernLabel.style('color', '#F4A460');
+  northernLabel.style('color', '#7dcef3');
   northernLabel.parent('filters');
   northernLabel.addClass('css-label');
   northernCheckBox.checked(true); // passing in an arg sets its state?
@@ -409,7 +423,7 @@ function checkBoxes() {
   var southernLabel = createElement('label', 'Southern');
   southernLabel.id('sLabel');
   southernLabel.attribute('for', 'southern');
-  southernLabel.style('color', '#fd8c8d');
+  southernLabel.style('color', '#6b95cf');
   southernLabel.addClass('css-label');
   southernLabel.parent('filters');
   southernCheckBox.checked(true); // passing in an arg sets its state?
@@ -426,7 +440,7 @@ function checkBoxes() {
   var westLabel = createElement('label', 'Western');
   westLabel.id('wLabel');
   westLabel.attribute('for', 'western');
-  westLabel.style('color', '#DDA0DD');
+  westLabel.style('color', '#746bb0');
   westLabel.parent('filters');
   westLabel.addClass('css-label');
   westCheckBox.checked(true); // passing in an arg sets its state?
@@ -557,10 +571,9 @@ function drawDottedGuides() {
 }
 
 function reload() {
+
   drawBkgrd();
   drawRefGuides();
-
-
   sortMe();
 
   for (var i = 0; i < sorted.length; i++) {
@@ -571,9 +584,9 @@ function reload() {
 }
 
 function sortMe() {
+  sorted = [];
   // hdr
   if (dropValue == 'HDR Ratings' && sortValue == 'By Male Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.hdrM > b.hdrM) {
         return 1;
@@ -591,7 +604,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'HDR Ratings' && sortValue == 'By Female Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.hdrF > b.hdrF) {
         return 1;
@@ -609,7 +621,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'HDR Ratings' && sortValue == 'By Gap Amount') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.hdrGap > b.hdrGap) {
         return 1;
@@ -626,28 +637,26 @@ function sortMe() {
       return val;
     });
   }
-  if (dropValue == 'HDR Ratings' && sortValue == 'By Region') {
-    sorted = [];
-    sorted = countryInfo.sort(function(a, b) {
-      if (a.area > b.area) {
-        return 1;
-      }
-      if (a.area < b.area) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
+  // if (dropValue == 'HDR Ratings' && sortValue == 'By Region') {
+  //   sorted = countryInfo.sort(function(a, b) {
+  //     if (a.area > b.area) {
+  //       return 1;
+  //     }
+  //     if (a.area < b.area) {
+  //       return -1;
+  //     }
+  //     // a must be equal to b
+  //     return 0;
+  //   });
 
-    sorted = sorted.map(function(val, ind) {
-      val.row = ind;
-      return val;
-    });
-  }
+  //   sorted = sorted.map(function(val, ind) {
+  //     val.row = ind;
+  //     return val;
+  //   });
+  // }
 
   // life
   if (dropValue == 'Life Expectancy' && sortValue == 'By Male Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.lifeM > b.lifeM) {
         return 1;
@@ -665,7 +674,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'Life Expectancy' && sortValue == 'By Female Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.lifeF > b.lifeF) {
         return 1;
@@ -681,9 +689,9 @@ function sortMe() {
       val.row = ind;
       return val;
     });
+    console.log(sorted);
   }
   if (dropValue == 'Life Expectancy' && sortValue == 'By Gap Amount') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.lifeGap > b.lifeGap) {
         return 1;
@@ -700,28 +708,26 @@ function sortMe() {
       return val;
     });
   }
-  if (dropValue == 'Life Expectancy' && sortValue == 'By Region') {
-    sorted = [];
-    sorted = countryInfo.sort(function(a, b) {
-      if (a.area > b.area) {
-        return 1;
-      }
-      if (a.area < b.area) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
+  // if (dropValue == 'Life Expectancy' && sortValue == 'By Region') {
+  //   sorted = countryInfo.sort(function(a, b) {
+  //     if (a.area > b.area) {
+  //       return 1;
+  //     }
+  //     if (a.area < b.area) {
+  //       return -1;
+  //     }
+  //     // a must be equal to b
+  //     return 0;
+  //   });
 
-    sorted = sorted.map(function(val, ind) {
-      val.row = ind;
-      return val;
-    });
-  }
+  //   sorted = sorted.map(function(val, ind) {
+  //     val.row = ind;
+  //     return val;
+  //   });
+  // }
 
   // Avg. Years of Schooling
   if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Male Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.meanSchoolM > b.meanSchoolM) {
         return 1;
@@ -743,7 +749,6 @@ function sortMe() {
     }
   }
   if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Female Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.meanSchoolF > b.meanSchoolF) {
         return 1;
@@ -761,7 +766,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Gap Amount') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.meanSchoolGap > b.meanSchoolGap) {
         return 1;
@@ -778,28 +782,26 @@ function sortMe() {
       return val;
     });
   }
-  if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Region') {
-    sorted = [];
-    sorted = countryInfo.sort(function(a, b) {
-      if (a.area > b.area) {
-        return 1;
-      }
-      if (a.area < b.area) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
+  // if (dropValue == 'Avg. Years of Schooling' && sortValue == 'By Region') {
+  //   sorted = countryInfo.sort(function(a, b) {
+  //     if (a.area > b.area) {
+  //       return 1;
+  //     }
+  //     if (a.area < b.area) {
+  //       return -1;
+  //     }
+  //     // a must be equal to b
+  //     return 0;
+  //   });
 
-    sorted = sorted.map(function(val, ind) {
-      val.row = ind;
-      return val;
-    });
-  }
+  //   sorted = sorted.map(function(val, ind) {
+  //     val.row = ind;
+  //     return val;
+  //   });
+  // }
 
   // Exp. Years of Schooling
   if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Male Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.expSchoolM > b.expSchoolM) {
         return 1;
@@ -817,7 +819,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Female Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.expSchoolF > b.expSchoolF) {
         return 1;
@@ -835,7 +836,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'Expected Years of Schooling' && sortValue == 'By Gap Amount') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.expSchoolGap > b.expSchoolGap) {
         return 1;
@@ -852,28 +852,26 @@ function sortMe() {
       return val;
     });
   }
-  if (dropValue == 'Expected Years of Schooling'  && sortValue == 'By Region') {
-    sorted = [];
-    sorted = countryInfo.sort(function(a, b) {
-      if (a.area > b.area) {
-        return 1;
-      }
-      if (a.area < b.area) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    });
+  // if (dropValue == 'Expected Years of Schooling'  && sortValue == 'By Region') {
+  //   sorted = countryInfo.sort(function(a, b) {
+  //     if (a.area > b.area) {
+  //       return 1;
+  //     }
+  //     if (a.area < b.area) {
+  //       return -1;
+  //     }
+  //     // a must be equal to b
+  //     return 0;
+  //   });
 
-    sorted = sorted.map(function(val, ind) {
-      val.row = ind;
-      return val;
-    });
-  }
+  //   sorted = sorted.map(function(val, ind) {
+  //     val.row = ind;
+  //     return val;
+  //   });
+  // }
 
   // GNI
   if (dropValue == 'GNI' && sortValue == 'By Male Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.gniM > b.gniM) {
         return 1;
@@ -891,7 +889,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'GNI' && sortValue == 'By Female Rating') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.gniF > b.gniF) {
         return 1;
@@ -909,7 +906,6 @@ function sortMe() {
     });
   }
   if (dropValue == 'GNI' && sortValue == 'By Gap Amount') {
-    sorted = [];
     sorted = countryInfo.sort(function(a, b) {
       if (a.gniGap > b.gniGap) {
         return 1;
@@ -926,8 +922,7 @@ function sortMe() {
       return val;
     });
   }
-  if (dropValue == 'GNI'  && sortValue == 'By Region') {
-    sorted = [];
+  if (sortValue == 'By Region') {
     sorted = countryInfo.sort(function(a, b) {
       if (a.area > b.area) {
         return 1;
@@ -947,6 +942,8 @@ function sortMe() {
 }
 
 function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
+
+  // console.log( femaleRank +" || "+ maleRank);
   if (femaleRank > 0 || maleRank > 0 ) {
 
     if (femaleRank < maleRank) {
@@ -957,7 +954,7 @@ function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
 
       text(nfc(maleRank-femaleRank,2,2), ((row + 1) * width / 55)-7, map(maleRank, minVal, maxVal, height - 135, 0)-30);
 
-    }else{
+    }else if(femaleRank > maleRank){
       strokeWeight(0);
       fill('rgba(255, 255, 255, 0.8)');
       textSize(10);
@@ -965,7 +962,6 @@ function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
       text(nfc(femaleRank-maleRank,2,2), ((row + 1) * width / 55)-7, map(femaleRank, minVal, maxVal, height - 135, 0)-30);
 
     }
-
     beginShape();
 
     var gap;
@@ -980,20 +976,21 @@ function drawImages(femaleRank, maleRank, minVal, maxVal, row) {
     strokeWeight(6);
     //lines
 
-    if (femaleRank < maleRank) {
+    if (femaleRank < maleRank || femaleRank == maleRank ) {
       image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 135, 0)-25);
       image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 135, 0)+5);
 
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 135, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 135, 0)); // record one vertex per data point
 
-    } else {
+    } else if (femaleRank > maleRank) {
       image(femaleImg, ((row + 1) * width / 55) + 2, map(femaleRank, minVal, maxVal, height - 135, 0)-25);
       image(maleImg, ((row + 1) * width / 55) + 2, map(maleRank, minVal, maxVal, height - 135, 0)+5);
 
       vertex(((row + 1) * width / 55) + 7, map(maleRank, minVal, maxVal, height - 135, 0)); // record one vertex per data point
       vertex(((row + 1) * width / 55) + 7, map(femaleRank, minVal, maxVal, height - 135, 0)); // record one vertex per data point
     }
+
     endShape();
   }
 }
@@ -1077,26 +1074,27 @@ function pickColor(region){
   // console.log(region);
   if (region == "central"){
     // return '#e82e69';
-    return '#FFF8DC';
+    return '#b8da8a';
   }
   if (region == "east"){
     // return '#d92b87';
-    return '#FFEC8B';
+    return '#71c18b';
   }
   if (region == "west"){
     // return '#c828b6';
-    return '#DDA0DD';
+    return '#746bb0';
   }
   if (region == "southern"){
     // return '#a826be';
-    return '#fd8c8d';
+    return '#6b95cf';
   }
   if (region == "northern"){
     // return '#9341ea';
-    return '#F4A460';
+    return '#7dcef3';
   }
 }
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight - 78);
+  reload();
 }

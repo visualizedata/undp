@@ -184,14 +184,14 @@ hr{
 #legend1 .legendColorBox {
     position: relative;
     margin-left: 60px;
-    opacity: 0.8;
+    opacity: 1;
     width: 25px;
     height: 20px;
 }
 #legend2 .legendColorBox {
     position: relative;
     margin-left: 60px;
-    opacity: 0.8;
+    opacity: 1;
     width: 25px;
     height: 20px;
 }
@@ -282,7 +282,7 @@ option{
 }
 #toggle-check-and-x.check-mark-active{
   /*color: rgba(255, 255, 255, 0.1);*/
-  background-color: #696969;
+  background-color: #D5D5D5;
 }
 
 loadingdiv {
