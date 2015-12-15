@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset=utf-8 />
-<title>The African Continent: Gender Equity in Focus</title>
+<title>Schoolhouse Africa</title>
 <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 <!-- 
     <script src="libraries/p5.js" type="text/javascript"></script>
@@ -24,22 +24,26 @@
 </style>
 </head>
 <body>
-<div id="compares">Hello</div>
+<div id="compares"></div>
 <div id="readout"></div>
-<div id="zreadout"><h2>A Schoolhouse in Chad</h2><p><img src="schools/Chad_east_Resize_07.jpg" width="430" height="287 alt="chad" /></p>
-<p>Please send us pictures of schoolhouses across Africa, via Twitter (#AfricanSchoolhouses).</p>
+<div id="zreadout">
+<h4>A SCHOOLHOUSE IN CHAD</h4>
+<p><img src="schools/Chad_east_Resize_07.jpg" width="300" alt="chad" /></p>
+<h4>Please send pictures of schoolhouses across Africa!</h4>
 
-<p>...</p></div>
+<p>...</p>
+
+</div>
 
 <style>
 #map {
   pointer-events:all;
-  cursor:pointer;
+/*   cursor:none; */
   }
 #zoommap {
- background:#eeeeee;
-  width:100px;
-  height:100px;
+  background:#73b5e5;
+  width:150px;
+  height:150px;
   overflow:hidden;
   -webkit-transform:rotate(-60deg);
      -moz-transform:rotate(-60deg);
@@ -55,16 +59,15 @@
 #border {
   border:0.5px solid #404040;
   border-radius:50%;
-  box-shadow:0 0 10px rgb(255,255,255);
+  box-shadow:0 0 10px rgba(0,0,0,0.25);
   }
 .overlay {
   position:absolute;
   pointer-events:none;
   overflow:hidden;
-  width:100px;
-  height:100px;
-  z-index:1000;
-  visibility: visible;
+  width:150px;
+  height:150px;
+  z-index:100;
   }
 .rotater {
   -webkit-transform:rotate(30deg);
@@ -75,29 +78,45 @@
   }
 </style>
 <div id='map'></div>
-<div id='footer'>
-<!-- 
-<canvas id="myCanvas" width="200" height="100" style="border:1px solid #FF0000;">
-<script>
-var c = document.getElementById("myCanvas");
-var ctx = c.getContext("2d");
-ctx.moveTo(100,50);
-ctx.lineTo(200,50);
-ctx.stroke();
-</script>
-</canvas>
- -->
+<div id='sidebar'>
 
-<span class="myheader">Africa's Schoolhouse: A Learning Map</span>
-<span>CHANGE YOUR MAP</span><span><a id="myLink" title="Change the Map!"
- href="#" onclick="changeLayer(0);return false;">SATELLITE</a></span>
-<span><a id="myLink" title="Change the Map!"
- href="#" onclick="changeLayer(1);return false;">GEOGRAPHY MAP</a></span>
-<span><a id="myLink" title="Change the Map!"
- href="#" onclick="changeLayer(2);return false;">NIGHT MAP</a></span>
-
+<div id='myheader'>
+SCHOOLHOUSE AFRICA
+</div>
+<div id='mytag'>
+ A LEARNING MAP
+</div>
+<div id='chooseLens'><HR>
+CHOOSE YOUR LENS<BR>
+<div class="lensSelect">
+<a id="myLink" title="Change the Lens!"
+ href="#" onclick="changeLayer(1);return false;">
+ <img src="images/Geo100.gif" width="100" height="100" alt="SmGeo" />Geography</a></div>
+<div class="lensSelect">
+<a id="myLink" title="Change the Lens!"
+ href="#" onclick="changeLayer(0);return false;">
+ <img src="images/Pol100.gif" width="100" height="100" alt="SmPol" />
+ Political Map</a></div>
+ 
+<div class="lensSelect"><a id="myLink" title="Change the Lens!"
+ href="#" onclick="changeLayer(2);return false;"><img src="images/Night100.gif" width="100" height="100" alt="SmNight" />
+Lights at Night</a>
 </div>
 
+
+</div>
+<!-- 
+<div id='findCountry'><HR>
+Can You Find Chad?
+</div>
+ -->
+<div id='compareCountry'><HR>
+Doubleclick to see schoolhouses.<BR>
+Click to compare education charts.<BR>
+<span class="female">Girls &bull;  Women</span> &bull; <span class="male">Boys &bull; Men</span> 
+
+</div>
+</div>
 <div id='zoomlens' class='overlay'>
     <div class='overlay rotater'>
         <div class='overlay rotater'>
@@ -110,19 +129,25 @@ ctx.stroke();
 <script>
    var geojson;
    var layerTracker = 0;
+   var canvasNumber = 0;
    var nxtHTML;
+   clickCountry = false;
    var cnArray = [];
+   var vnArray = [];
    var infoArray = [];
+  var testArray = [];
+var valueArray = [];
+var saveArrays = [];
+
 L.mapbox.accessToken = 'pk.eyJ1IjoianRoaXJraWVsZCIsImEiOiJjaWdiM2JyZWUxbnVydjltM3B5MThwZjdpIn0.6CxRDmKlbzs4MHL3YdrpEw';
 var map = L.mapbox.map('map', 'mapbox.satellite',{
    gridControl: false, // Disable default gridControl interactivity.
     zoomControl: false,
     touchZoom: false,
+    scrollWheelZoom: false,
     doubleClickZoom: true
-}).setView([-1.0, 1.0], 4);
+}).setView([-1.0, 3.0], 4);
 
-var geographyLayer = L.mapbox.tileLayer('mapbox.geography-class');
-var nightLayer = L.mapbox.tileLayer('mapbox.control-room');
 
 
 
@@ -137,6 +162,8 @@ var zoommap = L.mapbox.map('zoommap', 'mapbox.streets', {
     zoomControl: false,
     attributionControl: false
 });
+var geographyLayer = L.mapbox.tileLayer('mapbox.geography-class');
+var nightLayer = L.mapbox.tileLayer('mapbox.control-room');
 
 var zl = document.getElementById('zoomlens');
  var elt1 = document.getElementById("readout");
@@ -152,22 +179,23 @@ map.on('zoomend', zoomMe);
 function changeLayer(num) {
 if (layerTracker != num) {
 	if (layerTracker == 0 && num == 1) {
-	  geographyLayer.addTo(map);
+	  geographyLayer.addTo(zoommap);
 	  }
 	if (layerTracker == 0 && num == 2) {
-	  nightLayer.addTo(map);
+	  nightLayer.addTo(zoommap);
 	  }
 	if (layerTracker == 1) {
-		  map.removeLayer(geographyLayer);
 	if (num == 2) {
-	  nightLayer.addTo(map);
+	  nightLayer.addTo(zoommap);
 	  }
+	  		  zoommap.removeLayer(geographyLayer);
 	  }
 	if (layerTracker == 2) {
-		  map.removeLayer(nightLayer);
 	if (num == 1) {
-	  geographyLayer.addTo(map);
+	  geographyLayer.addTo(zoommap);
 	  }
+	  		  zoommap.removeLayer(nightLayer);
+
 	  }
 	  layerTracker = num;
 }
@@ -216,8 +244,28 @@ function onEachFeature(feature, layer) {
     }
     
   function clicktoKeep(e) {
-       elt3.style.visibility = 'visible';
-        elt3.innerHTML = nxtHTML;
+if (!clickCountry) {
+ canvasNumber = canvasNumber + 6;
+     cnArray.push(testArray);
+     vnArray.push(valueArray);
+     elt3.style.visibility = 'visible';
+       var myHTML = elt3.innerHTML;
+       var newHTML = '<div class="interior">' +nxtHTML + '</div>';
+       saveArrays.push(newHTML);
+       elt3.innerHTML = "";
+       lastFour = -1;
+       if (saveArrays.length > 4) {
+       lastFour = lastFour + saveArrays.length - 4;
+       }
+       for(var i=saveArrays.length-1; i > lastFour; i--) {
+        elt3.innerHTML += saveArrays[i];
+        }
+       for(var i=cnArray.length-1; i > lastFour; i--) {
+        
+          drawMe(cnArray[i],vnArray[i]);
+          }
+    }
+    clickCountry = true;
        }
        
        
@@ -237,38 +285,49 @@ function onEachFeature(feature, layer) {
 
 
 dpdate = function(props) {
+    clickCountry = false;
+
 testArray = [];
 valueArray = [];
 
-      nxtHTML =  '<h4>Education in ' + props.CountryName + '</h4>';
+      nxtHTML =  '<h4>' + props.CountryName + '</h4><p>';
 //if (props.CountryName) {
-if (props.MeanSchoolFemale != "..") {
-var Fnum = props.MeanSchoolFemale;
-var Mnum = props.MeanSchoolMale;
-var Fvalue = parseInt(100 * Fnum / 16);
-var Mvalue = parseInt(100 * Mnum / 16);
-nxtHTML += '<p>Mean Years of School</p><p class="female">Girls: ' + Fnum + '&nbsp;<canvas id="myF1Canvas" width="100" height="10"></canvas></p><p class="male">Boys: ' + Mnum + '&nbsp;<canvas id="myM1Canvas" width="100" height="10"></canvas></p>';
-testArray.push("myF1Canvas","myM1Canvas");
-valueArray.push(Fvalue, Mvalue);
-}
 
 if (props.ExpSchoolFemale != "..") {
 var Fnum = props.ExpSchoolFemale;
 var Mnum = props.ExpSchoolMale;
 var Fvalue = parseInt(100 * Fnum / 16);
 var Mvalue = parseInt(100 * Mnum / 16);
-nxtHTML += '<p>Expected Years of School</p><p class="female">Girls: ' + props.ExpSchoolFemale + '&nbsp;<canvas id="myF2Canvas" width="100" height="10"></canvas></p><p class="male">Boys: ' + props.ExpSchoolMale + '&nbsp;<canvas id="myM2Canvas" width="100" height="10"></canvas></p>';
-testArray.push("myF2Canvas","myM2Canvas");
+var myF2Canvas = canvasNumber + 1;
+var myM2Canvas = canvasNumber + 2;
+
+nxtHTML += '<p>Expected Years of School</p><p class="female"><canvas id="' + myF2Canvas + '" width="100" height="10"></canvas>' + props.ExpSchoolFemale +'</p><p class="male"><canvas id="' + myM2Canvas + '" width="100" height="10"></canvas>' + props.ExpSchoolMale + '</p>';
+testArray.push(myF2Canvas,myM2Canvas);
 valueArray.push(Fvalue, Mvalue);
 
 }
+if (props.MeanSchoolFemale != "..") {
+var Fnum = props.MeanSchoolFemale;
+var Mnum = props.MeanSchoolMale;
+var Fvalue = parseInt(100 * Fnum / 16);
+var Mvalue = parseInt(100 * Mnum / 16);
+var myF1Canvas = canvasNumber + 3;
+var myM1Canvas = canvasNumber + 4;
+nxtHTML += '<p>Mean Years of School</p><p class="female"><canvas id="' + myF1Canvas + '" width="100" height="10"></canvas>' + Fnum + '</p><p class="male"><canvas id="' + myM1Canvas + '" width="100" height="10"></canvas>' + Mnum + '</p>';
+testArray.push(myF1Canvas,myM1Canvas);
+valueArray.push(Fvalue, Mvalue);
+}
+
 
 if (props.PopSecEduFemale != "..") {
 var Fnum = props.PopSecEduFemale;
 var Mnum = props.PopSecEduMale;
+var myF3Canvas = canvasNumber + 5;
+var myM3Canvas = canvasNumber + 6;
 
-nxtHTML += '<p>Percent of Population with Some Secondary Education</p><p class="female">Women: ' + props.PopSecEduFemale + '&nbsp;<canvas id="myF3Canvas" width="100" height="10"></canvas></p><p class="male">Men: ' + props.PopSecEduMale + '&nbsp;<canvas id="myM3Canvas" width="100" height="10"></canvas></p>';
-testArray.push("myF3Canvas","myM3Canvas");
+
+nxtHTML += '<p>% of Population with Some Secondary Education</p><p class="female"><canvas id="' + myF3Canvas +'" width="100" height="10"></canvas>' + props.PopSecEduFemale + '</p><p class="male"><canvas id="' + myM3Canvas + '" width="100" height="10"></canvas>' + props.PopSecEduMale + '</p>';
+testArray.push(myF3Canvas,myM3Canvas);
 valueArray.push(Fnum, Mnum);
 
 }
@@ -286,27 +345,31 @@ infoArray.shift();
  elt1.innerHTML = nxtHTML;
  }
    }
+   drawMe(testArray,valueArray);
+
+
+   };
    
-   for (var h = 0; h < testArray.length; h++) {
-   var c = document.getElementById(testArray[h]);
+function drawMe(canN, canV) {
+      for (var h = 0; h < canN.length; h++) {
+   var c = document.getElementById(canN[h]);
 var ctx = c.getContext("2d");
 ctx.moveTo(0,5);
-ctx.lineTo(valueArray[h],5);
+ctx.lineTo(canV[h],5);
 if (h % 2 == 0) {
-ctx.strokeStyle = '#ff0000'
+ctx.strokeStyle = 'DarkGoldenRod'
 } else {
-ctx.strokeStyle = '#0000ff'
+ctx.strokeStyle = 'SteelBlue'
 }
 ctx.lineWidth = 5;
 ctx.stroke();
 }
-
-   };
+}
 function update(e) {
 
-    zl.style.top = ~~e.containerPoint.y - 50 + 'px';
-    zl.style.left = ~~e.containerPoint.x -50 + 'px';
-    elt1.style.top = ~~e.containerPoint.y - 150 + 'px';
+    zl.style.top = ~~e.containerPoint.y - 75 + 'px';
+    zl.style.left = ~~e.containerPoint.x -75 + 'px';
+    elt1.style.top = ~~e.containerPoint.y - 80 + 'px';
     elt1.style.left = ~~e.containerPoint.x + 70 + 'px';
     zoommap.setView(e.latlng, map.getZoom() + 0, true);
 

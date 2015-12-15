@@ -41619,7 +41619,22 @@ var africaData = {
     "id": "EH",
     "properties": {
       "id": "EH",
-      "name": "Western Sahara"
+      "name": "Western Sahara",
+      "CountryName": "Western Sahara",
+      "HDIFtoMratio": "..",
+"GDIrank": "..",
+"HDIfemale13": "..",
+"HDImale13": "..",
+"LifeExpFemale": 56.3,
+"LifeExpMale": 54.2,
+"MeanSchoolFemale": "..",
+"MeanSchoolMale": "..",
+"ExpSchoolFemale": "..",
+"ExpSchoolMale": "..",
+"GNIpcFemale": "..",
+"GNIpcMale": "..",
+"PopSecEduFemale": "..",
+"PopSecEduMale": ".."
      },
     "geometry": {
       "type": "Polygon",
@@ -49758,7 +49773,7 @@ var africaData = {
       "name": "Tanzania",
      "region": "east",
 "HDIrank": 159,
-"CountryName": "Tanzania (United Republic of)",
+"CountryName": "Tanzania",
 "HDIFtoMratio": 0.916,
 "GDIrank": 100,
 "HDIfemale13": 0.466,

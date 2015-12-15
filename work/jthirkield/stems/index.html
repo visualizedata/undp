@@ -7,6 +7,9 @@
 
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
    <script src="libraries/p5.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <script src="sketch.js" type="text/javascript"></script>
       <link rel="stylesheet" type="text/css" href="styles.css" />
@@ -14,32 +17,80 @@
     <style> body {padding: 0; margin: 0;} canvas {vertical-align: top;} </style>
   </head>
   <body>
-    
-    <div class="topbar">
-      <span class="header">STEMS AND BRANCHES</span>
-      <span class="tagline">GENDER GAPS AND DIVISIONS OF LABOR IN AFRICA</span>
-      </div>
-      <div class="filters">
+ <div class="topbar">
+      <div class="header">STEMS AND BRANCHES</div>
+      <div class="tagline">GENDER GAPS AND DIVISIONS OF LABOR IN AFRICA</div>
+            <div id="regions">
 
-        <p>REGIONS</p>
-<p class="west"><input type="checkbox" onchange="regionSort(0)" checked>&nbsp;West&nbsp;</p>
+        VIEW BY REGION
+<p class="northern"><input type="checkbox" onchange="regionSort(4)" checked>&nbsp;Northern&nbsp;</p>
+<p class="western"><input type="checkbox" onchange="regionSort(0)" checked>&nbsp;Western&nbsp;</p>
 <p class="central"> <input type="checkbox" onchange="regionSort(1)" checked>&nbsp;Central&nbsp;</p>
- <p class="east"><input type="checkbox" onchange="regionSort(2)" checked>&nbsp;East&nbsp;</p>
+ <p class="eastern"><input type="checkbox" onchange="regionSort(2)" checked>&nbsp;Eastern&nbsp;</p>
  <p class="southern"><input type="checkbox" onchange="regionSort(3)" checked>&nbsp;Southern&nbsp;</p>
-    </div>
-         <span class="branch"> <p>BRANCHES (Y-Axis)&nbsp;<select id="comboA" onchange="dataChange(this)">
-<option value=1>Annual Income</option>
-<option value=2>Business Ownership</option>
-<option value=3>Managerial Positions</option>
-<option value=4>Female Ownership</option>
-<option value=5>Full Time Workers</option>
-<option value=6>Production Workers</option>
-<option value=7>Non-Production Workers</option>
-</select></p></span>
-<span class="stem"><p>STEMS (X-Axis)&nbsp;<select id="xaxis" onchange="sortChange(this)"><option value=0>Human Development Index</option>
-<option value=1>Poverty Head Count Ratio</option>
-</select>
-</p></span>
 
-  </body>
+    </div>
+
+      </div>
+      <div id="popupInfo">
+        In Gabon, 30% of firms have female participation in ownership because that is why
+        everyone is like this all the time.
+      </div>
+<!--<span class="stem"><p>STEMS (X-Axis)&nbsp;<select id="xaxis" onchange="sortChange(this)"><option value=0>Human Development Index</option>-->
+<!--<option value=1>Poverty Head Count Ratio</option>-->
+<!--</select>-->
+<!--</p></span>-->
+<div class="dropup" id="XAXIS">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    COUNTRY BY: HUMAN DEVELOPMENT INDEX (> 100)
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right" id="myx" aria-labelledby="dropdownMenu1">
+        <li><a href="#" data-value="1">Poverty Head Count Ratio</a></li>
+    <li><a href="#" data-value="0">Human Development Index (All)</a></li>
+        <li><a href="#" data-value="4">Human Development Index (> 100)</a></li>
+    <li><a href="#" data-value="2">Gender Inequality Index (All)</a></li>
+    <li><a href="#" data-value="3">Gender Inequality Index (> 75)</a></li>
+  </ul>
+    <script>
+   $("#myx li a").click(function(){
+  $(this).parents(".dropup").find('.btn').html('COUNTRY BY: ' + $(this).text() + ' <span class="caret"></span>');
+  $(this).parents(".dropup").find('.btn').val($(this).data('value'));
+  var currentVal = $(this).data('value');
+  sortChange(currentVal);
+ });
+ </script>
+
+</div>
+
+
+<div class="dropup" id="YAXIS">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+    ANNUAL INCOME (< $10,000) BY GENDER
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right" id="myy" aria-labelledby="dropdownMenu2">
+    <li><a href="#" data-value="10">Annual Income (< $5,000)</a></li>
+    <li><a href="#" data-value="1">Annual Income (< $10,000)</a></li>
+    <li><a href="#" data-value="11">Annual Income (< $25,000)</a></li>
+    <li><a href="#" data-value="12">Labor Force Participation</a></li>
+    <li><a href="#" data-value="2">Participation in Business Ownership</a></li>
+    <li><a href="#" data-value="3">Tops Managers at Firms</a></li>
+    <li><a href="#" data-value="4">Majority Ownership</a></li>
+    <li><a href="#" data-value="5">Permanent Full Time Workers</a></li>
+    <li><a href="#" data-value="6">Production Workers</a></li>
+    <li><a href="#" data-value="7">Non-Production Workers</a></li>
+  </ul>
+  </div>
+    <script>
+  $("#myy li a").click(function(){
+  $(this).parents(".dropup").find('.btn').html($(this).text() + ' BY GENDER <span class="caret"></span>');
+  $(this).parents(".dropup").find('.btn').val($(this).data('value'));
+  var currentVal = $(this).data('value');
+  dataChange(currentVal);
+});
+</script>
+
+
+
 </html>

@@ -291,7 +291,6 @@ function selectedConnect(n, i) {
 
   text("Female-managed agricultural plots in" + " ", width * 0.13, height * 0.07);
   strokeWeight(1.6);
-
   text(names[n], width * 0.13 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.07);
   strokeWeight(0.8);
   text(" " + "produce an average of ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.07);
