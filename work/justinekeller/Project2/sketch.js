@@ -52,9 +52,9 @@ function showData() {
   noStroke();
   fill(235);
   textFont(sans);
-  textSize(18);
+  textSize(24);
   text("Click or scroll over lines for More Information", windowWidth * 2 / 3 - 100, windowHeight / 25);
-  textSize(16);
+  textSize(20);
   fill(235);
   text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
   push();
@@ -62,7 +62,7 @@ function showData() {
   rotate(PI + HALF_PI);
   text("Mean Years Schooling", 0, 0);
   pop();
-  textSize(20);
+  textSize(26);
   text("Comparision of Gross National Income, Education (Mean Years of Schooling), and Gender", windowWidth / 25, windowHeight * 24 / 25);
   for (var k = 0; k < table.getRowCount(); k++) {
     if (EGNIM[k] < EGNIF[k]) {
@@ -104,7 +104,7 @@ function mouseReleased() {
         line((windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIF[l], (windowHeight * 3 / 8) - (MYSF[l] * 18));
         stroke(225, 225, 94);
         line((windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[l], (windowHeight * 3 / 8) - (MYSM[l] * 18));
-        textSize(16);
+        textSize(20);
         fill(235);
         text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
         push();
@@ -133,17 +133,17 @@ function mouseReleased() {
     noStroke();
     fill(235);
     textFont(sans);
-    textSize(24);
+    textSize(30);
     text(country[w], 25, windowHeight - 110);
     fill(121, 181, 231);
-    textSize(14);
+    textSize(18);
     text("Estimated GNI Female: ", 25, windowHeight - 90);
     text("Mean Years Schooling Female: ", 25, windowHeight - 70);
     fill(225, 225, 94);
     text("Estimated GNI Male: ", 25, windowHeight - 50);
     text("Mean Years Schooling Male: ", 25, windowHeight - 30);
     fill(235);
-    textSize(16);
+    textSize(20);
     text("$" + round(EGNIF[w] * (windowWidth / 52)), 25 + textWidth("Estimated GNI Female:"), windowHeight - 90);
     text("$" + round(EGNIM[w] * (windowWidth / 52)), 25 + textWidth("Estimated GNI Male:"), windowHeight - 50);
     text(MYSF[w] + " years", 25 + textWidth("Mean Years Schooling Female:"), windowHeight - 70);
@@ -158,7 +158,7 @@ function mouseReleased() {
     stroke(225, 225, 94);
     line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 18));
     noStroke();
-    textSize(16);
+    textSize(20);
     fill(235);
     text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
     push();
@@ -166,7 +166,7 @@ function mouseReleased() {
     rotate(PI + HALF_PI);
     text("Mean Years Schooling", 0, 0);
     pop();
-    textSize(20);
+    textSize(24);
      fill(235);
   textFont(sans);
   if(MYSF[w] < MYSM[w]){
@@ -220,14 +220,14 @@ function mouseMoved() {
   }
   textAlign(CENTER);
   textFont(sans);
-  textSize(24);
+  textSize(30);
   noStroke();
   fill(235);
   text(country[w], (windowWidth / 25) + EGNIF[w] + (diam[w] / 2), (windowHeight * 3 / 8) + (diam[w] / 2) + 25);
   textAlign(LEFT);
   text(country[w], 25, windowHeight - 110);
   fill(121, 181, 231);
-  textSize(14);
+  textSize(18);
   text("Estimated GNI Female: ", 25, windowHeight - 90);
   text("Mean Years Schooling Female: ", 25, windowHeight - 70);
   fill(225, 225, 94);
@@ -235,7 +235,7 @@ function mouseMoved() {
   text("Mean Years Schooling Male: ", 25, windowHeight - 30);
 
   fill(235);
-  textSize(16);
+  textSize(20);
   text("$" + round(EGNIF[w] * (windowWidth / 52)), 25 + textWidth("Estimated GNI Female:"), windowHeight - 90);
   text("$" + round(EGNIM[w] * (windowWidth / 52)), 25 + textWidth("Estimated GNI Male:"), windowHeight - 50);
   text(MYSF[w] + " years", 25 + textWidth("Mean Years Schooling Female:"), windowHeight - 70);
@@ -254,7 +254,7 @@ function mouseMoved() {
   stroke(225, 225, 94);
   line((windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8), (windowWidth / 25) + EGNIM[w], (windowHeight * 3 / 8) - (MYSM[w] * 18));
   noStroke();
-  textSize(16);
+  textSize(20);
   fill(235);
   text("GNI", (windowWidth / 25) - 30, (windowHeight * 3 / 8) + 25);
   push();
@@ -262,7 +262,7 @@ function mouseMoved() {
   rotate(PI + HALF_PI);
   text("Mean Years Schooling", 0, 0);
   pop();
-   textSize(20);
+   textSize(24);
      fill(235);
   textFont(sans);
     if(MYSF[w] < MYSM[w]){
