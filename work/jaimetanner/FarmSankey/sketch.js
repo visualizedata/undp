@@ -124,9 +124,9 @@ function showData() {
     // line(width * 0.305, height * 0.09 * z + (height * 0.25), width * 0.33, height * 0.09 * z + (height * 0.2))
     // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
-    fill(119, 136, 153);
+    fill(170,165,127);
     rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
-    fill(192, 190, 188);
+    fill(125,116,99);
     rect(gaps[z], height * 0.09 * z + (height * 0.22), width * 0.25, height * 0.02);
 
     /*----------country names-----------*/
