@@ -96,6 +96,12 @@ function setup() {
     }
   }
   // console.log(test[0]);
+}
+
+function draw() {
+  background(20);
+
+  // MAKE BUTTONS WITH COUNTRY NAMES  ~~~~~~~~~~~~~~~~~~~~ 
   for (var i = 0; i < countryName.length; i++) {
     var nameButton = createButton(countryName[i]);
     nameButton.class("button");
@@ -108,7 +114,6 @@ function setup() {
       nameButton.style("background-color", "red");
     })
   }
-  // MAKE BUTTONS WITH COUNTRY NAMES  ~~~~~~~~~~~~~~~~~~~~ 
 
 
   // MAKE DIVS WITH LEGISLATION TEXT  ~~~~~~~~~~~~~~~~~~~~ 
@@ -136,11 +141,6 @@ function setup() {
     indSrc.class("src");
     indSrc.position(width * 0.80, 80 + q * 40);
   }
-}
-
-function draw() {
-  background(20);
-
 
 
   for (var r = 0; r < rowNum.length; r++) {
