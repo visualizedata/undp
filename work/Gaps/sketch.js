@@ -227,8 +227,8 @@ function handlePress() {
   stroke(255);
   line(width * 0.975, height * 0.9, width * 0.975, height * 0.15);
 
-  text("0%", width * 0.98, height * 0.89);
-  text("100%", width * 0.98, height * 0.17);
+  text("0%", width - 22, height * 0.89);
+  text("100%", width - 22, height * 0.17);
   line(width * 0.97, height * 0.9, width * 0.98, height * 0.9);
   line(width * 0.97, height * 0.15, width * 0.98, height * 0.15);
   stroke(255);

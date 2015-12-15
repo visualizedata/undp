@@ -1,13 +1,30 @@
 var table;
-var country = [];
-var code = [];
+var region = [];
 var HDIrank = [];
+var code = [];
+var country = [];
 var HDIF = [];
 var HDIM = [];
-var k = 0; // counter
+var LEF = [];
+var LEM = [];
+var MYSF = [];
+var MYSM = [];
+var EYSF = [];
+var EYSM = [];
+var EGNIF = [];
+var EGNIM = [];
+var mysg = 0;
+var eysg = 0;
 var l = 0; // counter x value
-var c = [0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3, 4, 5, 6, 7, 3, 4, 5, 6, 7]; //counter y value
+var m = 0;
+var c = [0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7]; //counter y value
+var cent = [0, 1, 2, 3, 4, 5, 6, 7];
+var eas = [8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7, 8];
+var nor = [0, 1, 2, 3, 4];
+var sou = [5, 6, 7, 8, 0];
+var wes = [1, 2, 3, 4, 5, 6, 7, 8, 0, 1, 2, 3, 4, 5, 6, 7];
 var q = 0;
+var d = 0;
 var sans;
 var sans2;
 var sans3;
@@ -20,127 +37,177 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  background(255);
   noLoop();
   table = loadTable("HDI3let.tsv", "tsv", "header", showData);
-  background(255);
 }
 
 function showData() {
-  for (var j = 0; j < table.getRowCount(); j++) {
-    var HDIranka = table.getString(j, 0);
-    var countrya = table.getString(j, 1);
+  for (var j = 0; j < table.getRowCount(); j++) { // pull in infromation from table
+    var regiona = table.getString(j, 0);
+    var HDIranka = table.getString(j, 1);
     var codea = table.getString(j, 2);
-    var HDIFa = table.getNum(j, 3);
-    var HDIMa = table.getNum(j, 4);
+    var countrya = table.getString(j, 3);
+    var HDIFa = table.getNum(j, 4);
+    var HDIMa = table.getNum(j, 5);
+    var LEFa = table.getNum(j, 6);
+    var LEMa = table.getNum(j, 7);
+    var MYSFa = table.getNum(j, 8);
+    var MYSMa = table.getNum(j, 9);
+    var EYSFa = table.getNum(j, 10);
+    var EYSMa = table.getNum(j, 11);
+    var EGNIFa = table.getNum(j, 12);
+    var EGNIMa = table.getNum(j, 13);
+    region.push(regiona);
     HDIrank.push(HDIranka);
-    country.push(countrya);
     code.push(codea);
+    country.push(countrya);
     HDIF.push(HDIFa);
     HDIM.push(HDIMa);
-    // console.log(HDIrank + " " + country + " " + code + " " + HDIF + " " + HDIM);
+    LEF.push(LEFa);
+    LEM.push(LEMa);
+    MYSF.push(MYSFa);
+    MYSM.push(MYSMa);
+    EYSF.push(EYSFa);
+    EYSM.push(EYSMa);
+    EGNIF.push(EGNIFa);
+    EGNIM.push(EGNIMa);
   }
   //title
   noStroke();
   fill(235);
-  textFont(sans2);
+  textFont(sans);
   textSize(24);
   textAlign(CENTER);
-  text("Human Development Index Gender Gap", windowWidth / 2, windowHeight / 28);
-  //list of names
+  text("Human Development Index Gender Gap", windowWidth / 2, windowHeight / 25);
+  //list of 3 letter country codes
   for (var i in code) {
-    if (i > 7 && i < 16) {
+    if (i > 8 && i < 18) {
       l = 1;
     }
-    if (i > 15 && i < 24) {
+    if (i > 17 && i < 27) {
       l = 2;
     }
-    if (i > 23 && i < 32) {
+    if (i > 26 && i < 36) {
       l = 3;
     }
-    if (i > 31 && i < 40) {
+    if (i > 35 && i < 45) {
       l = 4;
     }
-    if (i > 39 && i < 48) {
+    if (i > 44 && i < 53) {
       l = 5;
-    }
-    if (i > 47 && i < 54) {
-      l = 6;
     }
     textAlign(LEFT);
     noStroke();
-    textSize(50);
+    textSize(40);
     textFont(sans);
-    fill(45);
-    text(code[i].toUpperCase(), 50 + (l * 200), 170 + (c[i] * 65));
+    fill(50);
+    text(code[i].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[i] * (windowHeight / 12)));
     fill(255);
-    rect(50 + (l * 200), 170 + (c[i] * 65) - (50 * HDIF[i]), 100, (50 * (HDIM[i] - HDIF[i])));
+    rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[i] * (windowHeight / 12)) - (40 * HDIF[i]), (windowWidth / 8), (40 * (HDIM[i] - HDIF[i])));
   }
 }
 
 function mouseMoved() {
   var count = 0;
-  for (var k in code) {
-    l = 0;
-    if (k > 7 && k < 16) {
-      l = 1;
-    }
-    if (k > 15 && k < 24) {
-      l = 2;
-    }
-    if (k > 23 && k < 32) {
-      l = 3;
-    }
-    if (k > 31 && k < 40) {
-      l = 4;
-    }
-    if (k > 39 && k < 48) {
-      l = 5;
-    }
-    if (k > 47 && k < 54) {
-      l = 6;
-    }
-    var xvalue = 50 + (l * 200);
-    var yvalue = 170 + (c[k] * 65);
 
-    if (mouseX < xvalue + 50 && mouseX > xvalue - 50) {
-      if (mouseY < yvalue + 25 && mouseY > yvalue - 25) {
+  for (var k in code) {
+    if (k > -1 && k < 9) {
+      m = 0;
+    }
+    if (k > 8 && k < 18) {
+      m = 1;
+    }
+    if (k > 17 && k < 27) {
+      m = 2;
+    }
+    if (k > 26 && k < 36) {
+      m = 3;
+    }
+    if (k > 35 && k < 45) {
+      m = 4;
+    }
+    if (k > 44 && k < 53) {
+      m = 5;
+    }
+    var xvalue = (windowWidth * 3 / 16) + (m * (windowWidth / 8));
+    var yvalue = (windowHeight / 4) + (c[k] * (windowHeight / 12) - (windowHeight / 24));
+
+
+    if (mouseX < xvalue + (windowWidth / 16) && mouseX > xvalue - (windowWidth / 16)) {
+      if (mouseY < yvalue + (windowHeight / 24) && mouseY > yvalue - (windowHeight / 24)) {
         q = count;
       }
     }
     count++;
 
-    l = 0;
-    if (q > 7 && q < 16) {
+    var xvalue2 = (windowWidth / 16);
+    var yvalue2 = (windowHeight / 3) - 10;
+    if (mouseX < xvalue + (windowWidth / 16) && mouseX > xvalue - (windowWidth / 16)) {
+      if (mouseY < yvalue + 10 && mouseY > yvalue - 25) {
+        d = q;
+      }
+    }
+  
+
+    if (q > -1 && q < 9) {
+      l = 0;
+    }
+    if (q > 8 && q < 18) {
       l = 1;
     }
-    if (q > 15 && q < 24) {
+    if (q > 17 && q < 27) {
       l = 2;
     }
-    if (q > 23 && q < 32) {
+    if (q > 26 && q < 36) {
       l = 3;
     }
-    if (q > 31 && q < 40) {
+    if (q > 35 && q < 45) {
       l = 4;
     }
-    if (q > 39 && q < 48) {
+    if (q > 44 && q < 53) {
       l = 5;
     }
-    if (q > 47 && q < 54) {
-      l = 6;
-    }
+    textFont(sans);
     fill(255);
-    rect(50, 172, windowWidth, 18);
-    rect(50, 237, windowWidth, 18);
-    rect(50, 302, windowWidth, 18);
-    rect(50, 367, windowWidth, 18);
-    rect(50, 432, windowWidth, 18);
-    rect(50, 497, windowWidth, 18);
-    rect(50, 562, windowWidth, 18);
-    rect(50, 627, windowWidth, 18);
-    fill(200);
-    textSize(12);
+    rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 6) + (c[q] * (windowHeight / 12)), windowWidth / 8, windowHeight / 12);
+    rect((windowWidth / 8), (windowHeight * 3 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 4 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 5 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 6 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 7 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 8 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 9 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 10 / 12) + 3, (windowWidth * 6 / 8), 15);
+    rect((windowWidth / 8), (windowHeight * 11 / 12) + 3, (windowWidth * 6 / 8), 15);
+
+    rect((windowWidth * 3 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+    rect((windowWidth * 5 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+    rect((windowWidth * 7 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+    rect((windowWidth * 9 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+    rect((windowWidth * 11 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+    rect((windowWidth * 13 / 16), (windowHeight / 6), (windowWidth / 16), windowHeight - (windowHeight / 6));
+
+    fill(50);
+    textSize(40);
+    text(code[q].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[q] * (windowHeight / 12)));
+    fill(255);
+    rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - (40 * HDIF[q]), (windowWidth / 8), (40 * (HDIM[q] - HDIF[q])));
+    fill(150);
+    textSize(11);
+    text(country[q], (windowWidth / 8) + (l * (windowWidth / 8)), 15 + (windowHeight / 4) + (c[q] * (windowHeight / 12)));
     textFont(sans2);
-    text(country[q], 50 + (l * 200), 185 + (c[q] * 65));
+    textSize(9);
+    text("0", (windowWidth / 4) + (l * (windowWidth / 8)) + 15 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) + 5);
+    text("0.25", (windowWidth / 4) + (l * (windowWidth / 8)) + 15 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 5);
+    text("0.5", (windowWidth / 4) + (l * (windowWidth / 8)) + 15 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 12);
+    text("0.75", (windowWidth / 4) + (l * (windowWidth / 8)) + 15 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 20);
+    text("1", (windowWidth / 4) + (l * (windowWidth / 8)) + 15 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 30);
+    stroke(25);
+    line((windowWidth / 4) + (l * (windowWidth / 8)) + 10 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)), (windowWidth / 4) + (l * (windowWidth / 8)) + 5 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)));
+    line((windowWidth / 4) + (l * (windowWidth / 8)) + 10 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 35, (windowWidth / 4) + (l * (windowWidth / 8)) + 5 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 35);
+    line((windowWidth / 4) + (l * (windowWidth / 8)) + 10 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)) - 35, (windowWidth / 4) + (l * (windowWidth / 8)) + 10 - (windowWidth / 16), (windowHeight / 4) + (c[q] * (windowHeight / 12)));
+    noStroke();
 
   }
 }
@@ -149,39 +216,179 @@ function mousePressed() {
   if (q) {
     noStroke();
     fill(255);
-    rect(0, 0, windowWidth, 120);
-    textSize(100); //graphic text size
-    textFont(sans); //graphic text font
-    fill(50); // graphic text color
-    text(country[q].toUpperCase(), 150, 105); //make graphic uppercase of countries and postion
+    rect(0, 0, windowWidth, windowHeight / 6 + 10);
+    rect(0, 0, windowWidth / 8, windowHeight);
+    rect(windowWidth * 7 / 8, 0, windowWidth / 8, windowHeight);
+    textSize(100);
+    textFont(sans);
+    fill(50);
+    text(country[q].toUpperCase(), windowWidth / 8, windowHeight / 6); //make graphic uppercase of countries and postion
     fill(255); //rectangle fill
-    rect(0, 105 - (100 * HDIF[q]), windowWidth, (100 * (HDIM[q] - HDIF[q]))); //rectangle of gap
-    fill(100);
-    textFont(sans2);
-    textSize(20);
-    textAlign(CENTER);
-    text("HDI Rank:", windowWidth - 100, 55);
-    text(HDIrank[q], windowWidth - 100, 80);
-    textAlign(LEFT);
+    rect(windowWidth / 8, windowHeight / 6 - (100 * HDIF[q]), windowWidth * 7 / 8, (100 * (HDIM[q] - HDIF[q]))); //rectangle of gap
     if (HDIF[q] !== 0) {
+      fill(125);
       textSize(14);
-      text("HDI Male: " + HDIM[q] + " HDI Female: " + HDIF[q], 15, 90 - (100 * HDIF[q]), 130, 105);
-    stroke(25);
-    line(windowWidth - 250, 105, windowWidth - 255, 105);
-    line(windowWidth - 250, 17, windowWidth - 255, 17);
-    line(windowWidth - 250, 17, windowWidth - 250, 105);
-    noStroke();
-    fill(150);
-    textSize(11);
-    text("0", windowWidth - 245, 105 + 8);
-    text("0.25", windowWidth - 245, 105 - 14);
-    text("0.5", windowWidth - 245, 105 - 36);
-    text("0.75", windowWidth - 245, 105 - 58);
-    text("1", windowWidth - 245, 105 - 80);
+      text("HDI Male: " + HDIM[q], windowWidth / 32, (windowHeight / 6) - 10 - (100 * HDIF[q]));
+      text("HDI Female: " + HDIF[q], windowWidth / 32, (windowHeight / 6) + 10 - (100 * HDIF[q]));
     }
+    fill(125);
+    textSize(14);
+    text("HDI Rank:", windowWidth / 64, (windowHeight / 4) - 35);
+    text("Region:", windowWidth / 64, (windowHeight / 3) - 35);
+    text("HDI gap:", windowWidth / 64, (windowHeight * 5 / 12) - 35);
+    text("Life Expectancy Gap:", windowWidth / 64, (windowHeight * 6 / 12) - 35);
+    text("Education Gap:", windowWidth / 64, (windowHeight * 7 / 12) - 35);
+    text("Expected Education Gap:", windowWidth / 64, (windowHeight * 8 / 12) - 35);
+    text("Estimated GNI Gap:", windowWidth / 64, (windowHeight * 9 / 12) - 35);
+    textSize(30);
+    fill(100);
+    text(HDIrank[q], windowWidth / 32, (windowHeight / 4));
+    text(region[q], windowWidth / 32, (windowHeight / 3));
+    text(nfc((HDIM[q] - HDIF[q]), 2), windowWidth / 32, (windowHeight * 5 / 12));
+
+    if (MYSF[q] < MYSM[q]) {
+      mysg = nfc((MYSM[q] - MYSF[q]), 2);
+    }
+    if (MYSF[q] > MYSM[q]) {
+      mysg = nfc((MYSF[q] - MYSM[q]), 2);
+    }
+    if (MYSF[q] == MYSM[q]) {
+      mysg = 0;
+    }
+    if (EYSF[q] < EYSM[q]) {
+      eysg = nfc((EYSM[q] - EYSF[q]), 2);
+    }
+    if (EYSF[q] > EYSM[q]) {
+      eysg = nfc((EYSF[q] - EYSM[q]), 2);
+    }
+    if (EYSF[q] == EYSM[q]) {
+      eysg = 0;
+    }
+    text(abs(nfc((LEF[q] - LEM[q]), 2)), windowWidth / 32, (windowHeight * 6 / 12));
+    text(mysg, windowWidth / 32, (windowHeight * 7 / 12));
+    text(eysg, windowWidth / 32, (windowHeight * 8 / 12));
+    text("$" + round(EGNIM[q] - EGNIF[q]), windowWidth / 32, (windowHeight * 9 / 12));
+
+    textSize(14);
+    text("Life Expectancy Female:", (windowWidth * 7 / 8) + 5, (windowHeight * 3 / 12) - 35);
+    text("Life Expectancy Male:", (windowWidth * 7 / 8) + 5, (windowHeight * 4 / 12) - 35);
+    text("Education Female:", (windowWidth * 7 / 8) + 5, (windowHeight * 5 / 12) - 35);
+    text("Education Male:", (windowWidth * 7 / 8) + 5, (windowHeight * 6 / 12) - 35);
+    text("Expected Education Female:", (windowWidth * 7 / 8) + 5, (windowHeight * 7 / 12) - 35);
+    text("Expected Education Male:", (windowWidth * 7 / 8) + 5, (windowHeight * 8 / 12) - 35);
+    text("Estimated GNI Female:", (windowWidth * 7 / 8) + 5, (windowHeight * 9 / 12) - 35);
+    text("Estimated GNI Male:", (windowWidth * 7 / 8) + 5, (windowHeight * 10 / 12) - 35);
+    textSize(30);
+    fill(100);
+    text(nfc(LEF[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 3 / 12));
+    text(nfc(LEM[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 4 / 12));
+    text(nfc(MYSF[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 5 / 12));
+    text(nfc(MYSM[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 6 / 12));
+    text(nfc(EYSF[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 7 / 12));
+    text(nfc(EYSM[q], 2) + " years", (windowWidth * 7 / 8) + 5, (windowHeight * 8 / 12));
+    text("$" + round(EGNIF[q]), (windowWidth * 7 / 8) + 5, (windowHeight * 9 / 12));
+    text("$" + round(EGNIM[q]), (windowWidth * 7 / 8) + 5, (windowHeight * 10 / 12));
   }
+  // if (d) {
+  //   fill(255);
+  //   rect((windowWidth / 8), (windowHeight / 6), (windowWidth * 6 / 8), (windowHeight * 5 / 6));
+  //   for (var b in code) {
+  //     l = 0;
+  //     if (b > 8 && b < 18) {
+  //       l = 1;
+  //     }
+  //     if (b > 17 && b < 27) {
+  //       l = 2;
+  //     }
+  //     if (b > 26 && b < 36) {
+  //       l = 3;
+  //     }
+  //     if (b > 35 && b < 45) {
+  //       l = 4;
+  //     }
+  //     if (b > 44 && b < 53) {
+  //       l = 5;
+  //     }
+  //     textAlign(LEFT);
+  //     noStroke();
+  //     textSize(40);
+  //     textFont(sans);
+  //     fill(50);
+  //     text(code[b].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[b] * (windowHeight / 12)));
+  //     fill(255);
+  //     rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (c[b] * (windowHeight / 12)) - (40 * HDIF[b]), (windowWidth / 8), (40 * (HDIM[b] - HDIF[b])));
+  //   }
+  //   if (region[d] == "Central") {
+  //     l = 0;
+  //     for (var cent = 0; cent < 8; cent++) {
+  //       fill(19, 79, 129);
+  //       text(code[cent].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (cen[cent] * (windowHeight / 12)));
+  //       fill(255);
+  //       rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (cen[cent] * (windowHeight / 12)) - (40 * HDIF[cent]), (windowWidth / 8), (40 * (HDIM[cent] - HDIF[cent])));
+  //     }
+  //   }
+  //   if (region[d] == "Eastern") {
+  //     for (var east = 8; east < 27; east++) {
+  //       l = 0;
+  //       if (east > 8 && east < 18) {
+  //         l = 1;
+  //       }
+  //       if (east > 17 && east < 27) {
+  //         l = 2;
+  //       }
+  //       fill(0, 26, 77);
+  //       text(code[east].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (eas[east] * (windowHeight / 12)));
+  //       fill(255);
+  //       rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (eas[east] * (windowHeight / 12)) - (40 * HDIF[east]), (windowWidth / 8), (40 * (HDIM[east] - HDIF[east])));
+  //     }
+  //   }
+  //   if (region[d] == "Northern") {
+  //     for (var nort = 27; nort < 32; nort++) {
+  //       l = 3;
+  //       fill(133, 83, 0);
+  //       text(code[nort].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (nor[nort] * (windowHeight / 12)));
+  //       fill(255);
+  //       rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (nor[nort] * (windowHeight / 12)) - (40 * HDIF[nort]), (windowWidth / 8), (40 * (HDIM[nort] - HDIF[nort])));
+  //     }
+  //   }
+  //   if (region[d] == "Southern") {
+  //     for (var sout = 32; sout < 37; sout++) {
+  //       if (sout > 31 && sout < 35) {
+  //         l = 3;
+  //       }
+  //       if (sout > 34 && sout < 36) {
+  //         l = 4;
+  //       }
+  //       fill(75, 31, 75);
+  //       text(code[sout].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (sou[sout] * (windowHeight / 12)));
+  //       fill(255);
+  //       rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (sou[sout] * (windowHeight / 12)) - (40 * HDIF[sout]), (windowWidth / 8), (40 * (HDIM[sout] - HDIF[sout])));
+  //     }
+  //   }
+  //   if (region[d] == "Western") {
+  //     for (var west = 36; west < 53; west++) {
+  //       if (west > 34 && west < 36) {
+  //         l = 4;
+  //         if (west > 35 && west < 45) {
+  //           l = 4;
+  //         }
+  //         if (west > 44 && west < 53) {
+  //           l = 5;
+  //         }
+  //         fill(77, 0, 0);
+  //         text(code[west].toUpperCase(), (windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (wes[west] * (windowHeight / 12)));
+  //         fill(255);
+  //         rect((windowWidth / 8) + (l * (windowWidth / 8)), (windowHeight / 4) + (wes[west] * (windowHeight / 12)) - (40 * HDIF[west]), (windowWidth / 8), (40 * (HDIM[west] - HDIF[west])));
+  //       }
+  //     }
+  //   }
+  // }
 }
 
 function draw() {
 
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }

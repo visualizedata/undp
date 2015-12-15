@@ -1,0 +1,39 @@
+Country	married by 15	married by 18	HDI Rank	femaleHDI	maleHDI	mViolence	fViolence	location
+Gabon	6	22	112	..	..	..	58	c
+South Africa	1	6	118	..	..	..	..	s
+Cabo Verde	3	18	123	..	..	..	19	w
+Namibia	2	9	127	0.616	0.631	..	..	s
+Ghana	5	21	138	0.537	0.607	..	35	w
+Congo	6	33	140	0.543	0.585	..	..	c
+Zambia	9	42	141	0.534	0.585	..	43	e
+Sao Tome and Principe	5	34	142	0.524	0.586	..	37	c
+Equatorial Guinea	9	30	144	..	..	..	73	c
+Kenya	6	26	147	0.508	0.560	..	34	e
+Cameroon	13	38	152	0.468	0.537	..	54	c
+Nigeria	17	43	152	0.458	0.546	..	..	w
+Madagascar	12	41	155	0.476	0.519	..	..	e
+Zimbabwe	4	31	156	0.468	0.515	..	58	e
+Comoros	10	32	159	..	..	..	9	e
+Mauritania	14	34	161	0.425	0.530	..	..	w
+Lesotho	2	19	162	0.474	0.488	..	..	s
+Senegal	12	33	163	0.449	0.520	..	..	w
+Uganda	10	40	164	0.456	0.509	..	46	e
+Benin	11	32	165	0.428	0.520	..	..	w
+Sudan	7	33	166	..	..	..	..	e
+Djibouti	2	5	170	..	..	..	..	e
+Côte d'Ivoire	10	33	171	..	..	..	24	w
+Gambia	7	36	172	..	..	..	..	w
+Ethiopia	16	41	173	0.401	0.470	..	..	e
+Malawi	12	50	174	0.389	0.437	..	40	e
+Liberia	11	38	175	0.379	0.482	..	46	w
+Mali	15	55	176	0.350	0.455	..	14	w
+Guinea-Bissau	7	22	177	..	..	..	..	w
+Mozambique	14	48	178	0.343	0.391	30	37	e
+Guinea	21	52	179	0.344	0.439	..	..	w
+Burundi	3	20	180	0.370	0.410	..	..	e
+Burkina Faso	10	52	181	0.376	0.407	..	8	w
+Eritrea	13	41	182	..	..	..	..	e
+Sierra Leone	18	44	183	0.329	0.412	..	..	w
+Chad	29	68	184	0.319	0.419	..	..	c
+Democratic Republic of the Congo	9	39	186	0.304	0.369	..	70	c
+Niger	28	76	187	0.275	0.385	..	..	w
