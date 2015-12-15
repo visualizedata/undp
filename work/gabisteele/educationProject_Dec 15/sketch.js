@@ -54,6 +54,26 @@ function draw() {
   // } else {
   //   isOverCountry = false;
   // }
+  // print(isOverCountry);
+
+  var isOverRectangle;
+  if (mouseX >= 150 && mouseX <= 150 + 100 && mouseY >= 150 && mouseY <= 150 + 100) {
+    isOverRectangle = true;
+  } else {
+    isOverRectangle = false;
+  }
+
+  // draw a rectangle
+  rectMode(CORNER);
+  stroke(0);
+  strokeWeight(5);
+  if (isOverRectangle == true) {
+    fill(100);
+    cursor(HAND);
+  } else {
+    fill(200);
+    cursor(ARROW);
+  }
 
 
 }
@@ -75,14 +95,40 @@ function setup() {
   // button.class();
   // button.position(19, 200);
   // button.mousePressed(changeBG);
+  // noStroke();
+  // fill("Black");
+  // rect(985, 420, 720, 4);
+  
+  // stroke("black");
+  // strokeWeight(2);
+  // noFill();
+  // rect(987, 435, 30, 38)
+  // noStroke();
+  // fill("black");
+  // textFont(myFontBold);
+  // textSize(40);
+  // text("1     2     3    4    5    6    7    8    9    10    11    12", 995, 470);
+  
 
-  // load boy img
+  
+  // // load boy img
+  
   // loadImage("boy.png", function(boy_) {
   //   for (var i = 0; i < 30; i++) {
   //     var years = random(12);
   //     boy = boy_;
   //     boyLoaded = true;
-  //     image(boy, i*50,  0, 100, years * 20);
+  //     image(boy, 1400, 295);
+  //   }
+  // });
+
+  // loadImage("girl.png", function(boy_) {
+  //   for (var i = 0; i < 30; i++) {
+  //     var years = random(12);
+  //     boy = boy_;
+  //     boyLoaded = true;
+  //     image(boy, 1150, 295);
+
   //   }
   // });
 
@@ -109,12 +155,12 @@ function setup() {
   // notebook cubes 1
   strokeWeight(1);
   stroke(51, 102, 204, 60);
-  for (var i = 0; i < 10000; i++) {
+  for (var i = 0; i < 20000; i++) {
     line(30 * i, 0, 30 * i, 5000);
   }
   // notebook cubes 2
   stroke(51, 102, 204, 60);
-  for (var l = 0; l < 50000; l++) {
+  for (var l = 0; l < 2000; l++) {
     line(0, 30 * l, windowWidth, 30 * l);
   }
 
@@ -188,37 +234,38 @@ country.prototype.display = function() {
 
   var x = 110;
   var y = 275;
-  
+
   noStroke();
-  fill(255, 255, 0);
+  fill(255, 102, 0);
   textSize(28);
   text("CENTRAL", x - 105, y + 120, 1);
 
   fill(255, 204, 0, 90);
   textSize(40);
   text("EAST", x - 100, y + 520);
-  
-  
+
+
   fill(255, 153, 51);
   textSize(20);
   text("NORTHERN", x - 104, y + 980);
-  
-   fill(204, 0, 0);
+
+  fill(204, 0, 0);
   textSize(38);
   text("WEST", x - 100, y + 1420);
-  
 
 
-  noFill();
-  stroke(255, 255, 0, 90);
-  strokeWeight(3);
-  rect(x, y, 800, 222, 10);
-  noStroke();
+
 
   noFill();
   stroke(255, 204, 0, 90);
   strokeWeight(3);
   rect(x, y + 222, 800, 600, 10);
+  noStroke();
+
+  noFill();
+  stroke(255, 102, 0);
+  strokeWeight(3);
+  rect(x, y, 800, 222, 10);
   noStroke();
 
   noFill();
