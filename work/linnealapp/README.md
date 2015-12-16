@@ -5,6 +5,8 @@
 ## Gender imbalance & legislation in Africa
 ### Description
 
+This visualization explores the legal and regulatory barriers to women's economic development that exist within legislation across African economies. Do the constraints against women inherent in some country's legislations limit the ecomonic growth of that economy? This visualization can be used as a tool to quickly delve into the source documents for each legislation, in order to learn more about the legislative framework working for or against women across African economies.
+
 ## Child marriage & female development in Africa
 ### Description
 
