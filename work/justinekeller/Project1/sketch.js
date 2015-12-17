@@ -208,27 +208,27 @@ function mouseMoved() {
 
  if(d >-1 && d <8){
         fill('rgba(19, 79, 129, 0.5)');
-        rect(windowWidth / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 8 / 12));
+        rect(windowWidth / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 8 / 12) + 7);
   }
   if(d >7 && d <27){
         fill('rgba(0, 26, 77, 0.5)');
-        rect(windowWidth / 8, (windowHeight * 10 / 12), windowWidth / 8, windowHeight / 12 );
-        rect(windowWidth *2 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 9 / 12));
-        rect(windowWidth *3 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 9 / 12));
+        rect(windowWidth / 8, (windowHeight * 10 / 12) + 10, windowWidth / 8, (windowHeight / 12)+ 7 );
+        rect(windowWidth *2 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 9 / 12)+ 7);
+        rect(windowWidth *3 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 9 / 12)+ 7);
   }
   if(d >26 && d <32){
         fill('rgba(133, 83, 0, 0.5)');
-        rect(windowWidth *4 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 5 / 12));
+        rect(windowWidth *4 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 5 / 12)+ 7);
   }
   if(d >31 && d <37){
         fill('rgba(75, 31, 75, 0.5)');
-        rect(windowWidth *4 / 8,  10 + (windowHeight * 7 / 12), windowWidth / 8, (windowHeight * 4 / 12));
-        rect(windowWidth *5 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 1 / 12));
+        rect(windowWidth *4 / 8,  10 + (windowHeight * 7 / 12), windowWidth / 8, (windowHeight * 4 / 12)+ 7);
+        rect(windowWidth *5 / 8, (windowHeight / 6) + 10, windowWidth / 8, (windowHeight * 1 / 12) + 7);
   }
   if(d >38 && d <53){
         fill('rgba(77, 0, 0, 0.5)');
-        rect(windowWidth * 5 / 8, (windowHeight * 3 / 12) + 10, windowWidth / 8, (windowHeight * 9 / 12));
-         rect(windowWidth * 6 / 8, (windowHeight * 2 / 12) + 10, windowWidth / 8, (windowHeight * 10 / 12));
+        rect(windowWidth * 5 / 8, (windowHeight * 3 / 12) + 10, windowWidth / 8, (windowHeight * 8 / 12));
+         rect(windowWidth * 6 / 8, (windowHeight * 2 / 12) + 10, windowWidth / 8, (windowHeight * 9 / 12));
   }
   }
 }
