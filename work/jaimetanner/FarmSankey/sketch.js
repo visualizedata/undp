@@ -300,7 +300,7 @@ function selectedConnect(n, i) {
 
   strokeWeight(1.5);
   noFill();
-  stroke(0);
+  stroke(40);
   bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
 
   strokeWeight(1);

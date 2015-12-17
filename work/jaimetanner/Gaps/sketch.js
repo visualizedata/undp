@@ -57,24 +57,14 @@ function setup() {
   text("Child Marriages and the Gender Gap", width * 0.05, height * 0.05);
   line(width * 0.05, height * 0.065, width * 0.06 + textWidth("Child Marriages and the Gender Gap"), height * 0.065);
   textFont(latoLight);
-  textSize(9);
+  textSize(11);
   strokeWeight(0.7);
-  text("This project explores the relationship between the percentage of women between the ages of 20 and 24 who were married before the age of 18 in select African countries, and how it compares to the UNDP’s Human Development Index (HDI). Each country is represented by a triangle, with the height defined by the percentage of child marriage, the left corner of the triangle base the female score on the HDI, and the right the male score on the HDI.", width * 0.05, height * 0.09, width * 0.4);
+  text("This project explores the relationship between the percentage of women between the ages of 20 and 24 who were married before the age of 18 in select African countries, and how it compares to the UNDP’s Human Development Index (HDI). Each country is represented by a triangle, with the height defined by the percentage of child marriage, the left corner of the triangle base the female score on the HDI, and the right the male score on the HDI.", width * 0.045, height * 0.09, width * 0.42);
   textSize(8);
 
   /*-----------y-axis-----------*/
   fill(black);
   line(width - 25, height * 0.9, width - 25, height * 0.15);
-
-  // text("0%", width - 22, height * 0.85);
-  // text("100%", width - 22, height * 0.15);
-
-
-  /*-----------x-axis-----------*/
-  // fill(230);
-  // stroke(230);
-  // text("0.25", width * 0.03, height * 0.93);
-  // text("0.65", width * 0.97, height * 0.93);
 
   textSize(11);
   text("Human Development Index", width / 2 - (textWidth("Human Development Index") / 2), height * 0.99);
@@ -108,7 +98,7 @@ function showData() {
     region.push(table.getString(r, 8));
     hdiDiff.push(hM[r] - hF[r]);
 
-    marriage18.push(map(ge18[r], 0, 100, height * 0.9, height * 0.15));
+    marriage18.push(map(ge18[r], 0, 80, height * 0.9, height * 0.15));
     hdiF.push(map(hF[r], 0.2, 0.7, width * 0.02, width * 0.97));
     hdiM.push(map(hM[r], 0.2, 0.7, width * 0.02, width * 0.97));
 
@@ -228,11 +218,11 @@ function handlePress() {
   line(width * 0.975, height * 0.9, width * 0.975, height * 0.15);
 
   text("0%", width * 0.98, height * 0.89);
-  text("100%", width * 0.98, height * 0.17);
+  text("80%", width * 0.98, height * 0.17);
   line(width * 0.97, height * 0.9, width * 0.98, height * 0.9);
   line(width * 0.97, height * 0.15, width * 0.98, height * 0.15);
   stroke(255);
-  textSize(11);
+  textSize(12);
   push();
   translate(width * 0.99, height * 0.65);
   rotate(-HALF_PI);
@@ -281,18 +271,8 @@ function drawTriangle(spot) {
   var mountainColor = color(25, 28, 32, 110);
   // stroke(83, 102, 115, 100);
   fill(mountainColor);
+  stroke(25, 28, 32);
   for (var r = 0; r < region.length; r++) {
-    if (region[r] == "e") {
-      stroke(51, 51, 0);
-    } else if (region[r] == "w") {
-      stroke(0, 51, 51);
-    } else if (region[r] == "c") {
-      stroke(51, 0, 25);
-    } else if (region[r] == "s") {
-      stroke(0, 0, 51);
-    }
-    strokeWeight(1.2);
-    // noStroke();
     if (spot == region[r]) {
       triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.9, hdiF[r], height * 0.9);
     }
@@ -335,8 +315,8 @@ function selectTriangle(r) {
   textAlign(CENTER);
   text(country[r], (hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], height * 0.96);
   textAlign(LEFT);
-  textSize(11);
-  text(ge18[r] + "%", width * 0.957, marriage18[r] - 5);
+  textSize(12);
+  text(ge18[r] + "%", width * 0.95, marriage18[r] - 5);
   text(width * 0.96, ge18[r], width * 0.98, ge18[r]);
 
   textSize(11);
