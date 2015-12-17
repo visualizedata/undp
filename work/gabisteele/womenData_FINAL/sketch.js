@@ -95,6 +95,10 @@ function setup() {
   count = table.getRowCount();
   for (row = 0; row < count; row++) {
     y[row] = 1;
+    
+  //   button = createButton('click me');
+  // button.position(19, 19);
+  // button.html(href="http://unstats.un.org/unsd/gender/chapter6/chapter6.html");
 
 
   }
@@ -102,6 +106,7 @@ function setup() {
 }
 
 function draw() {
+  textFont(myFont);
   background(38, 38, 38);
 
 
@@ -116,25 +121,25 @@ function draw() {
     isOverCircle = false;
   }
   // draw a circle
-  noFill();
-  stroke(255);
-  strokeWeight(2);
-  ellipse(45, 45, 60, 60);
-  textAlign(CENTER);
-  fill(255);
-  noStroke();
-  text("View Source", 38, 40, 18);
-  if (isOverCircle == true) {
-    fill(255);
-    ellipse(45, 45, 60, 60);
-    fill(89, 89, 89);
+  // noFill();
+  // stroke(255);
+  // strokeWeight(2);
+  // ellipse(45, 45, 60, 60);
+  // textAlign(CENTER);
+  // fill(255);
+  // noStroke();
+  // text("View Source", 38, 40, 18);
+  // if (isOverCircle == true) {
+  // fill(255);
+  //   ellipse(45, 45, 60, 60);
+  //   fill(89, 89, 89);
 
-    text("View Source", 38, 40, 18);
-    cursor(HAND);
-  } else {
-    fill(200);
-    cursor(ARROW);
-  }
+  //   text("View Source", 38, 40, 18);
+  //   cursor(HAND);
+  // } else {
+  //   fill(200);
+  //   cursor(ARROW);
+  // }
 
   textAlign(LEFT);
   fill(255);
@@ -357,13 +362,9 @@ function draw() {
     fill("grey");
     text(dataYrs, 80 * row + 120, barY + 25);
     textAlign(LEFT);
-
-    rect(50, 870, 40, 1);
-    rect(50, 870, 1, 40);
-    ellipse(90, 870, 6, 6);
-    noStroke();
-    textSize(14)
-    text("Year Data Collected", 47, 912, 100, 100);
+    // noStroke();
+    // textSize(12)
+    // text("Data Collected in:", 5, 855, 100);
     //------------------------------------------------
     // var targetPx = 80*row + 100;
     // var dpx = targetPx - xpos;
@@ -541,7 +542,7 @@ function draw() {
       if (manCont == "No Data") {
         text(manCont, 80 * row + 100, barY - 460);
       } else {
-        text(manCont + "%", 80 * row + 100, barY - 460);
+  text(manCont + "%", 80 * row + 100, barY - 460);
       }
       fill(255);
       ellipse(mx, 110, 12, 12); // cont
@@ -551,18 +552,18 @@ function draw() {
     if (isOverDis) {
       fill(255, 0, 102);
       rect(80 * row + 123, barY, 4, -parseFloat(womanDis) * 4);
-
-      if (womanDis == "No Data") {
-        text(womanDis, 80 * row + 100, barY - 440);
+      
+      if(womanDis == "No Data"){
+      text(womanDis, 80 * row + 100, barY - 440);
       } else {
         text(womanDis + "%", 80 * row + 100, barY - 440);
       }
       fill(166, 166, 166);
       rect(80 * row + 133, barY, 4, -parseFloat(manDis) * 4);
-      if (manDis == "No Data") {
-        text(manDis, 80 * row + 100, barY - 460);
+      if (manDis == "No Data"){
+      text(manDis, 80 * row + 100, barY - 460);
       } else {
-        text(manDis + "%", 80 * row + 100, barY - 460);
+           text(manDis + "%", 80 * row + 100, barY - 460);
       }
 
       fill(255);
@@ -572,18 +573,18 @@ function draw() {
     if (isOverNoData) {
       fill(255, 0, 102);
       rect(80 * row + 123, barY, 4, -parseFloat(womanNoData) * 4);
-
-      if (womanNoData == "No Data") {
-        text(womanNoData, 80 * row + 100, barY - 440);
+      
+      if (womanNoData == "No Data"){
+      text(womanNoData, 80 * row + 100, barY - 440);
       } else {
-        text(womanNoData + "%", 80 * row + 100, barY - 440);
+         text(womanNoData + "%", 80 * row + 100, barY - 440);  
       }
       fill(166, 166, 166);
       rect(80 * row + 133, barY, 4, -parseFloat(manNoData) * 4);
-      if (manNoData == "No Data") {
-        text(manNoData, 80 * row + 100, barY - 460);
+      if (manNoData == "No Data"){
+      text(manNoData, 80 * row + 100, barY - 460);
       } else {
-        text(manNoData + "%", 80 * row + 100, barY - 460);
+       text(manNoData + "%", 80 * row + 100, barY - 460); 
       }
       fill(255);
       ellipse(mx, 170, 12, 12); // cont
@@ -658,19 +659,6 @@ function isOver() {
   } else {
     isOverNoData = false;
   }
-
-  // var distance2 = dist(mouseX, mouseY, 40, 40);
-  // if (distance2 < 50 && abs(mouseY - 40) < 10) {
-  //   isOverSource == true;
-  // } else {
-  //   isOverSource = false;
-  // }
-}
-
-function mouseOver() {
-
-
-
 }
 
 function mousePressed() {
@@ -684,17 +672,6 @@ function mousePressed() {
     text("View Source", 33, 35, 18);
     textAlign(LEFT);
   }
-
-  // if (isOverSource == true) {
-  //   (isOverSource == true);
-  //   fill(255);
-  //   ellipse(40, 40, 60, 60);
-  //   textAlign(CENTER);
-  //   fill(89, 89, 89);
-  //   text("View Source", 33, 35, 18);
-  //   textAlign(LEFT);
-  // }
-
 
   if (isOverBurn == true) {
     reset();
