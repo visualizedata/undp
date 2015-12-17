@@ -4,7 +4,7 @@ South Africa	1	6	118	..	..	..	..	s
 Cabo Verde	3	18	123	..	..	..	19	w
 Namibia	2	9	127	0.616	0.631	..	..	s
 Ghana	5	21	138	0.537	0.607	..	35	w
-Congo	6	33	140	0.543	0.585	..	..	c
+Republic of the Congo	6	33	140	0.543	0.585	..	..	c
 Zambia	9	42	141	0.534	0.585	..	43	e
 Sao Tome and Principe	5	34	142	0.524	0.586	..	37	c
 Equatorial Guinea	9	30	144	..	..	..	73	c

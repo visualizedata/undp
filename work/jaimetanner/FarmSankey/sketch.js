@@ -39,12 +39,31 @@ function setup() {
   fill(253, 241, 225);
   textFont(latoLight);
   textSize(24);
-  stroke(147, 38, 47);
-  fill(147, 38, 47);
-  var titleLength = width * 0.13 + textWidth("Productivity Differences Between");
-  text("Productivity Differences Between Male and Female African Farmers", width * 0.13, height * 0.91, textWidth("Productivity Differences Between Male"));
-  textSize(10);
-  strokeWeight(0.6);
+  stroke(0);
+  fill(0);
+  var titleLength = width * 0.13 + textWidth("Productivity Differences Between Male and");
+
+  text("Productivity Differences Between", width * 0.13, height * 0.92, textWidth("Productivity Differences Between Male and Female"));
+  fill(170, 165, 127);
+  stroke(170, 165, 127);
+  strokeWeight(2);
+  text("Male ", width * 0.13 + textWidth("Productivity Differences Between "), height * 0.92);
+  fill(0);
+  stroke(0);
+  strokeWeight(1);
+  text(" and", width * 0.13 + textWidth("Productivity Differences Between Male "), height * 0.92);
+  fill(125, 116, 99);
+  stroke(125, 116, 99);
+  strokeWeight(2);
+  text("Female", width * 0.13, height * 0.92, textWidth("Productivity Differences Between Male and"), height * 0.2);
+  fill(0);
+  stroke(0);
+  strokeWeight(1.2);
+  text("Farmers in Six African Countries", width * 0.13 + textWidth("Female "), height * 0.92, textWidth("Productivity Differences Between Male and"), height * 0.2);
+
+
+  textSize(13);
+  strokeWeight(0.7);
   textFont(latoHair);
 
   stroke(black);
@@ -65,8 +84,9 @@ function setup() {
   textFont(latoLight);
   textSize(16);
   stroke(200, 50, 50, 100);
-  text("Primary Factors Contributing to Gap:", width * 0.655, height * 0.135);
-  text("Relative Productivity of Female Farmers", width * 0.285, height * 0.135);
+  strokeWeight(1.25);
+  text("What barriers contribute to this gender gap? ", width * 0.655, height * 0.135);
+  text("After accounting for plot size, how much less do female farmers produce, relative to men? ", width * 0.285, height * 0.135, width * 0.25);
 
   table = loadTable("data.txt", "tsv", showData);
 }
@@ -117,16 +137,16 @@ function showData() {
       textFont(latoHair);
       stroke(80);
       fill(80);
-      textSize(7);
+      textSize(9);
       strokeWeight(0.7);
       text(lineStates[i] + "%", lines[i], height * 0.09 * z + (height * 0.265));
     }
     // line(width * 0.305, height * 0.09 * z + (height * 0.25), width * 0.33, height * 0.09 * z + (height * 0.2))
     // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
-    fill(170,165,127);
+    fill(170, 165, 127);
     rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
-    fill(125,116,99);
+    fill(125, 116, 99);
     rect(gaps[z], height * 0.09 * z + (height * 0.22), width * 0.25, height * 0.02);
 
     /*----------country names-----------*/
@@ -137,6 +157,12 @@ function showData() {
     text(names[z], width * 0.23, height * 0.09 * z + (height * 0.23));
     originY.push(height * 0.09 * z + (height * 0.22));
     textAlign(LEFT);
+
+    // for (var i = 0; i < 7; i++) {
+    //   strokeWeight(0.8);
+    //   textSize(13);
+    //   text(, width * 0.26, height * 0.09 * i + (height * 0.20));
+    // }
   }
 
   /*-----------bezier end points-----------*/
@@ -179,7 +205,7 @@ function showData() {
   }
   stroke(0);
   fill(0);
-  textSize(6);
+  textSize(7);
   var categories = [];
   var places = [];
   categories.push("LAND", "LABOUR", "NON-LABOUR INPUTS", "INFO", "ACCCESS TO MARKETS", "HUMAN CAPITOL", "WEALTH");
@@ -254,27 +280,27 @@ function mouseMoved() {
 function connect(n, i) {
   var black = color(0);
   textFont(latoHair);
-  textSize(13);
+  textSize(14);
 
   strokeWeight(0.2);
   noFill();
-  stroke(0, 0, 0, 100);
+  stroke(0, 0, 0, 150);
   bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
 
   strokeWeight(0.5);
-  stroke(170);
-  fill(170);
+  stroke(120);
+  fill(120);
   text(labels[2 + i], width * 0.655, height * 0.09 + ((2 + i) * (height * 0.0369)));
 }
 
 /*-----------selected curves-----------*/
 function selectedConnect(n, i) {
   textFont(latoHair);
-  textSize(13);
+  textSize(14);
 
   strokeWeight(1.5);
   noFill();
-  stroke(100);
+  stroke(40);
   bezier(width * 0.5, originY[n], width * 0.6, originY[n], width * 0.5, endY[i], width * 0.65, endY[i]);
 
   strokeWeight(1);
@@ -285,25 +311,25 @@ function selectedConnect(n, i) {
   var number = parseInt(100 - gapNum[n]);
   textFont(latoLight);
   endY.push(height * 0.14 + i * (height * 0.04));
-  textSize(20);
+  textSize(21);
   stroke(0);
   strokeWeight(0.9);
 
-  text("Female-managed agricultural plots in" + " ", width * 0.13, height * 0.07);
+  text("Female-managed agricultural plots in" + " ", width * 0.18, height * 0.07);
   strokeWeight(1.6);
-  text(names[n], width * 0.13 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.07);
+  text(names[n], width * 0.18 + (textWidth("Female-managed agricultural plots in" + " ")), height * 0.07);
   strokeWeight(0.8);
-  text(" " + "produce an average of ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.07);
+  text(" " + "produce an average of ", width * 0.18 + (textWidth("Female-managed agricultural plots in" + " " + names[n])), height * 0.07);
   strokeWeight(1.6);
-  text(number + "%", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.07);
+  text(number + "%", width * 0.18 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of ")), height * 0.07);
   strokeWeight(0.8);
-  text(" " + "less than those that are male managed ", width * 0.13 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.07);
+  text(" " + "less than those that are male managed ", width * 0.18 + (textWidth("Female-managed agricultural plots in" + " " + names[n] + " " + "produce an average of " + number + "%")), height * 0.07);
 
 }
 
 function selectedLabels(n, i) {
   textFont(latoHair);
-  textSize(13);
+  textSize(14);
 
   strokeWeight(1.5);
   noFill();
@@ -318,7 +344,7 @@ function selectedLabels(n, i) {
   endY.push(height * 0.14 + i * (height * 0.04));
   textFont(latoLight);
   textAlign(CENTER, CENTER);
-  textSize(15);
+  textSize(16);
   stroke(0.9);
   strokeWeight(0.8);
   // fill(0);
