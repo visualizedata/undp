@@ -357,9 +357,13 @@ function draw() {
     fill("grey");
     text(dataYrs, 80 * row + 120, barY + 25);
     textAlign(LEFT);
-    // noStroke();
-    // textSize(12)
-    // text("Data Collected in:", 5, 855, 100);
+
+    rect(50, 870, 40, 1);
+    rect(50, 870, 1, 40);
+    ellipse(90, 870, 6, 6);
+    noStroke();
+    textSize(14)
+    text("Year Data Collected", 47, 912, 100, 100);
     //------------------------------------------------
     // var targetPx = 80*row + 100;
     // var dpx = targetPx - xpos;
@@ -537,7 +541,7 @@ function draw() {
       if (manCont == "No Data") {
         text(manCont, 80 * row + 100, barY - 460);
       } else {
-  text(manCont + "%", 80 * row + 100, barY - 460);
+        text(manCont + "%", 80 * row + 100, barY - 460);
       }
       fill(255);
       ellipse(mx, 110, 12, 12); // cont
@@ -547,18 +551,18 @@ function draw() {
     if (isOverDis) {
       fill(255, 0, 102);
       rect(80 * row + 123, barY, 4, -parseFloat(womanDis) * 4);
-      
-      if(womanDis == "No Data"){
-      text(womanDis, 80 * row + 100, barY - 440);
+
+      if (womanDis == "No Data") {
+        text(womanDis, 80 * row + 100, barY - 440);
       } else {
         text(womanDis + "%", 80 * row + 100, barY - 440);
       }
       fill(166, 166, 166);
       rect(80 * row + 133, barY, 4, -parseFloat(manDis) * 4);
-      if (manDis == "No Data"){
-      text(manDis, 80 * row + 100, barY - 460);
+      if (manDis == "No Data") {
+        text(manDis, 80 * row + 100, barY - 460);
       } else {
-           text(manDis + "%", 80 * row + 100, barY - 460);
+        text(manDis + "%", 80 * row + 100, barY - 460);
       }
 
       fill(255);
@@ -568,18 +572,18 @@ function draw() {
     if (isOverNoData) {
       fill(255, 0, 102);
       rect(80 * row + 123, barY, 4, -parseFloat(womanNoData) * 4);
-      
-      if (womanNoData == "No Data"){
-      text(womanNoData, 80 * row + 100, barY - 440);
+
+      if (womanNoData == "No Data") {
+        text(womanNoData, 80 * row + 100, barY - 440);
       } else {
-         text(womanNoData + "%", 80 * row + 100, barY - 440);  
+        text(womanNoData + "%", 80 * row + 100, barY - 440);
       }
       fill(166, 166, 166);
       rect(80 * row + 133, barY, 4, -parseFloat(manNoData) * 4);
-      if (manNoData == "No Data"){
-      text(manNoData, 80 * row + 100, barY - 460);
+      if (manNoData == "No Data") {
+        text(manNoData, 80 * row + 100, barY - 460);
       } else {
-       text(manNoData + "%", 80 * row + 100, barY - 460); 
+        text(manNoData + "%", 80 * row + 100, barY - 460);
       }
       fill(255);
       ellipse(mx, 170, 12, 12); // cont
