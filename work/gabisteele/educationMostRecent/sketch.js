@@ -29,7 +29,8 @@ function preload() {
 }
 
 function draw() {
-
+  
+  
   sorted = countryObjectArray.sort(function(a, b) {
     if (a.Region > b.Region) {
       return 1;
@@ -41,47 +42,53 @@ function draw() {
     return 0;
     noLoop();
   });
-  console.log(sorted.length);
 
   for (var a = 0; a < sorted.length; a++) {
     sorted[a].display();
     tableRows++;
   noLoop();
   }
-
-
-  if (mouseX >= 150 && mouseX <= 150 + 100 && mouseY >= 150 && mouseY <= 150 + 100) {
+  
+  
+  
+  this.distance = dist(110, mouseY, 300, 10);
+  if(this.distance < 100) {
     isOverCountry = true;
   } else {
     isOverCountry = false;
   }
-  print(isOverCountry);
 
-  var isOverRectangle;
-  if (mouseX >= 150 && mouseX <= 150 + 100 && mouseY >= 150 && mouseY <= 150 + 100) {
-    isOverRectangle = true;
-  } else {
-    isOverRectangle = false;
-  }
-
-  // draw a rectangle
-  rectMode(CORNER);
   stroke(0);
   strokeWeight(5);
-  if (isOverRectangle == true) {
+  if (isOverCountry == true) {
+    fill("yellow");
+    rect(300, 100, 10, 300);
     fill(100);
     cursor(HAND);
   } else {
+    isOverCountry = false;
     fill(200);
     cursor(ARROW);
-  }
-
+}
 
 }
 
+  // this.distance = dist(mouseX, mouseY, 120, 310 + 30 * tableRows);
+
+  // if (this.distance < 100) {
+  //   noFill();
+  //   stroke("yellow");
+  //   strokeWeight(3);
+  //   rect(110, mouseY, 700, 40);
+  //   noStroke();
+  //   //isOverCountry = true;
+  // }
+  //   else {
+  // // isOverCountry = false;
+  //   }
 
 function setup() {
-  createCanvas(2000, 2000);
+  createCanvas(windowWidth, 1880);
   background(255);
   noFill();
   
@@ -103,7 +110,6 @@ function setup() {
   // textSize(40);
   // text("1     2     3    4    5    6    7    8    9    10    11    12", 995, 470);
   
-
   
   // // load boy img
   
@@ -269,19 +275,7 @@ country.prototype.display = function() {
   noStroke();
 
 
-  // this.distance = dist(mouseX, mouseY, 120, 310 + 30 * tableRows);
-  // //print(distance);
-  // if (this.distance < 100) {
-  //   noFill();
-  //   stroke("yellow");
-  //   strokeWeight(3);
-  //   rect(110, mouseY, 700, 40);
-  //   noStroke();
-  //   //isOverCountry = true;
-  // }
-  //   else {
-  // // isOverCountry = false;
-  //   }
+
 
 
 
@@ -361,19 +355,83 @@ function makeHeader() {
   textAlign(LEFT);
 
 }
-//---------------------------
 
-// // function changeBG() {
-// //   var val = random(255);
-// //   background(val);
-// // }
+function hover(){
+    this.distance = dist(110, mouseY, 300, 10);
+  if(this.distance < 50) {
+    isOverCountry = true;
+  } else {
+    isOverCountry = false;
+  }
 
-// function mouseOver() {
+  stroke(0);
+  strokeWeight(5);
+  if (isOverCountry == true) {
+    fill("yellow");
+    rect(300, 100, 10, 300);
+    fill(100);
+    cursor(HAND);
+  } else {
+    isOverCountry = false;
+    fill(200);
+    cursor(ARROW);
+}
+}
 
-//   var div = createDiv();
-//   div.id("rectangle");
-//   div.position(490, 500, 500, 400);
+
+
+function mouseMoved() {
+    if(!_isOverCountry()){
+        return;
+    }
+    else{
+    hoveredCountry = _hoveredCountry();
+    _drawCountryInfo(hoveredCountry);
+    }
+}
+
+// function _drawCountryInfo(hoveredCountry){
+//     // var div = createDiv();
+//     // div.id("rectangle");
+//     // div.position(490, 500, 500, 400);
+//     //Position parameters used for drawing the rectangle
+//     var x = mouseX;
+//     var y = mouseY;
+//     var width = 300;
+//     var height = 150;
+
+//     var canvas = document.createElement('canvas'); //Create a canvas element
+//     //Set canvas width/height
+//     canvas.style.width='100%';
+//     canvas.style.height='100%';
+//     //Set canvas drawing area width/height
+//     canvas.width = window.innerWidth;
+//     canvas.height = window.innerHeight;
+//     //Position canvas
+//     canvas.style.position='absolute';
+//     canvas.style.left=0;
+//     canvas.style.top=0;
+//     canvas.style.zIndex=100000;
+//     canvas.style.pointerEvents='none'; //Make sure you can click 'through' the canvas
+//     document.body.appendChild(canvas); //Append canvas to body element
+//     var context = canvas.getContext('2d');
+//     //Draw rectangle
+//     context.rect(x, y, width, height);
+//     context.font = "48px serif"
+//     canvas.fillText("Hello world", 10, 50);
+//     // context.fillStyle = 'yellow';
+//     // context.fill();
 // }
 
+// function _hoveredCountry(){
+//     noFill();
+//     stroke("yellow");
+//     strokeWeight(1);
+//     rect(110, 300, mouseY + 100, mouseX + 10);
+// }
+
+// function _isOverCountry(){
+//     return mouseX >= 150 && mouseX <= (150 + 100) && mouseY >= 310 && mouseY <= (110 + 1000);
+// }
 
 function windowResized() {}
