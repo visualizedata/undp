@@ -84,16 +84,21 @@ var tmX;
 
 function preload() {
   table = loadTable("womenData.txt", "tsv");
+  myFont = loadFont('Gotham-Book.ttf');
 }
 
 
 function setup() {
   createCanvas(10000, 1000);
-  textFont("Gotham");
+  textFont(myFont);
   textSize(12);
   count = table.getRowCount();
   for (row = 0; row < count; row++) {
     y[row] = 1;
+    
+  //   button = createButton('click me');
+  // button.position(19, 19);
+  // button.html(href="http://unstats.un.org/unsd/gender/chapter6/chapter6.html");
 
 
   }
@@ -101,6 +106,7 @@ function setup() {
 }
 
 function draw() {
+  textFont(myFont);
   background(38, 38, 38);
 
 
@@ -115,25 +121,25 @@ function draw() {
     isOverCircle = false;
   }
   // draw a circle
-  noFill();
-  stroke(255);
-  strokeWeight(2);
-  ellipse(45, 45, 60, 60);
-  textAlign(CENTER);
-  fill(255);
-  noStroke();
-  text("View Source", 38, 40, 18);
-  if (isOverCircle == true) {
-    fill(255);
-    ellipse(45, 45, 60, 60);
-    fill(89, 89, 89);
+  // noFill();
+  // stroke(255);
+  // strokeWeight(2);
+  // ellipse(45, 45, 60, 60);
+  // textAlign(CENTER);
+  // fill(255);
+  // noStroke();
+  // text("View Source", 38, 40, 18);
+  // if (isOverCircle == true) {
+  // fill(255);
+  //   ellipse(45, 45, 60, 60);
+  //   fill(89, 89, 89);
 
-    text("View Source", 38, 40, 18);
-    cursor(HAND);
-  } else {
-    fill(200);
-    cursor(ARROW);
-  }
+  //   text("View Source", 38, 40, 18);
+  //   cursor(HAND);
+  // } else {
+  //   fill(200);
+  //   cursor(ARROW);
+  // }
 
   textAlign(LEFT);
   fill(255);
@@ -653,19 +659,6 @@ function isOver() {
   } else {
     isOverNoData = false;
   }
-
-  // var distance2 = dist(mouseX, mouseY, 40, 40);
-  // if (distance2 < 50 && abs(mouseY - 40) < 10) {
-  //   isOverSource == true;
-  // } else {
-  //   isOverSource = false;
-  // }
-}
-
-function mouseOver() {
-
-
-
 }
 
 function mousePressed() {
@@ -679,17 +672,6 @@ function mousePressed() {
     text("View Source", 33, 35, 18);
     textAlign(LEFT);
   }
-
-  // if (isOverSource == true) {
-  //   (isOverSource == true);
-  //   fill(255);
-  //   ellipse(40, 40, 60, 60);
-  //   textAlign(CENTER);
-  //   fill(89, 89, 89);
-  //   text("View Source", 33, 35, 18);
-  //   textAlign(LEFT);
-  // }
-
 
   if (isOverBurn == true) {
     reset();
