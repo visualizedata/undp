@@ -50,7 +50,7 @@
 
           // add preview image when available
           if (usePreview) {
-            $(this).append("<img width=\"100%\" src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "' onClick='location.href=\"" + $(this).attr('href') + "\"'>");
+            $(this).append("<img title='launch project' width=\"100%\" src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "' onClick='location.href=\"" + $(this).attr('href') + "\"'>");
             $(this).find("img").error(function() {
               $(this).parent().append("<iframe width='100%' height='100%' src='" + $(this).parent().attr('href') +
                 "' frameborder='0' allowfullscreen></iframe>");

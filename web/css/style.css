@@ -99,6 +99,10 @@ img {
     margin-bottom: 15px;
 }
 
+img:hover {
+    cursor: alias;
+}
+
 h2 {
     font-family: "neue-regular" !important;
 }
