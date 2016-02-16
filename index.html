@@ -50,7 +50,7 @@
 
           // add preview image when available
           if (usePreview) {
-            $(this).append("<img width=\"100%\" src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "'>");
+            $(this).append("<img width=\"100%\" src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "' onClick='location.href=\"" + $(this).attr('href') + "\"'>");
             $(this).find("img").error(function() {
               $(this).parent().append("<iframe width='100%' height='100%' src='" + $(this).parent().attr('href') +
                 "' frameborder='0' allowfullscreen></iframe>");
@@ -64,20 +64,20 @@
         }
       });
 
-      $("div .project").click(function() {
-        if ($(this).attr('href') != undefined) {
+      // $("div .project").hover(function() {
+      //   if ($(this).attr('href') != undefined) {
 
-          // iFrames
-          // add iframe with content
-          console.log("path: " + $(this).attr('href'));
-          $(this).has("img").append("<iframe width='100%' src='" + $(this).attr('href') + "'></iframe>");
-          // hide image
-          $(this).find("img").hide();
-        }
-      }, function() {
-        $(this).has("img").find("iframe").remove();
-        $(this).find("img").show();
-      });
+      //     // iFrames
+      //     // add iframe with content
+      //     console.log("path: " + $(this).attr('href'));
+      //     $(this).has("img").append("<iframe width='100%' src='" + $(this).attr('href') + "'></iframe>");
+      //     // hide image
+      //     $(this).find("img").hide();
+      //   }
+      // }, function() {
+      //   $(this).has("img").find("iframe").remove();
+      //   $(this).find("img").show();
+      // });
 
       // index
       $("h3").each(function(i) {
@@ -120,8 +120,13 @@
         <div class="subtitle font-width-3 kern-decrease-10 col-md-10">
           UNDP Arica Human Development Report Partnership
         </div>
+        
+        <!--YEAR-->
         <div class="bottom-stripe col-md-12">
           <div class="bottom-stripe-inner"></div>
+        </div>
+        <div class="font-width-3 col-md-12">
+          2015
         </div>
 
       </div>
@@ -131,14 +136,6 @@
     <h2 class="col-md-10 col-md-offset-1">
       Partnering with the <a href="http://www.africa.undp.org/">United Nations Development Programme on Africa Human Development</a>, <a href="http://www.newschool.edu/parsons/ms-data-visualization/">Parsons Data Visualization</a> <a href="#about">students</a> investigate how gender inequality impact economics on a micro- and macro level.
     </h2>
-
-    <!--YEAR-->
-    <div class="bottom-stripe col-md-12">
-      <div class="bottom-stripe-inner"></div>
-    </div>
-    <div class="font-width-3 col-md-12">
-      2015
-    </div>
 
     <!--INDEX-->
     <div class="col-md-12 col-md-10 col-md-offset-1">
