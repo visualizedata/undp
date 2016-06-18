@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="no-js" lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -17,6 +17,13 @@
     var usePreview = true;
 
     $(document).ready(function() {
+      
+      // check for touch screens
+      var hasTouch = window.matchMedia('(pointer: coarse)').matches;
+      if (hasTouch) {
+        $(".no-touch").hide();
+      }
+      
       // activate tooltip
       $('[data-toggle="tooltip"]').tooltip();
 
@@ -189,7 +196,7 @@
 
     <!--*Jaime Project1-->
     <a id="jaime_1"></a>
-    <div href="./work/jaimetanner/FarmSankey/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/jaimetanner/FarmSankey/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Agricultural Productivity Differences Between Male and Female Managed Farms</span>
         <br />(<a href="https://github.com/jat3002">Jaime Tanner</a>, 2015)
@@ -214,7 +221,7 @@
 
     <!--*Justine Project1-->
     <a id="justine_1"></a>
-    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Human Development Index Gender Gap</span>
         <br />(<a href="https://github.com/Justinerk2">Justine Keller</a>, 2015)
@@ -278,7 +285,7 @@
 
     <!--*Jon Project2-->
     <a id="jon_2"></a>
-    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Schoolhouse Africa: A Learning Map</span>
         <br />(<a href="https://github.com/jthirkield">Jon Thirkield</a>, 2015 )
@@ -323,7 +330,7 @@
 
     <!--*Gabi Project2-->
     <a id="gabi_2"></a>
-    <div href="./work/gabisteele/womenData_FINAL/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/gabisteele/womenData_FINAL/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Investigating Opinions and Occurances of the Domestic Maltreatment of Women in Africa</span>
         <br />(<a href="https://github.com/gabisteele">Gabi Steele</a>, 2015)
@@ -343,7 +350,7 @@
 
     <!--*Linnea Project2-->
     <a id="linnea_2"></a>
-    <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Gender imbalance & legislation in Africa</span>
         <br />(<a href="https://github.com/llapp">Linnea Lapp</a>, 2015)
