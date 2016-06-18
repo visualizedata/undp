@@ -9,7 +9,9 @@ What story does the AFHDR data tell when condensed into a one-sentence biography
 ### Description
 
 - The page displays a single, run-on sentence describing the life of an average female citizen of a given African country through the lens of the data provided.
-- The user can cycle through countries by selecting them from a drop-down menu or pressing `n` and `p`.
+- The user can cycle through countries by selecting them from a drop-down menu or pressing `←` and `→`.
+
+![Screenshot](story.png)
 
 ### Methodology
 
@@ -26,7 +28,7 @@ What story does the AFHDR data tell when condensed into a one-sentence biography
 
 - The project is in essence an interactive version of the GDI calculation flowchart (See p. 1 of the [2014 HDR Technical Notes](http://hdr.undp.org/sites/default/files/hdr14_technical_notes.pdf))
 
-![GDI Flowchart](gdi-calc.png)
+![Screenshot](gdi.png)
 
 - Users can select which country to examine and see the values update accordingly.
 - Each of the indicators can be manipulated by clicking and dragging, with the variables depending on it updating in real time.

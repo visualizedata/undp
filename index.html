@@ -1,54 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>UNDP Arica Human Development 2015 Report Partnership</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UNDP Arica Human Development 2015 Report Partnership</title>
 
-    <link href="web/css/style.css" rel="stylesheet">
-    <link href="web/css/bootstrap.min.css" rel="stylesheet">
+  <link href="web/css/style.css" rel="stylesheet">
+  <link href="web/css/color.css" rel="stylesheet">
+  <link href="web/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
-          <div id="banner">
-          <div class="col-md-10 col-md-offset-1">
-    
-              <div id="menu_button_wrapper">
-                  <a href="#" id="menu_button" class="right-off-canvas-toggle menu-icon"><i class="fa fa-bars"></i></a>
-                  <a href="#" id="search_button" class="right-off-canvas-toggle menu-icon"><i class="fa fa-search"></i></a>
-              </div>
-    
-              <div id="site_lockup">
-                  <h1 class="u_name">
-                      <a href="http://newschool.edu/">
-                          <span class="font-width-1">T</span><span class="font-width-2">h</span><span class="font-width-1">e</span><span class="font-width-1">&nbsp;</span><span class="font-width-2">N</span><span class="font-width-1">e</span><span class="font-width-3">w</span><span class="font-width-1">&nbsp;</span><span class="font-width-1">S</span><span class="font-width-1">c</span><span class="font-width-2">h</span><span class="font-width-2">o</span><span class="font-width-2">o</span><span class="font-width-3">l</span>
-                      </a>
-                  </h1>
-                  <div id="stripe-1" class="bottom-stripe"><div class="bottom-stripe-inner"></div></div>
-                  <div id="stripe_menu" style="display: block;">
-                      <div id="inner-menu-stripe" class="bottom-stripe"><div class="bottom-stripe-inner"></div></div>
-                      <ul>
-                          <li>
-                              <span class="font-width-3 kern-decrease-10">UNDP Arica Human Development Report Partnership</span>
-                          <li>
-                          <li>
-                            <span class="font-width-3 kern-decrease-10">2015</span>
-                          </li>
-                              <h1><span class="font-width-3 kern-decrease-10">Data Visualization</span></h1>
-                          </li>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-            </div>
+  <script>
+    // use preview images if available otherwise iframes directly
+    var usePreview = true;
+
+    $(document).ready(function() {
+      // activate tooltip
+      $('[data-toggle="tooltip"]').tooltip();
+
+      // images
+      $("div .project").each(function() {
+        if ($(this).attr('href') != undefined) {
+
+          // embed button
+          var embed = "<span class='glyphicon glyphicon-share' data-toggle='tooltip' title='Embed'></span>";
+          $(this).append(embed).click(function() {
+            $(this).find("input").animate({
+              width: 'toggle'
+            }).select();
+          });
+
+          // scale
+          var str = "<button type='button' class='btn btn-default btn-default' onClick='location.href=\"";
+          str += $(this).attr('href');
+          str += "\"'><span class= 'glyphicon glyphicon-resize-full' aria-hidden='true' ></span></button>";
+          $(this).append(str);
+
+          // create text field to copy from
+          var iframe = "<input id='embed' type='text' class='collapse pull-right btn btn-default col-md-12' value='" +
+            $(this).find("p").html() +
+            "<iframe width=\"100%\" height=\"100%\" src=\"" + window.location.href + "/." + $(this).attr('href') + "\"></iframe>" +
+            "<a href=\"https://visualizedata.github.io/undp/\"><img style=\"width:200px !important\" src=\"" + window.location.href + "/../" + "web/img/ParsonsDataVisualization.png" + "\"></a>" +
+            "'>";
+          if ($(this).find("input").length == 0) {
+            $(this).append(iframe);
+          }
+
+          // add preview image when available
+          if (usePreview) {
+            $(this).append("<img title='launch project' width=\"100%\" src='" + $(this).attr('href') + "/../" + $(this).attr('img-src') + "' onClick='location.href=\"" + $(this).attr('href') + "\"'>");
+            $(this).find("img").error(function() {
+              $(this).parent().append("<iframe width='100%' height='100%' src='" + $(this).parent().attr('href') +
+                "' frameborder='0' allowfullscreen></iframe>");
+              $(this).parent().find("img").remove();
+            });
+
+          }
+          else {
+            $(this).append("<iframe width='100%' height='566' src='" + $(this).attr('href') + "'></iframe>");
+          }
+        }
+      });
+
+      // $("div .project").hover(function() {
+      //   if ($(this).attr('href') != undefined) {
+
+      //     // iFrames
+      //     // add iframe with content
+      //     console.log("path: " + $(this).attr('href'));
+      //     $(this).has("img").append("<iframe width='100%' src='" + $(this).attr('href') + "'></iframe>");
+      //     // hide image
+      //     $(this).find("img").hide();
+      //   }
+      // }, function() {
+      //   $(this).has("img").find("iframe").remove();
+      //   $(this).find("img").show();
+      // });
+
+      // index
+      $("h3").each(function(i) {
+        $("#index").append("<li><a href='#" + i + "'>" +
+          "<span class='glyphicon glyphicon-chevron-down'></span>  &nbsp;" +
+          $(this).text() + "</a><li>");
+        $(this).prepend("<a id='" + i + "'>");
+      });
+
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+
+    <!--MENU-->
+    <div id="banner">
+      <div id="menu_button_wrapper">
+        <a href="#" id="menu_button" class="right-off-canvas-toggle menu-icon"><i class="fa fa-bars"></i></a>
+        <a href="#" id="search_button" class="right-off-canvas-toggle menu-icon"><i class="fa fa-search"></i></a>
+      </div>
+
+      <div id="site_lockup">
+        <h1 class="u_name col-md-12">
+          <a href="http://newschool.edu/">
+              <span class="font-width-1">T</span><span class="font-width-2">h</span><span class="font-width-1">e</span><span class="font-width-1">&nbsp;</span><span class="font-width-2">N</span><span class="font-width-1">e</span><span class="font-width-3">w</span><span class="font-width-1">&nbsp;</span><span class="font-width-1">S</span><span class="font-width-1">c</span><span class="font-width-2">h</span><span class="font-width-2">o</span><span class="font-width-2">o</span><span class="font-width-3">l</span>
+          </a>
+        </h1>
+        <div class="bottom-stripe col-md-12">
+          <div class="bottom-stripe-inner"></div>
+        </div>
+
+        <div id="stripe_menu" class="col-md-12">
+          <div id="inner-menu-stripe" class="bottom-stripe">
+            <div class="bottom-stripe-inner"></div>
           </div>
-        </div>  
+          <h1 class="sitename"><span class="font-width-3 kern-decrease-10"><a href="http://www.newschool.edu/parsons/ms-data-visualization/">Data Visualization</a></span></h1>
+        </div>
+        <div class="subtitle font-width-3 kern-decrease-10 col-md-10">
+          UNDP Arica Human Development Report Partnership
+        </div>
+        
+        <!--YEAR-->
+        <div class="bottom-stripe col-md-12">
+          <div class="bottom-stripe-inner"></div>
+        </div>
+        <div class="font-width-3 col-md-12">
+          2015
+        </div>
+
+      </div>
     </div>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-  </body>
+
+
+    <h2 class="col-md-10 col-md-offset-1">
+      Partnering with the <a href="http://www.africa.undp.org/">United Nations Development Programme on Africa Human Development</a>, <a href="http://www.newschool.edu/parsons/ms-data-visualization/">Parsons Data Visualization</a> <a href="#about">students</a> investigate how gender inequality impacts economics on a micro- and macro level.
+    </h2>
+
+    <!--INDEX-->
+    <div class="col-md-12 col-md-10 col-md-offset-1">
+      <ul id="index">
+        <!--dynamically generated-->
+      </ul>
+      <br />
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Gender Equality and Women’s Empowerment</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--PROJECTS-->
+
+    <!--*Jacob Project2-->
+    <a id="jacob_2"></a>
+    <div href="./work/jacobromer/story/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">The Story Behind the Data</span>
+        <br />(<a href="https://github.com/jacobmbr">Jacob Romer</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        What story does the AFHDR data tell when condensed into a one-sentence biography of an average female citizen? The page displays a single, run-on sentence describing the life of an average female citizen of a given African country through the lens of the data provided. The user can cycle through countries by selecting them from a drop-down menu or pressing ← and →.
+      </p>
+    </div>
+
+    <!--*Barbara Project1-->
+    <a id="barbara_1"></a>
+    <div href="./work/compagnb/gap/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Establishing the gender gap</span>
+        <br />(<a href="https://github.com/compagnb">Barbara Compagnoni</a>, 2015)
+      </p>
+      <p class="col-md-7">
+          This project visualizes a comparison in GDI (female and male) scores to prove the gender gap of each country in Africa. The visualization compares the GDI for each gender and country, providing evidence of a gender gap. Filtering options will provide a more specific view of the factors that make up the HDR score for both men and women.
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Linkages between Gender Equality, Human Development & Structural Transformation</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--*Jaime Project1-->
+    <a id="jaime_1"></a>
+    <div href="./work/jaimetanner/FarmSankey/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Agricultural Productivity Differences Between Male and Female Managed Farms</span>
+        <br />(<a href="https://github.com/jat3002">Jaime Tanner</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        Across most African countries, women farmers produce less per hectare than their male counterparts. This visualization uses data from the World Bank as well as the ONE campaign to explore some of the major contributors to this gender gap, allowing the
+        reader to not only see the direct consequences of inequality on agricultural outputs, but also to recognize some of the largest country-specific drivers of the gap, significant information for citizens and policy-makers alike in addressing inequality.
+      </p>
+    </div>
+
+    <!--*Jon Project1-->
+    <a id="jon_1"></a>
+    <div href="./work/jthirkield/stems/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Stems and Branches: Gender Gaps and Divisions of Labor in Africa</span>
+        <br />(<a href="https://github.com/jthirkield">Jon Thirkield</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        No matter how wide the gender gap may be, we should never forget the dependency between men and women--as mothers, fathers, sisters and brothers--that lies at the root of a country's culture. This interactive visualization allows us to view the fragile balances between a country's economic well-being and roles of men and women in its labor force.
+      </p>
+    </div>
+
+    <!--*Justine Project1-->
+    <a id="justine_1"></a>
+    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Human Development Index Gender Gap</span>
+        <br />(<a href="https://github.com/Justinerk2">Justine Keller</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This project explores a visualization of the gender gap in the Human Development Index for each country in Africa. This study focuses on the individual country's gender HDI gap.
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Equal opportunities for economic, sociocultural and political advancement</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--*Barbara Project2-->
+    <a id="barbara_2"></a>
+    <div href="./work/compagnb/impacts/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Impacts of economic matters on gender equality</span>
+        <br />(<a href="https://github.com/compagnb">Barbara Compagnoni</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This project visualizes a comparison in GDI (female and male) scores to the economic status to prove its influence on the gender gap of each country in Africa. The visualization shows a locational relationship between country and overall HDR score, as well as a more specific view of the economic status as well as the factors that make up the HDR score for both men and women.
+      </p>
+    </div>
+
+    <!--*Gabi Project1-->
+    <a id="gabi_1"></a>
+    <div href="./work/gabisteele/education_FINAL/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Combating Gender Disparities in Education Levels for Children in Africa</span>
+        <br />(<a href="https://github.com/gabisteele">Gabi Steele</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This project focuses on the current education systems in sub-saharan Africa, specifically how many years children spend in school. It highlights the significant disparities between girls and boys level of education and the overall lower level of schooling that is provided. It also provides insight on the expectations for current students in African schools suggesting an improvement in the number of years children complete. Though the task of combating gender inequality in sub-saharan Africa can seem overwhelming, education may be a hugely successful way of brightening girls futures in this region.
+      </p>
+    </div>
+
+    <!--*Justine Project2-->
+    <a id="justine_2"></a>
+    <div href="./work/justinekeller/Project2/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Comparision of Gross National Income, Education, and Gender</span>
+        <br />(<a href="https://github.com/Justinerk2">Justine Keller</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This project shows the gap in gross national income levels between males and females in Africa for each county. It visualizes the mean years of schooling for males and females in Africa in comparison to the Gross National Incomes.
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Institutions and the political economy: Tools to promote Gender Equality</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--*Jon Project2-->
+    <a id="jon_2"></a>
+    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Schoolhouse Africa: A Learning Map</span>
+        <br />(<a href="https://github.com/jthirkield">Jon Thirkield</a>, 2015 )
+      </p>
+      <p class="col-md-7">
+        Can you find Chad on blank map? Lestho? Eritrea? This application looks at education in Africa through many lenses: from the data to the actual schoolhouses.
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Deconstructing the influence of social norms</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--*Linnea Project1-->
+    <a id="linnea_1"></a>
+    <div href="./work/linnealapp/childMarriageProject.js/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Child marriage & female development in Africa</span>
+        <br />(<a href="https://github.com/llapp">Linnea Lapp</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        Although child marriage is a violation of human rights it is prevelant in many countries, including many African countries. The formal or informal union of a girl under the age of 18 can compromise that girl's development; limiting educational and career opportunities.
+      </p>
+    </div>
+
+    <!--*Jaime Project2-->
+    <a id="jaime_2"></a>
+    <div href="./work/jaimetanner/Gaps/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Child Marriage and the Gender Gap </span>
+        <br />(<a href="https://github.com/jat3002">Jaime Tanner</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This project explores the relationship between the percentage of women between the ages of 20 and 24 who were married before the age of 18 in select African countries, and how it compares to the UNDP’s Human Development Index (HDI). Each country is represented
+        by a triangle, with the height defined by the percentage of child marriage, the left corner of the triangle base the female score on the HDI, and the right the male score on the HDI.
+      </p>
+    </div>
+
+    <!--*Gabi Project2-->
+    <a id="gabi_2"></a>
+    <div href="./work/gabisteele/womenData_FINAL/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Investigating Opinions and Occurances of the Domestic Maltreatment of Women in Africa</span>
+        <br />(<a href="https://github.com/gabisteele">Gabi Steele</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This visualization shares information on three main topics that deal with men vs women’s opinions on the treatment of girls and wives by their male counterparts. It portrays one branch of data on sexual assault of women in the region and two sets of data describing what the population thinks of how women are being treated in each country (related to domestic violence and female genital mutilation). Some countries have data that describes the progression of these beliefs and occurrences over various years in the past decade.
+      </p>
+    </div>
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+    <h3 class="col-md-12">Engendering policies for achieving Africa’s development agenda</h3>
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--*Linnea Project2-->
+    <a id="linnea_2"></a>
+    <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Gender imbalance & legislation in Africa</span>
+        <br />(<a href="https://github.com/llapp">Linnea Lapp</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        This visualization explores the legal and regulatory barriers to women's economic development that exist within legislation across African economies. Do the constraints against women inherent in some country's legislations limit the ecomonic growth of that economy? This visualization can be used as a tool to quickly delve into the source documents for each legislation, in order to learn more about the legislative framework working for or against women across African economies.
+      </p>
+    </div>
+
+    <!--*Jacob Project1-->
+    <a id="jacob_1"></a>
+    <div href="./work/jacobromer/gdi/index.html" img-src="preview.png" class="project col-md-12">
+      <p class=" col-md-3 col-md-offset-1">
+        <span class="title">Exploring the GDI</span>
+        <br />(<a href="https://github.com/jacobmbr">Jacob Romer</a>, 2015)
+      </p>
+      <p class="col-md-7">
+        Can an interactive display make the GDI more understandable? Can it empower users to understand, manipulate and critique the makeup of the GDI in a playful manner? The project is in essence an interactive version of the GDI calculation flowchart (See p. 1 of the <a href="http://hdr.undp.org/sites/default/files/hdr14_technical_notes.pdf">2014 HDR Technical Notes</a>)
+      </p>
+    </div>
+
+    <!--/PROJECTS-->
+
+    <div class="bottom-stripe col-md-12">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--FOOTER-->
+    <div id="about">
+      <div class="row">
+        <div class="col-md-3 col-md-offset-1">
+
+          <p><a href="http://www.newschool.edu/parsons/ms-data-visualization/">Data Visualization (MS)</a></p>
+
+          <a href="https://github.com/compagnb">Barbara Compagnoni</a>
+          <br /> <a href="https://github.com/llapp">Linnea Lapp</a>
+          <br /> <a href="https://github.com/Justinerk2">Justine Keller</a>
+          <br /> <a href="https://github.com/jacobmbr">Jacob Romer</a>
+          <br /> <a href="https://github.com/gabisteele">Gabi Steele</a>
+          <br /> <a href="https://github.com/jat3002">Jaime Tanner</a>
+          <br /> <a href="https://github.com/jthirkield">Jon Thirkield</a>
+          <p></p>
+
+        </div>
+        <div class="col-md-3">
+
+          <p><a href="http://www.africa.undp.org/">UNDP AfHD</a></p>
+          Angela Lusigi
+          <br /> James Neuhaus
+          <br /> Ahmadou MBoup
+          <br /> Eunice Kamwendo
+          <p></p>
+
+        </div>
+        <div class="col-md-3">
+
+          <p><a href="http://www.newschool.edu/parsons/">Parsons School of Design</a></p>
+
+          <a href="http://www.newschool.edu/parsons/art-media-technology-school-amt/">Art, Media, and Technology</a>
+          <br /> <a href="https://courses.newschool.edu/courses/PGDV5200">PGDV Major Studio 1</a>
+          <br /> <a href="http://www.newschool.edu/parsons/faculty.aspx?id=4e54-5978-4d7a-4932">Daniel Sauter</a>
+          <p></p>
+
+        </div>
+        <div class="col-md-1 text-right">
+            <p>&nbsp;</p>
+            <a href="https://github.com/visualizedata/undp"><img data-toggle='tooltip' title='Source' src="web/img/GitHub.png" style="width:30px"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-stripe col-md-12 marginbot-50">
+      <div class="bottom-stripe-inner"></div>
+    </div>
+
+    <!--COLOR SCHEME-->
+    <div id="colors">
+      <div class="container collapse">
+        <div class="row">
+          <div class="col-md-1 bg-1 text-center">c-1</div>
+          <div class="col-md-1 bg-2 text-center">c-2</div>
+          <div class="col-md-1 bg-3 text-center">c-3</div>
+          <div class="col-md-1 bg-4 text-center">c-4</div>
+          <div class="col-md-1 bg-5 text-center">c-5</div>
+          <div class="col-md-1 bg-6 text-center">c-6</div>
+          <div class="col-md-1 bg-7 text-center">c-7</div>
+          <div class="col-md-1 bg-8 text-center">c-8</div>
+          <div class="col-md-1 bg-9 text-center">c-9</div>
+          <div class="col-md-1 bg-10 text-center">c-10</div>
+          <div class="col-md-1 bg-11 text-center">c-11</div>
+          <div class="col-md-1 bg-12 text-center">c-12</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="web/js/bootstrap.min.js"></script>
+  <script src="web/js/jquery.easing.min.js"></script>
+  <script src="web/js/custom.js"></script>
+</body>
+
 </html>

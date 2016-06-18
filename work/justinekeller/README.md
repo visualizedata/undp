@@ -3,12 +3,14 @@
  
 ## Quantitative Data
 ## Project 1: [Human Development Index Gender Gap] (https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project1)
+## [Print Project 1] ((https://github.com/visualizedata/undp/tree/master/work/justinekeller/Project1b)
  
 ## Qualitative Data
 ### Project 1 Research Question
  
 ## Dynamics, Interactivity and Narrative
 I am visualizing the gap between the Human Development Index of Females and the Human Development Index of Males for each country in Africa. 
+The gender gap in the human development index is displayed here as a visual gap in the typography of the country code. If you click on a country the country word and more statistics will appear. The gaps of  life expectancy, education, and income levels gaps are also shown as the difference on one side and the separate gender divided numbers on the other. Not all the gaps are in the favor of males.
  
 ## Tools, Users and Use Cases
 ### Project 1 Description
@@ -28,7 +30,7 @@ The source I used was the HDR 2014. I wanted to focus on this one data set to st
 
 ### Project 2 Research Question
 
-I am highlighting the differences in Gross National Income and Education with regards to gender. I am also showing the relation of Education and Income.
+I am highlighting the differences in Gross National Income and Education with regards to gender. I am also showing the relation of Education and Income.This visualization compares the mean years of schooling with the gross national income levels. The blue lines represent female statistics, the yellow lines represent male statistics, and the loops are the difference in GNI levels.
 
 ### Project 2 Description
 

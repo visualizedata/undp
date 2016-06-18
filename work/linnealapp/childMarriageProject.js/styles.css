@@ -1,0 +1,120 @@
+container {
+  overflow: hidden;
+}
+
+.canvas {
+  z-index: 10;
+}
+
+.title {
+  position: absolute;
+  background-color: black;
+  padding-top: 30px;
+  padding-left: 40px;
+  padding-right: 30px;
+  font-size: 20pt;
+  color: white;
+  z-index: 15;
+  font-family: "Minion Pro";
+  /*font-weight: bold;*/
+  width: 11%;
+  height: 100%;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+}
+.desc{
+  /*position: absolute;*/
+  background-color: black;
+  padding-top: 15px;
+  /*padding-right: 5px;*/
+  color: white;
+  z-index: 15;
+  font-family: "Myriad Pro";
+  font-size: 9pt;
+  line-height: 14pt;
+}
+.xLabels {
+  position: absolute;
+  /*transform:translate(-30px, 30px);*/
+  transform: rotate(90deg);
+  padding-left: 1px;
+  width: 100px;
+  height: 10px;
+  font-family: "Myriad Pro";
+  font-size: 8pt;
+  color: rgb(102, 0, 101);
+  z-index: 15;
+}
+.yLabel {
+  z-index: 15;
+  position: absolute;
+  transform: rotate(270deg);
+  /*color: dimgrey;*/
+  font-size: 10pt;
+  font-family: "Myriad Pro";
+  font-weight: bold;
+}
+.button {
+  position: absolute;
+  top: 3%;
+  width: 100px;
+  font-size: 10pt;
+  color: white;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-top: dotted;
+  border-width: 2px;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 18px;
+  z-index: 15;
+  font-family: "Minion Pro";
+  background-color: rgb(225, 225, 225);
+  font-style: bold;
+}
+#gni {
+  right: 70px;
+  height: 30px;
+}
+
+#le {
+  right: 190px;
+  height: 30px;
+}
+
+#edu {
+  right: 310px;
+  height: 30px;
+}
+.region {
+  z-index: 15;
+  text-align: left;
+  height: 4%;
+  /*background-color: gray;*/
+  position: relative;
+  font-family: "Minion Pro";
+  border-top: dotted;
+  border-width: 2px;
+  border-color: dimgrey;
+}
+.regionText {
+  color: dimgrey;
+  font-size: 9pt;
+  position: absolute;
+  bottom: 2px;
+  /*left: 5px;*/
+}
+#c {
+  width: 13%;
+}
+#e {
+  width: 25.9%;
+}
+#s {
+  width: 4.5%;
+}
+#w {
+  width: 24.5%;
+}

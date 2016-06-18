@@ -1,0 +1,181 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <style>
+      @media (min-width: 1000px) {
+        div#buttons {
+          display: block;
+        }
+      }
+      @media (max-width: 1000px) {
+        div#buttons {
+          display: block;
+        }
+      }
+      @media only screen and (min-device-width : 300px) and (max-device-width : 667px) {
+        label:after {display:none}
+      }
+      p {
+        font-family: "europa",sans-serif;
+      }
+      #container {
+        position:relative;
+        height: 100%;
+        width: 100%;
+        padding: 0 0;
+        overflow: hidden;
+      }
+      #container1 {
+        top: 0;
+        position: absolute;
+        transition: all 0.2s ease-in-out;
+      }
+      #container1.container1pushdown {
+        top: 100%;
+      }
+      #container2 {
+        position:absolute;
+        width: 100%;
+        height: 100%;
+        top: -100%;
+        margin: 0 0;
+        transition: all 0.2s ease-in-out;
+      }
+      .bgNormal {
+        background: #001861;
+      }
+      #container2.bgAbout {
+        top: 0;
+      }
+      body {
+        background: #001861;
+        color: #fff;
+        margin: 0 0;
+        transition: all 0.5s ease-in-out;
+      }
+      div#buttons {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+      div#buttons a {
+        color: white;
+        width: 33%;
+        text-decoration: none;
+        float: left;
+        font-size: 1em;
+        padding: 10px 0;
+      }
+      div#buttons:hover {
+        opacity: 1;
+      }
+      select {
+        color: #fff;
+        font-size: 1em;
+        font-weight: bold;
+        font-family: Helvetica, sans-serif;
+        border: 3px solid #fff;
+        border-radius: 5px;
+        margin:0px 10px 0 0;
+        padding: 5px 18px 5px 18px;
+        box-shadow: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+        width: auto;
+        vertical-align: middle;
+      }
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+          select {padding-right:59px}
+      }
+      label {position:relative}
+      label:after {
+          content:'>';
+          font-weight:light;
+          font:1em "Consolas", monospace;
+          color:#fff;
+          -webkit-transform:rotate(90deg);
+          -moz-transform:rotate(90deg);
+          -ms-transform:rotate(90deg);
+          transform:rotate(90deg);
+          right:10px; bottom:0px;
+          padding:0 0 0 20px ;
+          position:absolute;
+          pointer-events:none;
+      }
+      label:before {
+          content:'';
+          right:6px; top:0px;
+          width:20px; height:20px;
+          /*background:#f8f8f8;*/
+          position:absolute;
+          pointer-events:none;
+      }
+      h1, span.counter {
+        font-family: Helvetica, sans-serif;
+        font-weight: bold;
+      }
+      h1 {
+        margin: 0 0 0 0;
+        transition: all 0.3s ease-in-out;
+      }
+      h1 div {display: inline;}
+      div {margin 0 0; padding: 0 0;}
+      select {}
+      span, u, option, .counterDiv {
+        display: inline;
+        vertical-align: bottom;
+      }
+      span.counter {
+        transition: all 0.3s ease;
+      }
+
+      span.bad { 
+        color: Red;
+        //color: #FF4819; 
+        font-size: 1.5em;
+        text-decoration: underline;
+      }
+      span.good { 
+        color: LimeGreen;
+        //color: #68B209;
+      }
+      span.strike { color: #5B6B9D; text-decoration: line-through; transition: all 0.5s ease;}
+      h1.underline {text-decoration: none; color:red;}
+
+
+      .phrase-enter {
+        opacity: 0.01;
+      }
+
+      .phrase-enter.phrase-enter-active {
+        opacity: 1;
+        transition: opacity .5s ease-in;
+      }
+      .phrase-leave {
+        opacity: 1;
+      }
+
+      .phrase-leave.phrase-leave-active {
+        opacity: 0.01;
+        transition: opacity .5s ease-in;
+      }
+
+    </style>
+    <title>Sketch</title>
+  </head>
+  <body>
+    <div id='root'>
+    </div>
+    <script src="vendors.js"></script>
+    <script src="app.js"></script>
+    <script src="https://use.typekit.net/agv1hsz.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  </body>
+</html>

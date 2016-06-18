@@ -1,10 +1,12 @@
 var table;
 var data = new Object;
 var back = 85;
-var counter = 0;
-// r = [0];
-var mapped = new Object;
-// var triWidth = ();
+var tri = false;
+var opt1 = true,
+  opt2 = false,
+  opt3 = false,
+  opt4 = false,
+  allOpt = false;
 var country = [];
 var marriage15 = [];
 var marriage18 = [];
@@ -13,137 +15,315 @@ var hdiF = [];
 var hdiM = [];
 var fVio = [];
 var mVio = [];
+var region = [];
+var hdiDiff = [];
+var halfway = [];
+var hM = [];
+var hF = [];
+var ge18 = [];
 var z = 0;
+var latoReg, latoLight;
+var areas = ["c", "e", "s", "w", "n"];
+xLines = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7];
+var lines = [];
+
+/*-----------load fonts-----------*/
+function preload() {
+  latoLight = loadFont('Lato-Hairline.ttf');
+  latoReg = loadFont('Lato-Light.ttf');
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  textFont('Pacifico');
-  background(250);
-  fill(85);
-  stroke(85);
+  /*-----------background----------*/
+  var black = color(255);
+  var backgroundColor = color(119, 136, 153);
+  var groundColor = color(49, 56, 63);
+
+  textFont(latoReg);
+  background(backgroundColor);
+  fill(groundColor);
+  stroke(groundColor);
   strokeWeight(1);
   textSize(9);
-  //load data into string array
+  /*-----------load tsv-----------*/
   table = loadTable("data.txt", "tsv", "header", showData);
-  rect(0, height * 0.8, width, height * 0.8);
+  rect(0, height * 0.9, width, height * 0.9);
 
-  //title 
-  textSize(40);
-  stroke(178, 34, 34);
-  fill(139, 0, 0);
-  text("Understanding Child Marriage and the Gender Gap", width * 0.05, height * 0.1);
-  textSize(9);
-  //top scale line
-  fill(85);
-  stroke(85);
-  line(width - 25, height * 0.8, width - 25, height * 0.1);
-  text("0%", width - 22, height * 0.79);
-  text("100%", width - 22, height * 0.1);
+  /*-----------title-----------*/
+  textSize(33);
+  stroke(black);
+  fill(black);
+  text("Child Marriages and the Gender Gap", width * 0.05, height * 0.05);
+  line(width * 0.05, height * 0.065, width * 0.06 + textWidth("Child Marriages and the Gender Gap"), height * 0.065);
+  textFont(latoLight);
+  textSize(11);
+  strokeWeight(0.7);
+  text("This project explores the relationship between the percentage of women between the ages of 20 and 24 who were married before the age of 18 in select African countries, and how it compares to the UNDP’s Human Development Index (HDI). Each country is represented by a triangle, with the height defined by the percentage of child marriage, the left corner of the triangle base the female score on the HDI, and the right the male score on the HDI.", width * 0.045, height * 0.09, width * 0.42);
+  textSize(8);
 
-  // middle scale bar 
-  fill(230);
-  stroke(230);
-  text("0.25", width * 0.03, height * 0.83);
-  text("0.65", width * 0.97, height * 0.83);
-  line(width * 0.03, height * 0.81, width * 0.03, height * 0.78);
-  line(width * 0.97, height * 0.81, width * 0.97, height * 0.78);
-  textSize(12);
-  text("Gender Development Index", width / 2 - (textWidth("Gender Development Index") / 2), height * 0.83);
-  //how to read bar 
-  fill(150);
-  noStroke();
-  rect(width * 0.75, height * 0.05, width * 0.20, height * 0.2);
-  fill(230);
-  stroke(230);
-  textSize(15);
-  text("How To Read", width * 0.76, height * 0.09);
-  line(width * 0.75, height * 0.19, width * 0.95, height * 0.19);
-  triangle(width * 0.82, height * 0.19, width * 0.88, height * 0.19, width * 0.85, height * 0.12);
-  //descriptions in read bar  
-  fill(210);
-  stroke(210);
-  textSize(10);
-  text("% women married under", width * 0.85, height * 0.12);
-  text("age of 18", width * 0.87, height * 0.14);
-  text("Female GDI", width * 0.82 - (textWidth("Female GDI__")), height * 0.18);
-  text("Male GDI", width * 0.89, height * 0.18);
+  /*-----------y-axis-----------*/
+  fill(black);
+  line(width - 25, height * 0.9, width - 25, height * 0.15);
 
-  fill(85);
-  stroke(85);
+  textSize(11);
+  text("Human Development Index", width / 2 - (textWidth("Human Development Index") / 2), height * 0.99);
+  /*-----------X Lines-----------*/
+  for (var r = 0; r < xLines.length; r++) {
+    lines.push(map(xLines[r], 0.2, 0.7, width * 0.02, width * 0.97));
+  }
+  for (var r = 0; r < lines.length; r++) {
+    fill(230);
+    stroke(230);
+    textSize(8);
+    text(xLines[r], lines[r], height * 0.935);
+    line(lines[r], height * 0.92, lines[r], height * 0.88)
+  }
 }
 
-function draw() {
-  // noStroke();
-  // for (var r = 0; r < hdiM.length; r++) {
-  //   if (counter == 0 && z == counter) {
-  //     fill(85, 85, 85, 50);
-  //     triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.8, hdiF[r], height * 0.8);
-  //     z++;
-  //   } else if (counter == r && z == counter) {
-  //     fill(85);
-  //     triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.8, hdiF[r], height * 0.8);
-  //     z++;
-  //   } else {
-  //     fill(85, 85, 85, 20);
-  //     triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.8, hdiF[r], height * 0.8);
-  //     z++;
-  //   }
-    
-  // }
-      
-}
-
+/*-----------sort data-----------*/
 function showData() {
-  stroke(255);
-  fill(255, 0, 0);
-  var count = table.getRowCount();
+  var black = color(240, 250, 255);
+  stroke(black);
+  fill(black);
+  count = table.getRowCount();
   for (var r = 0; r < count; r++) {
 
     country.push(table.getString(r, 0));
     var ge15 = table.getString(r, 1);
-    var ge18 = table.getString(r, 2);
+    ge18.push(table.getString(r, 2));
     hdi.push(table.getString(r, 3));
-    var hF = table.getString(r, 4);
-    var hM = table.getString(r, 5);
-    var vM = table.getString(r, 6);
-    var vF = table.getString(r, 7);
+    hF.push(table.getString(r, 4));
+    hM.push(table.getString(r, 5));
+    region.push(table.getString(r, 8));
+    hdiDiff.push(hM[r] - hF[r]);
 
-    // dataAll.push(data);
-    marriage15.push(map(ge15, 0, 100, width / 2, width - 30));
-    marriage18.push(map(ge18, 0, 100, height * 0.8, 0.1));
-    hdiF.push(map(hF, 0.25, 0.65, width * 0.03, width * 0.97));
-    hdiM.push(map(hM, 0.25, 0.65, width * 0.03, width * 0.97));
-    fVio.push(map(vF, 0, 100, height * 0.5, height - 30));
-    mVio.push(map(vM, 0, 100, height * 0.5, height - 30));
+    marriage18.push(map(ge18[r], 0, 80, height * 0.9, height * 0.15));
+    hdiF.push(map(hF[r], 0.2, 0.7, width * 0.02, width * 0.97));
+    hdiM.push(map(hM[r], 0.2, 0.7, width * 0.02, width * 0.97));
+
+    stroke(black);
+  }
 
 
-    stroke(0);
+  /*-----------buttons-----------*/
+  handlePress();
 
-    stroke(0, 0, 0, 50);
-    fill(0, 0, 0, 50);
-    triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.8, hdiF[r], height * 0.8);
-    fill(250);
-    stroke(250);
-    // line(hdiF[r], height / 2, hdiF[r], fVio[r]);
-    // line(hdiM[r], height / 2, hdiM[r], mVio[r]);
+  central = createButton('CENTRAL');
+  central.class('mybutton');
+  central.id('central');
+  central.position(width * 0.675, height * 0.05);
+  //  central.mousePressed(handlePress);
+
+  east = createButton('  EASTERN  ');
+  east.class('mybutton');
+  east.id('east');
+  east.position(width * 0.75, height * 0.05);
+  //  east.mousePressed(handlePress);
+
+
+  south = createButton('SOUTHERN  ');
+  south.class('mybutton');
+  south.id('south');
+  south.position(width * 0.825, height * 0.05);
+  //  south.mousePressed(handlePress);
+
+  west = createButton(' WESTERN ');
+  west.class('mybutton');
+  west.id('west');
+  west.position(width * 0.9, height * 0.05);
+  //  west.mousePressed(handlePress);
+
+  north = createButton(' ALL ');
+  north.class('mybutton');
+  north.id('all');
+  north.position(width * 0.6, height * 0.05);
+  //  north.mousePressed(handlePress);
+
+
+  /*-----------buttons controls-----------*/
+  $('#central').click(function() {
+    if ($(this).hasClass('active')) {
+      opt1 = false;
+      $(this).removeClass('active');
+    } else {
+      opt1 = true;
+      $(this).addClass('active');
+    }
+    handlePress();
+  });
+
+  $('#east').click(function() {
+    if ($(this).hasClass('active')) {
+      opt2 = false;
+      console.log(opt2);
+      $(this).removeClass('active');
+    } else {
+      opt2 = true;
+      console.log(opt2);
+      $(this).addClass('active');
+    }
+    handlePress();
+  });
+
+  $('#south').click(function() {
+    if ($(this).hasClass('active')) {
+      opt3 = false;
+      console.log(opt3);
+      $(this).removeClass('active');
+    } else {
+      opt3 = true;
+      console.log(opt3);
+      $(this).addClass('active');
+    }
+    handlePress();
+  });
+
+
+  $('#west').click(function() {
+    if ($(this).hasClass('active')) {
+      opt4 = false;
+      console.log(opt4);
+      $(this).removeClass('active');
+    } else {
+      opt4 = true;
+      console.log(opt4);
+      $(this).addClass('active');
+    }
+    handlePress();
+  });
+
+
+  $('#all').click(function() {
+    if ($(this).hasClass('active')) {
+      allOpt = false;
+      $(this).removeClass('active');
+    } else {
+      allOpt = true;
+      $(this).addClass('active');
+    }
+    handlePress();
+  });
+
+
+}
+
+function handlePress() {
+  var backgroundColor = color(119, 136, 153);
+  fill(backgroundColor);
+  noStroke()
+  rect(0, height * 0.15, width, height * 0.75);
+  /*-----------y-axis-----------*/
+  stroke(255);
+  line(width * 0.975, height * 0.9, width * 0.975, height * 0.15);
+
+  text("0%", width * 0.98, height * 0.89);
+  text("80%", width * 0.98, height * 0.17);
+  line(width * 0.97, height * 0.9, width * 0.98, height * 0.9);
+  line(width * 0.97, height * 0.15, width * 0.98, height * 0.15);
+  stroke(255);
+  textSize(12);
+  push();
+  translate(width * 0.99, height * 0.65);
+  rotate(-HALF_PI);
+  text("% of women married under age 18", 0, 0);
+  pop();
+
+  if (opt1) {
+    drawTriangle(areas[0]);
+  }
+  if (opt2) {
+    drawTriangle(areas[1]);
+  }
+  if (opt3) {
+    drawTriangle(areas[2]);
+  }
+  if (opt4) {
+    drawTriangle(areas[3]);
+  }
+  if (allOpt) {
+    drawTriangle(areas[1]);
+    drawTriangle(areas[2]);
+    drawTriangle(areas[3]);
+    drawTriangle(areas[4]);
   }
 }
 
-
-function keyPressed() {
-  console.log("cat");
-  if (keyCode === RIGHT_ARROW) {
-    counter++;
-  } else if (keyCode === LEFT_ARROW) {
-    counter--;
+function mouseMoved() {
+  for (var r = 0; r < region.length; r++) {
+    var middle = ((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r]);
+    if (middle - mouseX <= 10 && middle - mouseX >= 0 && region[r] == "c" && opt1 == true) {
+      selectTriangle(r);
+    } else if (middle - mouseX <= 10 && middle - mouseX >= 0 && region[r] == "e" && opt2 == true) {
+      selectTriangle(r);
+    } else if (middle - mouseX <= 10 && middle - mouseX >= 0 && region[r] == "s" && opt3 == true) {
+      selectTriangle(r);
+    } else if (middle - mouseX <= 10 && middle - mouseX >= 0 && region[r] == "w" && opt4 == true) {
+      selectTriangle(r);
+    } else if (middle - mouseX <= 10 && middle - mouseX >= 0 && allOpt == true) {
+      selectTriangle(r);
+    }
   }
-  return false; // prevent any default behavior
+
 }
 
-// function mouseClicked() {
-//   if (back == 85) {
-//     value = 255;
-//   } else {
-//     back = 85;
-//   }
-// }
+function drawTriangle(spot) {
+  var mountainColor = color(25, 28, 32, 110);
+  // stroke(83, 102, 115, 100);
+  fill(mountainColor);
+  stroke(25, 28, 32);
+  for (var r = 0; r < region.length; r++) {
+    if (spot == region[r]) {
+      triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.9, hdiF[r], height * 0.9);
+    }
+  }
+}
+
+function selectTriangle(r) {
+  var groundColor = color(49, 56, 63);
+  fill(groundColor);
+  stroke(groundColor);
+  strokeWeight(1);
+  textSize(9);
+  rect(0, height * 0.9, width, height * 0.9);
+
+  handlePress();
+  var mountainColor = color(25, 28, 32);
+  stroke(0);
+  strokeWeight(1);
+  fill(mountainColor);
+  triangle((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], marriage18[r], hdiM[r], height * 0.9, hdiF[r], height * 0.9);
+  fill(255);
+  stroke(230, 230, 230, 200);
+  for (i = 0; i < width * 0.8; i++) {
+    ellipse(((hdiM[r] - hdiF[r]) * 0.5 + hdiF[r]) + (i * 6), marriage18[r], 0.5, 0.5);
+  }
+
+  /*-----------x-axis further information-----------*/
+  fill(230);
+  stroke(230);
+  textSize(10);
+  textAlign(LEFT);
+  text(hM[r] + "  :" + "  Male Human Development Score", hdiM[r], height * 0.935);
+  textAlign(RIGHT);
+  text("Female Human Development Score :" + "  " + hF[r], hdiF[r], height * 0.935);
+
+
+  line(hdiM[r], height * 0.92, hdiM[r], height * 0.9);
+  line(hdiF[r], height * 0.92, hdiF[r], height * 0.9);
+  textSize(14);
+  textAlign(CENTER);
+  text(country[r], (hdiM[r] - hdiF[r]) * 0.5 + hdiF[r], height * 0.96);
+  textAlign(LEFT);
+  textSize(12);
+  text(ge18[r] + "%", width * 0.95, marriage18[r] - 5);
+  text(width * 0.96, ge18[r], width * 0.98, ge18[r]);
+
+  textSize(11);
+  stroke(180);
+  text("Human Development Index", width / 2 - (textWidth("Human Development Index") / 2), height * 0.99);
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}

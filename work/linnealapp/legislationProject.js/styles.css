@@ -1,0 +1,110 @@
+.canvas {
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+}
+.label {
+  color: white;
+  text-align: left;
+  width: 100px;
+  font-family: Sans-serif;
+  font-size: 11pt;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: dotted;
+  border-width: 1px;
+  border-color: white;
+  z-index: 20;
+}
+
+#label1 {
+  width: 13%;
+}
+#label2 {
+  width: 52%;
+}
+#label3 {
+  width: 6%;
+}
+#label4 {
+  width: 17%;
+}
+
+.button {
+  width: 13%;
+  height: 30px;
+  text-align: right;
+  padding-right: 10px;
+  color: white;
+  z-index: 20;
+  /*background-color: gray;*/
+}
+
+
+/*.legislations {*/
+
+
+/*  width: 150px;*/
+
+
+/*  height: 100%;*/
+
+
+/*  z-index: 20;*/
+
+
+/*  background-color: red;*/
+
+
+/*  color: white;*/
+
+
+/*}*/
+
+.legislations {
+  padding-left: 5px;
+  padding-top: 3px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  display: inline-block;
+  width: 51%;
+  height: 30px;
+  color: white;
+  background-color: DimGrey;
+  z-index: 25;
+  font-size: 9pt;
+  font-family: Sans-serif;
+}
+
+.status {
+  width: 5%;
+  height: 30px;
+  color: white;
+  background-color: DimGrey;
+  z-index: 25;
+  font-size: 12pt;
+  font-family: Sans-serif;
+  padding-left: 5px;
+  padding-top: 3px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  line-height: 30px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.src {
+  width: 16%;
+  height: 30px;
+  color: white;
+  background-color: DimGrey;
+  z-index: 25;
+  font-size: 8pt;
+  font-family: Sans-serif;
+  padding-left: 5px;
+  padding-top: 3px;
+  padding-right: 6px;
+  padding-bottom: 4px;
+  word-wrap: break-word;
+}

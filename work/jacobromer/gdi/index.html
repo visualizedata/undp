@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+      div#root {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        margin: 0 0;
+      }
+      div#container {
+        background: rgba(255,255,255,0.0);
+        text-align: center;
+        position: relative; 
+      }
+      div.dimension_index span, div.indicators span, div.dimensions span, .t25, .t50 {
+        vertical-align:text-top;
+      }
+      span.counter {
+        display: block;
+      }
+      div#gdi {
+      }
+      div#legend {
+        text-align: center;
+        font-family: "museo-slab";
+        width: 15%;
+        margin: 0 1%;
+        float: left;
+      }
+      div.missingData {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: rgba(255,255,255,0.1);
+
+      }
+      .hide { display:none; }
+      .show { display: block; }
+      .hideOp {opacity: 0; visibility: hidden;}
+      .showOp {opacity: 1; visibility: visible;}
+      span.t50 {
+        width: 50%;
+      }
+      span.t25 {
+        width: 25%;
+      }
+      span.t25, span.t50 {
+        display: inline-block;
+      }
+      body {
+        background: MidnightBlue;
+        color: #fff;
+        margin: 0 0;
+      }
+      select {
+        color: #fff;
+        font-size: 3em;
+        box-shadow: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        -moz-appearance:none;
+        appearance:none;
+        cursor:pointer;
+      }
+      label {position:relative}
+      label:after {
+          content:'>';
+          font-weight:light;
+          font:1em "Consolas", monospace;
+          color:#fff;
+          -webkit-transform:rotate(90deg);
+          -moz-transform:rotate(90deg);
+          -ms-transform:rotate(90deg);
+          transform:rotate(90deg);
+          right:0px; bottom:0px;
+          padding:0 0 0 15px ;
+          position:absolute;
+          pointer-events:none;
+      }
+      label:before {
+          content:'';
+          right:6px; top:0px;
+          width:20px; height:20px;
+          /*background:#f8f8f8;*/
+          position:absolute;
+          pointer-events:none;
+      }
+      h1, span.counter {
+        font-family: Helvetica, sans-serif;
+        font-weight: bold;
+      }
+      h1 {
+        font-size:3em;
+      }
+      div {
+        margin 0 0;
+        padding: 0 0;
+      }
+      span, u, select, option {
+        /*line-height: 24px;*/
+        vertical-align: middle;
+      }
+
+      span.bad { color: Red; font-size: 1.5em; text-decoration: underline;}
+      span.good { color: LimeGreen;}
+      span.strike { color: grey; text-decoration: line-through;}
+      h1.underline {text-decoration: none; color:red;}
+
+
+      .phrase-enter {
+        opacity: 0.01;
+      }
+
+      .phrase-enter.phrase-enter-active {
+        opacity: 1;
+        transition: opacity .5s ease-in;
+      }
+      .phrase-leave {
+        opacity: 1;
+      }
+
+      .phrase-leave.phrase-leave-active {
+        opacity: 0.01;
+        transition: opacity .5s ease-in;
+      }
+
+    </style>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900' rel='stylesheet' type='text/css'>
+    <link href='https://raw.githubusercontent.com/HubSpot/odometer/master/themes/odometer-theme-minimal.css' rel='stylesheet' type='text/css'>
+    <title>Sketch</title>
+  </head>
+  <body>
+    <div id='root'>
+    </div>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="vendors.js"></script>
+    <script src="app.js"></script>
+    <script src="https://use.typekit.net/agv1hsz.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+  </body>
+</html>
