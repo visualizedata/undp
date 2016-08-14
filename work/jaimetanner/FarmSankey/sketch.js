@@ -31,7 +31,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   var black = color(0);
-  var beige = color(238, 226, 210);
+  var beige = color(250);
   var greens = color(77, 102, 25);
   noStroke();
   fill(beige);
@@ -191,7 +191,7 @@ function showData() {
   }
 
 
-  var beige = color(238, 226, 210);
+  var beige = color(250);
   fill(beige);
   stroke(beige);
   rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
@@ -222,7 +222,7 @@ function showData() {
 
 function mouseMoved() {
   /*-----------clear curves -----------*/
-  var beige = color(238, 226, 210);
+  var beige = color(250);
   fill(beige);
   stroke(beige);
   rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
