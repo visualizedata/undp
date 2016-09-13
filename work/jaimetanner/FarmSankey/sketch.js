@@ -31,7 +31,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   var black = color(0);
-  var beige = color(250);
+  var beige = color(240);
   var greens = color(77, 102, 25);
   noStroke();
   fill(beige);
@@ -44,16 +44,16 @@ function setup() {
   var titleLength = width * 0.13 + textWidth("Productivity Differences Between Male and");
 
   text("Productivity Differences Between", width * 0.13, height * 0.92, textWidth("Productivity Differences Between Male and Female"));
-  fill(170, 165, 127);
-  stroke(170, 165, 127);
+  fill(72,194,199);
+  stroke(72,194,199);
   strokeWeight(2);
   text("Male ", width * 0.13 + textWidth("Productivity Differences Between "), height * 0.92);
   fill(0);
   stroke(0);
   strokeWeight(1);
   text(" and", width * 0.13 + textWidth("Productivity Differences Between Male "), height * 0.92);
-  fill(125, 116, 99);
-  stroke(125, 116, 99);
+  fill(200,82,83);
+  stroke(200,82,83);
   strokeWeight(2);
   text("Female", width * 0.13, height * 0.92, textWidth("Productivity Differences Between Male and"), height * 0.2);
   fill(0);
@@ -85,8 +85,8 @@ function setup() {
   textSize(16);
   stroke(200, 50, 50, 100);
   strokeWeight(1.25);
-  text("What barriers contribute to this gender gap? ", width * 0.655, height * 0.135);
-  text("After accounting for plot size, how much less do female farmers produce, relative to men? ", width * 0.285, height * 0.135, width * 0.25);
+  // text("What barriers contribute to this gender gap? ", width * 0.655, height * 0.135);
+  // text("After accounting for plot size, how much less do female farmers produce, relative to men? ", width * 0.285, height * 0.135, width * 0.25);
 
   table = loadTable("data.txt", "tsv", showData);
 }
@@ -144,9 +144,9 @@ function showData() {
     // line(width * 0.305, height * 0.09 * z + (height * 0.25), width * 0.33, height * 0.09 * z + (height * 0.2))
     // line(lines[z], height * 0.09 * z + (height * 0.24), lines[z], height * 0.09 * z + (height * 0.22));
     noStroke();
-    fill(170, 165, 127);
+    fill(72,194,199);
     rect(width * 0.28, height * 0.09 * z + (height * 0.2), width * 0.3, height * 0.02);
-    fill(125, 116, 99);
+    fill(200,82,83);
     rect(gaps[z], height * 0.09 * z + (height * 0.22), width * 0.25, height * 0.02);
 
     /*----------country names-----------*/
@@ -191,7 +191,7 @@ function showData() {
   }
 
 
-  var beige = color(250);
+  var beige = color(240);
   fill(beige);
   stroke(beige);
   rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
@@ -222,7 +222,7 @@ function showData() {
 
 function mouseMoved() {
   /*-----------clear curves -----------*/
-  var beige = color(250);
+  var beige = color(240);
   fill(beige);
   stroke(beige);
   rect(width * 0.5, height * 0.09 + 2 * (height * 0.03), width * 0.15, height * 0.7);
