@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>UNDP Arica Human Development 2015 Report Partnership</title>
+  <title>UNDP Africa Human Development 2015 Report Partnership</title>
 
   <link href="web/css/style.css" rel="stylesheet">
   <link href="web/css/color.css" rel="stylesheet">
@@ -16,6 +16,13 @@
     var usePreview = true;
 
     $(document).ready(function() {
+      
+      // check for touch screens
+      var hasTouch = window.matchMedia('(pointer: coarse)').matches;
+      if (hasTouch) {
+        $(".no-touch").hide();
+      }
+      
       // activate tooltip
       $('[data-toggle="tooltip"]').tooltip();
 
@@ -117,7 +124,7 @@
           <h1 class="sitename"><span class="font-width-3 kern-decrease-10"><a href="http://www.newschool.edu/parsons/ms-data-visualization/">Data Visualization</a></span></h1>
         </div>
         <div class="subtitle font-width-3 kern-decrease-10 col-md-10">
-          UNDP Arica Human Development Report Partnership
+          UNDP Africa Human Development Report Partnership
         </div>
         
         <!--YEAR-->
@@ -188,7 +195,7 @@
 
     <!--*Jaime Project1-->
     <a id="jaime_1"></a>
-    <div href="./work/jaimetanner/FarmSankey/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/jaimetanner/FarmSankey/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Agricultural Productivity Differences Between Male and Female Managed Farms</span>
         <br />(<a href="https://github.com/jat3002">Jaime Tanner</a>, 2015)
@@ -213,7 +220,7 @@
 
     <!--*Justine Project1-->
     <a id="justine_1"></a>
-    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/justinekeller/Project1/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Human Development Index Gender Gap</span>
         <br />(<a href="https://github.com/Justinerk2">Justine Keller</a>, 2015)
@@ -277,7 +284,7 @@
 
     <!--*Jon Project2-->
     <a id="jon_2"></a>
-    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/jthirkield/lens/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Schoolhouse Africa: A Learning Map</span>
         <br />(<a href="https://github.com/jthirkield">Jon Thirkield</a>, 2015 )
@@ -322,7 +329,7 @@
 
     <!--*Gabi Project2-->
     <a id="gabi_2"></a>
-    <div href="./work/gabisteele/womenData_FINAL/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/gabisteele/womenData_FINAL/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Investigating Opinions and Occurances of the Domestic Maltreatment of Women in Africa</span>
         <br />(<a href="https://github.com/gabisteele">Gabi Steele</a>, 2015)
@@ -342,7 +349,7 @@
 
     <!--*Linnea Project2-->
     <a id="linnea_2"></a>
-    <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-md-12">
+    <div href="./work/linnealapp/legislationProject.js/index.html" img-src="preview.png" class="project col-md-12 no-touch">
       <p class=" col-md-3 col-md-offset-1">
         <span class="title">Gender imbalance & legislation in Africa</span>
         <br />(<a href="https://github.com/llapp">Linnea Lapp</a>, 2015)
@@ -372,8 +379,14 @@
 
     <!--FOOTER-->
     <div id="about">
-      <div class="row">
-        <div class="col-md-3 col-md-offset-1">
+      <div class="row col-sm-offset-0 col-xs-offset-1">
+        
+        <div class="hidden-xs hidden-sm col-md-1 text-right">
+            <p>&nbsp;</p>
+            <a href="https://github.com/visualizedata/undp"><img data-toggle='tooltip' title='Source' src="web/img/GitHub.png" style="width:30px"></a>
+        </div>
+        
+        <div class="col-md-3">
 
           <p><a href="http://www.newschool.edu/parsons/ms-data-visualization/">Data Visualization (MS)</a></p>
 
@@ -387,30 +400,38 @@
           <p></p>
 
         </div>
+
         <div class="col-md-3">
 
+          <p><a href="http://www.newschool.edu/parsons/">Parsons School of Design</a></p>
+
+          <a href="http://www.newschool.edu/parsons/art-media-technology-school-amt/">Art, Media, and Technology</a>
+          <br /> <a href="http://www.newschool.edu/parsons/ms-data-visualization/">Data Visualization (MS)</a>
+          <br /> <a href="https://courses.newschool.edu/courses/PGDV5200">PGDV Major Studio 1</a>
+          <br /> <a href="http://www.newschool.edu/parsons/faculty.aspx?id=4e54-5978-4d7a-4932">Daniel Sauter</a>
+          <p></p>
+
+        </div>
+        
+        <div class="col-md-2">
+
           <p><a href="http://www.africa.undp.org/">UNDP AfHD</a></p>
-          Angela Lusigi
+          Ayodele Odusola
+          <br /> Angela Lusigi
           <br /> James Neuhaus
           <br /> Ahmadou MBoup
           <br /> Eunice Kamwendo
           <p></p>
 
         </div>
+        
         <div class="col-md-3">
-
-          <p><a href="http://www.newschool.edu/parsons/">Parsons School of Design</a></p>
-
-          <a href="http://www.newschool.edu/parsons/art-media-technology-school-amt/">Art, Media, and Technology</a>
-          <br /> <a href="https://courses.newschool.edu/courses/PGDV5200">PGDV Major Studio 1</a>
-          <br /> <a href="http://www.newschool.edu/parsons/faculty.aspx?id=4e54-5978-4d7a-4932">Daniel Sauter</a>
-          <p></p>
+          
+          <a href="http://www.africa.undp.org/content/rba/en/home/presscenter/articles/2016/11/21/parsons-school-of-design-partners-with-undp-africa-/"><img class='hidden-sm hidden-xs' src='web/img/UNDP.png' width='100'></a>
 
         </div>
-        <div class="col-md-1 text-right">
-            <p>&nbsp;</p>
-            <a href="https://github.com/visualizedata/undp"><img data-toggle='tooltip' title='Source' src="web/img/GitHub.png" style="width:30px"></a>
-        </div>
+
+
       </div>
     </div>
 
